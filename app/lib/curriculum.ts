@@ -2,6 +2,11 @@ export type LessonTest = {
   name: string;
   expression: string;
   failure: string;
+  feedback?: {
+    expected: string;
+    actualLine: number;
+    rule: string;
+  };
 };
 
 export type Lesson = {
@@ -43,19 +48,32 @@ export const lessons: Lesson[] = [
         example: "print(7 * 6)",
       },
     ],
-    requirements: ["输出文字：我的第一段 Python", "下一行输出 8 × 7 的计算结果"],
+    requirements: [
+      "第一行输出“我的第一段 Python”；中英文之间有无空格都可以",
+      "第二行用乘法表达式输出 56；8*7、7*8，以及运算符两侧加空格都可以",
+    ],
     starterCode: '# 在这里写下你的第一段代码\nprint("你好，Python")\n',
     hints: ["需要调用两次 print()。", "乘法运算符是 *，不要手算后直接写 56。"],
     tests: [
       {
-        name: "第一行文字正确",
-        expression: `_stdout.strip().splitlines()[0] == "我的第一段 Python" if _stdout.strip().splitlines() else False`,
-        failure: "第一行应完整输出“我的第一段 Python”。",
+        name: "第一行文字正确（忽略空格）",
+        expression: `len(_output_lines) >= 1 and _normalize_python_label(_output_lines[0]) == "我的第一段Python"`,
+        failure: "第一行的文字内容应为“我的第一段 Python”；中英文之间有无空格都可以。",
+        feedback: {
+          expected: "我的第一段 Python",
+          actualLine: 0,
+          rule: "只忽略中文与 Python 之间的空格",
+        },
       },
       {
-        name: "第二行来自乘法结果",
-        expression: `"8 * 7" in _source and _stdout.strip().splitlines()[-1] == "56"`,
-        failure: "请用 8 * 7 计算，并让最后一行输出 56。",
+        name: "第二行是乘法结果（乘数顺序不限）",
+        expression: `_uses_multiplication(_source) and len(_output_lines) >= 2 and _output_lines[1].strip() == "56"`,
+        failure: "第二行应输出乘法计算得到的 56；8*7 与 7*8 都会通过。",
+        feedback: {
+          expected: "56（由乘法表达式计算）",
+          actualLine: 1,
+          rule: "允许 8*7、7*8，以及运算符两侧任意空格",
+        },
       },
     ],
   },

@@ -74,7 +74,14 @@ test("运行时错误保留真实 traceback", () => {
 test("测试未通过结果不被改写", () => {
   const input = baseInput({
     tests: [
-      { name: "边界 60", passed: false, detail: "期望 B，实际得到 C" },
+      {
+        name: "边界 60",
+        passed: false,
+        detail: "期望 B，实际得到 C",
+        expected: "B",
+        actual: "C",
+        rule: "包含边界值 60",
+      },
       { name: "边界 90", passed: true, detail: "" },
     ],
     attemptedHints: ["先检查 60、89、90。"],

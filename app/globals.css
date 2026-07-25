@@ -954,6 +954,11 @@ textarea:focus-visible {
   color: var(--red);
 }
 
+.test-copy {
+  min-width: 0;
+  flex: 1;
+}
+
 .test-results strong {
   display: block;
   font-size: 10px;
@@ -964,6 +969,61 @@ textarea:focus-visible {
   color: #7b554f;
   font-size: 9px;
   line-height: 1.45;
+}
+
+.test-rule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 7px;
+  color: #5f6b65;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.test-rule span {
+  padding: 3px 5px;
+  border-radius: 5px;
+  background: #e8eee8;
+  color: #426354;
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.test-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.test-comparison > div {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 7px;
+  background: #f5f3f0;
+}
+
+.test-comparison span,
+.test-comparison code {
+  display: block;
+}
+
+.test-comparison span {
+  margin-bottom: 5px;
+  color: #818a85;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.test-comparison code {
+  overflow-wrap: anywhere;
+  color: #303c36;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+  line-height: 1.45;
+  white-space: pre-wrap;
 }
 
 .feedback-footer {

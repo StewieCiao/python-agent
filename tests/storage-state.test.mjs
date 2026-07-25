@@ -97,6 +97,22 @@ test("异常与测试结果必须满足页面实际使用的类型", () => {
     () => parseStoredProgress(JSON.stringify(badTest), lessonIds),
     /mistakes/,
   );
+
+  const badFeedback = validState();
+  badFeedback.mistakes[0].tests = [
+    {
+      name: "输出",
+      passed: false,
+      detail: "不匹配",
+      expected: 56,
+      actual: "54",
+      rule: "允许交换乘数",
+    },
+  ];
+  assert.throws(
+    () => parseStoredProgress(JSON.stringify(badFeedback), lessonIds),
+    /mistakes/,
+  );
 });
 
 test("无效 JSON 明确抛错，不返回部分默认值", () => {

@@ -18,7 +18,10 @@ function isValidTest(value) {
     isRecord(value) &&
     typeof value.name === "string" &&
     typeof value.passed === "boolean" &&
-    typeof value.detail === "string"
+    typeof value.detail === "string" &&
+    (value.expected === undefined || typeof value.expected === "string") &&
+    (value.actual === undefined || typeof value.actual === "string") &&
+    (value.rule === undefined || typeof value.rule === "string")
   );
 }
 

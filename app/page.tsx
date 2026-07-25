@@ -701,7 +701,7 @@ export default function Home() {
                             ? exceptionGuidance(result.exception)
                             : runPassed
                               ? "你的代码满足本关全部要求，进度已保存在本机。"
-                              : "Python 已正常执行；当前问题来自练习测试结果，而不是运行时异常。"}
+                              : "Python 已正常执行。请对照下面的“你的输出、期望结果、宽松规则”逐项修正。"}
                         </p>
                       </div>
                     </div>
@@ -740,9 +740,27 @@ export default function Home() {
                         {result.tests.map((test) => (
                           <div className={test.passed ? "test-pass" : "test-fail"} key={test.name}>
                             <span>{test.passed ? "✓" : "×"}</span>
-                            <div>
+                            <div className="test-copy">
                               <strong>{test.name}</strong>
                               {test.detail && <p>{test.detail}</p>}
+                              {test.rule && (
+                                <div className="test-rule">
+                                  <span>宽松规则</span>
+                                  {test.rule}
+                                </div>
+                              )}
+                              {!test.passed && test.expected && (
+                                <div className="test-comparison">
+                                  <div>
+                                    <span>你的输出</span>
+                                    <code>{test.actual || "（没有这一行输出）"}</code>
+                                  </div>
+                                  <div>
+                                    <span>期望结果</span>
+                                    <code>{test.expected}</code>
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           </div>
                         ))}

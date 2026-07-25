@@ -2,6 +2,9 @@ export type PromptTestResult = {
   name: string;
   passed: boolean;
   detail: string;
+  expected?: string;
+  actual?: string;
+  rule?: string;
 };
 
 export type PromptException = {
