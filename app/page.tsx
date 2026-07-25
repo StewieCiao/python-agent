@@ -701,7 +701,7 @@ export default function Home() {
                             ? exceptionGuidance(result.exception)
                             : runPassed
                               ? "你的代码满足本关全部要求，进度已保存在本机。"
-                              : "Python 已正常执行。请对照下面的“你的输出、期望结果、宽松规则”逐项修正。"}
+                              : "Python 已正常执行。请对照下面的实际结果、期望结果与判定规则逐项修正。"}
                         </p>
                       </div>
                     </div>
@@ -745,15 +745,15 @@ export default function Home() {
                               {test.detail && <p>{test.detail}</p>}
                               {test.rule && (
                                 <div className="test-rule">
-                                  <span>宽松规则</span>
+                                  <span>{test.kind === "structure" ? "教学构造" : "行为规则"}</span>
                                   {test.rule}
                                 </div>
                               )}
                               {!test.passed && test.expected && (
                                 <div className="test-comparison">
                                   <div>
-                                    <span>你的输出</span>
-                                    <code>{test.actual || "（没有这一行输出）"}</code>
+                                    <span>实际结果</span>
+                                    <code>{test.actual || "（测试未得到可比较结果）"}</code>
                                   </div>
                                   <div>
                                     <span>期望结果</span>

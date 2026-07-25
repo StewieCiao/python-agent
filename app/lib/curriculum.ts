@@ -2,9 +2,11 @@ export type LessonTest = {
   name: string;
   expression: string;
   failure: string;
+  kind?: "behavior" | "structure";
   feedback?: {
     expected: string;
-    actualLine: number;
+    actualLine?: number;
+    actualExpression?: string;
     rule: string;
   };
 };
@@ -50,7 +52,7 @@ export const lessons: Lesson[] = [
     ],
     requirements: [
       "第一行输出“我的第一段 Python”；中英文之间有无空格都可以",
-      "第二行用乘法表达式输出 56；8*7、7*8，以及运算符两侧加空格都可以",
+      "第二个 print() 的括号中直接写乘法表达式并输出 56；8*7、7*8，以及运算符两侧加空格都可以",
     ],
     starterCode: '# 在这里写下你的第一段代码\nprint("你好，Python")\n',
     hints: ["需要调用两次 print()。", "乘法运算符是 *，不要手算后直接写 56。"],
@@ -66,13 +68,24 @@ export const lessons: Lesson[] = [
         },
       },
       {
-        name: "第二行是乘法结果（乘数顺序不限）",
-        expression: `_uses_multiplication(_source) and len(_output_lines) >= 2 and _output_lines[1].strip() == "56"`,
-        failure: "第二行应输出乘法计算得到的 56；8*7 与 7*8 都会通过。",
+        name: "第二行输出 56",
+        expression: `len(_output_lines) >= 2 and _output_lines[1].strip() == "56"`,
+        failure: "第二行应输出 56。",
         feedback: {
-          expected: "56（由乘法表达式计算）",
+          expected: "56",
           actualLine: 1,
-          rule: "允许 8*7、7*8，以及运算符两侧任意空格",
+          rule: "检查真实标准输出的第二行",
+        },
+      },
+      {
+        name: "乘法写在第二个 print 中",
+        expression: `_second_print_uses_multiplication(_source)`,
+        failure: "请在第二个 print() 的括号中直接写乘法表达式。",
+        kind: "structure",
+        feedback: {
+          expected: "第二个 print 的参数表达式包含 *",
+          actualExpression: `_second_print_uses_multiplication(_source)`,
+          rule: "AST 只检查第二个 print 的参数；其他位置出现乘法不计入",
         },
       },
     ],
@@ -101,12 +114,35 @@ export const lessons: Lesson[] = [
     starterCode: 'name = ""\nlevel = 0\n\nprint()\n',
     hints: ["字符串需要引号，数字不需要。", '试试：print(f"{name}正在挑战第 {level} 关")，留意文字中的空格。'],
     tests: [
-      { name: "name 保存正确", expression: `name == "小派"`, failure: "变量 name 应保存字符串“小派”。" },
-      { name: "level 是数字 1", expression: `level == 1 and isinstance(level, int)`, failure: "level 应是整数 1，而不是字符串。" },
+      {
+        name: "name 保存正确",
+        expression: `name == "小派"`,
+        failure: "变量 name 应保存字符串“小派”。",
+        feedback: {
+          expected: "'小派'",
+          actualExpression: "name",
+          rule: "检查变量 name 的真实值",
+        },
+      },
+      {
+        name: "level 是数字 1",
+        expression: `level == 1 and isinstance(level, int)`,
+        failure: "level 应是整数 1，而不是字符串。",
+        feedback: {
+          expected: "1（int）",
+          actualExpression: `(level, type(level).__name__)`,
+          rule: "值和类型都必须正确",
+        },
+      },
       {
         name: "输出完全匹配",
         expression: `_stdout.strip() == "小派正在挑战第 1 关"`,
         failure: "输出应为“小派正在挑战第 1 关”，请检查空格。",
+        feedback: {
+          expected: "小派正在挑战第 1 关",
+          actualLine: 0,
+          rule: "检查去除首尾空白后的完整输出",
+        },
       },
     ],
   },
@@ -117,7 +153,7 @@ export const lessons: Lesson[] = [
     title: "处理真实文本",
     kicker: "字符串方法",
     minutes: 12,
-    goal: "清理用户输入，并提取文本中的有效信息。",
+    goal: "把文本清理规则封装成可复用函数。",
     concepts: [
       {
         title: "方法是值自带的工具",
@@ -130,15 +166,29 @@ export const lessons: Lesson[] = [
         example: 'word = "python"\nprint(word[:3])  # pyt',
       },
     ],
-    requirements: ['变量 raw 的值保持为 "  PyThOn 学习  "', "生成 clean：去除两端空格并转为小写", "输出 clean 和它的前 6 个字符"],
-    starterCode: 'raw = "  PyThOn 学习  "\n\n# 生成 clean\n\n# 分两行输出\n',
-    hints: ["可以连续调用 .strip().lower()。", "前 6 个字符的切片是 clean[:6]。"],
+    requirements: ["实现 normalize_title(text)", "返回去除两端空格并转为小写的新字符串", "不要在函数内 print"],
+    starterCode: "def normalize_title(text):\n    # 返回清理后的新字符串\n    pass\n",
+    hints: ["可以连续调用 .strip().lower()。", "直接 return 清理结果，不需要额外变量。"],
     tests: [
-      { name: "清理结果正确", expression: `clean == "python 学习"`, failure: "clean 应同时完成去空格和小写转换。" },
       {
-        name: "两行输出正确",
-        expression: `_stdout.strip().splitlines() == ["python 学习", "python"]`,
-        failure: "第一行输出 clean，第二行输出它的前 6 个字符。",
+        name: "混合大小写与中文",
+        expression: `_silent_call(normalize_title, "  PyThOn 学习  ") == ("python 学习", "")`,
+        failure: "应同时去掉两端空格、转为小写，并且不打印。",
+        feedback: {
+          expected: `("python 学习", "")`,
+          actualExpression: `_silent_call(normalize_title, "  PyThOn 学习  ")`,
+          rule: "结果元组第二项必须为空字符串，表示函数没有打印",
+        },
+      },
+      {
+        name: "可复用于其他输入",
+        expression: `_silent_call(normalize_title, "\\t  Data SCIENCE \\n") == ("data science", "")`,
+        failure: "函数应根据传入文本工作，不能写死示例结果。",
+        feedback: {
+          expected: `("data science", "")`,
+          actualExpression: `_silent_call(normalize_title, "\\t  Data SCIENCE \\n")`,
+          rule: "使用未在起始代码中出现的输入验证",
+        },
       },
     ],
   },
@@ -162,13 +212,40 @@ export const lessons: Lesson[] = [
         example: "age >= 18",
       },
     ],
-    requirements: ["实现函数 grade(score)", "90 分及以上返回 A；60–89 返回 B；低于 60 返回 C", "不要使用三个互相独立的 if"],
+    requirements: ["实现函数 grade(score)", "90 分及以上返回 A；60–89 返回 B；低于 60 返回 C"],
     starterCode: 'def grade(score):\n    # 在这里完成分支\n    pass\n',
-    hints: ["先判断 score >= 90，再判断 score >= 60。", "每个分支直接 return，就不需要额外变量。"],
+    hints: ["建议使用 if / elif / else，或用提前 return 表达互斥边界。", "先判断 score >= 90，再判断 score >= 60。"],
     tests: [
-      { name: "高分段", expression: `grade(90) == "A" and grade(100) == "A"`, failure: "90 和 100 都应返回 A。" },
-      { name: "中间分段", expression: `grade(60) == "B" and grade(89) == "B"`, failure: "60 到 89 应返回 B。" },
-      { name: "低分段", expression: `grade(0) == "C" and grade(59) == "C"`, failure: "低于 60 应返回 C。" },
+      {
+        name: "高分段",
+        expression: `grade(90) == "A" and grade(100) == "A"`,
+        failure: "90 和 100 都应返回 A。",
+        feedback: {
+          expected: "('A', 'A')",
+          actualExpression: `(grade(90), grade(100))`,
+          rule: "90 是 A 段的下边界",
+        },
+      },
+      {
+        name: "中间分段",
+        expression: `grade(60) == "B" and grade(89) == "B"`,
+        failure: "60 到 89 应返回 B。",
+        feedback: {
+          expected: "('B', 'B')",
+          actualExpression: `(grade(60), grade(89))`,
+          rule: "同时检查中间段两侧边界",
+        },
+      },
+      {
+        name: "低分段",
+        expression: `grade(0) == "C" and grade(59) == "C"`,
+        failure: "低于 60 应返回 C。",
+        feedback: {
+          expected: "('C', 'C')",
+          actualExpression: `(grade(0), grade(59))`,
+          rule: "59 仍属于低分段",
+        },
+      },
     ],
   },
   {
@@ -191,13 +268,41 @@ export const lessons: Lesson[] = [
         example: "total = 0\nfor n in numbers:\n    total += n",
       },
     ],
-    requirements: ["遍历 numbers", "只累加其中的偶数", "最后输出总和 18"],
-    starterCode: "numbers = [3, 4, 7, 6, 8, 1]\ntotal = 0\n\n# 写一个循环\n\nprint(total)\n",
+    requirements: ["实现 sum_even(numbers)", "用 for 遍历传入序列", "返回其中所有偶数的总和"],
+    starterCode: "def sum_even(numbers):\n    total = 0\n    # 用循环更新 total\n    return total\n",
     hints: ["偶数满足 number % 2 == 0。", "只有条件成立时才执行 total += number。"],
     tests: [
-      { name: "偶数和正确", expression: `total == 18`, failure: "4 + 6 + 8 的结果应为 18。" },
-      { name: "使用循环", expression: `"for " in _source`, failure: "请使用 for 循环，而不是直接写出答案。" },
-      { name: "输出结果", expression: `_stdout.strip() == "18"`, failure: "循环结束后输出 total。" },
+      {
+        name: "混合正负数",
+        expression: `sum_even([3, 4, 10, -6, 7]) == 8`,
+        failure: "应只累加偶数；本组输入期望得到 8。",
+        feedback: {
+          expected: "8",
+          actualExpression: `sum_even([3, 4, 10, -6, 7])`,
+          rule: "使用未在起始代码中出现的正数、负数和奇数",
+        },
+      },
+      {
+        name: "空输入与全奇数",
+        expression: `sum_even([]) == 0 and sum_even([1, 3, 9]) == 0`,
+        failure: "空输入和全奇数输入都应返回 0。",
+        feedback: {
+          expected: "(0, 0)",
+          actualExpression: `(sum_even([]), sum_even([1, 3, 9]))`,
+          rule: "返回结果，不依赖固定全局样例",
+        },
+      },
+      {
+        name: "使用 for 循环",
+        expression: `_function_has_node(_source, "sum_even", "For")`,
+        failure: "本关要求在 sum_even 函数中使用 for 循环。",
+        kind: "structure",
+        feedback: {
+          expected: "sum_even 函数体包含 for 循环",
+          actualExpression: `_function_has_node(_source, "sum_even", "For")`,
+          rule: "AST 只检查 sum_even 函数体；注释中的 for 不算",
+        },
+      },
     ],
   },
   {
@@ -224,10 +329,36 @@ export const lessons: Lesson[] = [
     starterCode: "def shipping_fee(price, member):\n    pass\n",
     hints: ["“或”对应 or。", "免费条件成立时 return 0，否则 return 10。"],
     tests: [
-      { name: "会员免运费", expression: `shipping_fee(20, True) == 0`, failure: "会员无论金额多少都应返回 0。" },
-      { name: "满额免运费", expression: `shipping_fee(99, False) == 0`, failure: "非会员满 99 元也应返回 0。" },
-      { name: "普通运费", expression: `shipping_fee(98, False) == 10`, failure: "非会员且未满 99 元应返回 10。" },
-      { name: "函数不打印", expression: `_stdout == ""`, failure: "函数应 return 结果，不要在函数内 print。" },
+      {
+        name: "会员免运费且不打印",
+        expression: `_silent_call(shipping_fee, 20, True) == (0, "")`,
+        failure: "会员应返回 0，调用期间不能打印。",
+        feedback: {
+          expected: `(0, "")`,
+          actualExpression: `_silent_call(shipping_fee, 20, True)`,
+          rule: "在真实调用 shipping_fee 时捕获标准输出",
+        },
+      },
+      {
+        name: "99 元边界且不打印",
+        expression: `_silent_call(shipping_fee, 99, False) == (0, "")`,
+        failure: "非会员恰好 99 元应返回 0，调用期间不能打印。",
+        feedback: {
+          expected: `(0, "")`,
+          actualExpression: `_silent_call(shipping_fee, 99, False)`,
+          rule: "99 属于免运费边界",
+        },
+      },
+      {
+        name: "普通情况且不打印",
+        expression: `_silent_call(shipping_fee, 37, False) == (10, "")`,
+        failure: "非会员且未满 99 元应返回 10，调用期间不能打印。",
+        feedback: {
+          expected: `(10, "")`,
+          actualExpression: `_silent_call(shipping_fee, 37, False)`,
+          rule: "用未在起始代码中出现的金额验证",
+        },
+      },
     ],
   },
   {
@@ -250,12 +381,41 @@ export const lessons: Lesson[] = [
         example: "[n * 2 for n in numbers if n > 0]",
       },
     ],
-    requirements: ["从 scores 中选出及格分数（>= 60）", "给每个及格分数加 5 分，但最高不超过 100", "结果保存为 improved"],
-    starterCode: "scores = [48, 60, 77, 98, 35]\n\nimproved = []\n",
+    requirements: ["实现 improve_scores(scores)", "选出及格分数（>= 60）并各加 5 分，最高不超过 100", "使用列表推导式返回新列表"],
+    starterCode: "def improve_scores(scores):\n    # 用一个列表推导式返回结果\n    pass\n",
     hints: ["先筛选 score >= 60。", "min(score + 5, 100) 可以限制上限。"],
     tests: [
-      { name: "结果内容正确", expression: `improved == [65, 82, 100]`, failure: "期望得到 [65, 82, 100]。" },
-      { name: "使用推导式", expression: `"[" in _source and " for " in _source`, failure: "请尝试用一个列表推导式完成。" },
+      {
+        name: "筛选、加分与封顶",
+        expression: `improve_scores([59, 60, 95, 100, 42]) == [65, 100, 100]`,
+        failure: "应过滤不及格分数，及格分加 5 并封顶 100。",
+        feedback: {
+          expected: "[65, 100, 100]",
+          actualExpression: `improve_scores([59, 60, 95, 100, 42])`,
+          rule: "按原顺序返回通过筛选的结果",
+        },
+      },
+      {
+        name: "空输入与另一组分数",
+        expression: `improve_scores([]) == [] and improve_scores([61, 74]) == [66, 79]`,
+        failure: "函数应适用于空列表和其他分数。",
+        feedback: {
+          expected: "([], [66, 79])",
+          actualExpression: `(improve_scores([]), improve_scores([61, 74]))`,
+          rule: "不能写死起始样例",
+        },
+      },
+      {
+        name: "使用列表推导式",
+        expression: `_function_has_node(_source, "improve_scores", "ListComp")`,
+        failure: "本关要求在 improve_scores 中使用列表推导式。",
+        kind: "structure",
+        feedback: {
+          expected: "improve_scores 函数体包含列表推导式",
+          actualExpression: `_function_has_node(_source, "improve_scores", "ListComp")`,
+          rule: "AST 只检查目标函数；注释或其他位置的文本不算",
+        },
+      },
     ],
   },
   {
@@ -278,16 +438,41 @@ export const lessons: Lesson[] = [
         example: "counts[word] = counts.get(word, 0) + 1",
       },
     ],
-    requirements: ["统计 words 中每个单词出现次数", "保存到 counts 字典", "不要提前写死任何单词键"],
-    starterCode: 'words = ["py", "go", "py", "js", "py", "go"]\ncounts = {}\n\n# 遍历并统计\n',
+    requirements: ["实现 word_counts(words)", "返回每个单词及其出现次数组成的字典", "用 for 遍历输入，不提前写死任何单词键"],
+    starterCode: "def word_counts(words):\n    counts = {}\n    # 遍历并统计\n    return counts\n",
     hints: ["每轮用 word 作为 counts 的键。", "右侧可以写 counts.get(word, 0) + 1。"],
     tests: [
       {
-        name: "频次统计正确",
-        expression: `counts == {"py": 3, "go": 2, "js": 1}`,
-        failure: "py、go、js 的次数应分别为 3、2、1。",
+        name: "统计未见过的单词",
+        expression: `word_counts(["rust", "py", "rust", "go", "rust", "py"]) == {"rust": 3, "py": 2, "go": 1}`,
+        failure: "应根据传入单词动态统计，不能写死 py/go/js 样例。",
+        feedback: {
+          expected: `{"rust": 3, "py": 2, "go": 1}`,
+          actualExpression: `word_counts(["rust", "py", "rust", "go", "rust", "py"])`,
+          rule: "键来自传入列表，而不是预先写死",
+        },
       },
-      { name: "结果是字典", expression: `isinstance(counts, dict)`, failure: "counts 应保持为字典。" },
+      {
+        name: "空输入与重复一次",
+        expression: `word_counts([]) == {} and word_counts(["x", "y"]) == {"x": 1, "y": 1}`,
+        failure: "空列表应返回空字典，新单词应从 1 开始。",
+        feedback: {
+          expected: `({}, {"x": 1, "y": 1})`,
+          actualExpression: `(word_counts([]), word_counts(["x", "y"]))`,
+          rule: "函数必须可复用",
+        },
+      },
+      {
+        name: "使用 for 遍历",
+        expression: `_function_has_node(_source, "word_counts", "For")`,
+        failure: "本关要求在 word_counts 中使用 for 循环统计。",
+        kind: "structure",
+        feedback: {
+          expected: "word_counts 函数体包含 for 循环",
+          actualExpression: `_function_has_node(_source, "word_counts", "For")`,
+          rule: "AST 只检查目标函数；注释中的 for 不算",
+        },
+      },
     ],
   },
   {
@@ -314,12 +499,46 @@ export const lessons: Lesson[] = [
     starterCode: "def parse_age(text):\n    # 只处理可预期的输入错误\n    pass\n",
     hints: ["int(text) 失败时会抛出 ValueError。", "try 中直接 return int(text)，except ValueError 中 return None。"],
     tests: [
-      { name: "有效年龄", expression: `parse_age("18") == 18`, failure: "字符串“18”应转换为整数 18。" },
-      { name: "无效年龄", expression: `parse_age("十八") is None`, failure: "无法转换时应返回 None。" },
       {
-        name: "捕获范围清晰",
-        expression: `"except ValueError" in _source and "except Exception" not in _source and "except BaseException" not in _source`,
-        failure: "请只捕获 ValueError。",
+        name: "多个有效整数",
+        expression: `parse_age("18") == 18 and parse_age(" 27 ") == 27`,
+        failure: "有效整数字符串应交给 int 转换，不能只识别一个样例。",
+        feedback: {
+          expected: "(18, 27)",
+          actualExpression: `(parse_age("18"), parse_age(" 27 "))`,
+          rule: "使用两个不同输入验证转换行为",
+        },
+      },
+      {
+        name: "无效年龄",
+        expression: `parse_age("十八") is None`,
+        failure: "无法转换时应返回 None。",
+        feedback: {
+          expected: "None",
+          actualExpression: `parse_age("十八")`,
+          rule: "只把 int 转换产生的 ValueError 转为 None",
+        },
+      },
+      {
+        name: "TypeError 继续外溢",
+        expression: `_type_error_escapes(parse_age)`,
+        failure: "只应处理 ValueError；int 转换中的 TypeError 必须继续抛出。",
+        feedback: {
+          expected: "TypeError 继续抛出",
+          actualExpression: `_type_error_escapes(parse_age)`,
+          rule: "行为探针会让 __int__ 抛出 TypeError；宽泛捕获会失败",
+        },
+      },
+      {
+        name: "只捕获 ValueError",
+        expression: `_function_catches_only_value_error(_source, "parse_age")`,
+        failure: "parse_age 中应使用 except ValueError；不能使用 bare except、Exception 或 BaseException。",
+        kind: "structure",
+        feedback: {
+          expected: "parse_age 至少有一个 except，且每个 handler 仅捕获 ValueError",
+          actualExpression: `_function_catches_only_value_error(_source, "parse_age")`,
+          rule: "AST 只检查 parse_age；接受括号和 as 别名，不读取源码字符串",
+        },
       },
     ],
   },
@@ -351,16 +570,31 @@ export const lessons: Lesson[] = [
         name: "初始余额",
         expression: `(lambda w: w.balance == 0)(Wallet())`,
         failure: "新 Wallet 的 balance 应为 0。",
+        feedback: {
+          expected: "0",
+          actualExpression: "Wallet().balance",
+          rule: "每个新实例都从 0 开始",
+        },
       },
       {
-        name: "存款更新并返回",
-        expression: `(lambda w: w.deposit(30) == 30 and w.balance == 30)(Wallet())`,
-        failure: "deposit(30) 后应返回 30，余额也应为 30。",
+        name: "连续存款更新并返回",
+        expression: `_wallet_sequence(Wallet)`,
+        failure: "连续存入 30 和 12 后，应分别返回 30、42，最终余额为 42。",
+        feedback: {
+          expected: "(30, 42, 42)",
+          actualExpression: `_wallet_results(Wallet)`,
+          rule: "同一个 Wallet 实例连续调用两次",
+        },
       },
       {
-        name: "拒绝非法金额",
-        expression: `(lambda: _raises_value_error(lambda: Wallet().deposit(0)))()`,
-        failure: "amount <= 0 时应抛出 ValueError。",
+        name: "拒绝零和负数",
+        expression: `_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-5))`,
+        failure: "amount 为 0 或负数时都应抛出 ValueError。",
+        feedback: {
+          expected: "(True, True)",
+          actualExpression: `(_raises_value_error(lambda: Wallet().deposit(0)), _raises_value_error(lambda: Wallet().deposit(-5)))`,
+          rule: "完整验证 amount <= 0",
+        },
       },
     ],
   },
@@ -388,9 +622,37 @@ export const lessons: Lesson[] = [
     starterCode: "def even_numbers(limit):\n    pass\n",
     hints: ["range(0, limit + 1, 2) 会依次产生偶数。", "循环中使用 yield number，而不是 return。"],
     tests: [
-      { name: "边界与顺序", expression: `list(even_numbers(6)) == [0, 2, 4, 6]`, failure: "limit=6 时应依次产生 0、2、4、6。" },
-      { name: "确实是生成器", expression: `inspect.isgenerator(even_numbers(2))`, failure: "请使用 yield，让函数返回生成器。" },
-      { name: "无中间列表", expression: `"yield" in _source and "return [" not in _source`, failure: "使用 yield 按需产生值。" },
+      {
+        name: "边界与顺序",
+        expression: `list(even_numbers(6)) == [0, 2, 4, 6]`,
+        failure: "limit=6 时应依次产生 0、2、4、6。",
+        feedback: {
+          expected: "[0, 2, 4, 6]",
+          actualExpression: "list(even_numbers(6))",
+          rule: "包含偶数上限并保持升序",
+        },
+      },
+      {
+        name: "零、奇数与负数边界",
+        expression: `list(even_numbers(0)) == [0] and list(even_numbers(5)) == [0, 2, 4] and list(even_numbers(-2)) == []`,
+        failure: "应正确处理 0、奇数上限和负数上限。",
+        feedback: {
+          expected: "([0], [0, 2, 4], [])",
+          actualExpression: `(list(even_numbers(0)), list(even_numbers(5)), list(even_numbers(-2)))`,
+          rule: "limit 为包含上限；负数范围为空",
+        },
+      },
+      {
+        name: "确实是生成器函数",
+        expression: `inspect.isgeneratorfunction(even_numbers)`,
+        failure: "even_numbers 本身应是生成器函数。",
+        kind: "structure",
+        feedback: {
+          expected: "True",
+          actualExpression: `inspect.isgeneratorfunction(even_numbers)`,
+          rule: "使用 Python 运行时的生成器语义判断，不读取源码文本",
+        },
+      },
     ],
   },
   {
@@ -417,13 +679,16 @@ export const lessons: Lesson[] = [
     starterCode: "def twice(func):\n    # 返回包装函数\n    pass\n\n@twice\ndef add(a, b):\n    return a + b\n",
     hints: ["在 twice 内定义 wrapper(*args, **kwargs)。", "调用两次 func；第一次不保存，第二次 return。"],
     tests: [
-      { name: "返回第二次结果", expression: `add(2, 3) == 5`, failure: "装饰后的 add(2, 3) 应返回 5。" },
       {
-        name: "确实调用两次",
-        expression: `_decorator_called_twice(twice)`,
-        failure: "包装器应调用原函数两次。",
+        name: "调用两次并返回第二次结果",
+        expression: `_decorator_contract(twice)`,
+        failure: "包装器应以完全相同的位置参数和关键字参数调用两次，并返回第二次结果。",
+        feedback: {
+          expected: "两次调用参数一致，返回第 2 次结果",
+          actualExpression: `_decorator_observation(twice)`,
+          rule: "用真实位置参数、仅关键字参数和调用次数记录验证",
+        },
       },
-      { name: "转发任意参数", expression: `"*args" in _source and "**kwargs" in _source`, failure: "包装函数应接收并转发 *args、**kwargs。" },
     ],
   },
   {
@@ -447,19 +712,39 @@ export const lessons: Lesson[] = [
         example: "words = text.lower().split()",
       },
     ],
-    requirements: ["实现 analyze(text)", "忽略大小写并按空白分词", "返回 words、unique、top 三个字段", "top 为出现最多的单词"],
+    requirements: ["实现 analyze(text)", "忽略大小写并按空白分词", "返回 words、unique、top 三个字段", "top 为出现最多的单词；同频时取最先出现者", "空文本的 top 为 None"],
     starterCode: "def analyze(text):\n    # 1. 清洗并分词\n    # 2. 统计次数\n    # 3. 返回结果\n    pass\n",
-    hints: ["words 数量是 len(words)，unique 是 len(counts)。", "max(counts, key=counts.get) 能找到次数最高的键。"],
+    hints: ["words 数量是 len(words)，unique 是 len(counts)。", "非空时 max(counts, key=counts.get) 会在同频时保留最先插入的键。"],
     tests: [
       {
         name: "基本统计",
         expression: `analyze("Py py code") == {"words": 3, "unique": 2, "top": "py"}`,
         failure: "“Py py code” 应得到 words=3、unique=2、top=py。",
+        feedback: {
+          expected: `{"words": 3, "unique": 2, "top": "py"}`,
+          actualExpression: `analyze("Py py code")`,
+          rule: "忽略大小写后校验完整字典",
+        },
       },
       {
-        name: "按任意空白分词",
-        expression: `analyze("one\\n two\\tone")["top"] == "one"`,
-        failure: "split() 应能处理换行和制表符。",
+        name: "第二组完整结果",
+        expression: `analyze("one\\n two\\tone") == {"words": 3, "unique": 2, "top": "one"}`,
+        failure: "换行和制表符也应分词，并返回完整、结构稳定的字典。",
+        feedback: {
+          expected: `{"words": 3, "unique": 2, "top": "one"}`,
+          actualExpression: `analyze("one\\n two\\tone")`,
+          rule: "校验完整字典，不只检查 top",
+        },
+      },
+      {
+        name: "同频与空文本",
+        expression: `analyze("red blue blue red") == {"words": 4, "unique": 2, "top": "red"} and analyze("   ") == {"words": 0, "unique": 0, "top": None}`,
+        failure: "同频时取最先出现的单词；空文本的 top 为 None。",
+        feedback: {
+          expected: `({"words": 4, "unique": 2, "top": "red"}, {"words": 0, "unique": 0, "top": None})`,
+          actualExpression: `(analyze("red blue blue red"), analyze("   "))`,
+          rule: "同频规则明确为最先出现者",
+        },
       },
     ],
   },
@@ -484,17 +769,41 @@ export const lessons: Lesson[] = [
         example: "by_category[key] = by_category.get(key, 0) + amount",
       },
     ],
-    requirements: ["实现 summarize(records)", "返回 total 和 by_category", "空列表也返回 total=0 与空字典", "只遍历 records 一次"],
+    requirements: ["实现 summarize(records)", "返回 total 和 by_category", "空列表也返回 total=0 与空字典", "在一个 for 循环中同时完成两项汇总，不使用额外推导式"],
     starterCode: "def summarize(records):\n    total = 0\n    by_category = {}\n    # 完成一次遍历\n    return {\"total\": total, \"by_category\": by_category}\n",
     hints: ["每条 record 用 record['amount'] 和 record['category'] 取值。", "在同一个 for 循环中更新 total 与 by_category。"],
     tests: [
       {
-        name: "汇总正确",
-        expression: `summarize([{"category":"餐饮","amount":28},{"category":"交通","amount":12},{"category":"餐饮","amount":20}]) == {"total":60,"by_category":{"餐饮":48,"交通":12}}`,
-        failure: "总额应为 60，餐饮 48，交通 12。",
+        name: "多组记录汇总",
+        expression: `summarize([{"category":"书籍","amount":13},{"category":"交通","amount":7},{"category":"书籍","amount":2}]) == {"total":22,"by_category":{"书籍":15,"交通":7}}`,
+        failure: "应按传入记录计算总额和分类，不能硬编码空/非空结果。",
+        feedback: {
+          expected: `{"total": 22, "by_category": {"书籍": 15, "交通": 7}}`,
+          actualExpression: `summarize([{"category":"书籍","amount":13},{"category":"交通","amount":7},{"category":"书籍","amount":2}])`,
+          rule: "使用未在起始代码中出现的类别和金额",
+        },
       },
-      { name: "空输入", expression: `summarize([]) == {"total": 0, "by_category": {}}`, failure: "空列表应返回零总额和空分类。" },
-      { name: "一次遍历", expression: `_source.count("for ") == 1`, failure: "这个项目只需要一个 for 循环。" },
+      {
+        name: "空输入",
+        expression: `summarize([]) == {"total": 0, "by_category": {}}`,
+        failure: "空列表应返回零总额和空分类。",
+        feedback: {
+          expected: `{"total": 0, "by_category": {}}`,
+          actualExpression: "summarize([])",
+          rule: "返回结构与非空输入保持一致",
+        },
+      },
+      {
+        name: "使用一个 for 循环",
+        expression: `_function_node_count(_source, "summarize", "For") == 1 and _function_node_count(_source, "summarize", "AsyncFor") == 0 and _function_node_count(_source, "summarize", "comprehension") == 0`,
+        failure: "summarize 中应恰好使用一个同步 for 循环，且不使用额外推导式。",
+        kind: "structure",
+        feedback: {
+          expected: "(1, 0, 0)",
+          actualExpression: `(_function_node_count(_source, "summarize", "For"), _function_node_count(_source, "summarize", "AsyncFor"), _function_node_count(_source, "summarize", "comprehension"))`,
+          rule: "依次为 for、async for、推导式数量；AST 只检查 summarize 的实际函数体",
+        },
+      },
     ],
   },
   {
@@ -526,16 +835,41 @@ export const lessons: Lesson[] = [
         name: "排序规则",
         expression: `plan([{"name":"write","priority":3},{"name":"learn","priority":5},{"name":"build","priority":3}]) == ["learn","build","write"]`,
         failure: "先按优先级降序，同级按名称升序。",
+        feedback: {
+          expected: `["learn", "build", "write"]`,
+          actualExpression: `plan([{"name":"write","priority":3},{"name":"learn","priority":5},{"name":"build","priority":3}])`,
+          rule: "优先级降序，同级名称升序",
+        },
       },
       {
-        name: "拒绝非法优先级",
-        expression: `_raises_value_error(lambda: plan([{"name":"bad","priority":0}]))`,
-        failure: "priority 不在 1–5 时应抛出 ValueError。",
+        name: "空输入与同级排序",
+        expression: `plan([]) == [] and plan([{"name":"zeta","priority":2},{"name":"alpha","priority":2},{"name":"mid","priority":4}]) == ["mid","alpha","zeta"]`,
+        failure: "空输入返回空列表；同优先级按 name 升序。",
+        feedback: {
+          expected: `([], ["mid", "alpha", "zeta"])`,
+          actualExpression: `(plan([]), plan([{"name":"zeta","priority":2},{"name":"alpha","priority":2},{"name":"mid","priority":4}]))`,
+          rule: "同级排序按名称字母顺序",
+        },
+      },
+      {
+        name: "拒绝优先级下界和上界",
+        expression: `_raises_value_error(lambda: plan([{"name":"low","priority":0}])) and _raises_value_error(lambda: plan([{"name":"high","priority":6}]))`,
+        failure: "priority 为 0 或 6 时都应抛出 ValueError。",
+        feedback: {
+          expected: "(True, True)",
+          actualExpression: `(_raises_value_error(lambda: plan([{"name":"low","priority":0}])), _raises_value_error(lambda: plan([{"name":"high","priority":6}]))`,
+          rule: "完整验证 1–5 的两侧边界",
+        },
       },
       {
         name: "不修改输入",
         expression: `_plan_preserves_input(plan)`,
         failure: "请返回新结果，不要原地修改 tasks。",
+        feedback: {
+          expected: "True",
+          actualExpression: "_plan_preserves_input(plan)",
+          rule: "调用前后比较原列表及内部字典",
+        },
       },
     ],
   },

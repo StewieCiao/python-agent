@@ -5,6 +5,7 @@ export type PromptTestResult = {
   expected?: string;
   actual?: string;
   rule?: string;
+  kind?: "behavior" | "structure";
 };
 
 export type PromptException = {

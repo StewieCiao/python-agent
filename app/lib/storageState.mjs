@@ -21,7 +21,10 @@ function isValidTest(value) {
     typeof value.detail === "string" &&
     (value.expected === undefined || typeof value.expected === "string") &&
     (value.actual === undefined || typeof value.actual === "string") &&
-    (value.rule === undefined || typeof value.rule === "string")
+    (value.rule === undefined || typeof value.rule === "string") &&
+    (value.kind === undefined ||
+      value.kind === "behavior" ||
+      value.kind === "structure")
   );
 }
 

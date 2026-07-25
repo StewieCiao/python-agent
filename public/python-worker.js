@@ -20,24 +20,116 @@ def _raises_value_error(func):
         return True
     return False
 
-def _uses_multiplication(source):
+def _second_print_uses_multiplication(source):
     tree = ast.parse(source, filename="<learner>")
-    return any(
-        isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mult)
-        for node in ast.walk(tree)
+    print_calls = [
+        statement.value
+        for statement in tree.body
+        if isinstance(statement, ast.Expr)
+        and isinstance(statement.value, ast.Call)
+        and isinstance(statement.value.func, ast.Name)
+        and statement.value.func.id == "print"
+    ]
+    if len(print_calls) < 2 or not print_calls[1].args:
+        return False
+    return any(isinstance(node, ast.Mult) for node in ast.walk(print_calls[1].args[0]))
+
+def _function_node(source, function_name):
+    tree = ast.parse(source, filename="<learner>")
+    return next(
+        (
+            node
+            for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.name == function_name
+        ),
+        None,
+    )
+
+def _nodes_in_scope(function):
+    pending = list(reversed(function.body))
+    while pending:
+        node = pending.pop()
+        if isinstance(
+            node,
+            (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda),
+        ):
+            continue
+        yield node
+        children = list(ast.iter_child_nodes(node))
+        pending.extend(reversed(children))
+
+def _function_has_node(source, function_name, node_type_name):
+    function = _function_node(source, function_name)
+    node_type = getattr(ast, node_type_name)
+    return function is not None and any(
+        isinstance(node, node_type) for node in _nodes_in_scope(function)
+    )
+
+def _function_node_count(source, function_name, node_type_name):
+    function = _function_node(source, function_name)
+    if function is None:
+        return 0
+    node_type = getattr(ast, node_type_name)
+    return sum(
+        isinstance(node, node_type) for node in _nodes_in_scope(function)
+    )
+
+def _function_catches_only_value_error(source, function_name):
+    function = _function_node(source, function_name)
+    if function is None:
+        return False
+    handlers = [
+        node for node in _nodes_in_scope(function) if isinstance(node, ast.ExceptHandler)
+    ]
+    return bool(handlers) and all(
+        isinstance(handler.type, ast.Name) and handler.type.id == "ValueError"
+        for handler in handlers
     )
 
 def _normalize_python_label(text):
     return re.sub(r"\s+(?=Python$)", "", text.strip())
 
-def _decorator_called_twice(decorator):
-    counter = {"n": 0}
-    def counted():
-        counter["n"] += 1
-        return counter["n"]
-    wrapped = decorator(counted)
-    wrapped()
-    return counter["n"] == 2
+def _silent_call(func, *args, **kwargs):
+    output = io.StringIO()
+    with contextlib.redirect_stdout(output):
+        result = func(*args, **kwargs)
+    return result, output.getvalue()
+
+def _type_error_escapes(func):
+    class TypeErrorProbe:
+        def __int__(self):
+            raise TypeError("type-error-probe")
+    try:
+        func(TypeErrorProbe())
+    except TypeError:
+        return True
+    return False
+
+def _wallet_results(wallet_type):
+    wallet = wallet_type()
+    first = wallet.deposit(30)
+    second = wallet.deposit(12)
+    return first, second, wallet.balance
+
+def _wallet_sequence(wallet_type):
+    return _wallet_results(wallet_type) == (30, 42, 42)
+
+def _decorator_observation(decorator):
+    calls = []
+    def target(left, right, *, scale):
+        calls.append(((left, right), {"scale": scale}))
+        return len(calls) * scale
+    result = decorator(target)(2, 3, scale=4)
+    return {"calls": calls, "result": result}
+
+def _decorator_contract(decorator):
+    expected_call = ((2, 3), {"scale": 4})
+    observation = _decorator_observation(decorator)
+    return observation == {
+        "calls": [expected_call, expected_call],
+        "result": 8,
+    }
 
 def _plan_preserves_input(func):
     items = [{"name": "x", "priority": 2}, {"name": "y", "priority": 4}]
@@ -76,16 +168,24 @@ _result["output"] = _stdout_buffer.getvalue()
 _result["stderr"] = _stderr_buffer.getvalue()
 
 if _result["exception"] is None:
-    _output_lines = _result["output"].strip().splitlines()
+    _output_lines = _result["output"].splitlines()
     _test_namespace = _learner_namespace.copy()
     _test_namespace.update({
         "_stdout": _result["output"],
         "_output_lines": _output_lines,
         "_source": __learner_code,
         "_raises_value_error": _raises_value_error,
-        "_uses_multiplication": _uses_multiplication,
+        "_second_print_uses_multiplication": _second_print_uses_multiplication,
+        "_function_has_node": _function_has_node,
+        "_function_node_count": _function_node_count,
+        "_function_catches_only_value_error": _function_catches_only_value_error,
         "_normalize_python_label": _normalize_python_label,
-        "_decorator_called_twice": _decorator_called_twice,
+        "_silent_call": _silent_call,
+        "_type_error_escapes": _type_error_escapes,
+        "_wallet_results": _wallet_results,
+        "_wallet_sequence": _wallet_sequence,
+        "_decorator_observation": _decorator_observation,
+        "_decorator_contract": _decorator_contract,
         "_plan_preserves_input": _plan_preserves_input,
         "inspect": inspect,
     })
@@ -94,12 +194,14 @@ if _result["exception"] is None:
         _expected = _feedback["expected"] if _feedback else ""
         _rule = _feedback["rule"] if _feedback else ""
         _actual = ""
-        if _feedback:
+        if _feedback and "actualLine" in _feedback:
             _actual_line = _feedback["actualLine"]
             if 0 <= _actual_line < len(_output_lines):
-                _actual = _output_lines[_actual_line]
+                _actual = _output_lines[_actual_line] or "（空行）"
         try:
             _passed = bool(eval(_spec["expression"], _test_namespace, _test_namespace))
+            if not _passed and _feedback and "actualExpression" in _feedback:
+                _actual = repr(eval(_feedback["actualExpression"], _test_namespace, _test_namespace))
             _detail = "" if _passed else _spec["failure"]
         except BaseException as _test_error:
             _passed = False
@@ -111,6 +213,7 @@ if _result["exception"] is None:
             "expected": _expected,
             "actual": _actual,
             "rule": _rule,
+            "kind": _spec.get("kind", "behavior"),
         })
 
 json.dumps(_result, ensure_ascii=False)

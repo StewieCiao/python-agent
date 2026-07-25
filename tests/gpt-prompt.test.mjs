@@ -86,7 +86,9 @@ test("测试未通过结果不被改写", () => {
     ],
     attemptedHints: ["先检查 60、89、90。"],
   });
-  assertCoreFields(parsePayload(buildGptHelpPrompt(input)), input);
+  const prompt = buildGptHelpPrompt(input);
+  assert.match(prompt, /没有 Python 异常、只有测试断言失败，不要编造错误行/);
+  assertCoreFields(parsePayload(prompt), input);
 });
 
 test("所有不可信字段包含标记、换行、引号、反斜杠和指令文本时仍无歧义", () => {

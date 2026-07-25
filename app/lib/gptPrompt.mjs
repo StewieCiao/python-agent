@@ -27,6 +27,7 @@ export function buildGptHelpPrompt(input) {
     "2. 只给解决当前阻塞所需的最小提示；默认不要给完整答案或整段替换代码。",
     "3. 给出一个可验证的下一步，说明修改后应重新运行哪项测试或观察什么输出。",
     "4. 如果信息不足，先明确缺少什么；不要猜测或编造诊断。",
+    "5. 如果没有 Python 异常、只有测试断言失败，不要编造错误行；只依据失败行为或明确的教学构造要求给最小提示。",
     "",
     promptDataHeader,
     JSON.stringify(payload, null, 2),
