@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Python Path · 闯关学习工作台",
-  description: "学知识、写代码、真实运行、看反馈、复习错题，再用项目巩固 Python。",
+  title: "Python → Agent · 智能体开发闯关路线",
+  description: "从 Python 基础、Agent 经典范式到旅行助手与 DeepResearch 的本地学习工作台。",
 };
 
 export default function RootLayout({

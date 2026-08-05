@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { loadPyodide } from "pyodide";
-import { lessons } from "../app/lib/curriculum.ts";
+import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
 
 const workerSource = await readFile(
   new URL("../public/python-worker.js", import.meta.url),
@@ -379,6 +379,194 @@ const validAlternatives = [
 
 for (const scenario of validAlternatives) {
   test(`${scenario.lessonId} 的正确替代写法全部通过`, async () => {
+    const result = await execute(scenario.lessonId, scenario.code);
+    assert.equal(result.exception, null);
+    assert.deepEqual(
+      passed(result),
+      result.tests.map(() => true),
+      result.tests.map((item) => item.detail).filter(Boolean).join("\n"),
+    );
+  });
+}
+
+const agentSolutions = [
+  {
+    lessonId: "agent-tool-registry",
+    code: [
+      "class ToolRegistry:",
+      "    def __init__(self):",
+      "        self.tools = {}",
+      "    def register(self, name, func):",
+      "        if name in self.tools:",
+      "            raise ValueError('duplicate tool')",
+      "        self.tools[name] = func",
+      "    def execute(self, name, payload):",
+      "        return self.tools[name](**payload)",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-action-parser",
+    code: [
+      "def parse_action(text):",
+      "    text = text.strip()",
+      "    if '[' not in text or not text.endswith(']'):",
+      "        return None, None",
+      "    name, payload = text[:-1].split('[', 1)",
+      "    if not name:",
+      "        return None, None",
+      "    return name, payload",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-react-loop",
+    code: [
+      "def parse_action(text):",
+      "    text = text.strip()",
+      "    if '[' not in text or not text.endswith(']'):",
+      "        return None, None",
+      "    name, payload = text[:-1].split('[', 1)",
+      "    return (name, payload) if name else (None, None)",
+      "",
+      "def run_react(actions, tools, max_steps=5):",
+      "    history = []",
+      "    steps = 0",
+      "    for action_text in actions[:max_steps]:",
+      "        steps += 1",
+      "        name, payload = parse_action(action_text)",
+      "        if name == 'Finish':",
+      "            return {'answer': payload, 'history': history, 'steps': steps}",
+      "        observation = tools[name](payload)",
+      "        history.append({'action': name, 'input': payload, 'observation': observation})",
+      "    return {'answer': None, 'history': history, 'steps': steps}",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-plan-solve",
+    code: [
+      "def execute_plan(steps, executor):",
+      "    context = {}",
+      "    results = []",
+      "    for step in steps:",
+      "        result = executor(step['task'], context.copy())",
+      "        results.append({'id': step['id'], 'result': result})",
+      "        context[step['id']] = result",
+      "    return results",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-reflection",
+    code: [
+      "def reflection_loop(draft, evaluate, revise, max_rounds=3):",
+      "    if max_rounds < 0:",
+      "        raise ValueError('max_rounds must be non-negative')",
+      "    for _ in range(max_rounds):",
+      "        if evaluate(draft):",
+      "            return draft",
+      "        draft = revise(draft)",
+      "    return draft",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-memory-retrieval",
+    code: [
+      "def retrieve_memories(memories, query, limit=2):",
+      "    if limit <= 0:",
+      "        return []",
+      "    query_words = set(query.lower().split())",
+      "    scored = []",
+      "    for index, memory in enumerate(memories):",
+      "        content_words = set(memory['content'].lower().split())",
+      "        overlap = len(query_words & content_words)",
+      "        if overlap:",
+      "            scored.append((overlap, memory['importance'], index, memory['content']))",
+      "    scored.sort(key=lambda item: (-item[0], -item[1], item[2]))",
+      "    return [item[3] for item in scored[:limit]]",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-handoff",
+    code: [
+      "def handoff(sender, task, agents):",
+      "    for agent in agents:",
+      "        if task['capability'] in agent['capabilities']:",
+      "            return {'from': sender, 'to': agent['name'], 'task': task['description']}",
+      "    raise LookupError(f\"no agent for {task['capability']}\")",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-travel-project",
+    code: [
+      "def build_trip(city, tools):",
+      "    trace = []",
+      "    weather = tools['weather'](city)",
+      "    trace.append({'tool': 'weather', 'input': city, 'observation': weather})",
+      "    attractions = tools['attraction'](city, weather['condition'])",
+      "    trace.append({'tool': 'attraction', 'input': {'city': city, 'condition': weather['condition']}, 'observation': attractions})",
+      "    return {'city': city, 'weather': weather, 'attractions': attractions, 'trace': trace}",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-deep-research-project",
+    code: [
+      "def build_research_report(topic, tasks, search):",
+      "    sections = []",
+      "    sources = []",
+      "    for task in tasks:",
+      "        results = search(task)",
+      "        findings = [item['snippet'] for item in results]",
+      "        section_sources = [item['url'] for item in results]",
+      "        sections.append({'title': task, 'findings': findings, 'sources': section_sources})",
+      "        for url in section_sources:",
+      "            if url not in sources:",
+      "                sources.append(url)",
+      "    return {'topic': topic, 'sections': sections, 'sources': sources}",
+    ].join("\n"),
+  },
+  {
+    lessonId: "agent-framework-capstone",
+    code: [
+      "class Agent:",
+      "    def __init__(self, name, max_steps=5):",
+      "        self.name = name",
+      "        self.max_steps = max_steps",
+      "        self.tools = {}",
+      "        self.history = []",
+      "    def register_tool(self, name, func):",
+      "        if name in self.tools:",
+      "            raise ValueError('duplicate tool')",
+      "        self.tools[name] = func",
+      "    def run(self, actions):",
+      "        self.history = []",
+      "        for action_text in actions[:self.max_steps]:",
+      "            if '[' not in action_text or not action_text.endswith(']'):",
+      "                continue",
+      "            name, payload = action_text[:-1].split('[', 1)",
+      "            if name == 'Finish':",
+      "                return {'answer': payload, 'history': self.history.copy()}",
+      "            observation = self.tools[name](payload)",
+      "            self.history.append({'action': name, 'input': payload, 'observation': observation})",
+      "        return {'answer': None, 'history': self.history.copy()}",
+    ].join("\n"),
+  },
+];
+
+test("Agent 路线关卡均标注 Hello-Agents 原始来源", () => {
+  const agentLessons = lessons.filter((lesson) => lesson.number >= 16);
+  assert.equal(agentLessons.length, 10);
+  assert.ok(agentLessons.every((lesson) => lesson.source?.url.includes("github.com/datawhalechina/hello-agents")));
+});
+
+test("Python 到 Agent 的 25 关路线连续且每个模块都有内容", () => {
+  assert.deepEqual(
+    lessons.map((lesson) => lesson.number),
+    Array.from({ length: 25 }, (_, index) => index + 1),
+  );
+  assert.equal(new Set(lessons.map((lesson) => lesson.id)).size, lessons.length);
+  assert.ok(MODULE_ORDER.every((module) => lessons.some((lesson) => lesson.module === module)));
+});
+
+for (const scenario of agentSolutions) {
+  test(`${scenario.lessonId} 的参考实现通过真实 Agent 判题`, async () => {
     const result = await execute(scenario.lessonId, scenario.code);
     assert.equal(result.exception, null);
     assert.deepEqual(

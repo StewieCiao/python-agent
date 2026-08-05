@@ -423,6 +423,24 @@ textarea:focus-visible {
   line-height: 1.75;
 }
 
+.lesson-source {
+  display: inline-flex;
+  margin-top: 14px;
+  padding: 7px 9px;
+  border: 1px solid #d5ddd6;
+  border-radius: 7px;
+  background: #f2f5f1;
+  color: #426354;
+  font-size: 10px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.lesson-source:hover {
+  border-color: #aebfb4;
+  background: #eaf0eb;
+}
+
 .concept-section,
 .task-section {
   margin-top: 36px;

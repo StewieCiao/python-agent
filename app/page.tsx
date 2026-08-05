@@ -17,7 +17,7 @@ import { parseStoredProgress } from "./lib/storageState.mjs";
 
 const PYODIDE_VERSION = "314.0.3";
 const EXECUTION_TIMEOUT_MS = 4_000;
-const STORAGE_KEY = "py-path-progress-v1";
+const STORAGE_KEY = "python-agent-path-progress-v2";
 
 type TestResult = PromptTestResult;
 
@@ -421,10 +421,10 @@ export default function Home() {
     <main className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark">PY</div>
+          <div className="brand-mark">AI</div>
           <div>
-            <strong>Python Path</strong>
-            <span>从零到能做项目</span>
+            <strong>Python → Agent</strong>
+            <span>从语法到智能体系统</span>
           </div>
         </div>
 
@@ -439,7 +439,7 @@ export default function Home() {
           <small>{progress.completed.length} / {lessons.length} 个关卡完成</small>
         </div>
 
-        <nav className="course-nav" aria-label="Python 学习路线">
+        <nav className="course-nav" aria-label="Python Agent 学习路线">
           {lessonsByModule.map((group, moduleIndex) => (
             <section className="module-group" key={group.module}>
               <div className="module-title">
@@ -490,8 +490,8 @@ export default function Home() {
       <section className="workspace">
         <header className="topbar">
           <div>
-            <span className="eyebrow">LEARNING WORKSPACE</span>
-            <h1>今天继续前进一小步。</h1>
+            <span className="eyebrow">AGENT BUILDER PATH</span>
+            <h1>把 Python 练成 Agent 开发能力。</h1>
           </div>
           <nav className="view-tabs" aria-label="学习视图">
             <button
@@ -516,7 +516,7 @@ export default function Home() {
               onClick={() => setViewMode("projects")}
               type="button"
             >
-              项目
+              Agent 项目
             </button>
           </nav>
         </header>
@@ -539,6 +539,16 @@ export default function Home() {
               <p className="lesson-kicker">{lesson.kicker}</p>
               <h2>{lesson.title}</h2>
               <p className="lesson-goal">{lesson.goal}</p>
+              {lesson.source && (
+                <a
+                  className="lesson-source"
+                  href={lesson.source.url}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  路线参考 · {lesson.source.label} ↗
+                </a>
+              )}
 
               <section className="concept-section">
                 <div className="section-heading">
@@ -828,8 +838,8 @@ export default function Home() {
           <section className="library-view">
             <div className="library-heading">
               <span>BUILD TO LEARN</span>
-              <h2>把知识拼成真正可用的程序。</h2>
-              <p>项目没有隐藏魔法：仍然是读要求、写代码、看真实反馈、逐项通过测试。</p>
+              <h2>把范式拼成真正可运行的 Agent。</h2>
+              <p>从工具调用到旅行助手与 DeepResearch：仍然是读契约、写代码、看真实反馈、逐项通过测试。</p>
             </div>
             <div className="project-grid">
               {lessons.filter((item) => item.project).map((item) => {
@@ -846,7 +856,7 @@ export default function Home() {
                       <span>{item.tests.length} 项验收</span>
                     </div>
                     <button disabled={locked || isRunning} onClick={() => openLesson(index)} type="button">
-                      {completed ? "重新挑战" : locked ? "完成前置关卡后解锁" : "开始项目"} →
+                      {completed ? "重新挑战" : locked ? "完成前置关卡后解锁" : "开始 Agent 项目"} →
                     </button>
                   </article>
                 );

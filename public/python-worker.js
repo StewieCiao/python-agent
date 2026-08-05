@@ -20,6 +20,20 @@ def _raises_value_error(func):
         return True
     return False
 
+def _raises_key_error(func):
+    try:
+        func()
+    except KeyError:
+        return True
+    return False
+
+def _raises_lookup_error(func):
+    try:
+        func()
+    except LookupError:
+        return True
+    return False
+
 def _second_print_uses_multiplication(source):
     tree = ast.parse(source, filename="<learner>")
     print_calls = [
@@ -137,6 +151,152 @@ def _plan_preserves_input(func):
     func(items)
     return items == before
 
+def _tool_registry_observation(registry_type):
+    calls = []
+    def combine(left, right=0):
+        calls.append({"left": left, "right": right})
+        return left + right
+    registry = registry_type()
+    registry.register("combine", combine)
+    results = [
+        registry.execute("combine", {"left": 2, "right": 3}),
+        registry.execute("combine", {"left": 10}),
+    ]
+    return {"results": results, "calls": calls}
+
+def _tool_registry_contract(registry_type):
+    return _tool_registry_observation(registry_type) == {
+        "results": [5, 10],
+        "calls": [{"left": 2, "right": 3}, {"left": 10, "right": 0}],
+    }
+
+def _tool_registry_errors(registry_type):
+    registry = registry_type()
+    registry.register("echo", lambda value: value)
+    duplicate = _raises_value_error(lambda: registry.register("echo", lambda value: value))
+    missing = _raises_key_error(lambda: registry.execute("missing", {"value": "x"}))
+    return duplicate, missing
+
+def _react_travel_observation(func):
+    tools = {
+        "weather": lambda city: f"{city}:晴",
+        "attraction": lambda request: f"{request}:熊猫基地",
+    }
+    return func(
+        ["weather[成都]", "attraction[成都|晴]", "Finish[安排完成]"],
+        tools,
+        5,
+    )
+
+def _react_limit_observation(func):
+    return func(
+        ["echo[one]", "Finish[不应到达]"],
+        {"echo": lambda text: text.upper()},
+        1,
+    )
+
+def _plan_solve_observation(func):
+    steps = [
+        {"id": "weather", "task": "查天气"},
+        {"id": "route", "task": "排行程"},
+    ]
+    def executor(task, context):
+        context_text = ",".join(f"{key}={value}" for key, value in context.items())
+        return f"{task}|{context_text}"
+    return func(steps, executor)
+
+def _memory_retrieval_observation(func):
+    memories = [
+        {"content": "python basics", "importance": 0.9},
+        {"content": "agent memory design", "importance": 0.95},
+        {"content": "python agent tools", "importance": 0.6},
+        {"content": "travel notes", "importance": 1.0},
+    ]
+    return func(memories, "PYTHON agent", 3)
+
+def _handoff_observation(func):
+    task = {"capability": "weather", "description": "查询成都天气"}
+    agents = [
+        {"name": "writer-agent", "capabilities": ["write"]},
+        {"name": "weather-agent", "capabilities": ["weather", "location"]},
+        {"name": "backup-agent", "capabilities": ["weather"]},
+    ]
+    return func("planner", task, agents)
+
+def _handoff_contract(func):
+    task = {"capability": "weather", "description": "查询成都天气"}
+    agents = [
+        {"name": "writer-agent", "capabilities": ["write"]},
+        {"name": "weather-agent", "capabilities": ["weather", "location"]},
+        {"name": "backup-agent", "capabilities": ["weather"]},
+    ]
+    before_task = copy.deepcopy(task)
+    before_agents = copy.deepcopy(agents)
+    result = func("planner", task, agents)
+    return (
+        result == {"from": "planner", "to": "weather-agent", "task": "查询成都天气"}
+        and task == before_task
+        and agents == before_agents
+    )
+
+def _travel_project_observation(func, city, condition, attractions):
+    def weather(requested_city):
+        if requested_city != city:
+            raise AssertionError(f"weather 收到错误城市: {requested_city}")
+        return {"condition": condition, "temperature": 26}
+    def attraction(requested_city, requested_condition):
+        if requested_city != city or requested_condition != condition:
+            raise AssertionError(
+                f"attraction 收到错误参数: {requested_city}, {requested_condition}"
+            )
+        return list(attractions)
+    tools = {
+        "weather": weather,
+        "attraction": attraction,
+    }
+    return func(city, tools)
+
+def _research_project_observation(func):
+    data = {
+        "基础": [
+            {"snippet": "先学 Python", "url": "source-a"},
+            {"snippet": "理解工具调用", "url": "source-shared"},
+        ],
+        "实践": [
+            {"snippet": "实现 ReAct", "url": "source-shared"},
+            {"snippet": "加入评估", "url": "source-b"},
+        ],
+    }
+    return func("Agent 学习路线", ["基础", "实践"], lambda task: data[task])
+
+def _mini_agent_observation(agent_type):
+    agent = agent_type("helper", max_steps=3)
+    agent.register_tool("echo", lambda text: text.upper())
+    first = agent.run(["echo[hello]", "Finish[done]"])
+    second = agent.run(["Finish[fresh]"])
+    return {"first": first, "second": second}
+
+def _mini_agent_contract(agent_type):
+    return _mini_agent_observation(agent_type) == {
+        "first": {
+            "answer": "done",
+            "history": [{"action": "echo", "input": "hello", "observation": "HELLO"}],
+        },
+        "second": {"answer": "fresh", "history": []},
+    }
+
+def _mini_agent_errors(agent_type):
+    agent = agent_type("helper")
+    agent.register_tool("echo", lambda text: text)
+    duplicate = _raises_value_error(lambda: agent.register_tool("echo", lambda text: text))
+    missing = _raises_key_error(lambda: agent.run(["missing[x]"]))
+    return duplicate, missing
+
+def _mini_agent_limit(agent_type):
+    agent = agent_type("helper", max_steps=1)
+    agent.register_tool("echo", lambda text: text.upper())
+    return agent.run(["echo[one]", "Finish[不应到达]"])
+
 _stdout_buffer = io.StringIO()
 _stderr_buffer = io.StringIO()
 _result = {
@@ -175,6 +335,8 @@ if _result["exception"] is None:
         "_output_lines": _output_lines,
         "_source": __learner_code,
         "_raises_value_error": _raises_value_error,
+        "_raises_key_error": _raises_key_error,
+        "_raises_lookup_error": _raises_lookup_error,
         "_second_print_uses_multiplication": _second_print_uses_multiplication,
         "_function_has_node": _function_has_node,
         "_function_node_count": _function_node_count,
@@ -187,6 +349,21 @@ if _result["exception"] is None:
         "_decorator_observation": _decorator_observation,
         "_decorator_contract": _decorator_contract,
         "_plan_preserves_input": _plan_preserves_input,
+        "_tool_registry_observation": _tool_registry_observation,
+        "_tool_registry_contract": _tool_registry_contract,
+        "_tool_registry_errors": _tool_registry_errors,
+        "_react_travel_observation": _react_travel_observation,
+        "_react_limit_observation": _react_limit_observation,
+        "_plan_solve_observation": _plan_solve_observation,
+        "_memory_retrieval_observation": _memory_retrieval_observation,
+        "_handoff_observation": _handoff_observation,
+        "_handoff_contract": _handoff_contract,
+        "_travel_project_observation": _travel_project_observation,
+        "_research_project_observation": _research_project_observation,
+        "_mini_agent_observation": _mini_agent_observation,
+        "_mini_agent_contract": _mini_agent_contract,
+        "_mini_agent_errors": _mini_agent_errors,
+        "_mini_agent_limit": _mini_agent_limit,
         "inspect": inspect,
     })
     for _spec in json.loads(__lesson_tests_json):

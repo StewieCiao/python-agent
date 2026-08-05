@@ -13,7 +13,13 @@ export type LessonTest = {
 
 export type Lesson = {
   id: string;
-  module: "基础语法" | "基础编程" | "高级编程" | "项目实战";
+  module:
+    | "Python 起步"
+    | "Python 工程能力"
+    | "Python 综合训练"
+    | "Agent 核心范式"
+    | "Agent 系统能力"
+    | "Agent 案例实战";
   number: number;
   title: string;
   kicker: string;
@@ -25,14 +31,28 @@ export type Lesson = {
   hints: string[];
   tests: LessonTest[];
   project?: boolean;
+  source?: { label: string; url: string };
 };
 
-export const MODULE_ORDER = ["基础语法", "基础编程", "高级编程", "项目实战"] as const;
+export const MODULE_ORDER = [
+  "Python 起步",
+  "Python 工程能力",
+  "Python 综合训练",
+  "Agent 核心范式",
+  "Agent 系统能力",
+  "Agent 案例实战",
+] as const;
+
+const HELLO_AGENTS_REPO = "https://github.com/datawhalechina/hello-agents";
+const HELLO_AGENTS_CHAPTER_4 = `${HELLO_AGENTS_REPO}/blob/main/docs/chapter4/%E7%AC%AC%E5%9B%9B%E7%AB%A0%20%E6%99%BA%E8%83%BD%E4%BD%93%E7%BB%8F%E5%85%B8%E8%8C%83%E5%BC%8F%E6%9E%84%E5%BB%BA.md`;
+const HELLO_AGENTS_CHAPTER_7 = `${HELLO_AGENTS_REPO}/blob/main/docs/chapter7/%E7%AC%AC%E4%B8%83%E7%AB%A0%20%E6%9E%84%E5%BB%BA%E4%BD%A0%E7%9A%84Agent%E6%A1%86%E6%9E%B6.md`;
+const HELLO_AGENTS_CHAPTER_8 = `${HELLO_AGENTS_REPO}/blob/main/docs/chapter8/%E7%AC%AC%E5%85%AB%E7%AB%A0%20%E8%AE%B0%E5%BF%86%E4%B8%8E%E6%A3%80%E7%B4%A2.md`;
+const HELLO_AGENTS_CHAPTER_14 = `${HELLO_AGENTS_REPO}/blob/main/docs/chapter14/Chapter14-Automated-Deep-Research-Agent.md`;
 
 export const lessons: Lesson[] = [
   {
     id: "first-output",
-    module: "基础语法",
+    module: "Python 起步",
     number: 1,
     title: "让 Python 开口",
     kicker: "输出与表达式",
@@ -92,7 +112,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "variables",
-    module: "基础语法",
+    module: "Python 起步",
     number: 2,
     title: "给数据起名字",
     kicker: "变量与类型",
@@ -148,7 +168,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "strings",
-    module: "基础语法",
+    module: "Python 起步",
     number: 3,
     title: "处理真实文本",
     kicker: "字符串方法",
@@ -194,7 +214,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "branches",
-    module: "基础语法",
+    module: "Python 起步",
     number: 4,
     title: "让程序做决定",
     kicker: "条件分支",
@@ -250,7 +270,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "loops",
-    module: "基础编程",
+    module: "Python 工程能力",
     number: 5,
     title: "批量处理数据",
     kicker: "循环与 range",
@@ -307,7 +327,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "functions",
-    module: "基础编程",
+    module: "Python 工程能力",
     number: 6,
     title: "封装一条规则",
     kicker: "函数与返回值",
@@ -363,7 +383,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "lists",
-    module: "基础编程",
+    module: "Python 工程能力",
     number: 7,
     title: "组织一组数据",
     kicker: "列表与推导式",
@@ -420,7 +440,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "dictionaries",
-    module: "基础编程",
+    module: "Python 工程能力",
     number: 8,
     title: "建立键值关系",
     kicker: "字典与统计",
@@ -477,7 +497,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "exceptions",
-    module: "高级编程",
+    module: "Python 工程能力",
     number: 9,
     title: "只捕获能处理的错误",
     kicker: "异常与边界",
@@ -544,7 +564,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "classes",
-    module: "高级编程",
+    module: "Python 工程能力",
     number: 10,
     title: "让数据带上行为",
     kicker: "类与对象",
@@ -600,7 +620,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "generators",
-    module: "高级编程",
+    module: "Python 工程能力",
     number: 11,
     title: "按需产生数据",
     kicker: "迭代器与生成器",
@@ -657,7 +677,7 @@ export const lessons: Lesson[] = [
   },
   {
     id: "decorators",
-    module: "高级编程",
+    module: "Python 工程能力",
     number: 12,
     title: "为函数增加能力",
     kicker: "装饰器与闭包",
@@ -693,22 +713,22 @@ export const lessons: Lesson[] = [
   },
   {
     id: "project-text",
-    module: "项目实战",
+    module: "Python 综合训练",
     number: 13,
-    title: "文本分析器",
-    kicker: "项目 · 数据清洗",
+    title: "Prompt 文本分析器",
+    kicker: "Agent 前置项目 · 上下文统计",
     minutes: 35,
-    goal: "组合字符串、列表和字典，完成一个可复用的文本统计函数。",
+    goal: "组合字符串、列表和字典，分析进入 Agent 上下文的文本规模与高频词。",
     project: true,
     concepts: [
       {
         title: "先定义输入输出契约",
-        body: "函数接收文本，返回结构稳定的字典，测试才有明确目标。",
+        body: "Agent 的上下文处理也需要稳定契约：函数接收文本，返回结构固定的统计字典。",
         example: '{"words": 4, "unique": 3, "top": "python"}',
       },
       {
         title: "让数据逐步变干净",
-        body: "先统一大小写，再分词，再统计；每一步只做一件事。",
+        body: "Prompt 进入模型前先统一大小写、分词、统计；每一步只做一件事。",
         example: "words = text.lower().split()",
       },
     ],
@@ -750,22 +770,22 @@ export const lessons: Lesson[] = [
   },
   {
     id: "project-expense",
-    module: "项目实战",
+    module: "Python 综合训练",
     number: 14,
-    title: "消费汇总器",
-    kicker: "项目 · 结构化数据",
+    title: "Agent 调用成本汇总器",
+    kicker: "Agent 前置项目 · 成本观测",
     minutes: 40,
-    goal: "从记录列表中计算总额和分类汇总，形成常见业务数据处理能力。",
+    goal: "从模型与工具调用记录中计算总成本和分类成本，为 Agent 评估建立观测能力。",
     project: true,
     concepts: [
       {
-        title: "记录列表是常见输入",
-        body: "每条字典是一条记录，循环把记录累积成汇总结果。",
-        example: '{"category": "餐饮", "amount": 28}',
+        title: "调用记录是 Agent 的账单",
+        body: "每条字典表示一次模型或工具调用，循环把成本累积成汇总结果。",
+        example: '{"category": "model", "amount": 0.03}',
       },
       {
-        title: "金额计算要集中",
-        body: "同一个循环同时更新总额与分类，但不要重复遍历。",
+        title: "成本计算要集中",
+        body: "同一个循环同时更新总成本与分类成本，不重复遍历 trace。",
         example: "by_category[key] = by_category.get(key, 0) + amount",
       },
     ],
@@ -774,13 +794,13 @@ export const lessons: Lesson[] = [
     hints: ["每条 record 用 record['amount'] 和 record['category'] 取值。", "在同一个 for 循环中更新 total 与 by_category。"],
     tests: [
       {
-        name: "多组记录汇总",
-        expression: `summarize([{"category":"书籍","amount":13},{"category":"交通","amount":7},{"category":"书籍","amount":2}]) == {"total":22,"by_category":{"书籍":15,"交通":7}}`,
+        name: "多类 Agent 调用汇总",
+        expression: `summarize([{"category":"model","amount":13},{"category":"tool","amount":7},{"category":"model","amount":2}]) == {"total":22,"by_category":{"model":15,"tool":7}}`,
         failure: "应按传入记录计算总额和分类，不能硬编码空/非空结果。",
         feedback: {
-          expected: `{"total": 22, "by_category": {"书籍": 15, "交通": 7}}`,
-          actualExpression: `summarize([{"category":"书籍","amount":13},{"category":"交通","amount":7},{"category":"书籍","amount":2}])`,
-          rule: "使用未在起始代码中出现的类别和金额",
+          expected: `{"total": 22, "by_category": {"model": 15, "tool": 7}}`,
+          actualExpression: `summarize([{"category":"model","amount":13},{"category":"tool","amount":7},{"category":"model","amount":2}])`,
+          rule: "用模型与工具两类调用记录验证",
         },
       },
       {
@@ -808,12 +828,12 @@ export const lessons: Lesson[] = [
   },
   {
     id: "project-tasks",
-    module: "项目实战",
+    module: "Python 综合训练",
     number: 15,
-    title: "任务优先级引擎",
-    kicker: "毕业项目 · 综合建模",
+    title: "Agent 任务优先级引擎",
+    kicker: "Agent 前置项目 · 计划排序",
     minutes: 50,
-    goal: "综合函数、排序、异常边界与清晰数据契约，完成可扩展的小型项目。",
+    goal: "综合函数、排序、异常边界与数据契约，为 Planner 排出稳定的执行顺序。",
     project: true,
     concepts: [
       {
@@ -869,6 +889,573 @@ export const lessons: Lesson[] = [
           expected: "True",
           actualExpression: "_plan_preserves_input(plan)",
           rule: "调用前后比较原列表及内部字典",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-tool-registry",
+    module: "Agent 核心范式",
+    number: 16,
+    title: "给 Agent 装上工具箱",
+    kicker: "Hello-Agents · Tool Registry",
+    minutes: 26,
+    goal: "用统一注册表管理工具，让 Agent 通过名字和参数字典安全调用 Python 函数。",
+    source: { label: "Hello-Agents 第七章：构建 Agent 框架", url: HELLO_AGENTS_CHAPTER_7 },
+    concepts: [
+      {
+        title: "工具是 Agent 的手脚",
+        body: "模型只负责决定调用什么；注册表负责找到真实函数、传入参数并返回观察结果。两者分离后，工具更容易测试和扩展。",
+        example: 'registry.register("weather", get_weather)\nregistry.execute("weather", {"city": "成都"})',
+      },
+      {
+        title: "失败必须清晰",
+        body: "重复名称通常是配置错误，未知工具通常是决策错误。分别抛出 ValueError 与 KeyError，调用方才能准确处理。",
+        example: 'if name in self.tools:\n    raise ValueError("duplicate tool")',
+      },
+    ],
+    requirements: [
+      "实现 ToolRegistry 类，实例内维护 tools 字典",
+      "register(name, func) 注册工具；重复名称抛出 ValueError",
+      "execute(name, payload) 使用 func(**payload) 调用；未知名称抛出 KeyError",
+      "原样返回工具结果，不打印、不伪造成功",
+    ],
+    starterCode: "class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        pass\n\n    def execute(self, name, payload):\n        pass\n",
+    hints: ["先检查 name 是否已经存在，再保存 func。", "执行时从 self.tools[name] 取函数，并用 **payload 展开关键字参数。"],
+    tests: [
+      {
+        name: "注册、转发参数并返回真实结果",
+        expression: `_tool_registry_contract(ToolRegistry)`,
+        failure: "注册表应把两组不同参数完整转发给工具，并原样返回结果。",
+        feedback: {
+          expected: "两次结果正确，调用参数完整",
+          actualExpression: `_tool_registry_observation(ToolRegistry)`,
+          rule: "使用记录型工具验证真实调用次数、位置和关键字参数",
+        },
+      },
+      {
+        name: "重复与未知工具边界",
+        expression: `_tool_registry_errors(ToolRegistry) == (True, True)`,
+        failure: "重复注册应抛 ValueError，执行未知工具应抛 KeyError。",
+        feedback: {
+          expected: "(True, True)",
+          actualExpression: `_tool_registry_errors(ToolRegistry)`,
+          rule: "不吞掉注册和路由错误",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-action-parser",
+    module: "Agent 核心范式",
+    number: 17,
+    title: "读懂模型的 Action",
+    kicker: "Hello-Agents · ReAct 输出解析",
+    minutes: 22,
+    goal: "把模型输出的 tool[input] 或 Finish[answer] 解析为稳定的结构化数据。",
+    source: { label: "Hello-Agents 第四章：ReAct 输出解析", url: HELLO_AGENTS_CHAPTER_4 },
+    concepts: [
+      {
+        title: "文本协议是模型与代码的边界",
+        body: "LLM 返回文本，Python 需要把动作名与参数拆开。解析失败应返回明确的空结果，而不是猜测模型意图。",
+        example: 'parse_action("weather[北京]")  # ("weather", "北京")',
+      },
+      {
+        title: "Finish 也是一种动作",
+        body: "工具动作继续循环，Finish 表示已经收集到足够信息，可以结束并交付答案。",
+        example: 'parse_action("Finish[行程已生成]")',
+      },
+    ],
+    requirements: [
+      "实现 parse_action(text)",
+      "忽略整段文本首尾空白，解析第一个 [ 与最后一个 ] 之间的完整内容",
+      "合法输入返回 (name, payload)，payload 可以包含换行",
+      "缺少动作名、方括号不完整或括号后还有内容时返回 (None, None)",
+    ],
+    starterCode: "def parse_action(text):\n    # 返回 (action_name, payload)\n    pass\n",
+    hints: ["先用 strip() 清理整段文本。", "可检查 '[' 的位置和字符串是否以 ']' 结尾，再用 split('[', 1)。"],
+    tests: [
+      {
+        name: "解析工具与 Finish",
+        expression: `parse_action("  weather[成都]  ") == ("weather", "成都") and parse_action("Finish[安排完成]") == ("Finish", "安排完成")`,
+        failure: "应正确解析工具动作和 Finish 动作。",
+        feedback: {
+          expected: `(("weather", "成都"), ("Finish", "安排完成"))`,
+          actualExpression: `(parse_action("  weather[成都]  "), parse_action("Finish[安排完成]"))`,
+          rule: "只忽略整段文本首尾空白，不改写 payload",
+        },
+      },
+      {
+        name: "保留多行 payload",
+        expression: `parse_action("search[line 1\\nline 2]") == ("search", "line 1\\nline 2")`,
+        failure: "方括号中的换行应作为 payload 原样保留。",
+        feedback: {
+          expected: `("search", "line 1\\nline 2")`,
+          actualExpression: `parse_action("search[line 1\\nline 2]")`,
+          rule: "payload 可跨行",
+        },
+      },
+      {
+        name: "拒绝模糊格式",
+        expression: `parse_action("weather 成都") == (None, None) and parse_action("[成都]") == (None, None) and parse_action("weather[成都] extra") == (None, None)`,
+        failure: "格式不完整或括号后有多余内容时不要猜测。",
+        feedback: {
+          expected: "((None, None), (None, None), (None, None))",
+          actualExpression: `(parse_action("weather 成都"), parse_action("[成都]"), parse_action("weather[成都] extra"))`,
+          rule: "无法确定时返回明确空结果",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-react-loop",
+    module: "Agent 核心范式",
+    number: 18,
+    title: "跑通 ReAct 循环",
+    kicker: "Hello-Agents · Thought → Action → Observation",
+    minutes: 34,
+    goal: "实现一个离线 ReAct 执行器，掌握动作解析、工具调用、观察记录与最大步数安全阀。",
+    source: { label: "Hello-Agents 第四章：ReAct 智能体", url: HELLO_AGENTS_CHAPTER_4 },
+    concepts: [
+      {
+        title: "Agent 是持续与环境交互的循环",
+        body: "每一步读取一个动作，调用工具获得 Observation，再把观察写入历史，直到 Finish。真实项目中动作来自 LLM，本关用固定响应隔离网络变量。",
+        example: "Action → Tool → Observation → 下一步 Action",
+      },
+      {
+        title: "max_steps 是必要安全阀",
+        body: "模型可能重复调用工具。达到最大步数必须停止，避免无限循环和不可控成本。",
+        example: "for action in actions[:max_steps]: ...",
+      },
+    ],
+    requirements: [
+      "实现 run_react(actions, tools, max_steps=5)",
+      "工具动作通过 tools[name](payload) 执行，并把 action、input、observation 写入 history",
+      "遇到 Finish 返回其中答案；未遇到则 answer 为 None",
+      "返回 {'answer': ..., 'history': [...], 'steps': 实际读取动作数}",
+      "未知工具保留真实 KeyError；最多处理 max_steps 个动作",
+    ],
+    starterCode: "def parse_action(text):\n    text = text.strip()\n    if '[' not in text or not text.endswith(']'):\n        return None, None\n    name, payload = text[:-1].split('[', 1)\n    return (name, payload) if name else (None, None)\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    # 完成 Action → Observation 循环\n    pass\n",
+    hints: ["遍历 actions[:max_steps]，每读一个动作就更新 steps。", "先处理 Finish；否则从 tools 字典取函数并记录 observation。"],
+    tests: [
+      {
+        name: "旅行助手式工具链",
+        expression: `_react_travel_observation(run_react) == {"answer":"安排完成","history":[{"action":"weather","input":"成都","observation":"成都:晴"},{"action":"attraction","input":"成都|晴","observation":"成都|晴:熊猫基地"}],"steps":3}`,
+        failure: "应按顺序执行天气与景点工具，记录观察，并在 Finish 时返回答案。",
+        feedback: {
+          expected: `{"answer": "安排完成", "history": 2 条真实观察, "steps": 3}`,
+          actualExpression: `_react_travel_observation(run_react)`,
+          rule: "对应 Hello-Agents 旅行助手的 Thought-Action-Observation 主循环",
+        },
+      },
+      {
+        name: "最大步数安全停止",
+        expression: `_react_limit_observation(run_react) == {"answer":None,"history":[{"action":"echo","input":"one","observation":"ONE"}],"steps":1}`,
+        failure: "max_steps=1 时只能处理第一个动作，不能继续读到 Finish。",
+        feedback: {
+          expected: `{"answer": None, "history": 1 条, "steps": 1}`,
+          actualExpression: `_react_limit_observation(run_react)`,
+          rule: "最大步数是硬限制，不伪造完成状态",
+        },
+      },
+      {
+        name: "未知工具暴露真实错误",
+        expression: `_raises_key_error(lambda: run_react(["missing[x]"], {}, 2))`,
+        failure: "未知工具应抛出 KeyError，不能返回模拟观察。",
+        feedback: {
+          expected: "KeyError",
+          actualExpression: `_raises_key_error(lambda: run_react(["missing[x]"], {}, 2))`,
+          rule: "工具路由失败不伪装为成功",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-plan-solve",
+    module: "Agent 核心范式",
+    number: 19,
+    title: "先规划，再逐步求解",
+    kicker: "Hello-Agents · Plan-and-Solve",
+    minutes: 30,
+    goal: "把复杂目标拆成有序步骤，并让后续步骤读取之前的结果上下文。",
+    source: { label: "Hello-Agents 第四章：Plan-and-Solve", url: HELLO_AGENTS_CHAPTER_4 },
+    concepts: [
+      {
+        title: "规划与执行分离",
+        body: "Planner 负责生成步骤，Solver 负责逐步执行。分离后更容易检查计划、重试单步和复用执行器。",
+        example: 'steps = [{"id": "weather", "task": "查询天气"}]',
+      },
+      {
+        title: "上下文只包含已完成结果",
+        body: "执行当前步骤时，把之前的结果快照交给 executor；不要让未来步骤提前污染上下文。",
+        example: "result = executor(step['task'], context.copy())",
+      },
+    ],
+    requirements: [
+      "实现 execute_plan(steps, executor)",
+      "按输入顺序执行每个 {'id', 'task'} 步骤",
+      "executor(task, context) 中的 context 是此前 id 到 result 的新字典",
+      "返回 [{'id': id, 'result': result}, ...]；空计划返回 []",
+    ],
+    starterCode: "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    # 逐步求解并更新 context\n    return results\n",
+    hints: ["每步调用 executor(step['task'], context.copy())。", "先把结果加入 results，再用当前 id 更新 context。"],
+    tests: [
+      {
+        name: "后续步骤看到已完成上下文",
+        expression: `_plan_solve_observation(execute_plan) == [{"id":"weather","result":"查天气|"},{"id":"route","result":"排行程|weather=查天气|"}]`,
+        failure: "第二步应读取第一步结果，但第一步不应看到未来上下文。",
+        feedback: {
+          expected: "weather 无前置上下文；route 看到 weather 结果",
+          actualExpression: `_plan_solve_observation(execute_plan)`,
+          rule: "按计划顺序增量构建上下文",
+        },
+      },
+      {
+        name: "空计划不调用执行器",
+        expression: `execute_plan([], lambda task, context: 1 / 0) == []`,
+        failure: "空计划应直接返回空结果，不调用 executor。",
+        feedback: {
+          expected: "[]",
+          actualExpression: `execute_plan([], lambda task, context: 1 / 0)`,
+          rule: "没有步骤就没有执行副作用",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-reflection",
+    module: "Agent 核心范式",
+    number: 20,
+    title: "让 Agent 反思后再改进",
+    kicker: "Hello-Agents · Reflection",
+    minutes: 28,
+    goal: "实现执行—评估—改进闭环，并在质量达标或达到轮次上限时准确停止。",
+    source: { label: "Hello-Agents 第四章：Reflection", url: HELLO_AGENTS_CHAPTER_4 },
+    concepts: [
+      {
+        title: "Reflection 不是无限重写",
+        body: "每轮先 evaluate；达标立即返回，不达标才 revise。max_rounds 控制最多改进次数。",
+        example: "if evaluate(draft):\n    return draft",
+      },
+      {
+        title: "把评估器和改写器注入函数",
+        body: "高阶函数让循环独立于具体模型，测试时可以用确定性函数替代真实 LLM。",
+        example: "reflection_loop(draft, evaluate, revise, max_rounds=3)",
+      },
+    ],
+    requirements: [
+      "实现 reflection_loop(draft, evaluate, revise, max_rounds=3)",
+      "每轮先调用 evaluate(draft)；True 时立即返回当前 draft",
+      "False 时调用 revise(draft) 并计为一次改进，最多改进 max_rounds 次",
+      "max_rounds < 0 时抛出 ValueError；达到上限返回最后版本",
+    ],
+    starterCode: "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    # 执行 → 评估 → 改进\n    pass\n",
+    hints: ["先验证 max_rounds，再用 range(max_rounds) 控制改进次数。", "循环后还未达标时，返回最后一次 revise 的结果。"],
+    tests: [
+      {
+        name: "达标后提前停止",
+        expression: `reflection_loop("a", lambda text: len(text) >= 3, lambda text: text + "!", 5) == "a!!"`,
+        failure: "应改进到首次达标的 a!! 后停止，不能继续追加。",
+        feedback: {
+          expected: "'a!!'",
+          actualExpression: `reflection_loop("a", lambda text: len(text) >= 3, lambda text: text + "!", 5)`,
+          rule: "每轮先评估，质量达标立即停止",
+        },
+      },
+      {
+        name: "轮次上限不伪造达标",
+        expression: `reflection_loop("draft", lambda text: False, lambda text: text + "+", 2) == "draft++"`,
+        failure: "始终未达标时只能改进两次，然后返回真实最后版本。",
+        feedback: {
+          expected: "'draft++'",
+          actualExpression: `reflection_loop("draft", lambda text: False, lambda text: text + "+", 2)`,
+          rule: "达到上限后停止，不声称已经通过评估",
+        },
+      },
+      {
+        name: "拒绝负轮次",
+        expression: `_raises_value_error(lambda: reflection_loop("x", lambda text: True, lambda text: text, -1))`,
+        failure: "max_rounds 为负数时应抛出 ValueError。",
+        feedback: {
+          expected: "ValueError",
+          actualExpression: `_raises_value_error(lambda: reflection_loop("x", lambda text: True, lambda text: text, -1))`,
+          rule: "配置错误显式失败",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-memory-retrieval",
+    module: "Agent 系统能力",
+    number: 21,
+    title: "实现最小记忆检索",
+    kicker: "Hello-Agents · Memory / Naive RAG",
+    minutes: 36,
+    goal: "用关键词重叠、重要度和稳定排序构建可解释的本地记忆检索器。",
+    source: { label: "Hello-Agents 第八章：记忆与检索", url: HELLO_AGENTS_CHAPTER_8 },
+    concepts: [
+      {
+        title: "先检索，再生成",
+        body: "RAG 在回答前从外部知识中找相关内容。本关先实现无需向量库的关键词检索，理解召回、排序与 limit。",
+        example: "overlap = len(query_words & content_words)",
+      },
+      {
+        title: "排序规则必须可解释",
+        body: "先按关键词重叠数降序，再按 importance 降序；仍同分时保留原始顺序。",
+        example: "sorted(scored, key=lambda item: (-item[0], -item[1], item[2]))",
+      },
+    ],
+    requirements: [
+      "实现 retrieve_memories(memories, query, limit=2)",
+      "memory 含 content 与 importance；按空白分词并忽略大小写",
+      "只保留至少命中一个查询词的记忆",
+      "依次按命中词数、importance 降序，最后按原始顺序；返回 content 列表",
+      "limit <= 0 或没有命中时返回 []",
+    ],
+    starterCode: "def retrieve_memories(memories, query, limit=2):\n    # 计算关键词重叠并排序\n    pass\n",
+    hints: ["用 set(query.lower().split()) 得到查询词集合。", "把 (命中数, importance, 原索引, content) 放进列表后统一排序。"],
+    tests: [
+      {
+        name: "相关度、重要度与稳定顺序",
+        expression: `_memory_retrieval_observation(retrieve_memories) == ["python agent tools", "agent memory design", "python basics"]`,
+        failure: "应先按命中词数，再按重要度排序；完全无关内容不能返回。",
+        feedback: {
+          expected: `["python agent tools", "agent memory design", "python basics"]`,
+          actualExpression: `_memory_retrieval_observation(retrieve_memories)`,
+          rule: "可解释的 Naive RAG 排序，不依赖外部模型",
+        },
+      },
+      {
+        name: "limit 与空命中边界",
+        expression: `retrieve_memories([{"content":"agent tools","importance":1}], "python", 2) == [] and retrieve_memories([{"content":"agent tools","importance":1}], "agent", 0) == []`,
+        failure: "没有关键词命中或 limit <= 0 时应返回空列表。",
+        feedback: {
+          expected: "([], [])",
+          actualExpression: `(retrieve_memories([{"content":"agent tools","importance":1}], "python", 2), retrieve_memories([{"content":"agent tools","importance":1}], "agent", 0))`,
+          rule: "不返回无关记忆，不绕过数量上限",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-handoff",
+    module: "Agent 系统能力",
+    number: 22,
+    title: "设计多 Agent 交接",
+    kicker: "Hello-Agents · Multi-Agent Handoff",
+    minutes: 30,
+    goal: "根据能力选择协作者，并用稳定消息信封传递来源、目标和任务。",
+    source: { label: "Hello-Agents：从单智能体到多智能体系统", url: HELLO_AGENTS_REPO },
+    concepts: [
+      {
+        title: "交接必须有明确契约",
+        body: "多 Agent 协作不是随意聊天。消息至少要说明谁发起、交给谁、要完成什么，方便追踪和评估。",
+        example: '{"from": "planner", "to": "weather", "task": "查询成都天气"}',
+      },
+      {
+        title: "路由失败不能静默",
+        body: "找不到具备所需 capability 的 Agent 时抛出 LookupError，让上层决定重规划或告知用户。",
+        example: 'raise LookupError(f"no agent for {capability}")',
+      },
+    ],
+    requirements: [
+      "实现 handoff(sender, task, agents)",
+      "task 含 capability 与 description；agents 按顺序含 name 与 capabilities 列表",
+      "选择第一个具备能力的 Agent，返回 {'from', 'to', 'task'}",
+      "找不到匹配 Agent 时抛出 LookupError，不修改 task 或 agents",
+    ],
+    starterCode: "def handoff(sender, task, agents):\n    # 找到第一个具备 task['capability'] 的 Agent\n    pass\n",
+    hints: ["按 agents 原顺序遍历。", "命中时只构造新字典；遍历结束仍未命中再 raise LookupError。"],
+    tests: [
+      {
+        name: "按能力选择第一个协作者",
+        expression: `_handoff_contract(handoff)`,
+        failure: "应选择第一个具备 weather 能力的 Agent，并生成稳定信封。",
+        feedback: {
+          expected: `{"from": "planner", "to": "weather-agent", "task": "查询成都天气"}`,
+          actualExpression: `_handoff_observation(handoff)`,
+          rule: "按输入顺序选择，不依赖固定 Agent 名称",
+        },
+      },
+      {
+        name: "无匹配能力时明确失败",
+        expression: `_raises_lookup_error(lambda: handoff("planner", {"capability":"code","description":"写代码"}, [{"name":"weather","capabilities":["weather"]}]))`,
+        failure: "没有匹配能力时应抛出 LookupError。",
+        feedback: {
+          expected: "LookupError",
+          actualExpression: `_raises_lookup_error(lambda: handoff("planner", {"capability":"code","description":"写代码"}, [{"name":"weather","capabilities":["weather"]}]))`,
+          rule: "不能伪造接收方或假装交接成功",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-travel-project",
+    module: "Agent 案例实战",
+    number: 23,
+    title: "智能旅行助手",
+    kicker: "Hello-Agents 案例 · 天气与景点协作",
+    minutes: 45,
+    goal: "复现 Hello-Agents 旅行助手的工具链：先查天气，再基于天气选择景点，并保留完整调用轨迹。",
+    project: true,
+    source: { label: "Hello-Agents：智能旅行助手案例", url: `${HELLO_AGENTS_REPO}/blob/main/docs/chapter1/%E7%AC%AC%E4%B8%80%E7%AB%A0%20%E5%88%9D%E8%AF%86%E6%99%BA%E8%83%BD%E4%BD%93.md` },
+    concepts: [
+      {
+        title: "工具结果决定下一步参数",
+        body: "景点工具不只需要城市，还要读取天气工具返回的 condition。这是 Agent 根据 Observation 调整后续 Action 的最小示例。",
+        example: "weather = tools['weather'](city)\nattractions = tools['attraction'](city, weather['condition'])",
+      },
+      {
+        title: "Trace 让结果可检查",
+        body: "最终答案之外，还要保存调用了哪个工具、输入什么、观察到什么；没有轨迹就很难调试 Agent。",
+        example: '{"tool": "weather", "input": "成都", "observation": {...}}',
+      },
+    ],
+    requirements: [
+      "实现 build_trip(city, tools)",
+      "先调用 tools['weather'](city)，再调用 tools['attraction'](city, weather['condition'])",
+      "返回 city、weather、attractions 与 trace；trace 按真实调用顺序保存两条记录",
+      "使用工具真实返回值，不写死城市、天气或景点",
+    ],
+    starterCode: "def build_trip(city, tools):\n    trace = []\n    # 1. 查询天气并记录\n    # 2. 根据天气查询景点并记录\n    # 3. 返回结构化行程\n    pass\n",
+    hints: ["先把 weather 结果保存下来，第二个工具需要其中的 condition。", "trace 的 observation 应保存工具原始返回值。"],
+    tests: [
+      {
+        name: "成都晴天工具链",
+        expression: `_travel_project_observation(build_trip, "成都", "晴", ["熊猫基地", "锦里"]) == {"city":"成都","weather":{"condition":"晴","temperature":26},"attractions":["熊猫基地","锦里"],"trace":[{"tool":"weather","input":"成都","observation":{"condition":"晴","temperature":26}},{"tool":"attraction","input":{"city":"成都","condition":"晴"},"observation":["熊猫基地","锦里"]}]}`,
+        failure: "应先查天气，再把真实天气条件交给景点工具，并保存两条轨迹。",
+        feedback: {
+          expected: "成都、晴、两处景点及两条顺序正确的 trace",
+          actualExpression: `_travel_project_observation(build_trip, "成都", "晴", ["熊猫基地", "锦里"])`,
+          rule: "工具由测试注入，不能写死 Hello-Agents 示例值",
+        },
+      },
+      {
+        name: "另一城市仍可复用",
+        expression: `_travel_project_observation(build_trip, "厦门", "雨", ["鼓浪屿室内馆"]) ["attractions"] == ["鼓浪屿室内馆"] and _travel_project_observation(build_trip, "厦门", "雨", ["鼓浪屿室内馆"]) ["trace"][1]["input"] == {"city":"厦门","condition":"雨"}`,
+        failure: "旅行助手必须根据传入城市与天气工具结果工作。",
+        feedback: {
+          expected: "厦门 / 雨 / 鼓浪屿室内馆",
+          actualExpression: `_travel_project_observation(build_trip, "厦门", "雨", ["鼓浪屿室内馆"])`,
+          rule: "用第二组城市和天气防止样例写死",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-deep-research-project",
+    module: "Agent 案例实战",
+    number: 24,
+    title: "自动化 DeepResearch",
+    kicker: "Hello-Agents 案例 · 规划、检索、报告",
+    minutes: 52,
+    goal: "把研究主题拆成子任务，逐项收集资料，并生成带去重来源的结构化研究报告。",
+    project: true,
+    source: { label: "Hello-Agents 第十四章：DeepResearch Agent", url: HELLO_AGENTS_CHAPTER_14 },
+    concepts: [
+      {
+        title: "研究 Agent 有三段流水线",
+        body: "问题分析负责子任务，信息收集负责调用 search，报告阶段负责整合 findings 与 sources。",
+        example: "Plan → Search each task → Report with citations",
+      },
+      {
+        title: "来源必须去重并保序",
+        body: "同一资料可能被多个子任务命中。报告保留第一次出现的位置，既避免重复，也保持可追溯顺序。",
+        example: "if url not in sources:\n    sources.append(url)",
+      },
+    ],
+    requirements: [
+      "实现 build_research_report(topic, tasks, search)",
+      "按 tasks 顺序调用 search(task)，结果项含 snippet 与 url",
+      "每个 section 返回 title、findings（snippet 列表）与 sources（该节 url 列表）",
+      "报告顶层返回 topic、sections、sources；顶层 sources 全局去重并保持首次出现顺序",
+      "空 tasks 返回空 sections 与 sources，不能伪造研究结果",
+    ],
+    starterCode: "def build_research_report(topic, tasks, search):\n    sections = []\n    sources = []\n    # 逐个检索子任务并汇总引用\n    return {\"topic\": topic, \"sections\": sections, \"sources\": sources}\n",
+    hints: ["每个 task 的 search 结果先生成本节 findings 与 section_sources。", "顶层 sources 用成员检查去重，但不要改变各 section 的来源。"],
+    tests: [
+      {
+        name: "多子任务与引用去重",
+        expression: `_research_project_observation(build_research_report) == {"topic":"Agent 学习路线","sections":[{"title":"基础","findings":["先学 Python","理解工具调用"],"sources":["source-a","source-shared"]},{"title":"实践","findings":["实现 ReAct","加入评估"],"sources":["source-shared","source-b"]}],"sources":["source-a","source-shared","source-b"]}`,
+        failure: "应按任务生成完整章节，并在顶层去重来源同时保持顺序。",
+        feedback: {
+          expected: "2 个完整 section；顶层来源为 a、shared、b",
+          actualExpression: `_research_project_observation(build_research_report)`,
+          rule: "对应 Hello-Agents DeepResearch 的规划—收集—报告链路",
+        },
+      },
+      {
+        name: "空研究计划不伪造结果",
+        expression: `build_research_report("空主题", [], lambda task: 1 / 0) == {"topic":"空主题","sections":[],"sources":[]}`,
+        failure: "空任务时不应调用 search，也不能生成虚假章节。",
+        feedback: {
+          expected: `{"topic": "空主题", "sections": [], "sources": []}`,
+          actualExpression: `build_research_report("空主题", [], lambda task: 1 / 0)`,
+          rule: "没有检索就没有研究结论",
+        },
+      },
+    ],
+  },
+  {
+    id: "agent-framework-capstone",
+    module: "Agent 案例实战",
+    number: 25,
+    title: "毕业设计：Mini Agent 框架",
+    kicker: "Hello-Agents 第七章 · 从零造轮子",
+    minutes: 65,
+    goal: "把工具注册、ReAct 循环、步数限制和运行状态整合成一个可复用的 Agent 类。",
+    project: true,
+    source: { label: "Hello-Agents 第七章：构建你的 Agent 框架", url: HELLO_AGENTS_CHAPTER_7 },
+    concepts: [
+      {
+        title: "Agent 是稳定入口，能力来自 Tools",
+        body: "Hello-Agents 的教学架构强调核心 Agent 加工具系统。run 提供统一入口，具体外部能力通过 register_tool 扩展。",
+        example: "agent.register_tool('echo', echo)\nagent.run(actions)",
+      },
+      {
+        title: "一次 run 就是一个独立会话",
+        body: "每次运行都必须重置 history，避免上一位用户或上一项任务的观察污染新任务。",
+        example: "def run(self, actions):\n    self.history = []",
+      },
+    ],
+    requirements: [
+      "实现 Agent(name, max_steps=5)，保存 name、max_steps、tools 与 history",
+      "register_tool(name, func) 注册工具；重复名称抛 ValueError",
+      "run(actions) 支持 tool[payload] 与 Finish[answer]，每次运行先重置 history",
+      "工具记录格式为 {'action', 'input', 'observation'}；返回 {'answer', 'history'}",
+      "最多处理 max_steps 个动作；未知工具抛 KeyError；未 Finish 时 answer 为 None",
+    ],
+    starterCode: "class Agent:\n    def __init__(self, name, max_steps=5):\n        pass\n\n    def register_tool(self, name, func):\n        pass\n\n    def run(self, actions):\n        pass\n",
+    hints: ["把解析 action 的小逻辑放成类内私有方法会更清晰。", "run 开头重置 self.history；遍历 actions[:self.max_steps]。"],
+    tests: [
+      {
+        name: "完整框架契约",
+        expression: `_mini_agent_contract(Agent)`,
+        failure: "Agent 应注册工具、执行动作、记录观察、处理 Finish，并在第二次 run 前重置历史。",
+        feedback: {
+          expected: "第一次执行工具后 Finish；第二次只有全新 Finish 且 history 为空",
+          actualExpression: `_mini_agent_observation(Agent)`,
+          rule: "用两个连续会话验证框架状态隔离",
+        },
+      },
+      {
+        name: "框架错误边界",
+        expression: `_mini_agent_errors(Agent) == (True, True)`,
+        failure: "重复工具应抛 ValueError，未知工具应抛 KeyError。",
+        feedback: {
+          expected: "(True, True)",
+          actualExpression: `_mini_agent_errors(Agent)`,
+          rule: "框架不吞错、不伪造 Observation",
+        },
+      },
+      {
+        name: "最大步数不伪造完成",
+        expression: `_mini_agent_limit(Agent) == {"answer":None,"history":[{"action":"echo","input":"one","observation":"ONE"}]}`,
+        failure: "max_steps=1 时不能继续读取第二个 Finish。",
+        feedback: {
+          expected: `{"answer": None, "history": 1 条真实观察}`,
+          actualExpression: `_mini_agent_limit(Agent)`,
+          rule: "达到安全上限后真实停止",
         },
       },
     ],
