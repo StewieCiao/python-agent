@@ -6,6 +6,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "build:offline": "node --experimental-strip-types scripts/build-offline-html.mjs",
     "prepare:pyodide": "node scripts/prepare-pyodide.mjs",
     "postinstall": "npm run prepare:pyodide",
     "predev": "npm run prepare:pyodide",

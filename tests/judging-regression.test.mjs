@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { loadPyodide } from "pyodide";
 import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
+import { lessonSolutions } from "../app/lib/solutions.ts";
 
 const workerSource = await readFile(
   new URL("../public/python-worker.js", import.meta.url),
@@ -576,3 +577,15 @@ for (const scenario of agentSolutions) {
     );
   });
 }
+
+test("离线版的 25 份参考答案全部通过真实判题", async () => {
+  assert.deepEqual(Object.keys(lessonSolutions).sort(), [...lessonById.keys()].sort());
+  for (const lesson of lessons) {
+    const result = await execute(lesson.id, lessonSolutions[lesson.id]);
+    assert.equal(result.exception, null, `${lesson.id} 不应抛出异常`);
+    assert.ok(
+      result.tests.every((item) => item.passed),
+      `${lesson.id}: ${result.tests.map((item) => item.detail).filter(Boolean).join("\n")}`,
+    );
+  }
+});

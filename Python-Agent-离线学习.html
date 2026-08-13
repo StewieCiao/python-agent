@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Python → Agent 离线学习册</title>
+  <style>
+    :root {
+      --ink: #17221d;
+      --muted: #627068;
+      --paper: #f4f1e9;
+      --panel: #fffdf7;
+      --line: #d8d3c5;
+      --green: #176448;
+      --green-dark: #0d4934;
+      --green-soft: #dceadf;
+      --amber: #eaa43a;
+      --code: #15251f;
+      --code-ink: #e7f2e8;
+      --shadow: 0 16px 42px rgba(45, 56, 48, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 80% -10%, rgba(234, 164, 58, 0.15), transparent 28rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, textarea, input { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 26px 20px;
+      color: #f6fbf7;
+      background: var(--green-dark);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--green-dark);
+      background: var(--amber);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    .brand strong { display: block; font-size: 16px; }
+    .brand span { display: block; margin-top: 2px; color: #a9c7b7; font-size: 12px; }
+
+    .offline-badge {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      padding: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      color: #d4e7db;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .offline-dot {
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      margin-top: 5px;
+      border-radius: 50%;
+      background: #79d29e;
+      box-shadow: 0 0 0 4px rgba(121, 210, 158, 0.12);
+    }
+
+    .progress-card {
+      margin-bottom: 22px;
+      padding: 14px;
+      border-radius: 14px;
+      color: var(--ink);
+      background: #f7f0db;
+    }
+
+    .progress-row { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; }
+    .progress-row strong { font-size: 18px; }
+    .progress-track { height: 7px; margin-top: 11px; overflow: hidden; border-radius: 999px; background: #ded8c5; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--green); transition: width 180ms ease; }
+
+    .module { margin-top: 20px; }
+    .module-title { margin: 0 8px 8px; color: #88b39c; font-size: 11px; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .lesson-list { display: grid; gap: 4px; }
+    .lesson-button {
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) 18px;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      padding: 9px 8px;
+      border: 0;
+      border-radius: 10px;
+      color: #dcebe1;
+      text-align: left;
+      background: transparent;
+    }
+    .lesson-button:hover { background: rgba(255, 255, 255, 0.07); }
+    .lesson-button.active { color: #11231a; background: var(--amber); }
+    .lesson-number { font-size: 11px; opacity: 0.7; }
+    .lesson-name { overflow: hidden; font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+    .lesson-state { font-size: 13px; text-align: center; }
+
+    .sidebar-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 24px; }
+    .sidebar-actions button, .import-label {
+      display: grid;
+      min-height: 38px;
+      place-items: center;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9px;
+      color: #e5f1e9;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 12px;
+      text-align: center;
+    }
+    .sidebar-actions button:hover, .import-label:hover { background: rgba(255, 255, 255, 0.11); }
+    .import-label { cursor: pointer; }
+    .import-label input { display: none; }
+
+    .main { min-width: 0; padding: 28px clamp(20px, 4vw, 64px) 56px; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      max-width: 1500px;
+      margin: 0 auto 24px;
+    }
+
+    .eyebrow { margin: 0 0 5px; color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: 0.16em; }
+    .topbar h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 3vw, 38px); font-weight: 600; letter-spacing: -0.035em; }
+    .topbar-copy { max-width: 410px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+
+    .notice {
+      display: none;
+      max-width: 1500px;
+      margin: 0 auto 16px;
+      padding: 12px 14px;
+      border: 1px solid #e6c987;
+      border-radius: 11px;
+      color: #694a12;
+      background: #fff4d6;
+      font-size: 13px;
+    }
+    .notice.visible { display: block; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+      gap: 18px;
+      max-width: 1500px;
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .lesson-panel { padding: clamp(22px, 3vw, 38px); }
+    .lesson-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 17px; }
+    .pill { padding: 5px 9px; border-radius: 999px; color: var(--green); background: var(--green-soft); font-size: 11px; font-weight: 800; }
+    .pill.neutral { color: var(--muted); background: #ece9df; }
+    .lesson-panel h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(30px, 4vw, 52px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.03; }
+    .goal { margin: 17px 0 28px; color: #4b5a51; font-size: 16px; line-height: 1.75; }
+
+    .section { padding-top: 24px; border-top: 1px solid var(--line); }
+    .section + .section { margin-top: 26px; }
+    .section h3 { margin: 0 0 14px; font-size: 13px; letter-spacing: 0.08em; }
+    .concept-list { display: grid; gap: 12px; }
+    .concept { padding: 15px; border-radius: 13px; background: #f2f0e8; }
+    .concept strong { display: block; margin-bottom: 5px; font-size: 14px; }
+    .concept p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .concept code { display: block; margin-top: 10px; padding: 10px 12px; overflow-x: auto; border-radius: 8px; color: #daeee1; background: #263a31; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; line-height: 1.6; white-space: pre; }
+
+    .requirements { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .requirements li { position: relative; padding-left: 25px; color: #3f4d45; font-size: 14px; line-height: 1.6; }
+    .requirements li::before { position: absolute; left: 0; top: 2px; content: "✓"; color: var(--green); font-weight: 900; }
+    .checks { display: flex; flex-wrap: wrap; gap: 7px; }
+    .check { padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 11px; }
+
+    .hints { display: grid; gap: 8px; }
+    details.hint { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    details.hint summary { padding: 11px 13px; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 750; }
+    details.hint p { margin: 0; padding: 0 13px 13px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+
+    .practice-panel { position: sticky; top: 18px; }
+    .practice-header { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #2e4239; color: var(--code-ink); background: var(--code); }
+    .practice-header strong { font-size: 13px; }
+    .save-state { color: #96b6a5; font-size: 11px; }
+
+    .editor-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 430px; max-height: 58vh; overflow: hidden; background: var(--code); }
+    .line-numbers { min-width: 46px; margin: 0; padding: 18px 10px 18px 8px; overflow: hidden; color: #61796c; border-right: 1px solid #2b4036; font: 13px/1.65 "SFMono-Regular", Consolas, monospace; text-align: right; user-select: none; }
+    #editor { width: 100%; min-height: 430px; padding: 18px; resize: none; overflow: auto; border: 0; outline: 0; color: var(--code-ink); caret-color: var(--amber); background: var(--code); font: 13px/1.65 "SFMono-Regular", Consolas, monospace; tab-size: 4; }
+    #editor::selection { background: rgba(234, 164, 58, 0.32); }
+
+    .editor-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px; border-top: 1px solid #2e4239; background: var(--code); }
+    .editor-actions button { padding: 8px 12px; border: 1px solid #40574c; border-radius: 8px; color: #d7e8dd; background: transparent; font-size: 12px; }
+    .editor-actions button:hover { background: #263c31; }
+    .editor-actions .complete { margin-left: auto; color: #15251f; border-color: var(--amber); background: var(--amber); font-weight: 800; }
+
+    .answer { border-top: 1px solid var(--line); background: #fbfaf5; }
+    .answer summary { padding: 16px 18px; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 850; }
+    .answer-body { padding: 0 14px 14px; }
+    .answer-note { margin: 0 4px 10px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .answer-code { margin: 0; padding: 16px; overflow: auto; border-radius: 11px; color: var(--code-ink); background: #1d3027; font: 12px/1.65 "SFMono-Regular", Consolas, monospace; white-space: pre; }
+
+    .nav-row { display: flex; justify-content: space-between; gap: 12px; max-width: 1500px; margin: 20px auto 0; }
+    .nav-row button { min-width: 132px; padding: 11px 15px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: var(--panel); }
+    .nav-row button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+    .mobile-menu { display: none; }
+
+    @media (max-width: 1120px) {
+      .app-shell { grid-template-columns: 260px minmax(0, 1fr); }
+      .workspace { grid-template-columns: 1fr; }
+      .practice-panel { position: static; }
+      .editor-wrap { max-height: none; }
+    }
+
+    @media (max-width: 760px) {
+      .app-shell { display: block; }
+      .sidebar { position: fixed; z-index: 20; inset: 0 auto 0 0; width: min(88vw, 320px); transform: translateX(-102%); transition: transform 180ms ease; box-shadow: 20px 0 50px rgba(0, 0, 0, 0.22); }
+      .sidebar.open { transform: translateX(0); }
+      .mobile-menu { display: inline-grid; min-width: 42px; height: 42px; place-items: center; border: 1px solid var(--line); border-radius: 11px; color: var(--green); background: var(--panel); font-size: 18px; }
+      .main { padding: 18px 14px 40px; }
+      .topbar { align-items: flex-start; }
+      .topbar-copy { display: none; }
+      .lesson-panel { padding: 22px 18px; }
+      .editor-wrap { min-height: 390px; }
+      #editor { min-height: 390px; }
+    }
+
+    @media print {
+      .sidebar, .practice-panel, .nav-row, .mobile-menu { display: none !important; }
+      .app-shell { display: block; }
+      .main { padding: 0; }
+      .lesson-panel { border: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="课程目录">
+      <div class="brand">
+        <div class="brand-mark">Py</div>
+        <div><strong>Python → Agent</strong><span>单文件离线学习册</span></div>
+      </div>
+      <div class="offline-badge"><span class="offline-dot"></span><span>完全离线 · 不执行代码 · 不发送数据。编辑内容只留在本机浏览器。</span></div>
+      <div class="progress-card">
+        <div class="progress-row"><span>学习进度</span><strong id="progressText">0 / 25</strong></div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <nav id="courseNav"></nav>
+      <div class="sidebar-actions">
+        <button type="button" id="exportButton">导出记录</button>
+        <label class="import-label">导入记录<input type="file" id="importInput" accept="application/json,.json"></label>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" type="button" id="menuButton" aria-label="打开课程目录">☰</button>
+        <div>
+          <p class="eyebrow">LOCAL · PRIVATE · OFFLINE</p>
+          <h1>把 Python 练成 Agent 开发能力</h1>
+        </div>
+        <p class="topbar-copy">双击本文件即可学习。这里保留题目、编辑器、提示和参考答案，不含联网、账号、远程运行与数据上传。</p>
+      </header>
+
+      <div class="notice" id="notice" role="status"></div>
+
+      <div class="workspace">
+        <article class="panel lesson-panel">
+          <div class="lesson-meta">
+            <span class="pill" id="modulePill"></span>
+            <span class="pill neutral" id="numberPill"></span>
+            <span class="pill neutral" id="timePill"></span>
+          </div>
+          <h2 id="lessonTitle"></h2>
+          <p class="goal" id="lessonGoal"></p>
+
+          <section class="section">
+            <h3>需要理解</h3>
+            <div class="concept-list" id="conceptList"></div>
+          </section>
+
+          <section class="section">
+            <h3>闯关要求</h3>
+            <ul class="requirements" id="requirementList"></ul>
+          </section>
+
+          <section class="section">
+            <h3>自查标准</h3>
+            <div class="checks" id="testList"></div>
+          </section>
+
+          <section class="section">
+            <h3>分步提示</h3>
+            <div class="hints" id="hintList"></div>
+          </section>
+        </article>
+
+        <section class="panel practice-panel" aria-label="代码练习区">
+          <div class="practice-header"><strong>practice.py</strong><span class="save-state" id="saveState">等待编辑</span></div>
+          <div class="editor-wrap">
+            <pre class="line-numbers" id="lineNumbers" aria-hidden="true">1</pre>
+            <textarea id="editor" aria-label="Python 代码编辑器" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+          </div>
+          <div class="editor-actions">
+            <button type="button" id="resetButton">恢复初始代码</button>
+            <button type="button" id="copyButton">复制代码</button>
+            <button class="complete" type="button" id="completeButton">标记已完成</button>
+          </div>
+          <details class="answer" id="answerDetails">
+            <summary>查看参考答案</summary>
+            <div class="answer-body">
+              <p class="answer-note">先独立完成，再对照结构和边界处理。参考答案不是唯一正确写法。</p>
+              <pre class="answer-code" id="answerCode"></pre>
+            </div>
+          </details>
+        </section>
+      </div>
+
+      <div class="nav-row">
+        <button type="button" id="previousButton">← 上一关</button>
+        <button type="button" id="nextButton">下一关 →</button>
+      </div>
+    </main>
+  </div>
+
+  <script id="course-data" type="application/json">{"modules":["Python 起步","Python 工程能力","Python 综合训练","Agent 核心范式","Agent 系统能力","Agent 案例实战"],"lessons":[{"id":"first-output","module":"Python 起步","number":1,"title":"让 Python 开口","kicker":"输出与表达式","minutes":8,"goal":"理解代码从上到下执行，并用 print() 输出计算结果。","concepts":[{"title":"print() 是你的观察窗口","body":"括号里的值会被输出。先让程序可观察，再判断它是否按预期工作。","example":"print(\"你好，Python\")"},{"title":"表达式会先计算","body":"Python 会先算出括号中的表达式，再把结果交给 print。","example":"print(7 * 6)"}],"requirements":["第一行输出“我的第一段 Python”；中英文之间有无空格都可以","第二个 print() 的括号中直接写乘法表达式并输出 56；8*7、7*8，以及运算符两侧加空格都可以"],"starterCode":"# 在这里写下你的第一段代码\nprint(\"你好，Python\")\n","hints":["需要调用两次 print()。","乘法运算符是 *，不要手算后直接写 56。"],"tests":[{"name":"第一行文字正确（忽略空格）","kind":"behavior"},{"name":"第二行输出 56","kind":"behavior"},{"name":"乘法写在第二个 print 中","kind":"structure"}],"solution":"print(\"我的第一段 Python\")\nprint(8 * 7)"},{"id":"variables","module":"Python 起步","number":2,"title":"给数据起名字","kicker":"变量与类型","minutes":10,"goal":"用变量保存字符串和数字，并组合出可读的输出。","concepts":[{"title":"变量是名字，不是盒子","body":"赋值让一个名字指向某个值。好名字能让代码直接表达意图。","example":"course = \"Python\"\nlessons = 15"},{"title":"f-string 组合文本","body":"在字符串前加 f，就能用花括号插入变量。","example":"print(f\"{course} 有 {lessons} 关\")"}],"requirements":["创建变量 name，值为“小派”","创建变量 level，值为 1","输出：小派正在挑战第 1 关"],"starterCode":"name = \"\"\nlevel = 0\n\nprint()\n","hints":["字符串需要引号，数字不需要。","试试：print(f\"{name}正在挑战第 {level} 关\")，留意文字中的空格。"],"tests":[{"name":"name 保存正确","kind":"behavior"},{"name":"level 是数字 1","kind":"behavior"},{"name":"输出完全匹配","kind":"behavior"}],"solution":"name = \"小派\"\nlevel = 1\n\nprint(f\"{name}正在挑战第 {level} 关\")"},{"id":"strings","module":"Python 起步","number":3,"title":"处理真实文本","kicker":"字符串方法","minutes":12,"goal":"把文本清理规则封装成可复用函数。","concepts":[{"title":"方法是值自带的工具","body":"字符串方法会返回新字符串，不会悄悄修改原值。","example":"clean = raw.strip().lower()"},{"title":"切片提取片段","body":"text[start:end] 包含 start，不包含 end。","example":"word = \"python\"\nprint(word[:3])  # pyt"}],"requirements":["实现 normalize_title(text)","返回去除两端空格并转为小写的新字符串","不要在函数内 print"],"starterCode":"def normalize_title(text):\n    # 返回清理后的新字符串\n    pass\n","hints":["可以连续调用 .strip().lower()。","直接 return 清理结果，不需要额外变量。"],"tests":[{"name":"混合大小写与中文","kind":"behavior"},{"name":"可复用于其他输入","kind":"behavior"}],"solution":"def normalize_title(text):\n    return text.strip().lower()"},{"id":"branches","module":"Python 起步","number":4,"title":"让程序做决定","kicker":"条件分支","minutes":14,"goal":"用互斥条件覆盖边界，避免重复或遗漏。","concepts":[{"title":"从最具体的条件开始","body":"if / elif / else 只会执行第一个成立的分支。","example":"if score >= 90:\n    grade = \"A\"\nelif score >= 60:\n    grade = \"B\""},{"title":"边界值最容易出错","body":"写完条件后，主动检查 59、60、89、90 这样的边界。","example":"age >= 18"}],"requirements":["实现函数 grade(score)","90 分及以上返回 A；60–89 返回 B；低于 60 返回 C"],"starterCode":"def grade(score):\n    # 在这里完成分支\n    pass\n","hints":["建议使用 if / elif / else，或用提前 return 表达互斥边界。","先判断 score >= 90，再判断 score >= 60。"],"tests":[{"name":"高分段","kind":"behavior"},{"name":"中间分段","kind":"behavior"},{"name":"低分段","kind":"behavior"}],"solution":"def grade(score):\n    if score \u003c 60:\n        return \"C\"\n    if score \u003c 90:\n        return \"B\"\n    return \"A\""},{"id":"loops","module":"Python 工程能力","number":5,"title":"批量处理数据","kicker":"循环与 range","minutes":14,"goal":"用循环表达重复规则，而不是复制粘贴代码。","concepts":[{"title":"for 读取序列","body":"每轮循环把下一个元素交给临时变量。","example":"for number in numbers:\n    print(number)"},{"title":"累加器记录过程","body":"在循环外初始化，在循环内更新，循环后读取结果。","example":"total = 0\nfor n in numbers:\n    total += n"}],"requirements":["实现 sum_even(numbers)","用 for 遍历传入序列","返回其中所有偶数的总和"],"starterCode":"def sum_even(numbers):\n    total = 0\n    # 用循环更新 total\n    return total\n","hints":["偶数满足 number % 2 == 0。","只有条件成立时才执行 total += number。"],"tests":[{"name":"混合正负数","kind":"behavior"},{"name":"空输入与全奇数","kind":"behavior"},{"name":"使用 for 循环","kind":"structure"}],"solution":"def sum_even(numbers):\n    total = 0\n    for number in numbers:\n        if number % 2 == 0:\n            total += number\n    return total"},{"id":"functions","module":"Python 工程能力","number":6,"title":"封装一条规则","kicker":"函数与返回值","minutes":16,"goal":"把输入、规则和输出封装成可重复验证的函数。","concepts":[{"title":"参数是函数的输入","body":"同一段逻辑通过不同参数处理不同数据。","example":"def double(number):\n    return number * 2"},{"title":"return 交还结果","body":"print 只负责显示；return 才让调用者拿到值继续使用。","example":"result = double(4)"}],"requirements":["实现函数 shipping_fee(price, member)","会员或满 99 元免运费","其他情况返回 10","返回数字，不在函数内 print"],"starterCode":"def shipping_fee(price, member):\n    pass\n","hints":["“或”对应 or。","免费条件成立时 return 0，否则 return 10。"],"tests":[{"name":"会员免运费且不打印","kind":"behavior"},{"name":"99 元边界且不打印","kind":"behavior"},{"name":"普通情况且不打印","kind":"behavior"}],"solution":"def shipping_fee(price, member):\n    return 0 if member or price >= 99 else 10"},{"id":"lists","module":"Python 工程能力","number":7,"title":"组织一组数据","kicker":"列表与推导式","minutes":16,"goal":"筛选并转换列表，写出可读的数据处理管道。","concepts":[{"title":"列表保持顺序","body":"列表适合保存同类、有顺序、可增删的数据。","example":"scores = [82, 95, 61]"},{"title":"推导式表达映射与筛选","body":"简单规则可写成“为每个元素生成什么，只保留谁”。","example":"[n * 2 for n in numbers if n > 0]"}],"requirements":["实现 improve_scores(scores)","选出及格分数（>= 60）并各加 5 分，最高不超过 100","使用列表推导式返回新列表"],"starterCode":"def improve_scores(scores):\n    # 用一个列表推导式返回结果\n    pass\n","hints":["先筛选 score >= 60。","min(score + 5, 100) 可以限制上限。"],"tests":[{"name":"筛选、加分与封顶","kind":"behavior"},{"name":"空输入与另一组分数","kind":"behavior"},{"name":"使用列表推导式","kind":"structure"}],"solution":"def improve_scores(scores):\n    return [min(score + 5, 100) for score in scores if score >= 60]"},{"id":"dictionaries","module":"Python 工程能力","number":8,"title":"建立键值关系","kicker":"字典与统计","minutes":18,"goal":"用字典完成频次统计，并安全处理第一次出现的值。","concepts":[{"title":"字典用键查值","body":"键应唯一，适合表示名字到数量、编号到记录的映射。","example":"profile = {\"name\": \"小派\", \"level\": 8}"},{"title":"get 提供明确初值","body":"统计时，尚不存在的键从 0 开始。","example":"counts[word] = counts.get(word, 0) + 1"}],"requirements":["实现 word_counts(words)","返回每个单词及其出现次数组成的字典","用 for 遍历输入，不提前写死任何单词键"],"starterCode":"def word_counts(words):\n    counts = {}\n    # 遍历并统计\n    return counts\n","hints":["每轮用 word 作为 counts 的键。","右侧可以写 counts.get(word, 0) + 1。"],"tests":[{"name":"统计未见过的单词","kind":"behavior"},{"name":"空输入与重复一次","kind":"behavior"},{"name":"使用 for 遍历","kind":"structure"}],"solution":"def word_counts(words):\n    result = {}\n    for word in words:\n        result[word] = result.get(word, 0) + 1\n    return result"},{"id":"exceptions","module":"Python 工程能力","number":9,"title":"只捕获能处理的错误","kicker":"异常与边界","minutes":18,"goal":"识别可恢复边界，捕获具体异常并保留真实失败。","concepts":[{"title":"异常不是普通分支","body":"只捕获你知道如何处理的具体异常，其他错误应继续暴露。","example":"try:\n    value = int(text)\nexcept ValueError:\n    return None"},{"title":"不要用 except Exception 吞错","body":"宽泛捕获会把真正的编程错误伪装成正常结果。","example":"except ValueError:  # 边界清晰"}],"requirements":["实现 parse_age(text)","有效整数返回 int","仅当无法转为整数时返回 None","不要捕获 Exception 或 BaseException"],"starterCode":"def parse_age(text):\n    # 只处理可预期的输入错误\n    pass\n","hints":["int(text) 失败时会抛出 ValueError。","try 中直接 return int(text)，except ValueError 中 return None。"],"tests":[{"name":"多个有效整数","kind":"behavior"},{"name":"无效年龄","kind":"behavior"},{"name":"TypeError 继续外溢","kind":"behavior"},{"name":"只捕获 ValueError","kind":"structure"}],"solution":"def parse_age(text):\n    try:\n        return int(text)\n    except ValueError:\n        return None"},{"id":"classes","module":"Python 工程能力","number":10,"title":"让数据带上行为","kicker":"类与对象","minutes":22,"goal":"用类维护相关状态，并通过方法保护状态变化规则。","concepts":[{"title":"对象把状态和行为放在一起","body":"__init__ 建立实例状态，方法通过 self 读取或修改它。","example":"class Counter:\n    def __init__(self):\n        self.value = 0"},{"title":"方法维护不变量","body":"如果状态变化有约束，让方法统一执行，避免外部随意修改。","example":"def add(self, amount):\n    self.value += amount"}],"requirements":["实现 Wallet 类，初始 balance 为 0","deposit(amount) 增加余额并返回新余额","amount \u003c= 0 时抛出 ValueError"],"starterCode":"class Wallet:\n    def __init__(self):\n        pass\n\n    def deposit(self, amount):\n        pass\n","hints":["初始化时写 self.balance = 0。","非法 amount 用 raise ValueError(...) 主动拒绝。"],"tests":[{"name":"初始余额","kind":"behavior"},{"name":"连续存款更新并返回","kind":"behavior"},{"name":"拒绝零和负数","kind":"behavior"}],"solution":"class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def deposit(self, amount):\n        if amount \u003c= 0:\n            raise ValueError(\"amount must be positive\")\n        self.balance += amount\n        return self.balance"},{"id":"generators","module":"Python 工程能力","number":11,"title":"按需产生数据","kicker":"迭代器与生成器","minutes":20,"goal":"用 yield 描述数据流，避免一次性创建不必要的列表。","concepts":[{"title":"yield 暂停并保留状态","body":"生成器每次产出一个值，下次从暂停位置继续。","example":"def countdown(n):\n    while n:\n        yield n\n        n -= 1"},{"title":"生成器适合流式数据","body":"数据很多或可能无限时，按需计算能减少内存占用。","example":"for item in countdown(3): ..."}],"requirements":["实现 even_numbers(limit)","依次 yield 0 到 limit 以内的偶数","不创建中间列表"],"starterCode":"def even_numbers(limit):\n    pass\n","hints":["range(0, limit + 1, 2) 会依次产生偶数。","循环中使用 yield number，而不是 return。"],"tests":[{"name":"边界与顺序","kind":"behavior"},{"name":"零、奇数与负数边界","kind":"behavior"},{"name":"确实是生成器函数","kind":"structure"}],"solution":"def even_numbers(limit):\n    for number in range(0, limit + 1, 2):\n        yield number"},{"id":"decorators","module":"Python 工程能力","number":12,"title":"为函数增加能力","kicker":"装饰器与闭包","minutes":24,"goal":"理解函数是一等对象，并用装饰器复用横切逻辑。","concepts":[{"title":"函数也可以被传递","body":"装饰器接收函数并返回新函数，不修改原函数内部。","example":"def decorate(func):\n    def wrapper():\n        return func()\n    return wrapper"},{"title":"*args 与 **kwargs 保留调用方式","body":"包装器转发任意参数，才能适配不同函数。","example":"def wrapper(*args, **kwargs):\n    return func(*args, **kwargs)"}],"requirements":["实现 twice 装饰器","被装饰函数每次调用两遍","返回第二次调用的结果","支持任意参数"],"starterCode":"def twice(func):\n    # 返回包装函数\n    pass\n\n@twice\ndef add(a, b):\n    return a + b\n","hints":["在 twice 内定义 wrapper(*args, **kwargs)。","调用两次 func；第一次不保存，第二次 return。"],"tests":[{"name":"调用两次并返回第二次结果","kind":"behavior"}],"solution":"def twice(func):\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper"},{"id":"project-text","module":"Python 综合训练","number":13,"title":"Prompt 文本分析器","kicker":"Agent 前置项目 · 上下文统计","minutes":35,"goal":"组合字符串、列表和字典，分析进入 Agent 上下文的文本规模与高频词。","concepts":[{"title":"先定义输入输出契约","body":"Agent 的上下文处理也需要稳定契约：函数接收文本，返回结构固定的统计字典。","example":"{\"words\": 4, \"unique\": 3, \"top\": \"python\"}"},{"title":"让数据逐步变干净","body":"Prompt 进入模型前先统一大小写、分词、统计；每一步只做一件事。","example":"words = text.lower().split()"}],"requirements":["实现 analyze(text)","忽略大小写并按空白分词","返回 words、unique、top 三个字段","top 为出现最多的单词；同频时取最先出现者","空文本的 top 为 None"],"starterCode":"def analyze(text):\n    # 1. 清洗并分词\n    # 2. 统计次数\n    # 3. 返回结果\n    pass\n","hints":["words 数量是 len(words)，unique 是 len(counts)。","非空时 max(counts, key=counts.get) 会在同频时保留最先插入的键。"],"tests":[{"name":"基本统计","kind":"behavior"},{"name":"第二组完整结果","kind":"behavior"},{"name":"同频与空文本","kind":"behavior"}],"solution":"def analyze(text):\n    words = text.lower().split()\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    top = max(counts, key=counts.get) if counts else None\n    return {\"words\": len(words), \"unique\": len(counts), \"top\": top}"},{"id":"project-expense","module":"Python 综合训练","number":14,"title":"Agent 调用成本汇总器","kicker":"Agent 前置项目 · 成本观测","minutes":40,"goal":"从模型与工具调用记录中计算总成本和分类成本，为 Agent 评估建立观测能力。","concepts":[{"title":"调用记录是 Agent 的账单","body":"每条字典表示一次模型或工具调用，循环把成本累积成汇总结果。","example":"{\"category\": \"model\", \"amount\": 0.03}"},{"title":"成本计算要集中","body":"同一个循环同时更新总成本与分类成本，不重复遍历 trace。","example":"by_category[key] = by_category.get(key, 0) + amount"}],"requirements":["实现 summarize(records)","返回 total 和 by_category","空列表也返回 total=0 与空字典","在一个 for 循环中同时完成两项汇总，不使用额外推导式"],"starterCode":"def summarize(records):\n    total = 0\n    by_category = {}\n    # 完成一次遍历\n    return {\"total\": total, \"by_category\": by_category}\n","hints":["每条 record 用 record['amount'] 和 record['category'] 取值。","在同一个 for 循环中更新 total 与 by_category。"],"tests":[{"name":"多类 Agent 调用汇总","kind":"behavior"},{"name":"空输入","kind":"behavior"},{"name":"使用一个 for 循环","kind":"structure"}],"solution":"def summarize(records):\n    total = 0\n    by_category = {}\n    for record in records:\n        total += record[\"amount\"]\n        category = record[\"category\"]\n        by_category[category] = by_category.get(category, 0) + record[\"amount\"]\n    return {\"total\": total, \"by_category\": by_category}"},{"id":"project-tasks","module":"Python 综合训练","number":15,"title":"Agent 任务优先级引擎","kicker":"Agent 前置项目 · 计划排序","minutes":50,"goal":"综合函数、排序、异常边界与数据契约，为 Planner 排出稳定的执行顺序。","concepts":[{"title":"排序键表达业务规则","body":"key 函数把每项转换成可比较的元组，规则优先级一目了然。","example":"sorted(tasks, key=lambda task: (-task['priority'], task['name']))"},{"title":"在入口验证数据","body":"越早拒绝无效值，后续逻辑越简单可靠。","example":"if priority not in range(1, 6):\n    raise ValueError(...)"}],"requirements":["实现 plan(tasks)","priority 必须是 1–5，否则抛出 ValueError","先按 priority 从高到低，再按 name 字母顺序","返回任务 name 列表，不修改原列表"],"starterCode":"def plan(tasks):\n    # 验证后排序，返回名称列表\n    pass\n","hints":["先循环验证 priority，再调用 sorted。","排序键可用 (-task['priority'], task['name'])。"],"tests":[{"name":"排序规则","kind":"behavior"},{"name":"空输入与同级排序","kind":"behavior"},{"name":"拒绝优先级下界和上界","kind":"behavior"},{"name":"不修改输入","kind":"behavior"}],"solution":"def plan(tasks):\n    for task in tasks:\n        if task[\"priority\"] not in range(1, 6):\n            raise ValueError(\"priority must be 1-5\")\n    ordered = sorted(\n        tasks,\n        key=lambda task: (-task[\"priority\"], task[\"name\"]),\n    )\n    return [task[\"name\"] for task in ordered]"},{"id":"agent-tool-registry","module":"Agent 核心范式","number":16,"title":"给 Agent 装上工具箱","kicker":"Hello-Agents · Tool Registry","minutes":26,"goal":"用统一注册表管理工具，让 Agent 通过名字和参数字典安全调用 Python 函数。","concepts":[{"title":"工具是 Agent 的手脚","body":"模型只负责决定调用什么；注册表负责找到真实函数、传入参数并返回观察结果。两者分离后，工具更容易测试和扩展。","example":"registry.register(\"weather\", get_weather)\nregistry.execute(\"weather\", {\"city\": \"成都\"})"},{"title":"失败必须清晰","body":"重复名称通常是配置错误，未知工具通常是决策错误。分别抛出 ValueError 与 KeyError，调用方才能准确处理。","example":"if name in self.tools:\n    raise ValueError(\"duplicate tool\")"}],"requirements":["实现 ToolRegistry 类，实例内维护 tools 字典","register(name, func) 注册工具；重复名称抛出 ValueError","execute(name, payload) 使用 func(**payload) 调用；未知名称抛出 KeyError","原样返回工具结果，不打印、不伪造成功"],"starterCode":"class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        pass\n\n    def execute(self, name, payload):\n        pass\n","hints":["先检查 name 是否已经存在，再保存 func。","执行时从 self.tools[name] 取函数，并用 **payload 展开关键字参数。"],"tests":[{"name":"注册、转发参数并返回真实结果","kind":"behavior"},{"name":"重复与未知工具边界","kind":"behavior"}],"solution":"class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        if name in self.tools:\n            raise ValueError(\"duplicate tool\")\n        self.tools[name] = func\n\n    def execute(self, name, payload):\n        return self.tools[name](**payload)"},{"id":"agent-action-parser","module":"Agent 核心范式","number":17,"title":"读懂模型的 Action","kicker":"Hello-Agents · ReAct 输出解析","minutes":22,"goal":"把模型输出的 tool[input] 或 Finish[answer] 解析为稳定的结构化数据。","concepts":[{"title":"文本协议是模型与代码的边界","body":"LLM 返回文本，Python 需要把动作名与参数拆开。解析失败应返回明确的空结果，而不是猜测模型意图。","example":"parse_action(\"weather[北京]\")  # (\"weather\", \"北京\")"},{"title":"Finish 也是一种动作","body":"工具动作继续循环，Finish 表示已经收集到足够信息，可以结束并交付答案。","example":"parse_action(\"Finish[行程已生成]\")"}],"requirements":["实现 parse_action(text)","忽略整段文本首尾空白，解析第一个 [ 与最后一个 ] 之间的完整内容","合法输入返回 (name, payload)，payload 可以包含换行","缺少动作名、方括号不完整或括号后还有内容时返回 (None, None)"],"starterCode":"def parse_action(text):\n    # 返回 (action_name, payload)\n    pass\n","hints":["先用 strip() 清理整段文本。","可检查 '[' 的位置和字符串是否以 ']' 结尾，再用 split('[', 1)。"],"tests":[{"name":"解析工具与 Finish","kind":"behavior"},{"name":"保留多行 payload","kind":"behavior"},{"name":"拒绝模糊格式","kind":"behavior"}],"solution":"def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    if not name:\n        return None, None\n    return name, payload"},{"id":"agent-react-loop","module":"Agent 核心范式","number":18,"title":"跑通 ReAct 循环","kicker":"Hello-Agents · Thought → Action → Observation","minutes":34,"goal":"实现一个离线 ReAct 执行器，掌握动作解析、工具调用、观察记录与最大步数安全阀。","concepts":[{"title":"Agent 是持续与环境交互的循环","body":"每一步读取一个动作，调用工具获得 Observation，再把观察写入历史，直到 Finish。真实项目中动作来自 LLM，本关用固定响应隔离网络变量。","example":"Action → Tool → Observation → 下一步 Action"},{"title":"max_steps 是必要安全阀","body":"模型可能重复调用工具。达到最大步数必须停止，避免无限循环和不可控成本。","example":"for action in actions[:max_steps]: ..."}],"requirements":["实现 run_react(actions, tools, max_steps=5)","工具动作通过 tools[name](payload) 执行，并把 action、input、observation 写入 history","遇到 Finish 返回其中答案；未遇到则 answer 为 None","返回 {'answer': ..., 'history': [...], 'steps': 实际读取动作数}","未知工具保留真实 KeyError；最多处理 max_steps 个动作"],"starterCode":"def parse_action(text):\n    text = text.strip()\n    if '[' not in text or not text.endswith(']'):\n        return None, None\n    name, payload = text[:-1].split('[', 1)\n    return (name, payload) if name else (None, None)\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    # 完成 Action → Observation 循环\n    pass\n","hints":["遍历 actions[:max_steps]，每读一个动作就更新 steps。","先处理 Finish；否则从 tools 字典取函数并记录 observation。"],"tests":[{"name":"旅行助手式工具链","kind":"behavior"},{"name":"最大步数安全停止","kind":"behavior"},{"name":"未知工具暴露真实错误","kind":"behavior"}],"solution":"def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    return (name, payload) if name else (None, None)\n\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    steps = 0\n    for action_text in actions[:max_steps]:\n        steps += 1\n        name, payload = parse_action(action_text)\n        if name == \"Finish\":\n            return {\"answer\": payload, \"history\": history, \"steps\": steps}\n        observation = tools[name](payload)\n        history.append({\n            \"action\": name,\n            \"input\": payload,\n            \"observation\": observation,\n        })\n    return {\"answer\": None, \"history\": history, \"steps\": steps}"},{"id":"agent-plan-solve","module":"Agent 核心范式","number":19,"title":"先规划，再逐步求解","kicker":"Hello-Agents · Plan-and-Solve","minutes":30,"goal":"把复杂目标拆成有序步骤，并让后续步骤读取之前的结果上下文。","concepts":[{"title":"规划与执行分离","body":"Planner 负责生成步骤，Solver 负责逐步执行。分离后更容易检查计划、重试单步和复用执行器。","example":"steps = [{\"id\": \"weather\", \"task\": \"查询天气\"}]"},{"title":"上下文只包含已完成结果","body":"执行当前步骤时，把之前的结果快照交给 executor；不要让未来步骤提前污染上下文。","example":"result = executor(step['task'], context.copy())"}],"requirements":["实现 execute_plan(steps, executor)","按输入顺序执行每个 {'id', 'task'} 步骤","executor(task, context) 中的 context 是此前 id 到 result 的新字典","返回 [{'id': id, 'result': result}, ...]；空计划返回 []"],"starterCode":"def execute_plan(steps, executor):\n    context = {}\n    results = []\n    # 逐步求解并更新 context\n    return results\n","hints":["每步调用 executor(step['task'], context.copy())。","先把结果加入 results，再用当前 id 更新 context。"],"tests":[{"name":"后续步骤看到已完成上下文","kind":"behavior"},{"name":"空计划不调用执行器","kind":"behavior"}],"solution":"def execute_plan(steps, executor):\n    context = {}\n    results = []\n    for step in steps:\n        result = executor(step[\"task\"], context.copy())\n        results.append({\"id\": step[\"id\"], \"result\": result})\n        context[step[\"id\"]] = result\n    return results"},{"id":"agent-reflection","module":"Agent 核心范式","number":20,"title":"让 Agent 反思后再改进","kicker":"Hello-Agents · Reflection","minutes":28,"goal":"实现执行—评估—改进闭环，并在质量达标或达到轮次上限时准确停止。","concepts":[{"title":"Reflection 不是无限重写","body":"每轮先 evaluate；达标立即返回，不达标才 revise。max_rounds 控制最多改进次数。","example":"if evaluate(draft):\n    return draft"},{"title":"把评估器和改写器注入函数","body":"高阶函数让循环独立于具体模型，测试时可以用确定性函数替代真实 LLM。","example":"reflection_loop(draft, evaluate, revise, max_rounds=3)"}],"requirements":["实现 reflection_loop(draft, evaluate, revise, max_rounds=3)","每轮先调用 evaluate(draft)；True 时立即返回当前 draft","False 时调用 revise(draft) 并计为一次改进，最多改进 max_rounds 次","max_rounds \u003c 0 时抛出 ValueError；达到上限返回最后版本"],"starterCode":"def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    # 执行 → 评估 → 改进\n    pass\n","hints":["先验证 max_rounds，再用 range(max_rounds) 控制改进次数。","循环后还未达标时，返回最后一次 revise 的结果。"],"tests":[{"name":"达标后提前停止","kind":"behavior"},{"name":"轮次上限不伪造达标","kind":"behavior"},{"name":"拒绝负轮次","kind":"behavior"}],"solution":"def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    if max_rounds \u003c 0:\n        raise ValueError(\"max_rounds must be non-negative\")\n    for _ in range(max_rounds):\n        if evaluate(draft):\n            return draft\n        draft = revise(draft)\n    return draft"},{"id":"agent-memory-retrieval","module":"Agent 系统能力","number":21,"title":"实现最小记忆检索","kicker":"Hello-Agents · Memory / Naive RAG","minutes":36,"goal":"用关键词重叠、重要度和稳定排序构建可解释的本地记忆检索器。","concepts":[{"title":"先检索，再生成","body":"RAG 在回答前从外部知识中找相关内容。本关先实现无需向量库的关键词检索，理解召回、排序与 limit。","example":"overlap = len(query_words & content_words)"},{"title":"排序规则必须可解释","body":"先按关键词重叠数降序，再按 importance 降序；仍同分时保留原始顺序。","example":"sorted(scored, key=lambda item: (-item[0], -item[1], item[2]))"}],"requirements":["实现 retrieve_memories(memories, query, limit=2)","memory 含 content 与 importance；按空白分词并忽略大小写","只保留至少命中一个查询词的记忆","依次按命中词数、importance 降序，最后按原始顺序；返回 content 列表","limit \u003c= 0 或没有命中时返回 []"],"starterCode":"def retrieve_memories(memories, query, limit=2):\n    # 计算关键词重叠并排序\n    pass\n","hints":["用 set(query.lower().split()) 得到查询词集合。","把 (命中数, importance, 原索引, content) 放进列表后统一排序。"],"tests":[{"name":"相关度、重要度与稳定顺序","kind":"behavior"},{"name":"limit 与空命中边界","kind":"behavior"}],"solution":"def retrieve_memories(memories, query, limit=2):\n    if limit \u003c= 0:\n        return []\n    query_words = set(query.lower().split())\n    scored = []\n    for index, memory in enumerate(memories):\n        content_words = set(memory[\"content\"].lower().split())\n        overlap = len(query_words & content_words)\n        if overlap:\n            scored.append((\n                overlap,\n                memory[\"importance\"],\n                index,\n                memory[\"content\"],\n            ))\n    scored.sort(key=lambda item: (-item[0], -item[1], item[2]))\n    return [item[3] for item in scored[:limit]]"},{"id":"agent-handoff","module":"Agent 系统能力","number":22,"title":"设计多 Agent 交接","kicker":"Hello-Agents · Multi-Agent Handoff","minutes":30,"goal":"根据能力选择协作者，并用稳定消息信封传递来源、目标和任务。","concepts":[{"title":"交接必须有明确契约","body":"多 Agent 协作不是随意聊天。消息至少要说明谁发起、交给谁、要完成什么，方便追踪和评估。","example":"{\"from\": \"planner\", \"to\": \"weather\", \"task\": \"查询成都天气\"}"},{"title":"路由失败不能静默","body":"找不到具备所需 capability 的 Agent 时抛出 LookupError，让上层决定重规划或告知用户。","example":"raise LookupError(f\"no agent for {capability}\")"}],"requirements":["实现 handoff(sender, task, agents)","task 含 capability 与 description；agents 按顺序含 name 与 capabilities 列表","选择第一个具备能力的 Agent，返回 {'from', 'to', 'task'}","找不到匹配 Agent 时抛出 LookupError，不修改 task 或 agents"],"starterCode":"def handoff(sender, task, agents):\n    # 找到第一个具备 task['capability'] 的 Agent\n    pass\n","hints":["按 agents 原顺序遍历。","命中时只构造新字典；遍历结束仍未命中再 raise LookupError。"],"tests":[{"name":"按能力选择第一个协作者","kind":"behavior"},{"name":"无匹配能力时明确失败","kind":"behavior"}],"solution":"def handoff(sender, task, agents):\n    for agent in agents:\n        if task[\"capability\"] in agent[\"capabilities\"]:\n            return {\n                \"from\": sender,\n                \"to\": agent[\"name\"],\n                \"task\": task[\"description\"],\n            }\n    raise LookupError(f\"no agent for {task['capability']}\")"},{"id":"agent-travel-project","module":"Agent 案例实战","number":23,"title":"智能旅行助手","kicker":"Hello-Agents 案例 · 天气与景点协作","minutes":45,"goal":"复现 Hello-Agents 旅行助手的工具链：先查天气，再基于天气选择景点，并保留完整调用轨迹。","concepts":[{"title":"工具结果决定下一步参数","body":"景点工具不只需要城市，还要读取天气工具返回的 condition。这是 Agent 根据 Observation 调整后续 Action 的最小示例。","example":"weather = tools['weather'](city)\nattractions = tools['attraction'](city, weather['condition'])"},{"title":"Trace 让结果可检查","body":"最终答案之外，还要保存调用了哪个工具、输入什么、观察到什么；没有轨迹就很难调试 Agent。","example":"{\"tool\": \"weather\", \"input\": \"成都\", \"observation\": {...}}"}],"requirements":["实现 build_trip(city, tools)","先调用 tools['weather'](city)，再调用 tools['attraction'](city, weather['condition'])","返回 city、weather、attractions 与 trace；trace 按真实调用顺序保存两条记录","使用工具真实返回值，不写死城市、天气或景点"],"starterCode":"def build_trip(city, tools):\n    trace = []\n    # 1. 查询天气并记录\n    # 2. 根据天气查询景点并记录\n    # 3. 返回结构化行程\n    pass\n","hints":["先把 weather 结果保存下来，第二个工具需要其中的 condition。","trace 的 observation 应保存工具原始返回值。"],"tests":[{"name":"成都晴天工具链","kind":"behavior"},{"name":"另一城市仍可复用","kind":"behavior"}],"solution":"def build_trip(city, tools):\n    trace = []\n    weather = tools[\"weather\"](city)\n    trace.append({\n        \"tool\": \"weather\",\n        \"input\": city,\n        \"observation\": weather,\n    })\n    condition = weather[\"condition\"]\n    attractions = tools[\"attraction\"](city, condition)\n    trace.append({\n        \"tool\": \"attraction\",\n        \"input\": {\"city\": city, \"condition\": condition},\n        \"observation\": attractions,\n    })\n    return {\n        \"city\": city,\n        \"weather\": weather,\n        \"attractions\": attractions,\n        \"trace\": trace,\n    }"},{"id":"agent-deep-research-project","module":"Agent 案例实战","number":24,"title":"自动化 DeepResearch","kicker":"Hello-Agents 案例 · 规划、检索、报告","minutes":52,"goal":"把研究主题拆成子任务，逐项收集资料，并生成带去重来源的结构化研究报告。","concepts":[{"title":"研究 Agent 有三段流水线","body":"问题分析负责子任务，信息收集负责调用 search，报告阶段负责整合 findings 与 sources。","example":"Plan → Search each task → Report with citations"},{"title":"来源必须去重并保序","body":"同一资料可能被多个子任务命中。报告保留第一次出现的位置，既避免重复，也保持可追溯顺序。","example":"if url not in sources:\n    sources.append(url)"}],"requirements":["实现 build_research_report(topic, tasks, search)","按 tasks 顺序调用 search(task)，结果项含 snippet 与 url","每个 section 返回 title、findings（snippet 列表）与 sources（该节 url 列表）","报告顶层返回 topic、sections、sources；顶层 sources 全局去重并保持首次出现顺序","空 tasks 返回空 sections 与 sources，不能伪造研究结果"],"starterCode":"def build_research_report(topic, tasks, search):\n    sections = []\n    sources = []\n    # 逐个检索子任务并汇总引用\n    return {\"topic\": topic, \"sections\": sections, \"sources\": sources}\n","hints":["每个 task 的 search 结果先生成本节 findings 与 section_sources。","顶层 sources 用成员检查去重，但不要改变各 section 的来源。"],"tests":[{"name":"多子任务与引用去重","kind":"behavior"},{"name":"空研究计划不伪造结果","kind":"behavior"}],"solution":"def build_research_report(topic, tasks, search):\n    sections = []\n    sources = []\n    for task in tasks:\n        results = search(task)\n        findings = [item[\"snippet\"] for item in results]\n        section_sources = [item[\"url\"] for item in results]\n        sections.append({\n            \"title\": task,\n            \"findings\": findings,\n            \"sources\": section_sources,\n        })\n        for url in section_sources:\n            if url not in sources:\n                sources.append(url)\n    return {\"topic\": topic, \"sections\": sections, \"sources\": sources}"},{"id":"agent-framework-capstone","module":"Agent 案例实战","number":25,"title":"毕业设计：Mini Agent 框架","kicker":"Hello-Agents 第七章 · 从零造轮子","minutes":65,"goal":"把工具注册、ReAct 循环、步数限制和运行状态整合成一个可复用的 Agent 类。","concepts":[{"title":"Agent 是稳定入口，能力来自 Tools","body":"Hello-Agents 的教学架构强调核心 Agent 加工具系统。run 提供统一入口，具体外部能力通过 register_tool 扩展。","example":"agent.register_tool('echo', echo)\nagent.run(actions)"},{"title":"一次 run 就是一个独立会话","body":"每次运行都必须重置 history，避免上一位用户或上一项任务的观察污染新任务。","example":"def run(self, actions):\n    self.history = []"}],"requirements":["实现 Agent(name, max_steps=5)，保存 name、max_steps、tools 与 history","register_tool(name, func) 注册工具；重复名称抛 ValueError","run(actions) 支持 tool[payload] 与 Finish[answer]，每次运行先重置 history","工具记录格式为 {'action', 'input', 'observation'}；返回 {'answer', 'history'}","最多处理 max_steps 个动作；未知工具抛 KeyError；未 Finish 时 answer 为 None"],"starterCode":"class Agent:\n    def __init__(self, name, max_steps=5):\n        pass\n\n    def register_tool(self, name, func):\n        pass\n\n    def run(self, actions):\n        pass\n","hints":["把解析 action 的小逻辑放成类内私有方法会更清晰。","run 开头重置 self.history；遍历 actions[:self.max_steps]。"],"tests":[{"name":"完整框架契约","kind":"behavior"},{"name":"框架错误边界","kind":"behavior"},{"name":"最大步数不伪造完成","kind":"behavior"}],"solution":"class Agent:\n    def __init__(self, name, max_steps=5):\n        self.name = name\n        self.max_steps = max_steps\n        self.tools = {}\n        self.history = []\n\n    def register_tool(self, name, func):\n        if name in self.tools:\n            raise ValueError(\"duplicate tool\")\n        self.tools[name] = func\n\n    def run(self, actions):\n        self.history = []\n        for action_text in actions[:self.max_steps]:\n            if \"[\" not in action_text or not action_text.endswith(\"]\"):\n                continue\n            name, payload = action_text[:-1].split(\"[\", 1)\n            if name == \"Finish\":\n                return {\"answer\": payload, \"history\": self.history.copy()}\n            observation = self.tools[name](payload)\n            self.history.append({\n                \"action\": name,\n                \"input\": payload,\n                \"observation\": observation,\n            })\n        return {\"answer\": None, \"history\": self.history.copy()}"}]}</script>
+  <script>
+    "use strict";
+
+    const COURSE = JSON.parse(document.getElementById("course-data").textContent);
+    const STORAGE_KEY = "python-agent-offline-v1";
+    const lessonIds = new Set(COURSE.lessons.map((lesson) => lesson.id));
+    const emptyState = () => ({ currentId: COURSE.lessons[0].id, drafts: {}, completed: [] });
+
+    const elements = {
+      sidebar: document.getElementById("sidebar"),
+      nav: document.getElementById("courseNav"),
+      notice: document.getElementById("notice"),
+      module: document.getElementById("modulePill"),
+      number: document.getElementById("numberPill"),
+      time: document.getElementById("timePill"),
+      title: document.getElementById("lessonTitle"),
+      goal: document.getElementById("lessonGoal"),
+      concepts: document.getElementById("conceptList"),
+      requirements: document.getElementById("requirementList"),
+      tests: document.getElementById("testList"),
+      hints: document.getElementById("hintList"),
+      editor: document.getElementById("editor"),
+      lines: document.getElementById("lineNumbers"),
+      save: document.getElementById("saveState"),
+      answer: document.getElementById("answerCode"),
+      answerDetails: document.getElementById("answerDetails"),
+      complete: document.getElementById("completeButton"),
+      progressText: document.getElementById("progressText"),
+      progressFill: document.getElementById("progressFill"),
+      previous: document.getElementById("previousButton"),
+      next: document.getElementById("nextButton"),
+    };
+
+    function isValidState(value) {
+      if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+      if (!lessonIds.has(value.currentId)) return false;
+      if (!value.drafts || typeof value.drafts !== "object" || Array.isArray(value.drafts)) return false;
+      if (!Array.isArray(value.completed) || new Set(value.completed).size !== value.completed.length) return false;
+      if (!value.completed.every((id) => lessonIds.has(id))) return false;
+      return Object.entries(value.drafts).every(([id, code]) => lessonIds.has(id) && typeof code === "string");
+    }
+
+    function readState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return emptyState();
+        const parsed = JSON.parse(raw);
+        if (!isValidState(parsed)) throw new Error("记录结构不完整");
+        return parsed;
+      } catch (error) {
+        showNotice(`本地记录无法读取：${error.message}。已使用空白进度。`);
+        return emptyState();
+      }
+    }
+
+    let state = readState();
+    let saveTimer = null;
+
+    function showNotice(message) {
+      elements.notice.textContent = message;
+      elements.notice.classList.add("visible");
+    }
+
+    function clearNotice() {
+      elements.notice.textContent = "";
+      elements.notice.classList.remove("visible");
+    }
+
+    function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        elements.save.textContent = "已保存在本机";
+      } catch (error) {
+        elements.save.textContent = "未保存";
+        showNotice(`浏览器无法保存本地记录：${error.message}。请使用“导出记录”备份。`);
+      }
+    }
+
+    function node(tag, className, text) {
+      const item = document.createElement(tag);
+      if (className) item.className = className;
+      if (text !== undefined) item.textContent = text;
+      return item;
+    }
+
+    function currentIndex() {
+      const index = COURSE.lessons.findIndex((lesson) => lesson.id === state.currentId);
+      return index === -1 ? 0 : index;
+    }
+
+    function currentLesson() {
+      return COURSE.lessons[currentIndex()];
+    }
+
+    function renderNav() {
+      elements.nav.replaceChildren();
+      for (const moduleName of COURSE.modules) {
+        const lessons = COURSE.lessons.filter((lesson) => lesson.module === moduleName);
+        const section = node("section", "module");
+        section.append(node("h2", "module-title", moduleName));
+        const list = node("div", "lesson-list");
+        for (const lesson of lessons) {
+          const button = node("button", "lesson-button");
+          button.type = "button";
+          button.dataset.lessonId = lesson.id;
+          button.classList.toggle("active", lesson.id === state.currentId);
+          button.setAttribute("aria-current", lesson.id === state.currentId ? "page" : "false");
+          button.append(
+            node("span", "lesson-number", String(lesson.number).padStart(2, "0")),
+            node("span", "lesson-name", lesson.title),
+            node("span", "lesson-state", state.completed.includes(lesson.id) ? "✓" : ""),
+          );
+          button.addEventListener("click", () => openLesson(lesson.id));
+          list.append(button);
+        }
+        section.append(list);
+        elements.nav.append(section);
+      }
+    }
+
+    function renderLesson() {
+      const lesson = currentLesson();
+      const index = currentIndex();
+      elements.module.textContent = lesson.module;
+      elements.number.textContent = `第 ${lesson.number} / ${COURSE.lessons.length} 关`;
+      elements.time.textContent = `${lesson.minutes} 分钟`;
+      elements.title.textContent = lesson.title;
+      elements.goal.textContent = lesson.goal;
+
+      elements.concepts.replaceChildren();
+      for (const concept of lesson.concepts) {
+        const card = node("article", "concept");
+        card.append(node("strong", "", concept.title), node("p", "", concept.body));
+        if (concept.example) card.append(node("code", "", concept.example));
+        elements.concepts.append(card);
+      }
+
+      elements.requirements.replaceChildren(...lesson.requirements.map((item) => node("li", "", item)));
+      elements.tests.replaceChildren(...lesson.tests.map((item) => node("span", "check", item.name)));
+      elements.hints.replaceChildren();
+      lesson.hints.forEach((hint, hintIndex) => {
+        const detail = node("details", "hint");
+        detail.append(node("summary", "", `提示 ${hintIndex + 1}`), node("p", "", hint));
+        elements.hints.append(detail);
+      });
+
+      elements.editor.value = state.drafts[lesson.id] ?? lesson.starterCode;
+      elements.answer.textContent = lesson.solution;
+      elements.answerDetails.open = false;
+      elements.previous.disabled = index === 0;
+      elements.next.disabled = index === COURSE.lessons.length - 1;
+      elements.complete.textContent = state.completed.includes(lesson.id) ? "取消完成标记" : "标记已完成";
+      elements.save.textContent = state.drafts[lesson.id] ? "已载入本机草稿" : "初始代码";
+      updateLineNumbers();
+      renderProgress();
+      renderNav();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderProgress() {
+      const count = state.completed.length;
+      const percent = Math.round((count / COURSE.lessons.length) * 100);
+      elements.progressText.textContent = `${count} / ${COURSE.lessons.length}`;
+      elements.progressFill.style.width = `${percent}%`;
+    }
+
+    function openLesson(id) {
+      if (!lessonIds.has(id)) return;
+      saveDraftNow();
+      state.currentId = id;
+      persistState();
+      elements.sidebar.classList.remove("open");
+      renderLesson();
+    }
+
+    function updateLineNumbers() {
+      const count = Math.max(1, elements.editor.value.split("\n").length);
+      elements.lines.textContent = Array.from({ length: count }, (_, index) => index + 1).join("\n");
+      elements.lines.scrollTop = elements.editor.scrollTop;
+    }
+
+    function saveDraftNow() {
+      const lesson = currentLesson();
+      state.drafts[lesson.id] = elements.editor.value;
+      persistState();
+    }
+
+    elements.editor.addEventListener("input", () => {
+      updateLineNumbers();
+      elements.save.textContent = "正在编辑…";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveDraftNow, 300);
+    });
+
+    elements.editor.addEventListener("scroll", () => {
+      elements.lines.scrollTop = elements.editor.scrollTop;
+    });
+
+    elements.editor.addEventListener("keydown", (event) => {
+      if (event.key === "Tab") {
+        event.preventDefault();
+        const start = elements.editor.selectionStart;
+        const end = elements.editor.selectionEnd;
+        elements.editor.setRangeText("    ", start, end, "end");
+        elements.editor.dispatchEvent(new Event("input"));
+      }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        saveDraftNow();
+      }
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+      const lesson = currentLesson();
+      elements.editor.value = lesson.starterCode;
+      delete state.drafts[lesson.id];
+      persistState();
+      updateLineNumbers();
+      elements.save.textContent = "已恢复初始代码";
+    });
+
+    document.getElementById("copyButton").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(elements.editor.value);
+        elements.save.textContent = "代码已复制";
+      } catch (error) {
+        showNotice(`浏览器未允许复制：${error.message}。可在编辑器中全选后复制。`);
+      }
+    });
+
+    elements.complete.addEventListener("click", () => {
+      const id = currentLesson().id;
+      state.completed = state.completed.includes(id)
+        ? state.completed.filter((item) => item !== id)
+        : [...state.completed, id];
+      persistState();
+      renderProgress();
+      renderNav();
+      elements.complete.textContent = state.completed.includes(id) ? "取消完成标记" : "标记已完成";
+    });
+
+    elements.previous.addEventListener("click", () => openLesson(COURSE.lessons[currentIndex() - 1].id));
+    elements.next.addEventListener("click", () => openLesson(COURSE.lessons[currentIndex() + 1].id));
+    document.getElementById("menuButton").addEventListener("click", () => elements.sidebar.classList.toggle("open"));
+
+    document.getElementById("exportButton").addEventListener("click", () => {
+      saveDraftNow();
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "python-agent-learning-progress.json";
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
+
+    document.getElementById("importInput").addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const parsed = JSON.parse(await file.text());
+        if (!isValidState(parsed)) throw new Error("记录结构不完整或包含未知关卡");
+        state = parsed;
+        persistState();
+        clearNotice();
+        renderLesson();
+      } catch (error) {
+        showNotice(`导入失败：${error.message}`);
+      } finally {
+        event.target.value = "";
+      }
+    });
+
+    renderLesson();
+  </script>
+</body>
+</html>
