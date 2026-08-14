@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
+import { lessonGuides } from "../app/lib/lessonGuides.ts";
 import { lessonSolutions } from "../app/lib/solutions.ts";
 
 const offlineHtml = await readFile(
@@ -23,6 +24,7 @@ test("离线文件内嵌完整课程与参考答案", () => {
   );
   for (const lesson of course.lessons) {
     assert.equal(lesson.solution, lessonSolutions[lesson.id]);
+    assert.deepEqual(lesson.guide, lessonGuides[lesson.id]);
     assert.ok(lesson.requirements.length > 0);
     assert.ok(lesson.tests.length > 0);
   }

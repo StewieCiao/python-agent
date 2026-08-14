@@ -27,6 +27,7 @@ npm run dev
 ## 课程与反馈
 
 - 25 个关卡，从 Python 起步与工程能力，逐步进入 ReAct、Plan-and-Solve、Reflection、Memory/RAG、多 Agent 协作。
+- 每关提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐行代码示例和阅读要点照顾零基础学习者。
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
 - Agent 关卡使用确定性的本地工具与模型响应模拟，不需要 API Key；重点先掌握循环、状态、工具契约和错误边界。

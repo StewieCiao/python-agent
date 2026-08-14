@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
+import { lessonGuides } from "../app/lib/lessonGuides.ts";
 import { lessonSolutions } from "../app/lib/solutions.ts";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -17,6 +18,14 @@ if (missingSolutions.length > 0) {
   throw new Error(`以下关卡缺少参考答案：${missingSolutions.join(", ")}`);
 }
 
+const missingGuides = lessons
+  .filter((lesson) => !Array.isArray(lessonGuides[lesson.id]))
+  .map((lesson) => lesson.id);
+
+if (missingGuides.length > 0) {
+  throw new Error(`以下关卡缺少知识讲解：${missingGuides.join(", ")}`);
+}
+
 const course = {
   modules: MODULE_ORDER,
   lessons: lessons.map((lesson) => ({
@@ -27,7 +36,7 @@ const course = {
     kicker: lesson.kicker,
     minutes: lesson.minutes,
     goal: lesson.goal,
-    concepts: lesson.concepts,
+    guide: lessonGuides[lesson.id],
     requirements: lesson.requirements,
     starterCode: lesson.starterCode,
     hints: lesson.hints,

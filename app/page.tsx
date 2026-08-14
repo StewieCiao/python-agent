@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { lessons, lessonsByModule, type LessonTest } from "./lib/curriculum";
+import { lessonGuides } from "./lib/lessonGuides";
 import {
   buildGptHelpPrompt,
   type GptHelpPromptInput,
@@ -553,14 +554,28 @@ export default function Home() {
               <section className="concept-section">
                 <div className="section-heading">
                   <span>01</span>
-                  <h3>先理解</h3>
+                  <div>
+                    <h3>知识讲解</h3>
+                    <p>按“概念 → 拆解 → 避坑”的顺序阅读，再开始写代码。</p>
+                  </div>
                 </div>
-                <div className="concept-list">
-                  {lesson.concepts.map((concept) => (
-                    <article className="concept-card" key={concept.title}>
-                      <h4>{concept.title}</h4>
-                      <p>{concept.body}</p>
-                      <pre><code>{concept.example}</code></pre>
+                <div className="guide-list">
+                  {lessonGuides[lesson.id].map((guide, index) => (
+                    <article className="guide-card" key={guide.title}>
+                      <div className="guide-marker">
+                        <span>{String(index + 1).padStart(2, "0")}</span>
+                        <strong>{guide.kind}</strong>
+                      </div>
+                      <div className="guide-content">
+                        <h4>{guide.title}</h4>
+                        <p>{guide.body}</p>
+                        <ul>
+                          {guide.bullets.map((bullet) => (
+                            <li key={bullet}>{bullet}</li>
+                          ))}
+                        </ul>
+                        <pre><code>{guide.example}</code></pre>
+                      </div>
                     </article>
                   ))}
                 </div>

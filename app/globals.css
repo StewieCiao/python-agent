@@ -448,7 +448,7 @@ textarea:focus-visible {
 
 .section-heading {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   margin-bottom: 13px;
 }
@@ -465,13 +465,19 @@ textarea:focus-visible {
   font-weight: 720;
 }
 
-.concept-list {
+.section-heading p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.guide-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 11px;
 }
 
-.concept-card,
+.guide-card,
 .task-card {
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -479,26 +485,74 @@ textarea:focus-visible {
   box-shadow: 0 4px 18px rgba(23, 33, 29, 0.035);
 }
 
-.concept-card {
-  padding: 17px;
+.guide-card {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  overflow: hidden;
 }
 
-.concept-card h4 {
-  margin: 0 0 8px;
+.guide-marker {
+  padding: 18px 14px;
+  border-right: 1px solid #dce3dd;
+  background: #eef3ee;
+}
+
+.guide-marker span,
+.guide-marker strong {
+  display: block;
+}
+
+.guide-marker span {
+  color: #819088;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 9px;
+}
+
+.guide-marker strong {
+  margin-top: 5px;
+  color: var(--green);
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.guide-content {
+  min-width: 0;
+  padding: 18px;
+}
+
+.guide-content h4 {
+  margin: 0 0 9px;
   font-size: 13px;
 }
 
-.concept-card p {
-  min-height: 58px;
-  margin: 0 0 13px;
+.guide-content > p {
+  margin: 0;
   color: var(--muted);
   font-size: 11px;
-  line-height: 1.65;
+  line-height: 1.75;
 }
 
-.concept-card pre {
-  min-height: 54px;
-  margin: 0;
+.guide-content ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide-content li {
+  padding: 5px 7px;
+  border: 1px solid #dbe2dc;
+  border-radius: 999px;
+  color: #53655b;
+  background: #f8faf7;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.guide-content pre {
+  margin: 12px 0 0;
   padding: 10px 11px;
   overflow-x: auto;
   border-radius: 8px;
@@ -1305,10 +1359,18 @@ textarea:focus-visible {
     padding: 24px 16px;
   }
 
-  .concept-list,
+  .guide-list,
   .mistake-grid,
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .guide-card {
+    grid-template-columns: 68px minmax(0, 1fr);
+  }
+
+  .guide-marker {
+    padding: 16px 10px;
   }
 
   .editor-wrap {
