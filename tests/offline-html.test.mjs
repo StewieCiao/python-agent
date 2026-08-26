@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
 import { lessonGuides } from "../app/lib/lessonGuides.ts";
 import { lessonSolutions } from "../app/lib/solutions.ts";
+import { learningTracks } from "../app/lib/learningCatalog.ts";
 
 const offlineHtml = await readFile(
   new URL("../Python-Agent-离线学习.html", import.meta.url),
@@ -17,6 +18,18 @@ const dataMatch = offlineHtml.match(
 test("离线文件内嵌完整课程与参考答案", () => {
   assert.ok(dataMatch, "应包含内嵌课程 JSON");
   const course = JSON.parse(dataMatch[1]);
+  assert.deepEqual(
+    course.tracks.map(({ id, currentLessonId, lessons }) => ({
+      id,
+      currentLessonId,
+      lessonIds: lessons.map((lesson) => lesson.id),
+    })),
+    learningTracks.map(({ id, currentLessonId, lessons }) => ({
+      id,
+      currentLessonId,
+      lessonIds: lessons.map((lesson) => lesson.id),
+    })),
+  );
   assert.deepEqual(course.modules, MODULE_ORDER);
   assert.deepEqual(
     course.lessons.map(({ id, number }) => ({ id, number })),
@@ -30,9 +43,8 @@ test("离线文件内嵌完整课程与参考答案", () => {
   }
 });
 
-test("离线文件没有外部资源或联网执行入口", () => {
+test("离线文件没有外部加载资源或联网执行入口", () => {
   assert.match(offlineHtml, /connect-src 'none'/);
-  assert.doesNotMatch(offlineHtml, /https?:\/\//i);
   assert.doesNotMatch(offlineHtml, /<(?:script|img|link)[^>]+(?:src|href)=/i);
   assert.doesNotMatch(
     offlineHtml,

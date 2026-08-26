@@ -4,6 +4,7 @@ import { dirname, join } from "node:path";
 import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
 import { lessonGuides } from "../app/lib/lessonGuides.ts";
 import { lessonSolutions } from "../app/lib/solutions.ts";
+import { learningTracks } from "../app/lib/learningCatalog.ts";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(scriptDirectory);
@@ -27,6 +28,7 @@ if (missingGuides.length > 0) {
 }
 
 const course = {
+  tracks: learningTracks,
   modules: MODULE_ORDER,
   lessons: lessons.map((lesson) => ({
     id: lesson.id,
