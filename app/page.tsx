@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { CatalogLesson } from "./components/CatalogLesson";
+import { CourseChat } from "./components/CourseChat";
+import { ModelSettings } from "./components/ModelSettings";
 import { lessons, lessonsByModule, type LessonTest } from "./lib/curriculum";
+import { learningTracks, type LearningTrack } from "./lib/learningCatalog";
 import { lessonGuides } from "./lib/lessonGuides";
 import {
   buildGptHelpPrompt,
@@ -69,7 +73,7 @@ type StoredProgress = {
 };
 
 type RuntimeState = "loading" | "ready" | "error";
-type ViewMode = "learn" | "review" | "projects";
+type ViewMode = "learn" | "review" | "projects" | "settings";
 
 const EMPTY_PROGRESS: StoredProgress = {
   completed: [],
@@ -124,6 +128,8 @@ function combinedOutput(result: ExecutionResult | null) {
 }
 
 export default function Home() {
+  const [activeTrackId, setActiveTrackId] = useState<LearningTrack["id"]>("langchain-rag");
+  const [activeLearningLessonId, setActiveLearningLessonId] = useState("memory-modernization");
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [viewMode, setViewMode] = useState<ViewMode>("learn");
   const [progress, setProgress] = useState<StoredProgress>(EMPTY_PROGRESS);
@@ -136,6 +142,7 @@ export default function Home() {
   const [runtimeError, setRuntimeError] = useState("");
   const [revealedHints, setRevealedHints] = useState<Record<string, number>>({});
   const [notice, setNotice] = useState("");
+  const [chatOpen, setChatOpen] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
@@ -145,12 +152,11 @@ export default function Home() {
 
   const currentIndex = lessons.findIndex((lesson) => lesson.id === currentLessonId);
   const lesson = lessons[currentIndex];
+  const activeTrack = learningTracks.find((track) => track.id === activeTrackId)!;
+  const activeCatalogLesson = activeTrack.lessons.find((item) =>
+    item.id === (activeTrackId === "python" ? currentLessonId : activeLearningLessonId)
+  )!;
   const result = runRecord?.result ?? null;
-  const firstIncompleteIndex = lessons.findIndex(
-    (item) => !progress.completed.includes(item.id),
-  );
-  const unlockedThrough =
-    firstIncompleteIndex === -1 ? lessons.length - 1 : firstIncompleteIndex;
   const completedPercent = Math.round((progress.completed.length / lessons.length) * 100);
   const visibleHintCount = revealedHints[lesson.id] ?? 0;
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
@@ -275,7 +281,7 @@ export default function Home() {
   }
 
   function openLesson(index: number, restoredCode?: string) {
-    if (runLockRef.current || index > unlockedThrough) return;
+    if (runLockRef.current) return;
     const nextLesson = lessons[index];
     const nextCode = restoredCode ?? progress.drafts[nextLesson.id] ?? nextLesson.starterCode;
     currentLessonIdRef.current = nextLesson.id;
@@ -284,6 +290,24 @@ export default function Home() {
     setCode(nextCode);
     setRunRecord(null);
     setNotice("");
+    setViewMode("learn");
+  }
+
+  function selectTrack(track: LearningTrack) {
+    if (runLockRef.current) return;
+    setActiveTrackId(track.id);
+    setActiveLearningLessonId(track.currentLessonId);
+    setViewMode("learn");
+    setNotice("");
+  }
+
+  function selectLearningLesson(lessonId: string) {
+    if (runLockRef.current) return;
+    if (activeTrackId === "python") {
+      openLesson(lessons.findIndex((item) => item.id === lessonId));
+      return;
+    }
+    setActiveLearningLessonId(lessonId);
     setViewMode("learn");
   }
 
@@ -422,55 +446,54 @@ export default function Home() {
     <main className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark">AI</div>
+          <div className="brand-mark">S</div>
           <div>
-            <strong>Python → Agent</strong>
-            <span>从语法到智能体系统</span>
+            <strong>Stewie 的个人学习站</strong>
+            <span>Python · LangChain · LangGraph</span>
           </div>
         </div>
 
         <div className="sidebar-progress">
           <div className="progress-copy">
-            <span>总进度</span>
+            <span>Python 练习进度</span>
             <strong>{completedPercent}%</strong>
           </div>
           <div className="progress-track" aria-label={`学习进度 ${completedPercent}%`}>
             <span style={{ width: `${completedPercent}%` }} />
           </div>
-          <small>{progress.completed.length} / {lessons.length} 个关卡完成</small>
+          <small>{progress.completed.length} / {lessons.length} 个练习完成 · 不锁定顺序</small>
         </div>
 
-        <nav className="course-nav" aria-label="Python Agent 学习路线">
-          {lessonsByModule.map((group, moduleIndex) => (
+        <nav className="course-nav" aria-label="个人学习课程">
+          <div className="track-list">
+            {learningTracks.map((track) => (
+              <button className={`track-switch ${track.id === activeTrackId ? "active" : ""}`} disabled={isRunning} key={track.id} onClick={() => selectTrack(track)} type="button">
+                <span style={{ background: track.accent }} />
+                <div><strong>{track.shortTitle}</strong><small>{track.lessons.length} 节课程</small></div>
+              </button>
+            ))}
+          </div>
+
+          {activeTrackId === "python" ? lessonsByModule.map((group, moduleIndex) => (
             <section className="module-group" key={group.module}>
-              <div className="module-title">
-                <span>0{moduleIndex + 1}</span>
-                <strong>{group.module}</strong>
-              </div>
+              <div className="module-title"><span>0{moduleIndex + 1}</span><strong>{group.module}</strong></div>
               {group.lessons.map((item) => {
-                const index = lessons.findIndex((candidate) => candidate.id === item.id);
                 const completed = progress.completed.includes(item.id);
-                const locked = index > unlockedThrough;
-                return (
-                  <button
-                    className={`lesson-link ${item.id === lesson.id && viewMode === "learn" ? "active" : ""}`}
-                    disabled={locked || isRunning}
-                    key={item.id}
-                    onClick={() => openLesson(index)}
-                    type="button"
-                  >
-                    <span className={`lesson-state ${completed ? "complete" : ""}`}>
-                      {completed ? "✓" : locked ? "·" : item.number}
-                    </span>
-                    <span>
-                      <strong>{item.title}</strong>
-                      <small>{item.minutes} 分钟</small>
-                    </span>
-                  </button>
-                );
+                return <button className={`lesson-link ${item.id === lesson.id && viewMode === "learn" ? "active" : ""}`} disabled={isRunning} key={item.id} onClick={() => selectLearningLesson(item.id)} type="button">
+                  <span className={`lesson-state ${completed ? "complete" : ""}`}>{completed ? "✓" : item.number}</span>
+                  <span><strong>{item.title}</strong><small>{item.minutes} 分钟</small></span>
+                </button>;
               })}
             </section>
-          ))}
+          )) : (
+            <section className="module-group">
+              <div className="module-title"><span>NOW</span><strong>{activeTrack.title}</strong></div>
+              {activeTrack.lessons.map((item, index) => <button className={`lesson-link ${item.id === activeCatalogLesson.id && viewMode === "learn" ? "active" : ""}`} disabled={isRunning} key={item.id} onClick={() => selectLearningLesson(item.id)} type="button">
+                <span className="lesson-state">{String(index + 1).padStart(2, "0")}</span>
+                <span><strong>{item.title}</strong><small>{item.minutes} 分钟</small></span>
+              </button>)}
+            </section>
+          )}
         </nav>
 
         <div className="sidebar-foot">
@@ -491,8 +514,8 @@ export default function Home() {
       <section className="workspace">
         <header className="topbar">
           <div>
-            <span className="eyebrow">AGENT BUILDER PATH</span>
-            <h1>把 Python 练成 Agent 开发能力。</h1>
+            <span className="eyebrow">STEWIE LEARNING DESK</span>
+            <h1>{viewMode === "settings" ? "模型与本地数据设置" : activeTrack.title}</h1>
           </div>
           <nav className="view-tabs" aria-label="学习视图">
             <button
@@ -501,7 +524,7 @@ export default function Home() {
               onClick={() => setViewMode("learn")}
               type="button"
             >
-              学习
+              课程
             </button>
             <button
               className={viewMode === "review" ? "active" : ""}
@@ -519,6 +542,17 @@ export default function Home() {
             >
               Agent 项目
             </button>
+            <button
+              className={viewMode === "settings" ? "active" : ""}
+              disabled={isRunning}
+              onClick={() => setViewMode("settings")}
+              type="button"
+            >
+              模型设置
+            </button>
+            <button disabled={isRunning} onClick={() => setChatOpen(true)} type="button">
+              课程导师
+            </button>
           </nav>
         </header>
 
@@ -529,7 +563,7 @@ export default function Home() {
           </div>
         )}
 
-        {viewMode === "learn" && (
+        {viewMode === "learn" && (activeTrackId === "python" ? (
           <div className="learning-grid">
             <article className="lesson-pane">
               <div className="lesson-meta">
@@ -805,7 +839,14 @@ export default function Home() {
               </div>
             </section>
           </div>
-        )}
+        ) : (
+          <CatalogLesson
+            key={`${activeTrack.id}/${activeCatalogLesson.id}`}
+            lesson={activeCatalogLesson}
+            onOpenChat={() => setChatOpen(true)}
+            track={activeTrack}
+          />
+        ))}
 
         {viewMode === "review" && (
           <section className="library-view">
@@ -859,10 +900,9 @@ export default function Home() {
             <div className="project-grid">
               {lessons.filter((item) => item.project).map((item) => {
                 const index = lessons.findIndex((candidate) => candidate.id === item.id);
-                const locked = index > unlockedThrough;
                 const completed = progress.completed.includes(item.id);
                 return (
-                  <article className={`project-card ${locked ? "locked" : ""}`} key={item.id}>
+                  <article className="project-card" key={item.id}>
                     <div className="project-number">PROJECT {String(item.number - 12).padStart(2, "0")}</div>
                     <h3>{item.title}</h3>
                     <p>{item.goal}</p>
@@ -870,8 +910,11 @@ export default function Home() {
                       <span>{item.minutes} 分钟</span>
                       <span>{item.tests.length} 项验收</span>
                     </div>
-                    <button disabled={locked || isRunning} onClick={() => openLesson(index)} type="button">
-                      {completed ? "重新挑战" : locked ? "完成前置关卡后解锁" : "开始 Agent 项目"} →
+                    <button disabled={isRunning} onClick={() => {
+                      setActiveTrackId("python");
+                      openLesson(index);
+                    }} type="button">
+                      {completed ? "重新练习" : "开始 Agent 项目"} →
                     </button>
                   </article>
                 );
@@ -879,7 +922,17 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {viewMode === "settings" && <ModelSettings />}
       </section>
+      {chatOpen && (
+        <CourseChat
+          key={`${activeTrack.id}/${activeCatalogLesson.id}`}
+          lesson={activeCatalogLesson}
+          onClose={() => setChatOpen(false)}
+          track={activeTrack}
+        />
+      )}
     </main>
   );
 }

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Python → Agent · 智能体开发闯关路线",
-  description: "从 Python 基础、Agent 经典范式到旅行助手与 DeepResearch 的本地学习工作台。",
+  title: "Stewie 的个人学习站",
+  description: "面向初学者的 Python、LangChain、RAG 与 LangGraph 本地学习工作台。",
 };
 
 export default function RootLayout({

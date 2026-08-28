@@ -44,7 +44,7 @@ export type LearningLesson = {
   videos: VideoResource[];
   officialSources: Array<{ label: string; url: string }>;
   migrations: MigrationNote[];
-  exercise?: LearningExercise;
+  exercise: LearningExercise;
   pythonLessonId?: string;
 };
 
@@ -768,6 +768,7 @@ export function validateLearningCatalog(catalog: readonly LearningTrack[]) {
       if (track.id !== "python" && lesson.videos.length === 0) {
         throw new Error(`课程缺少视频 ${track.id}/${lesson.id}`);
       }
+      if (!lesson.exercise) throw new Error(`课程缺少练习 ${track.id}/${lesson.id}`);
       for (const video of lesson.videos) {
         const host = new URL(video.url).hostname;
         if (!ALLOWED_VIDEO_HOSTS.has(host)) throw new Error(`不允许的视频域名 ${host}`);

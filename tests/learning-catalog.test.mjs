@@ -27,4 +27,11 @@ test("目录校验拒绝视频域名和迁移来源被悄悄放宽", () => {
     () => validateLearningCatalog(missingSource),
     /迁移说明缺少官方来源/,
   );
+
+  const missingExercise = structuredClone(learningTracks);
+  delete missingExercise[2].lessons[0].exercise;
+  assert.throws(
+    () => validateLearningCatalog(missingExercise),
+    /课程缺少练习/,
+  );
 });
