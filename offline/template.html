@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; object-src 'none'; frame-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>Python → Agent 离线学习册</title>
+  <title>Stewie 的个人学习站 · 离线版</title>
   <style>
     :root {
       --ink: #17221d;
@@ -116,8 +116,13 @@
     .progress-track { height: 7px; margin-top: 11px; overflow: hidden; border-radius: 999px; background: #ded8c5; }
     .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--green); transition: width 180ms ease; }
 
-    .module { margin-top: 20px; }
-    .module-title { margin: 0 8px 8px; color: #88b39c; font-size: 11px; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .track-list { display: grid; gap: 7px; margin-bottom: 20px; }
+    .track-button { width: 100%; padding: 11px 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 11px; color: #dcebe1; background: rgba(255,255,255,.04); text-align: left; }
+    .track-button strong, .track-button span { display: block; }
+    .track-button strong { font-size: 13px; }
+    .track-button span { margin-top: 3px; color: #9db9aa; font-size: 10px; }
+    .track-button.active { color: #17221d; border-color: var(--amber); background: var(--amber); }
+    .track-button.active span { color: #5f4b25; }
     .lesson-list { display: grid; gap: 4px; }
     .lesson-button {
       display: grid;
@@ -137,23 +142,6 @@
     .lesson-number { font-size: 11px; opacity: 0.7; }
     .lesson-name { overflow: hidden; font-size: 13px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
     .lesson-state { font-size: 13px; text-align: center; }
-
-    .sidebar-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 24px; }
-    .sidebar-actions button, .import-label {
-      display: grid;
-      min-height: 38px;
-      place-items: center;
-      padding: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 9px;
-      color: #e5f1e9;
-      background: rgba(255, 255, 255, 0.06);
-      font-size: 12px;
-      text-align: center;
-    }
-    .sidebar-actions button:hover, .import-label:hover { background: rgba(255, 255, 255, 0.11); }
-    .import-label { cursor: pointer; }
-    .import-label input { display: none; }
 
     .main { min-width: 0; padding: 28px clamp(20px, 4vw, 64px) 56px; }
 
@@ -227,14 +215,13 @@
     .requirements { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
     .requirements li { position: relative; padding-left: 25px; color: #3f4d45; font-size: 14px; line-height: 1.6; }
     .requirements li::before { position: absolute; left: 0; top: 2px; content: "✓"; color: var(--green); font-weight: 900; }
-    .checks { display: flex; flex-wrap: wrap; gap: 7px; }
-    .check { padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-size: 11px; }
-
-    .hints { display: grid; gap: 8px; }
-    details.hint { border: 1px solid var(--line); border-radius: 10px; background: #fff; }
-    details.hint summary { padding: 11px 13px; cursor: pointer; color: var(--green); font-size: 13px; font-weight: 750; }
-    details.hint p { margin: 0; padding: 0 13px 13px; color: var(--muted); font-size: 13px; line-height: 1.65; }
-
+    .resource-list { display: grid; gap: 9px; }
+    .resource-list a { padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--green); background: #fff; font-size: 12px; font-weight: 750; text-decoration: none; }
+    .migration { margin-top: 11px; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+    .migration h4 { margin: 0 0 7px; }
+    .migration p { color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .migration pre { padding: 11px; overflow: auto; border-radius: 8px; color: var(--code-ink); background: var(--code); font: 11px/1.6 "SFMono-Regular", Consolas, monospace; white-space: pre; }
+    .migration-code { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
     .practice-panel { position: sticky; top: 18px; }
     .practice-header { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 15px 18px; border-bottom: 1px solid #2e4239; color: var(--code-ink); background: var(--code); }
     .practice-header strong { font-size: 13px; }
@@ -296,19 +283,16 @@
   <div class="app-shell">
     <aside class="sidebar" id="sidebar" aria-label="课程目录">
       <div class="brand">
-        <div class="brand-mark">Py</div>
-        <div><strong>Python → Agent</strong><span>单文件离线学习册</span></div>
+        <div class="brand-mark">S</div>
+        <div><strong>Stewie 的个人学习站</strong><span>单文件离线版</span></div>
       </div>
-      <div class="offline-badge"><span class="offline-dot"></span><span>完全离线 · 不执行代码 · 不发送数据。编辑内容只留在本机浏览器。</span></div>
+      <div class="offline-badge"><span class="offline-dot"></span><span>三条学习路线 · 不执行代码 · 不发送数据。编辑内容只留在本机浏览器。</span></div>
+      <div class="track-list" id="trackList"></div>
       <div class="progress-card">
-        <div class="progress-row"><span>学习进度</span><strong id="progressText">0 / 25</strong></div>
+        <div class="progress-row"><span>当前路线进度</span><strong id="progressText"></strong></div>
         <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
       </div>
       <nav id="courseNav"></nav>
-      <div class="sidebar-actions">
-        <button type="button" id="exportButton">导出记录</button>
-        <label class="import-label">导入记录<input type="file" id="importInput" accept="application/json,.json"></label>
-      </div>
     </aside>
 
     <main class="main">
@@ -316,7 +300,7 @@
         <button class="mobile-menu" type="button" id="menuButton" aria-label="打开课程目录">☰</button>
         <div>
           <p class="eyebrow">LOCAL · PRIVATE · OFFLINE</p>
-          <h1>把 Python 练成 Agent 开发能力</h1>
+          <h1>Python、LangChain 与 LangGraph</h1>
         </div>
         <p class="topbar-copy">双击本文件即可学习。这里保留题目、编辑器、提示和参考答案，不含联网、账号、远程运行与数据上传。</p>
       </header>
@@ -326,7 +310,7 @@
       <div class="workspace">
         <article class="panel lesson-panel">
           <div class="lesson-meta">
-            <span class="pill" id="modulePill"></span>
+            <span class="pill" id="trackPill"></span>
             <span class="pill neutral" id="numberPill"></span>
             <span class="pill neutral" id="timePill"></span>
           </div>
@@ -340,18 +324,23 @@
           </section>
 
           <section class="section">
-            <h3>闯关要求</h3>
+            <h3>本节练习</h3>
             <ul class="requirements" id="requirementList"></ul>
           </section>
 
           <section class="section">
-            <h3>自查标准</h3>
-            <div class="checks" id="testList"></div>
+            <h3>官方资料</h3>
+            <div class="resource-list" id="sourceList"></div>
           </section>
 
-          <section class="section">
-            <h3>分步提示</h3>
-            <div class="hints" id="hintList"></div>
+          <section class="section" id="migrationSection">
+            <h3>新版迁移卡</h3>
+            <div id="migrationList"></div>
+          </section>
+
+          <section class="section" id="videoSection">
+            <h3>配套视频</h3>
+            <div class="resource-list" id="videoList"></div>
           </section>
         </article>
 
@@ -377,8 +366,8 @@
       </div>
 
       <div class="nav-row">
-        <button type="button" id="previousButton">← 上一关</button>
-        <button type="button" id="nextButton">下一关 →</button>
+        <button type="button" id="previousButton">← 上一节</button>
+        <button type="button" id="nextButton">下一节 →</button>
       </div>
     </main>
   </div>
@@ -388,23 +377,34 @@
     "use strict";
 
     const COURSE = JSON.parse(document.getElementById("course-data").textContent);
-    const STORAGE_KEY = "python-agent-offline-v1";
-    const lessonIds = new Set(COURSE.lessons.map((lesson) => lesson.id));
-    const emptyState = () => ({ currentId: COURSE.lessons[0].id, drafts: {}, completed: [] });
+    const STORAGE_KEY = "stewie-learning-site-offline-v1";
+    const trackIds = new Set(COURSE.tracks.map((track) => track.id));
+    const lessonIds = new Set(COURSE.tracks.flatMap((track) => track.lessons.map((lesson) => lesson.id)));
+    const initialTrack = COURSE.tracks.find((track) => track.id === "langchain-rag");
+    const emptyState = () => ({
+      currentTrackId: initialTrack.id,
+      currentId: initialTrack.currentLessonId,
+      drafts: {},
+      completed: [],
+    });
 
     const elements = {
       sidebar: document.getElementById("sidebar"),
+      tracks: document.getElementById("trackList"),
       nav: document.getElementById("courseNav"),
       notice: document.getElementById("notice"),
-      module: document.getElementById("modulePill"),
+      track: document.getElementById("trackPill"),
       number: document.getElementById("numberPill"),
       time: document.getElementById("timePill"),
       title: document.getElementById("lessonTitle"),
       goal: document.getElementById("lessonGoal"),
       guides: document.getElementById("guideList"),
       requirements: document.getElementById("requirementList"),
-      tests: document.getElementById("testList"),
-      hints: document.getElementById("hintList"),
+      sources: document.getElementById("sourceList"),
+      migrations: document.getElementById("migrationList"),
+      migrationSection: document.getElementById("migrationSection"),
+      videos: document.getElementById("videoList"),
+      videoSection: document.getElementById("videoSection"),
       editor: document.getElementById("editor"),
       lines: document.getElementById("lineNumbers"),
       save: document.getElementById("saveState"),
@@ -419,7 +419,10 @@
 
     function isValidState(value) {
       if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+      if (!trackIds.has(value.currentTrackId)) return false;
       if (!lessonIds.has(value.currentId)) return false;
+      const selectedTrack = COURSE.tracks.find((track) => track.id === value.currentTrackId);
+      if (!selectedTrack.lessons.some((lesson) => lesson.id === value.currentId)) return false;
       if (!value.drafts || typeof value.drafts !== "object" || Array.isArray(value.drafts)) return false;
       if (!Array.isArray(value.completed) || new Set(value.completed).size !== value.completed.length) return false;
       if (!value.completed.every((id) => lessonIds.has(id))) return false;
@@ -447,18 +450,13 @@
       elements.notice.classList.add("visible");
     }
 
-    function clearNotice() {
-      elements.notice.textContent = "";
-      elements.notice.classList.remove("visible");
-    }
-
     function persistState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         elements.save.textContent = "已保存在本机";
       } catch (error) {
         elements.save.textContent = "未保存";
-        showNotice(`浏览器无法保存本地记录：${error.message}。请使用“导出记录”备份。`);
+        showNotice(`浏览器无法保存本地记录：${error.message}`);
       }
     }
 
@@ -469,58 +467,117 @@
       return item;
     }
 
+    function currentTrack() {
+      return COURSE.tracks.find((track) => track.id === state.currentTrackId);
+    }
+
     function currentIndex() {
-      const index = COURSE.lessons.findIndex((lesson) => lesson.id === state.currentId);
-      return index === -1 ? 0 : index;
+      return currentTrack().lessons.findIndex((lesson) => lesson.id === state.currentId);
     }
 
     function currentLesson() {
-      return COURSE.lessons[currentIndex()];
+      return currentTrack().lessons[currentIndex()];
+    }
+
+    function renderTracks() {
+      elements.tracks.replaceChildren();
+      for (const track of COURSE.tracks) {
+        const button = node("button", "track-button");
+        button.type = "button";
+        button.classList.toggle("active", track.id === state.currentTrackId);
+        button.append(node("strong", "", track.shortTitle), node("span", "", `${track.lessons.length} 节 · 自由学习`));
+        button.addEventListener("click", () => openTrack(track));
+        elements.tracks.append(button);
+      }
     }
 
     function renderNav() {
       elements.nav.replaceChildren();
-      for (const moduleName of COURSE.modules) {
-        const lessons = COURSE.lessons.filter((lesson) => lesson.module === moduleName);
-        const section = node("section", "module");
-        section.append(node("h2", "module-title", moduleName));
-        const list = node("div", "lesson-list");
-        for (const lesson of lessons) {
-          const button = node("button", "lesson-button");
-          button.type = "button";
-          button.dataset.lessonId = lesson.id;
-          button.classList.toggle("active", lesson.id === state.currentId);
-          button.setAttribute("aria-current", lesson.id === state.currentId ? "page" : "false");
-          button.append(
-            node("span", "lesson-number", String(lesson.number).padStart(2, "0")),
-            node("span", "lesson-name", lesson.title),
-            node("span", "lesson-state", state.completed.includes(lesson.id) ? "✓" : ""),
-          );
-          button.addEventListener("click", () => openLesson(lesson.id));
-          list.append(button);
-        }
-        section.append(list);
-        elements.nav.append(section);
+      const list = node("div", "lesson-list");
+      currentTrack().lessons.forEach((lesson, index) => {
+        const button = node("button", "lesson-button");
+        button.type = "button";
+        button.classList.toggle("active", lesson.id === state.currentId);
+        button.setAttribute("aria-current", lesson.id === state.currentId ? "page" : "false");
+        button.append(
+          node("span", "lesson-number", String(index + 1).padStart(2, "0")),
+          node("span", "lesson-name", lesson.title),
+          node("span", "lesson-state", state.completed.includes(lesson.id) ? "✓" : ""),
+        );
+        button.addEventListener("click", () => openLesson(lesson.id));
+        list.append(button);
+      });
+      elements.nav.append(list);
+    }
+
+    function externalLink(label, url) {
+      const link = node("a", "", `${label} ↗`);
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      return link;
+    }
+
+    function renderResources(lesson) {
+      elements.sources.replaceChildren(...lesson.officialSources.map((source) => externalLink(source.label, source.url)));
+
+      elements.migrationSection.hidden = lesson.migrations.length === 0;
+      elements.migrations.replaceChildren();
+      for (const migration of lesson.migrations) {
+        const card = node("article", "migration");
+        const code = node("div", "migration-code");
+        const before = node("div", "");
+        const after = node("div", "");
+        before.append(node("strong", "", "课程写法"), node("pre", "", migration.beforeCode));
+        after.append(node("strong", "", "当前写法"), node("pre", "", migration.afterCode));
+        code.append(before, after);
+        card.append(node("h4", "", migration.title), node("p", "", migration.explanation), code);
+        elements.migrations.append(card);
       }
+
+      elements.videoSection.hidden = lesson.videos.length === 0;
+      elements.videos.replaceChildren(...lesson.videos.map((video) => externalLink(`${video.provider} · ${video.title} · ${video.duration}`, video.url)));
+    }
+
+    function openTrack(track) {
+      saveDraftNow();
+      state.currentTrackId = track.id;
+      state.currentId = track.currentLessonId;
+      persistState();
+      renderLesson();
+    }
+
+    function openLesson(id) {
+      saveDraftNow();
+      state.currentId = id;
+      persistState();
+      elements.sidebar.classList.remove("open");
+      renderLesson();
+    }
+
+    function renderProgress() {
+      const lessons = currentTrack().lessons;
+      const count = lessons.filter((lesson) => state.completed.includes(lesson.id)).length;
+      const percent = Math.round((count / lessons.length) * 100);
+      elements.progressText.textContent = `${count} / ${lessons.length}`;
+      elements.progressFill.style.width = `${percent}%`;
     }
 
     function renderLesson() {
+      const track = currentTrack();
       const lesson = currentLesson();
       const index = currentIndex();
-      elements.module.textContent = lesson.module;
-      elements.number.textContent = `第 ${lesson.number} / ${COURSE.lessons.length} 关`;
+      elements.track.textContent = track.shortTitle;
+      elements.number.textContent = `第 ${index + 1} / ${track.lessons.length} 节`;
       elements.time.textContent = `${lesson.minutes} 分钟`;
       elements.title.textContent = lesson.title;
-      elements.goal.textContent = lesson.goal;
+      elements.goal.textContent = lesson.summary;
 
       elements.guides.replaceChildren();
       lesson.guide.forEach((guide, guideIndex) => {
         const card = node("article", "guide");
         const marker = node("div", "guide-marker");
-        marker.append(
-          node("span", "", String(guideIndex + 1).padStart(2, "0")),
-          node("strong", "", guide.kind),
-        );
+        marker.append(node("span", "", String(guideIndex + 1).padStart(2, "0")), node("strong", "", "核心概念"));
         const content = node("div", "guide-content");
         content.append(node("h4", "", guide.title), node("p", "", guide.body));
         const bullets = node("ul", "");
@@ -530,42 +587,22 @@
         elements.guides.append(card);
       });
 
-      elements.requirements.replaceChildren(...lesson.requirements.map((item) => node("li", "", item)));
-      elements.tests.replaceChildren(...lesson.tests.map((item) => node("span", "check", item.name)));
-      elements.hints.replaceChildren();
-      lesson.hints.forEach((hint, hintIndex) => {
-        const detail = node("details", "hint");
-        detail.append(node("summary", "", `提示 ${hintIndex + 1}`), node("p", "", hint));
-        elements.hints.append(detail);
-      });
+      const requirements = lesson.exercise.prompt.split("\n").filter((item) => item.trim());
+      elements.requirements.replaceChildren(...requirements.map((item) => node("li", "", item)));
+      renderResources(lesson);
 
-      elements.editor.value = state.drafts[lesson.id] ?? lesson.starterCode;
-      elements.answer.textContent = lesson.solution;
+      elements.editor.value = state.drafts[lesson.id] ?? lesson.exercise.starterCode;
+      elements.answer.textContent = lesson.exercise.solution;
       elements.answerDetails.open = false;
       elements.previous.disabled = index === 0;
-      elements.next.disabled = index === COURSE.lessons.length - 1;
+      elements.next.disabled = index === track.lessons.length - 1;
       elements.complete.textContent = state.completed.includes(lesson.id) ? "取消完成标记" : "标记已完成";
-      elements.save.textContent = state.drafts[lesson.id] ? "已载入本机草稿" : "初始代码";
+      elements.save.textContent = state.drafts[lesson.id] !== undefined ? "已载入本机草稿" : "初始代码";
       updateLineNumbers();
       renderProgress();
+      renderTracks();
       renderNav();
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function renderProgress() {
-      const count = state.completed.length;
-      const percent = Math.round((count / COURSE.lessons.length) * 100);
-      elements.progressText.textContent = `${count} / ${COURSE.lessons.length}`;
-      elements.progressFill.style.width = `${percent}%`;
-    }
-
-    function openLesson(id) {
-      if (!lessonIds.has(id)) return;
-      saveDraftNow();
-      state.currentId = id;
-      persistState();
-      elements.sidebar.classList.remove("open");
-      renderLesson();
     }
 
     function updateLineNumbers() {
@@ -607,7 +644,7 @@
 
     document.getElementById("resetButton").addEventListener("click", () => {
       const lesson = currentLesson();
-      elements.editor.value = lesson.starterCode;
+      elements.editor.value = lesson.exercise.starterCode;
       delete state.drafts[lesson.id];
       persistState();
       updateLineNumbers();
@@ -634,36 +671,9 @@
       elements.complete.textContent = state.completed.includes(id) ? "取消完成标记" : "标记已完成";
     });
 
-    elements.previous.addEventListener("click", () => openLesson(COURSE.lessons[currentIndex() - 1].id));
-    elements.next.addEventListener("click", () => openLesson(COURSE.lessons[currentIndex() + 1].id));
+    elements.previous.addEventListener("click", () => openLesson(currentTrack().lessons[currentIndex() - 1].id));
+    elements.next.addEventListener("click", () => openLesson(currentTrack().lessons[currentIndex() + 1].id));
     document.getElementById("menuButton").addEventListener("click", () => elements.sidebar.classList.toggle("open"));
-
-    document.getElementById("exportButton").addEventListener("click", () => {
-      saveDraftNow();
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "python-agent-learning-progress.json";
-      link.click();
-      URL.revokeObjectURL(link.href);
-    });
-
-    document.getElementById("importInput").addEventListener("change", async (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
-      try {
-        const parsed = JSON.parse(await file.text());
-        if (!isValidState(parsed)) throw new Error("记录结构不完整或包含未知关卡");
-        state = parsed;
-        persistState();
-        clearNotice();
-        renderLesson();
-      } catch (error) {
-        showNotice(`导入失败：${error.message}`);
-      } finally {
-        event.target.value = "";
-      }
-    });
 
     renderLesson();
   </script>

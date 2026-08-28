@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
+import { lessons } from "../app/lib/curriculum.ts";
 import { lessonGuides } from "../app/lib/lessonGuides.ts";
 import { lessonSolutions } from "../app/lib/solutions.ts";
 import { learningTracks } from "../app/lib/learningCatalog.ts";
@@ -9,7 +9,7 @@ import { learningTracks } from "../app/lib/learningCatalog.ts";
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(scriptDirectory);
 const templatePath = join(projectRoot, "offline", "template.html");
-const outputPath = join(projectRoot, "Python-Agent-离线学习.html");
+const outputPath = join(projectRoot, "Stewie-个人学习站-离线版.html");
 
 const missingSolutions = lessons
   .filter((lesson) => typeof lessonSolutions[lesson.id] !== "string")
@@ -29,22 +29,6 @@ if (missingGuides.length > 0) {
 
 const course = {
   tracks: learningTracks,
-  modules: MODULE_ORDER,
-  lessons: lessons.map((lesson) => ({
-    id: lesson.id,
-    module: lesson.module,
-    number: lesson.number,
-    title: lesson.title,
-    kicker: lesson.kicker,
-    minutes: lesson.minutes,
-    goal: lesson.goal,
-    guide: lessonGuides[lesson.id],
-    requirements: lesson.requirements,
-    starterCode: lesson.starterCode,
-    hints: lesson.hints,
-    tests: lesson.tests.map(({ name, kind }) => ({ name, kind: kind ?? "behavior" })),
-    solution: lessonSolutions[lesson.id],
-  })),
 };
 
 const template = await readFile(templatePath, "utf8");

@@ -1,13 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
-import { lessonGuides } from "../app/lib/lessonGuides.ts";
-import { lessonSolutions } from "../app/lib/solutions.ts";
 import { learningTracks } from "../app/lib/learningCatalog.ts";
 
 const offlineHtml = await readFile(
-  new URL("../Python-Agent-离线学习.html", import.meta.url),
+  new URL("../Stewie-个人学习站-离线版.html", import.meta.url),
   "utf8",
 );
 
@@ -30,17 +27,20 @@ test("离线文件内嵌完整课程与参考答案", () => {
       lessonIds: lessons.map((lesson) => lesson.id),
     })),
   );
-  assert.deepEqual(course.modules, MODULE_ORDER);
-  assert.deepEqual(
-    course.lessons.map(({ id, number }) => ({ id, number })),
-    lessons.map(({ id, number }) => ({ id, number })),
-  );
-  for (const lesson of course.lessons) {
-    assert.equal(lesson.solution, lessonSolutions[lesson.id]);
-    assert.deepEqual(lesson.guide, lessonGuides[lesson.id]);
-    assert.ok(lesson.requirements.length > 0);
-    assert.ok(lesson.tests.length > 0);
+  for (const track of course.tracks) {
+    for (const lesson of track.lessons) {
+      assert.ok(lesson.guide.length >= 2);
+      assert.ok(lesson.exercise.prompt);
+      assert.ok(lesson.exercise.starterCode);
+      assert.ok(lesson.exercise.solution);
+    }
   }
+});
+
+test("离线版使用统一学习站品牌并明确排除本地服务功能", () => {
+  assert.match(offlineHtml, /Stewie 的个人学习站/);
+  assert.match(offlineHtml, /三条学习路线/);
+  assert.doesNotMatch(offlineHtml, />模型设置<|>课程导师<|127\.0\.0\.1:4318/);
 });
 
 test("离线文件没有外部加载资源或联网执行入口", () => {
@@ -56,5 +56,8 @@ test("离线文件没有外部加载资源或联网执行入口", () => {
 test("课程 JSON 使用脚本安全序列化", () => {
   assert.ok(dataMatch);
   assert.doesNotMatch(dataMatch[1], /<\/script/i);
-  assert.equal(JSON.parse(dataMatch[1]).lessons.length, 25);
+  assert.deepEqual(
+    JSON.parse(dataMatch[1]).tracks.map((track) => track.lessons.length),
+    learningTracks.map((track) => track.lessons.length),
+  );
 });
