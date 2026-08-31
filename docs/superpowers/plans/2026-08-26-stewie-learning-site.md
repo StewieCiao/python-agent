@@ -1,5 +1,7 @@
 # Stewie Personal Learning Site Implementation Plan
 
+> **Archived baseline:** This plan records the current Mac local-service implementation. New zero-environment desktop work follows `2026-08-31-stewie-learnos-desktop.md`; keep this document only as migration evidence until the desktop replacement is verified.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Upgrade the existing local Python course into Stewie's local-first Python, LangChain/RAG, and LangGraph learning site with secure local model profiles and a lesson-aware chat tutor.
