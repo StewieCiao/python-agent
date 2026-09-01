@@ -1,4 +1,4 @@
-name: Desktop packaged Python smoke
+name: Desktop packaged smoke
 
 on:
   pull_request:
@@ -8,6 +8,7 @@ jobs:
   packaged-python:
     name: ${{ matrix.target }}
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -29,3 +30,5 @@ jobs:
       - run: npm ci
       - run: npm run desktop:package
       - run: npm run smoke:packaged-python
+      - run: npm run smoke:packaged-renderer
+        timeout-minutes: 2

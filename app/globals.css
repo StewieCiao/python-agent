@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-geist-sans: Inter;
+  --font-geist-mono: "SFMono-Regular";
   --ink: #17211d;
   --muted: #66706a;
   --paper: #f4f5f0;
@@ -2018,10 +2020,67 @@ textarea:focus-visible {
     position: static;
     height: auto;
     max-height: none;
+    padding: 16px;
   }
 
   .course-nav {
     display: block;
+  }
+
+  .brand {
+    padding: 0 2px 14px;
+  }
+
+  .sidebar-progress {
+    margin: 14px 2px 16px;
+  }
+
+  .track-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+  }
+
+  .track-switch {
+    min-width: 0;
+    gap: 7px;
+    padding: 8px 7px;
+  }
+
+  .track-switch > span {
+    width: 6px;
+    height: 28px;
+    flex-basis: 6px;
+  }
+
+  .track-switch strong {
+    font-size: 10px;
+  }
+
+  .track-switch small {
+    display: none;
+  }
+
+  .module-group {
+    display: grid;
+    grid-auto-columns: minmax(210px, 72vw);
+    grid-auto-flow: column;
+    gap: 6px;
+    margin: 0;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .module-title {
+    display: none;
+  }
+
+  .lesson-link {
+    min-height: 44px;
+    background: rgba(255, 255, 255, 0.035);
   }
 
   .sidebar-foot {
