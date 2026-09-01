@@ -10,7 +10,11 @@ const config: ForgeConfig = {
     appBundleId: "com.stewie.learnos",
     asar: true,
     executableName: "stewie-learnos",
+    extraResource: [".runtime/python"],
     name: "Stewie LearnOS",
+    // 正式发行时，osxSign/osxNotarize 必须覆盖 extraResource 中的
+    // Resources/python/bin/python3 与其动态库；凭据只从 CI secrets 注入。
+    // Windows 的 Squirrel 证书文件与密码也只在发行工作流注入。
   },
   rebuildConfig: {},
   makers: [

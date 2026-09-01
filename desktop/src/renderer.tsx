@@ -28,10 +28,18 @@ function DesktopShell() {
           桌面运行基础已就绪。课程、个性化练习和本地 RAG 会在后续阶段接入同一个安全壳。
         </p>
         {appInfo ? (
-          <p className="status" role="status">
-            <span aria-hidden="true" />
-            本地静态界面已加载 · {appInfo.platform} / {appInfo.architecture} · v{appInfo.version}
-          </p>
+          <div className="status-stack" role="status">
+            <p className="status">
+              <span aria-hidden="true" />
+              本地静态界面已加载 · {appInfo.platform} / {appInfo.architecture} · v{appInfo.version}
+            </p>
+            <p className={appInfo.python ? "status" : "status muted"}>
+              <span aria-hidden="true" />
+              {appInfo.python
+                ? `内置 Python ${appInfo.python.pythonVersion} 已就绪 · SQLite FTS5 可用`
+                : "开发热更新模式未启动安装包内的 Python 服务"}
+            </p>
+          </div>
         ) : error ? (
           <p className="error" role="alert">{error}</p>
         ) : (

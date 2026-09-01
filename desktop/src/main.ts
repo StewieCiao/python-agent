@@ -11,6 +11,7 @@ import started from "electron-squirrel-startup";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { DesktopAppInfo } from "./bridge";
+import { startPythonService, type PythonServiceClient } from "./pythonService.mjs";
 import {
   createDesktopSecurityPolicy,
   createWindowOptions,
@@ -41,6 +42,7 @@ if (!hasSingleInstanceLock) {
 
 const devServerUrl = MAIN_WINDOW_VITE_DEV_SERVER_URL || undefined;
 const securityPolicy = createDesktopSecurityPolicy(devServerUrl);
+let pythonService: PythonServiceClient | undefined;
 const runStartupTask = createStartupBoundary({
   showError(message) {
     dialog.showErrorBox("Stewie LearnOS 启动失败", message);
@@ -84,6 +86,14 @@ void runStartupTask(app.whenReady().then(async () => {
         });
       }
     });
+
+    pythonService = await startPythonService({
+      resourcesPath: process.resourcesPath,
+      platform: process.platform,
+      onFailure(error) {
+        void runStartupTask(Promise.reject(error));
+      },
+    });
   }
 
   ipcMain.handle("app:info", (event): DesktopAppInfo => {
@@ -98,6 +108,7 @@ void runStartupTask(app.whenReady().then(async () => {
       version: app.getVersion(),
       platform: process.platform,
       architecture: process.arch,
+      python: pythonService?.health ?? null,
     };
   });
 
@@ -119,4 +130,8 @@ app.on("second-instance", () => {
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+app.on("before-quit", () => {
+  pythonService?.stop();
 });

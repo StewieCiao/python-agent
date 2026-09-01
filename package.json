@@ -14,6 +14,8 @@
     "desktop:make": "npm run make --workspace @stewie/desktop",
     "desktop:package": "npm run package --workspace @stewie/desktop",
     "desktop:typecheck": "npm run typecheck --workspace @stewie/desktop",
+    "prepare:python-runtime": "node scripts/prepare-python-runtime.mjs",
+    "smoke:packaged-python": "node --experimental-strip-types scripts/smoke-packaged-python.mjs",
     "prepare:pyodide": "node scripts/prepare-pyodide.mjs",
     "postinstall": "npm run prepare:pyodide",
     "predev": "npm run prepare:pyodide",

@@ -1,0 +1,31 @@
+name: Desktop packaged Python smoke
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  packaged-python:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macOS arm64
+            runner: macos-15
+          - target: macOS x64
+            runner: macos-15-intel
+          - target: Windows arm64
+            runner: windows-11-arm
+          - target: Windows x64
+            runner: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+      - run: npm ci
+      - run: npm run desktop:package
+      - run: npm run smoke:packaged-python

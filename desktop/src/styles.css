@@ -98,6 +98,11 @@ h1 {
   font-size: 14px;
 }
 
+.status-stack {
+  display: grid;
+  gap: 10px;
+}
+
 .status {
   color: #315041;
   background: #eef5e9;
@@ -110,6 +115,15 @@ h1 {
   margin-right: 8px;
   border-radius: 50%;
   background: #7dbb31;
+}
+
+.status.muted {
+  color: #647068;
+  background: #f1f3ef;
+}
+
+.status.muted span {
+  background: #9ca69f;
 }
 
 .error {

@@ -37,6 +37,8 @@ yarn-error.log*
 # typescript
 next-env.d.ts
 *.tsbuildinfo
+__pycache__/
+*.py[cod]
 /dist/
 /.wrangler/
 /outputs/
@@ -50,3 +52,4 @@ next-env.d.ts
 /desktop/.vite/
 /desktop/src/.vite/
 /desktop/out/
+/desktop/.runtime/
