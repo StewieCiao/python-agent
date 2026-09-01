@@ -29,7 +29,12 @@ const RUNTIME_ROOT = join(BUILD_ROOT, "python");
 const CACHE_ROOT = join(BUILD_ROOT, "cache");
 const SOURCE_ROOT = join(PROJECT_ROOT, "python-runtime");
 const LOCK_PATH = join(SOURCE_ROOT, "requirements.lock");
-const SERVICE_FILES = ["protocol.py", "service.py"];
+const SERVICE_FILES = [
+  "protocol.py",
+  "service.py",
+  "storage.py",
+  "migrations/001-model-profiles.sql",
+];
 
 async function pathExists(path) {
   try {
@@ -151,7 +156,11 @@ export async function preparePythonRuntime() {
 
     const serviceRoot = join(stagedRuntime, "service");
     await mkdir(serviceRoot);
-    for (const file of SERVICE_FILES) await cp(join(SOURCE_ROOT, file), join(serviceRoot, file));
+    for (const file of SERVICE_FILES) {
+      const target = join(serviceRoot, file);
+      await mkdir(dirname(target), { recursive: true });
+      await cp(join(SOURCE_ROOT, file), target);
+    }
     await run(stagedExecutable, [
       "-c",
       "import langchain, langgraph, pypdf; import langgraph.checkpoint.sqlite",

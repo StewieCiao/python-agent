@@ -1,3 +1,4 @@
+import argparse
 import importlib
 import importlib.metadata
 import platform
@@ -8,6 +9,7 @@ from contextlib import closing
 
 from langchain_core._api.deprecation import LangChainPendingDeprecationWarning
 from protocol import decode_request, encode_message, error_response, success_response
+from storage import Storage
 
 
 REQUIRED_PACKAGES = {
@@ -57,13 +59,35 @@ def build_health_result():
     }
 
 
-def serve(input_stream, output_stream):
+def dispatch_request(request, storage):
+    method = request["method"]
+    params = request["params"]
+    if method == "health":
+        return build_health_result()
+    if method == "profile.list":
+        return storage.list_profiles()
+    if method == "profile.get":
+        return storage.get_profile(params["profileId"])
+    if method == "profile.upsert":
+        return storage.upsert_profile(
+            params["profile"],
+            params["apiKeyCiphertext"],
+            params["makeActive"],
+        )
+    if method == "profile.activate":
+        return storage.set_active_profile(params["profileId"])
+    if method == "profile.delete":
+        return storage.delete_profile(params["profileId"])
+    raise ValueError("不支持的服务方法")
+
+
+def serve(input_stream, output_stream, storage):
     for frame in input_stream:
         request_id = None
         try:
             request = decode_request(frame)
             request_id = request["id"]
-            response = success_response(request_id, build_health_result())
+            response = success_response(request_id, dispatch_request(request, storage))
         except Exception as error:
             response = error_response(request_id, error)
         output_stream.write(encode_message(response))
@@ -71,7 +95,14 @@ def serve(input_stream, output_stream):
 
 
 def main():
-    serve(sys.stdin, sys.stdout)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--database", required=True)
+    args = parser.parse_args()
+    storage = Storage(args.database)
+    try:
+        serve(sys.stdin, sys.stdout, storage)
+    finally:
+        storage.close()
 
 
 if __name__ == "__main__":

@@ -45,6 +45,23 @@ class ProtocolTest(unittest.TestCase):
                 with self.assertRaises(ProtocolError):
                     decode_request(frame)
 
+    def test_profile_methods_accept_only_their_exact_parameter_contract(self):
+        request = decode_request(
+            '{"id":"p1","method":"profile.get","params":{"profileId":"primary"}}'
+        )
+        self.assertEqual(request["params"], {"profileId": "primary"})
+
+        invalid_frames = [
+            '{"id":"p1","method":"profile.get","params":{}}',
+            '{"id":"p1","method":"profile.get","params":{"profileId":"primary","extra":true}}',
+            '{"id":"p1","method":"profile.activate","params":{"profileId":1}}',
+            '{"id":"p1","method":"profile.upsert","params":{"profile":{},"apiKeyCiphertext":null}}',
+        ]
+        for frame in invalid_frames:
+            with self.subTest(frame=frame):
+                with self.assertRaises(ProtocolError):
+                    decode_request(frame)
+
 
 if __name__ == "__main__":
     unittest.main()

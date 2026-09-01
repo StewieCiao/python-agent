@@ -79,7 +79,28 @@ export function createStorage(directory) {
     },
 
     async saveProfiles(profiles) {
-      const validProfiles = profiles.map((profile) => validateProfile(profile));
+      const validProfiles = profiles.map((profile) => {
+        const validated = validateProfile({
+          id: profile.id,
+          name: profile.name,
+          baseUrl: profile.baseUrl,
+          model: profile.model,
+          embeddingModel: profile.embeddingModel,
+          temperature: profile.temperature,
+          maxTokens: profile.maxTokens,
+          timeoutMs: profile.timeoutMs,
+        });
+        return {
+          id: validated.id,
+          name: validated.name,
+          baseUrl: validated.baseUrl,
+          model: validated.model,
+          embeddingModel: validated.embeddingModel,
+          temperature: validated.temperature,
+          maxTokens: validated.maxTokens,
+          timeoutMs: validated.timeoutMs,
+        };
+      });
       await writeJson(profilesPath, validProfiles, "模型配置");
     },
 

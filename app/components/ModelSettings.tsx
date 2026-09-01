@@ -1,46 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { ModelProfile } from "../lib/localServiceClient";
 import {
-  LOCAL_SERVICE_URL,
-  localServiceRequest,
-  type ModelProfile,
-} from "../lib/localServiceClient";
+  listModelProfiles,
+  modelStorageInfo,
+  platformServiceLabel,
+  saveModelProfile,
+  testModelProfile,
+} from "../lib/platformBridge";
 
 const EMPTY_PROFILE = {
   id: "my-model",
   name: "我的模型",
   baseUrl: "https://api.openai.com/v1",
   model: "gpt-5-mini",
+  embeddingModel: "",
   temperature: 0.2,
   maxTokens: 2048,
   timeoutMs: 30000,
 };
 
-type Health = {
-  ready: true;
-  configPath: string;
-  historyPath: string;
-  keychainService: string;
+type StorageInfo = {
+  nonSecretPath: string;
+  secretStorage: string;
+  historyPath: string | null;
 };
 
 export function ModelSettings() {
   const [profile, setProfile] = useState(EMPTY_PROFILE);
-  const [apiKey, setApiKey] = useState("");
+  const apiKeyRef = useRef<HTMLInputElement>(null);
   const [savedProfiles, setSavedProfiles] = useState<ModelProfile[]>([]);
-  const [health, setHealth] = useState<Health | null>(null);
+  const [storageInfo, setStorageInfo] = useState<StorageInfo | null>(null);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("正在连接本地服务…");
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     Promise.all([
-      localServiceRequest<Health>("/health"),
-      localServiceRequest<{ profiles: ModelProfile[] }>("/profiles"),
-    ]).then(([nextHealth, result]) => {
-      setHealth(nextHealth);
-      setSavedProfiles(result.profiles);
-      setMessage("本地服务已连接");
+      modelStorageInfo(),
+      listModelProfiles(),
+    ]).then(([nextStorageInfo, profiles]) => {
+      setStorageInfo(nextStorageInfo);
+      setSavedProfiles(profiles);
+      setMessage("安全模型服务已连接");
       setIsError(false);
     }).catch((error) => {
       setMessage(`本地服务连接失败：${error instanceof Error ? error.message : String(error)}`);
@@ -72,35 +75,32 @@ export function ModelSettings() {
   }
 
   async function refreshProfiles() {
-    const result = await localServiceRequest<{ profiles: ModelProfile[] }>("/profiles");
-    setSavedProfiles(result.profiles);
+    setSavedProfiles(await listModelProfiles());
   }
 
   return (
     <section className="settings-view">
       <div className="page-intro">
         <span>LOCAL MODEL SETTINGS</span>
-        <h2>模型配置只在这台 Mac 上生效。</h2>
+        <h2>模型配置只在这台电脑上生效。</h2>
         <p>云端 OpenAI、通义兼容接口和本机 Ollama 都使用同一个 OpenAI-compatible 配置格式。</p>
       </div>
 
       <div className={`service-state ${isError ? "error" : "ready"}`} role="status">
         <strong>{message}</strong>
-        <span>本地服务地址：{LOCAL_SERVICE_URL}</span>
+        <span>服务：{platformServiceLabel()}</span>
       </div>
 
       <div className="settings-layout">
         <form className="settings-form" onSubmit={(event) => {
           event.preventDefault();
           void perform(async () => {
-            const result = await localServiceRequest<{ profile: ModelProfile }>(`/profiles/${profile.id}`, {
-              method: "PUT",
-              body: JSON.stringify({ profile, ...(apiKey ? { apiKey } : {}) }),
-            });
-            setApiKey("");
+            const apiKey = apiKeyRef.current?.value ?? "";
+            if (apiKeyRef.current) apiKeyRef.current.value = "";
+            const result = await saveModelProfile(profile, apiKey || undefined);
             await refreshProfiles();
-            return result.profile.hasApiKey
-              ? "配置已保存；API Key 已写入 macOS 钥匙串。"
+            return result.hasApiKey
+              ? "配置已保存；API Key 已写入系统安全存储。"
               : "非敏感配置已保存；尚未设置 API Key。";
           });
         }}>
@@ -113,26 +113,27 @@ export function ModelSettings() {
             <label>显示名称<input value={profile.name} onChange={(event) => editProfile("name", event.target.value)} /></label>
             <label className="wide">Base URL<input value={profile.baseUrl} onChange={(event) => editProfile("baseUrl", event.target.value)} /></label>
             <label className="wide">模型名称<input value={profile.model} onChange={(event) => editProfile("model", event.target.value)} /></label>
+            <label className="wide">Embedding 模型（可选）<input value={profile.embeddingModel} onChange={(event) => editProfile("embeddingModel", event.target.value)} /></label>
             <label>Temperature<input min="0" max="2" step="0.1" type="number" value={profile.temperature} onChange={(event) => editProfile("temperature", event.target.value)} /></label>
             <label>Max tokens<input min="1" type="number" value={profile.maxTokens} onChange={(event) => editProfile("maxTokens", event.target.value)} /></label>
             <label>超时（毫秒）<input min="1000" max="120000" type="number" value={profile.timeoutMs} onChange={(event) => editProfile("timeoutMs", event.target.value)} /></label>
-            <label>API Key<input autoComplete="new-password" placeholder="保存后清空且不回显" type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} /></label>
+            <label>API Key<input autoComplete="new-password" placeholder="提交后立即清空且不回显" ref={apiKeyRef} type="password" /></label>
           </div>
           <div className="form-actions">
             <button className="primary-action" disabled={busy} type="submit">保存配置</button>
             <button disabled={busy} onClick={() => void perform(async () => {
-              const result = await localServiceRequest<{ reply: string }>(`/profiles/${profile.id}/test`, { method: "POST" });
-              return `连接测试成功：${result.reply}`;
+              const reply = await testModelProfile(profile.id);
+              return `连接测试成功：${reply}`;
             })} type="button">测试连接</button>
           </div>
         </form>
 
         <aside className="settings-notes">
           <h3>配置实际保存在哪里？</h3>
-          {health ? <dl>
-            <div><dt>非敏感参数</dt><dd>{health.configPath}</dd></div>
-            <div><dt>API Key</dt><dd>macOS 钥匙串 · service：{health.keychainService}</dd></div>
-            <div><dt>聊天历史</dt><dd>{health.historyPath}</dd></div>
+          {storageInfo ? <dl>
+            <div><dt>非敏感参数与密文</dt><dd>{storageInfo.nonSecretPath}</dd></div>
+            <div><dt>API Key 加密</dt><dd>{storageInfo.secretStorage}</dd></div>
+            <div><dt>聊天历史</dt><dd>{storageInfo.historyPath ?? "当前桌面会话内存；下一阶段迁入同一数据库"}</dd></div>
           </dl> : <p>连接本地服务后显示准确路径。</p>}
           <h3>已保存配置</h3>
           {savedProfiles.length === 0 ? <p>尚无配置。</p> : savedProfiles.map((item) => (
@@ -141,6 +142,7 @@ export function ModelSettings() {
               name: item.name,
               baseUrl: item.baseUrl,
               model: item.model,
+              embeddingModel: item.embeddingModel ?? "",
               temperature: item.temperature,
               maxTokens: item.maxTokens,
               timeoutMs: item.timeoutMs,

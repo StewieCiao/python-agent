@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import type { LearningLesson, LearningTrack } from "../lib/learningCatalog";
 import {
-  localServiceRequest,
+  clearCourseHistory,
+  listModelProfiles,
+  loadCourseHistory,
+  sendCourseChat,
+} from "../lib/platformBridge";
+import {
   type ChatMessage,
   type ModelProfile,
 } from "../lib/localServiceClient";
@@ -23,13 +28,15 @@ export function CourseChat({ track, lesson, onClose }: {
 
   useEffect(() => {
     Promise.all([
-      localServiceRequest<{ profiles: ModelProfile[] }>("/profiles"),
-      localServiceRequest<{ messages: ChatMessage[] }>(`/chat-history?courseId=${encodeURIComponent(track.id)}&lessonId=${encodeURIComponent(lesson.id)}`),
+      listModelProfiles(),
+      loadCourseHistory(track.id, lesson.id),
     ]).then(([profileResult, historyResult]) => {
-      setProfiles(profileResult.profiles);
-      setProfileId(profileResult.profiles[0]?.id ?? "");
+      setProfiles(profileResult);
+      setProfileId(profileResult.find((profile) => profile.active)?.id ?? profileResult[0]?.id ?? "");
       setHistory(historyResult.messages);
-      setStatus(profileResult.profiles.length === 0 ? "请先在模型设置中保存一个配置。" : "");
+      setStatus(profileResult.length === 0
+        ? "请先在模型设置中保存一个配置。"
+        : historyResult.persisted ? "" : "本次桌面对话仅保留在当前会话中。");
     }).catch((error) => {
       setStatus(`无法读取本地聊天数据：${error instanceof Error ? error.message : String(error)}`);
     });
@@ -73,24 +80,22 @@ export function CourseChat({ track, lesson, onClose }: {
           const question = message.trim();
           if (!question || !profileId) return;
           void perform(async () => {
-            const result = await localServiceRequest<{ reply: string }>("/chat", {
-              method: "POST",
-              body: JSON.stringify({
-                profileId,
-                mode,
-                courseId: track.id,
-                lessonId: lesson.id,
-                lessonContext: mode === "lesson" ? { courseId: track.id, lesson } : undefined,
-                message: question,
-              }),
+            const reply = await sendCourseChat({
+              profileId,
+              mode,
+              courseId: track.id,
+              lessonId: lesson.id,
+              lessonContext: mode === "lesson" ? { courseId: track.id, lesson } : undefined,
+              history,
+              message: question,
             });
-            setHistory((current) => [...current, { role: "user", content: question }, { role: "assistant", content: result.reply }]);
+            setHistory((current) => [...current, { role: "user", content: question }, { role: "assistant", content: reply }]);
             setMessage("");
           });
         }}>
           <textarea aria-label="向课程导师提问" placeholder="输入你没理解的概念或代码问题…" value={message} onChange={(event) => setMessage(event.target.value)} />
           <div><button disabled={busy || history.length === 0} onClick={() => void perform(async () => {
-            await localServiceRequest(`/chat-history?courseId=${encodeURIComponent(track.id)}&lessonId=${encodeURIComponent(lesson.id)}`, { method: "DELETE" });
+            await clearCourseHistory(track.id, lesson.id);
             setHistory([]);
           })} type="button">清除本节记录</button><button className="primary-action" disabled={busy || !profileId || !message.trim()} type="submit">{busy ? "等待真实回复…" : "发送"}</button></div>
         </form>

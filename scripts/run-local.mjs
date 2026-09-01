@@ -40,7 +40,7 @@ function siteCommand(mode) {
 async function main() {
   const mode = process.argv[2];
   const exitCode = await runProcesses([
-    { command: process.execPath, args: ["local-service/index.mjs"], label: "本地模型服务" },
+    { command: process.execPath, args: ["--experimental-strip-types", "local-service/index.mjs"], label: "本地模型服务" },
     siteCommand(mode),
   ]);
   process.exitCode = exitCode;

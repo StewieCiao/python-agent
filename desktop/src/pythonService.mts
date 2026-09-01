@@ -22,7 +22,7 @@ export type PythonHealth = {
 };
 
 export type PythonServiceFrame =
-  | { id: string; ok: true; result: PythonHealth }
+  | { id: string; ok: true; result: unknown }
   | { id: string; ok: false; error: { type: string; message: string } };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -61,7 +61,7 @@ export function resolvePythonServicePaths(resourcesPath: string, platform: strin
   };
 }
 
-export function parsePythonServiceFrame(line: string): PythonServiceFrame {
+function parsePythonServiceEnvelope(line: string): PythonServiceFrame {
   let value: unknown;
   try {
     value = JSON.parse(line);
@@ -72,7 +72,7 @@ export function parsePythonServiceFrame(line: string): PythonServiceFrame {
   if (!isRecord(value) || typeof value.id !== "string" || value.id.length === 0) {
     throw new Error("Python 服务响应缺少有效请求 ID");
   }
-  if (value.ok === true && hasExactKeys(value, ["id", "ok", "result"]) && isHealth(value.result)) {
+  if (value.ok === true && hasExactKeys(value, ["id", "ok", "result"])) {
     return value as PythonServiceFrame;
   }
   if (
@@ -86,22 +86,30 @@ export function parsePythonServiceFrame(line: string): PythonServiceFrame {
   throw new Error("Python 服务响应结构无效");
 }
 
+export function parsePythonServiceFrame(line: string): PythonServiceFrame {
+  const frame = parsePythonServiceEnvelope(line);
+  if (frame.ok && !isHealth(frame.result)) {
+    throw new Error("Python 服务响应结构无效");
+  }
+  return frame;
+}
+
 type SpawnProcess = (
   executable: string,
   args: readonly string[],
   options: { stdio: ["pipe", "pipe", "pipe"]; windowsHide: true },
 ) => ChildProcessWithoutNullStreams;
 
-type PendingHealth = {
+type PendingRequest = {
   timer: ReturnType<typeof setTimeout>;
-  resolve: (health: PythonHealth) => void;
+  resolve: (result: unknown) => void;
   reject: (error: Error) => void;
 };
 
 export class PythonServiceClient {
   health!: PythonHealth;
   readonly #child: ChildProcessWithoutNullStreams;
-  readonly #pending = new Map<string, PendingHealth>();
+  readonly #pending = new Map<string, PendingRequest>();
   #stderr = "";
   #stopped = false;
   #ready = false;
@@ -149,22 +157,28 @@ export class PythonServiceClient {
     if (!this.#child.killed) this.#child.kill();
   }
 
-  #requestHealth(timeoutMs: number): Promise<PythonHealth> {
+  request(method: string, params: Record<string, unknown>, timeoutMs = 10_000): Promise<unknown> {
     const id = randomUUID();
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         this.#pending.delete(id);
-        reject(new Error(`Python 服务健康检查超时（${timeoutMs}ms）`));
+        reject(new Error(`Python 服务请求 ${method} 超时（${timeoutMs}ms）`));
       }, timeoutMs);
       this.#pending.set(id, { timer, resolve, reject });
-      this.#child.stdin.write(`${JSON.stringify({ id, method: "health", params: {} })}\n`);
+      this.#child.stdin.write(`${JSON.stringify({ id, method, params })}\n`);
     });
+  }
+
+  async #requestHealth(timeoutMs: number): Promise<PythonHealth> {
+    const result = await this.request("health", {}, timeoutMs);
+    if (!isHealth(result)) throw new Error("Python 服务健康响应结构无效");
+    return result;
   }
 
   #receive(line: string): void {
     let frame: PythonServiceFrame;
     try {
-      frame = parsePythonServiceFrame(line);
+      frame = parsePythonServiceEnvelope(line);
     } catch (error) {
       this.#fail(error instanceof Error ? error : new Error("Python 服务响应解析失败"));
       return;
@@ -196,6 +210,7 @@ export class PythonServiceClient {
 export type StartPythonServiceOptions = {
   resourcesPath: string;
   platform: string;
+  databasePath: string;
   timeoutMs?: number;
   spawnProcess?: SpawnProcess;
   onFailure: (error: Error) => void;
@@ -204,12 +219,13 @@ export type StartPythonServiceOptions = {
 export async function startPythonService({
   resourcesPath,
   platform,
+  databasePath,
   timeoutMs = 10_000,
   spawnProcess = spawn,
   onFailure,
 }: StartPythonServiceOptions): Promise<PythonServiceClient> {
   const paths = resolvePythonServicePaths(resourcesPath, platform);
-  const child = spawnProcess(paths.executable, [paths.service], {
+  const child = spawnProcess(paths.executable, [paths.service, "--database", databasePath], {
     stdio: ["pipe", "pipe", "pipe"],
     windowsHide: true,
   });

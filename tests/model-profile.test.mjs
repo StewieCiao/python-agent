@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import {
   redactProfile,
   validateProfile,
-} from "../local-service/modelProfile.mjs";
+  redactSecrets,
+} from "../app/lib/modelConfig.ts";
 
 const validProfile = {
   id: "qwen-local",
@@ -13,16 +14,35 @@ const validProfile = {
   temperature: 0.3,
   maxTokens: 2048,
   timeoutMs: 30000,
+  embeddingModel: "text-embedding-v4",
 };
 
 test("模型配置规范化 URL，并只向前端暴露非敏感字段", () => {
   const profile = validateProfile(validProfile);
   assert.equal(profile.baseUrl, "https://dashscope.aliyuncs.com/compatible-mode/v1");
+  assert.equal(profile.origin, "https://dashscope.aliyuncs.com");
   assert.deepEqual(redactProfile(profile, true), {
-    ...profile,
+    id: profile.id,
+    name: profile.name,
+    baseUrl: profile.baseUrl,
+    model: profile.model,
+    embeddingModel: profile.embeddingModel,
+    temperature: profile.temperature,
+    maxTokens: profile.maxTokens,
+    timeoutMs: profile.timeoutMs,
+    active: false,
     hasApiKey: true,
   });
   assert.equal("apiKey" in redactProfile(profile, true), false);
+});
+
+test("可选 embedding model 归一为空值，错误文本会统一脱敏", () => {
+  const profile = validateProfile({ ...validProfile, embeddingModel: "  " });
+  assert.equal(profile.embeddingModel, null);
+  assert.equal(
+    redactSecrets("Authorization: Bearer sk-secret；上游回显 sk-secret", ["sk-secret"]),
+    "Authorization: [REDACTED]；上游回显 [REDACTED]",
+  );
 });
 
 test("模型配置以一组边界拒绝不安全 URL 和无效参数", () => {

@@ -1,5 +1,5 @@
-import { buildChatMessages, ChatInputError } from "./chatPrompt.mjs";
-import { ProfileValidationError, redactProfile, validateProfile } from "./modelProfile.mjs";
+import { buildChatMessages, ChatInputError } from "../app/lib/chatPrompt.mjs";
+import { ProfileValidationError, redactProfile, redactSecrets, validateProfile } from "./modelProfile.mjs";
 import { StorageError, createStorage } from "./storage.mjs";
 
 const ALLOWED_ORIGINS = new Set(["http://localhost:3000", "http://127.0.0.1:3000"]);
@@ -52,7 +52,7 @@ function providerMessage(payload, rawText) {
 }
 
 async function callOpenAICompatible(profile, apiKey, messages) {
-  const safeText = (value) => String(value).replaceAll(apiKey, "[REDACTED]");
+  const safeText = (value) => redactSecrets(value, [apiKey]);
   const response = await fetch(`${profile.baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
@@ -66,6 +66,7 @@ async function callOpenAICompatible(profile, apiKey, messages) {
       max_tokens: profile.maxTokens,
       stream: false,
     }),
+    redirect: "error",
     signal: AbortSignal.timeout(profile.timeoutMs),
   });
   const rawText = await response.text();

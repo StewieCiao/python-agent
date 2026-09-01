@@ -5,6 +5,16 @@ class ProtocolError(ValueError):
     pass
 
 
+METHOD_PARAMS = {
+    "health": set(),
+    "profile.list": set(),
+    "profile.get": {"profileId"},
+    "profile.activate": {"profileId"},
+    "profile.delete": {"profileId"},
+    "profile.upsert": {"profile", "apiKeyCiphertext", "makeActive"},
+}
+
+
 def decode_request(frame):
     try:
         request = json.loads(frame)
@@ -17,10 +27,21 @@ def decode_request(frame):
         raise ProtocolError("请求字段必须且只能包含 id、method、params")
     if not isinstance(request["id"], str) or not request["id"] or len(request["id"]) > 128:
         raise ProtocolError("请求 id 必须是 1–128 字符的字符串")
-    if request["method"] != "health":
+    if request["method"] not in METHOD_PARAMS:
         raise ProtocolError("不支持的服务方法")
-    if request["params"] != {}:
-        raise ProtocolError("health 的 params 必须是空对象")
+    params = request["params"]
+    if not isinstance(params, dict) or set(params) != METHOD_PARAMS[request["method"]]:
+        raise ProtocolError(f"{request['method']} 的 params 字段无效")
+    if request["method"] in {"profile.get", "profile.activate", "profile.delete"}:
+        if not isinstance(params["profileId"], str) or not params["profileId"]:
+            raise ProtocolError("profileId 必须是非空字符串")
+    if request["method"] == "profile.upsert":
+        if not isinstance(params["profile"], dict):
+            raise ProtocolError("profile 必须是对象")
+        if params["apiKeyCiphertext"] is not None and not isinstance(params["apiKeyCiphertext"], str):
+            raise ProtocolError("apiKeyCiphertext 必须是字符串或 null")
+        if not isinstance(params["makeActive"], bool):
+            raise ProtocolError("makeActive 必须是布尔值")
     return request
 
 

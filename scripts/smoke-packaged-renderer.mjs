@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
-import { createServer } from "node:net";
+import { createServer as createHttpServer } from "node:http";
+import { createServer as createNetServer } from "node:net";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { packagedExecutablePath } from "./desktopPackagePaths.mjs";
@@ -18,7 +19,7 @@ function withTimeout(promise, label, timeoutMs = IO_TIMEOUT_MS) {
 }
 
 async function reservePort() {
-  const server = createServer();
+  const server = createNetServer();
   await new Promise((resolve, reject) => {
     server.once("error", reject);
     server.listen(0, "127.0.0.1", resolve);
@@ -30,6 +31,37 @@ async function reservePort() {
   }
   await new Promise((resolve) => server.close(resolve));
   return address.port;
+}
+
+async function startModelServer() {
+  const requests = [];
+  const server = createHttpServer(async (request, response) => {
+    let body = "";
+    for await (const chunk of request) body += chunk;
+    requests.push({
+      url: request.url,
+      authorization: request.headers.authorization,
+      body: JSON.parse(body),
+    });
+    response.writeHead(200, { "Content-Type": "application/json" });
+    response.end(JSON.stringify({
+      choices: [{ message: { role: "assistant", content: "PACKAGED_OK" } }],
+    }));
+  });
+  await new Promise((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", resolve);
+  });
+  const address = server.address();
+  if (!address || typeof address === "string") {
+    server.close();
+    throw new Error("无法启动模型 smoke 服务");
+  }
+  return {
+    baseUrl: `http://127.0.0.1:${address.port}/v1`,
+    requests,
+    close: () => new Promise((resolve, reject) => server.close((error) => error ? reject(error) : resolve())),
+  };
 }
 
 async function waitFor(probe, label, timeoutMs) {
@@ -113,8 +145,22 @@ function clickButtonExpression(label) {
   })()`;
 }
 
-const executable = packagedExecutablePath(process.platform, process.arch);
+function setLabeledInputExpression(label, value) {
+  return `(() => {
+    const field = [...document.querySelectorAll('label')]
+      .find((item) => item.textContent.trim().startsWith(${JSON.stringify(label)}))
+      ?.querySelector('input');
+    if (!(field instanceof HTMLInputElement)) return false;
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+    setter.call(field, ${JSON.stringify(value)});
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+    return true;
+  })()`;
+}
+
+const executable = process.env.STEWIE_PACKAGED_EXECUTABLE || packagedExecutablePath(process.platform, process.arch);
 const port = await reservePort();
+const modelServer = await startModelServer();
 const userDataDirectory = await mkdtemp(join(tmpdir(), "stewie-renderer-smoke-"));
 const stderr = [];
 const child = spawn(executable, [
@@ -211,7 +257,58 @@ try {
 
   await setCodeAndRun('print("我的第一段 Python")\nprint(8 * 7)');
   await waitForText("全部通过 · 可以进入下一关");
-  process.stdout.write("packaged renderer smoke: success, syntax, failed tests, timeout recovery\n");
+
+  if (!await evaluate(clickButtonExpression("模型设置"))) throw new Error("无法打开模型设置");
+  await waitForText("OpenAI-compatible 配置");
+  for (const [label, value] of [
+    ["配置 ID", "renderer-smoke"],
+    ["显示名称", "Renderer Smoke"],
+    ["Base URL", modelServer.baseUrl],
+    ["模型名称", "mock-model"],
+    ["Temperature", "0"],
+    ["Max tokens", "64"],
+    ["超时（毫秒）", "5000"],
+    ["API Key", "sk-renderer-smoke"],
+  ]) {
+    if (!await evaluate(setLabeledInputExpression(label, value))) {
+      throw new Error(`找不到模型配置字段：${label}`);
+    }
+  }
+  if (!await evaluate(clickButtonExpression("保存配置"))) throw new Error("模型配置保存按钮不可用");
+  await waitFor(
+    () => evaluate(`document.body.textContent.includes("配置已保存") || document.body.textContent.includes("系统安全存储写入失败")`),
+    "模型配置没有返回明确结果",
+    RUN_TIMEOUT_MS,
+  );
+  const passwordValue = await evaluate(`([...document.querySelectorAll('label')]
+    .find((item) => item.textContent.trim().startsWith("API Key"))
+    ?.querySelector('input')?.value) ?? null`);
+  if (passwordValue !== "") throw new Error("API Key 输入框在提交后没有立即清空");
+
+  const profileList = await evaluate(`window.stewie.listModelProfiles()`);
+  if (profileList?.ok && profileList.value.some((profile) => profile.id === "renderer-smoke")) {
+    if (/sk-renderer-smoke|apiKeyCiphertext/.test(JSON.stringify(profileList))) {
+      throw new Error("打包应用把 API Key 或密文返回给了 renderer");
+    }
+    const modelReply = await evaluate(`window.stewie.testModelProfile("renderer-smoke")`);
+    if (!modelReply?.ok || modelReply.value?.reply !== "PACKAGED_OK") {
+      throw new Error(`打包应用模型请求失败：${JSON.stringify(modelReply)}`);
+    }
+    if (
+      modelServer.requests.length !== 1 ||
+      modelServer.requests[0].authorization !== "Bearer sk-renderer-smoke" ||
+      modelServer.requests[0].url !== "/v1/chat/completions"
+    ) {
+      throw new Error(`打包应用模型请求合同不符：${JSON.stringify(modelServer.requests)}`);
+    }
+    process.stdout.write("packaged renderer smoke: Python execution/recovery and secure model request passed\n");
+  } else {
+    const visibleFailure = await evaluate(`document.body.textContent.includes("系统安全存储写入失败")`);
+    if (!visibleFailure || modelServer.requests.length !== 0 || profileList?.value?.length !== 0) {
+      throw new Error(`打包应用模型配置失败路径不明确：${JSON.stringify(profileList)}`);
+    }
+    process.stdout.write("packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n");
+  }
 } catch (error) {
   const processError = stderr.join("").trim();
   throw new Error(`${error instanceof Error ? error.message : String(error)}${processError ? `\nElectron stderr:\n${processError}` : ""}`);
@@ -232,4 +329,5 @@ try {
     rm(userDataDirectory, { recursive: true, force: true }),
     "无法清理 renderer smoke 临时目录",
   );
+  await withTimeout(modelServer.close(), "无法停止模型 smoke 服务");
 }

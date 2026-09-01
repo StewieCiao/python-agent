@@ -22,6 +22,7 @@ const HEALTH_RESULT = {
   },
   sqlite: { version: "3.50.4", transaction: true, fts5: true },
 };
+const DATABASE_PATH = join("Library", "Application Support", "Stewie LearnOS", "stewie.db");
 
 test("桌面只从 process.resourcesPath 下解析内置服务", async () => {
   const { resolvePythonServicePaths } = await loadPythonService();
@@ -97,6 +98,7 @@ test("启动唯一服务后先完成真实健康握手", async () => {
   const client = await startPythonService({
     resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
     platform: "darwin",
+    databasePath: DATABASE_PATH,
     timeoutMs: 100,
     onFailure(error) {
       assert.fail(error.message);
@@ -110,7 +112,11 @@ test("启动唯一服务后先完成真实健康握手", async () => {
   assert.equal(client.health.pythonVersion, "3.13.15");
   assert.equal(spawnCalls.length, 1);
   assert.match(spawnCalls[0].executable, /Resources\/python\/bin\/python3$/);
-  assert.deepEqual(spawnCalls[0].args, [join("Applications", "Stewie LearnOS", "Resources", "python", "service", "service.py")]);
+  assert.deepEqual(spawnCalls[0].args, [
+    join("Applications", "Stewie LearnOS", "Resources", "python", "service", "service.py"),
+    "--database",
+    DATABASE_PATH,
+  ]);
   assert.deepEqual(spawnCalls[0].options, { stdio: ["pipe", "pipe", "pipe"], windowsHide: true });
   client.stop();
   assert.equal(child.killed, true);
@@ -125,6 +131,7 @@ test("健康握手超时会明确失败并终止服务，不自动重试", async
     startPythonService({
       resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
       platform: "darwin",
+      databasePath: DATABASE_PATH,
       timeoutMs: 5,
       onFailure(error) {
         assert.fail(error.message);
@@ -134,7 +141,7 @@ test("健康握手超时会明确失败并终止服务，不自动重试", async
         return child;
       },
     }),
-    /Python 服务健康检查超时/,
+    /Python 服务请求 health 超时/,
   );
 
   assert.equal(spawnCount, 1);
@@ -160,6 +167,7 @@ test("SQLite 事务或 FTS5 探针失败时拒绝就绪", async () => {
       startPythonService({
         resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
         platform: "darwin",
+        databasePath: DATABASE_PATH,
         timeoutMs: 100,
         spawnProcess: () => child,
         onFailure(error) {
@@ -182,6 +190,7 @@ test("服务就绪后异常退出会保留 stderr 并通知唯一故障边界", 
   await startPythonService({
     resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
     platform: "darwin",
+    databasePath: DATABASE_PATH,
     timeoutMs: 100,
     spawnProcess: () => child,
     onFailure: (error) => failures.push(error.message),

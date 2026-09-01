@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildChatMessages } from "../local-service/chatPrompt.mjs";
+import { buildChatMessages } from "../app/lib/chatPrompt.mjs";
 
 test("课程导师把所有课程内容放入可往返 JSON，并保持用户问题为独立消息", () => {
   const lessonContext = {

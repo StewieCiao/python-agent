@@ -1,15 +1,8 @@
+import type { PublicModelProfile } from "./modelConfig.ts";
+
 export const LOCAL_SERVICE_URL = "http://127.0.0.1:4318";
 
-export type ModelProfile = {
-  id: string;
-  name: string;
-  baseUrl: string;
-  model: string;
-  temperature: number;
-  maxTokens: number;
-  timeoutMs: number;
-  hasApiKey: boolean;
-};
+export type ModelProfile = PublicModelProfile;
 
 export type ChatMessage = {
   role: "user" | "assistant";
@@ -18,13 +11,18 @@ export type ChatMessage = {
 };
 
 export class LocalServiceError extends Error {
+  status: number;
+  code: string;
+
   constructor(
-    public status: number,
-    public code: string,
+    status: number,
+    code: string,
     message: string,
   ) {
     super(message);
     this.name = "LocalServiceError";
+    this.status = status;
+    this.code = code;
   }
 }
 

@@ -1,6 +1,7 @@
 import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -35,13 +36,19 @@ class ServiceTest(unittest.TestCase):
                 '{"id":"second","method":"health","params":{}}',
             ]
         ) + "\n"
-        completed = subprocess.run(
-            [sys.executable, str(RUNTIME_ROOT / "service.py")],
-            input=frames,
-            text=True,
-            capture_output=True,
-            check=True,
-        )
+        with tempfile.TemporaryDirectory() as directory:
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNTIME_ROOT / "service.py"),
+                    "--database",
+                    str(Path(directory) / "stewie.db"),
+                ],
+                input=frames,
+                text=True,
+                capture_output=True,
+                check=True,
+            )
         responses = [json.loads(line) for line in completed.stdout.splitlines()]
 
         self.assertEqual(completed.stderr, "")
@@ -56,6 +63,49 @@ class ServiceTest(unittest.TestCase):
             },
         )
         self.assertEqual((responses[2]["id"], responses[2]["ok"]), ("second", True))
+
+    def test_service_persists_opaque_profile_ciphertext(self):
+        profile = {
+            "id": "primary",
+            "name": "Primary",
+            "baseUrl": "https://api.example.com/v1",
+            "origin": "https://api.example.com",
+            "model": "model-1",
+            "embeddingModel": None,
+            "temperature": 0.2,
+            "maxTokens": 1024,
+            "timeoutMs": 30000,
+        }
+        frames = "\n".join(
+            [
+                json.dumps({
+                    "id": "save",
+                    "method": "profile.upsert",
+                    "params": {
+                        "profile": profile,
+                        "apiKeyCiphertext": "Y2lwaGVydGV4dA==",
+                        "makeActive": True,
+                    },
+                }),
+                '{"id":"list","method":"profile.list","params":{}}',
+            ]
+        ) + "\n"
+        with tempfile.TemporaryDirectory() as directory:
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNTIME_ROOT / "service.py"),
+                    "--database",
+                    str(Path(directory) / "stewie.db"),
+                ],
+                input=frames,
+                text=True,
+                capture_output=True,
+                check=True,
+            )
+        responses = [json.loads(line) for line in completed.stdout.splitlines()]
+        self.assertEqual(responses[0]["ok"], True)
+        self.assertEqual(responses[1]["result"][0]["apiKeyCiphertext"], "Y2lwaGVydGV4dA==")
 
 
 if __name__ == "__main__":
