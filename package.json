@@ -2,11 +2,18 @@
   "name": "python-path-local",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "desktop"
+  ],
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
     "build:offline": "node --experimental-strip-types scripts/build-offline-html.mjs",
+    "desktop:dev": "npm run start --workspace @stewie/desktop",
+    "desktop:make": "npm run make --workspace @stewie/desktop",
+    "desktop:package": "npm run package --workspace @stewie/desktop",
+    "desktop:typecheck": "npm run typecheck --workspace @stewie/desktop",
     "prepare:pyodide": "node scripts/prepare-pyodide.mjs",
     "postinstall": "npm run prepare:pyodide",
     "predev": "npm run prepare:pyodide",

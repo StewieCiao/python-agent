@@ -45,3 +45,8 @@ next-env.d.ts
 
 # generated from the exact pyodide dependency by scripts/prepare-pyodide.mjs
 /public/pyodide/
+
+# Electron Forge / Vite generated desktop artifacts
+/desktop/.vite/
+/desktop/src/.vite/
+/desktop/out/

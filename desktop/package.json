@@ -1,0 +1,38 @@
+{
+  "name": "@stewie/desktop",
+  "productName": "Stewie LearnOS",
+  "version": "0.1.0",
+  "description": "Stewie 的本地优先自适应学习平台",
+  "author": "Stewie",
+  "private": true,
+  "main": ".vite/build/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "1.0.1",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "7.11.2",
+    "@electron-forge/maker-dmg": "7.11.2",
+    "@electron-forge/maker-squirrel": "7.11.2",
+    "@electron-forge/plugin-fuses": "7.11.2",
+    "@electron-forge/plugin-vite": "7.11.2",
+    "@electron-forge/shared-types": "7.11.2",
+    "@electron/fuses": "1.8.0",
+    "@types/electron-squirrel-startup": "1.0.2",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "electron": "44.1.0",
+    "typescript": "5.9.3",
+    "vite": "8.0.13"
+  }
+}
