@@ -71,12 +71,103 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
   },
 };
 
+const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
+  "langchain-rag:文档加载": {
+    summary: "把不同来源统一成带正文和来源 metadata 的文档记录。",
+    prompt: "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。",
+    starterCode: "def normalize_documents(records):\n    return []\n",
+    solution: "def normalize_documents(records):\n    documents = []\n    for record in records:\n        text = record[\"text\"].strip()\n        if text:\n            documents.append({\"text\": text, \"metadata\": {\"source\": record[\"source\"]}})\n    return documents\n",
+    hints: ["先定义统一的 Document 形状。", "清洗正文后再判断是否为空。", "来源放入 metadata，而不是丢在正文里。"],
+    checks: [
+      { name: "保留来源", expression: "normalize_documents([{\"text\": \"  hello  \", \"source\": \"a.md\"}]) == [{\"text\": \"hello\", \"metadata\": {\"source\": \"a.md\"}}]", failure: "正文应清洗，来源应保留在 metadata。", kind: "behavior" },
+      { name: "跳过空正文", expression: "normalize_documents([{\"text\": \" \", \"source\": \"empty.md\"}]) == []", failure: "空正文不能进入索引。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:文本切分": {
+    summary: "按可解释的边界切分长文，同时保留每个片段的来源信息。",
+    prompt: "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。",
+    starterCode: "def split_text(text, size):\n    pass\n",
+    solution: "def split_text(text, size):\n    if not text:\n        return []\n    return [text[start:start + size] for start in range(0, len(text), size)]\n",
+    hints: ["先处理空文本边界。", "range 的步长就是片段大小。", "最后一个片段可以比 size 短，但不能凭空补字符。"],
+    checks: [
+      { name: "完整覆盖", expression: "split_text(\"abcdefgh\", 3) == [\"abc\", \"def\", \"gh\"]", failure: "片段应按顺序覆盖全部正文。", kind: "behavior" },
+      { name: "空输入", expression: "split_text(\"\", 3) == []", failure: "空文本应返回空列表。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:引用生成": {
+    summary: "让回答中的引用只来自真实召回结果，并能回溯到来源。",
+    prompt: "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。",
+    starterCode: "def format_citations(results):\n    pass\n",
+    solution: "def format_citations(results):\n    if not results:\n        return \"没有找到相关资料\"\n    return \"\\n\".join(f\"[{index}] {item['source']}\" for index, item in enumerate(results, 1))\n",
+    hints: ["先明确无检索结果的用户可见状态。", "编号由结果顺序产生，不要写死来源。", "只读取结果中的 source 字段。"],
+    checks: [
+      { name: "来源可追溯", expression: "format_citations([{\"source\": \"guide.md\"}, {\"source\": \"faq.md\"}]) == \"[1] guide.md\\n[2] faq.md\"", failure: "每条引用应对应实际结果来源。", kind: "behavior" },
+      { name: "无结果边界", expression: "format_citations([]) == \"没有找到相关资料\"", failure: "无资料时应明确说明，而不是编造答案。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:无答案边界": {
+    summary: "在相似度不足时停止生成，区分无资料和资料不足。",
+    prompt: "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。",
+    starterCode: "def choose_context(results, threshold):\n    pass\n",
+    solution: "def choose_context(results, threshold):\n    selected = [item for item in results if item[\"score\"] >= threshold]\n    return selected or None\n",
+    hints: ["阈值比较应包含等于边界。", "过滤后再判断是否为空。", "None 表示不能基于现有资料回答。"],
+    checks: [
+      { name: "阈值过滤", expression: "choose_context([{\"score\": 0.8}, {\"score\": 0.5}], 0.6) == [{\"score\": 0.8}]", failure: "只应保留达到阈值的结果。", kind: "behavior" },
+      { name: "无答案", expression: "choose_context([{\"score\": 0.4}], 0.6) is None", failure: "没有合格资料时必须返回 None。", kind: "behavior" },
+    ],
+  },
+  "langgraph:状态更新": {
+    summary: "让节点返回局部更新，由图运行时统一合并状态。",
+    prompt: "实现 add_observation(state, text)，返回只包含 observations 更新的字典，不直接修改输入 state。",
+    starterCode: "def add_observation(state, text):\n    pass\n",
+    solution: "def add_observation(state, text):\n    return {\"observations\": [*state.get(\"observations\", []), text]}\n",
+    hints: ["节点输出是更新，不是完整状态副本。", "用新列表保留旧观察。", "比较调用前后的 state，确认没有原地修改。"],
+    checks: [
+      { name: "追加观察", expression: "add_observation({\"observations\": [\"a\"]}, \"b\") == {\"observations\": [\"a\", \"b\"]}", failure: "节点应保留历史并追加新观察。", kind: "behavior" },
+      { name: "不修改输入", expression: "((lambda state: (add_observation(state, \"b\"), state))({\"observations\": [\"a\"]}))[1] == {\"observations\": [\"a\"]}", failure: "节点不应直接修改传入状态。", kind: "behavior" },
+    ],
+  },
+  "langgraph:条件路由": {
+    summary: "把状态判断和图的下一步名称分开，确保每个分支都可解释。",
+    prompt: "实现 route_review(state)：score >= 0.8 返回 finish，否则返回 revise；不要修改 state。",
+    starterCode: "def route_review(state):\n    pass\n",
+    solution: "def route_review(state):\n    return \"finish\" if state[\"score\"] >= 0.8 else \"revise\"\n",
+    hints: ["路由函数只返回有限的名称。", "先处理达到阈值的情况。", "用 0.8 和略低于 0.8 的输入分别验证。"],
+    checks: [
+      { name: "完成分支", expression: "route_review({\"score\": 0.8}) == \"finish\"", failure: "达到阈值应路由到 finish。", kind: "behavior" },
+      { name: "修订分支", expression: "route_review({\"score\": 0.79}) == \"revise\"", failure: "低于阈值应路由到 revise。", kind: "behavior" },
+    ],
+  },
+  "langgraph:循环终止": {
+    summary: "为循环同时设置业务完成条件和步数上限，避免图无限运行。",
+    prompt: "实现 should_continue(state)：完成或 attempts >= 3 时返回 end，否则返回 revise。",
+    starterCode: "def should_continue(state):\n    pass\n",
+    solution: "def should_continue(state):\n    if state[\"done\"] or state[\"attempts\"] >= 3:\n        return \"end\"\n    return \"revise\"\n",
+    hints: ["两个终止原因都要覆盖。", "先判断 done，再检查 attempts 上限。", "测试 0、2、3 次尝试以及 done=True。"],
+    checks: [
+      { name: "完成即停", expression: "should_continue({\"done\": True, \"attempts\": 0}) == \"end\"", failure: "业务完成后不能继续循环。", kind: "behavior" },
+      { name: "上限即停", expression: "should_continue({\"done\": False, \"attempts\": 3}) == \"end\" and should_continue({\"done\": False, \"attempts\": 2}) == \"revise\"", failure: "循环必须在三次尝试后停止。", kind: "behavior" },
+    ],
+  },
+  "langgraph:thread_id": {
+    summary: "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
+    prompt: "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。",
+    starterCode: "def get_thread_state(store, thread_id):\n    pass\n",
+    solution: "def get_thread_state(store, thread_id):\n    return store.get(thread_id)\n",
+    hints: ["把 thread_id 当作唯一键。", "不要遍历后猜测最相近的会话。", "用两个线程和一个未知 id 验证隔离。"],
+    checks: [
+      { name: "线程隔离", expression: "get_thread_state({\"a\": {\"count\": 1}, \"b\": {\"count\": 2}}, \"b\") == {\"count\": 2}", failure: "应只返回指定 thread_id 的状态。", kind: "behavior" },
+      { name: "未知线程", expression: "get_thread_state({\"a\": {\"count\": 1}}, \"missing\") is None", failure: "未知 thread_id 应明确返回 None。", kind: "behavior" },
+    ],
+  },
+};
+
 function generatedLesson(track: CourseTrack, index: number, stageId: string, project: boolean): CourseLesson {
   const source = SOURCES[track.id];
   const id = `${track.id}-lesson-${String(index).padStart(2, "0")}`;
   const previous = track.lessons[index - 1]?.id;
   const topic = TOPICS[track.id][index % TOPICS[track.id].length];
-  const topicSpec = track.id === "python" ? PYTHON_TOPIC_SPECS[topic] : undefined;
+  const topicSpec = track.id === "python" ? PYTHON_TOPIC_SPECS[topic] : FRAMEWORK_TOPIC_SPECS[`${track.id}:${topic}`];
   const exercise = track.id === "python"
     ? { starterCode: "value = 2\nresult = None", solution: "value = 2\nresult = value * 3" }
     : track.id === "langchain-rag"
