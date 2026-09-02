@@ -233,6 +233,8 @@ class ServiceTest(unittest.TestCase):
                 result = dispatch_request({"method": "personalization.next", "params": {"lessonId": "loops", "seed": 2}}, storage, BUNDLE)
                 self.assertEqual(result["recommendation"]["mistakeCodes"], ["missing-loop"])
                 self.assertEqual(result["exercise"]["familyId"], "python-loops-v1")
+                self.assertIn("sum even values", result["exercise"]["prompt"])
+                self.assertEqual(len(result["exercise"]["hints"]), 3)
                 with self.assertRaisesRegex(ValueError, "重复"):
                     dispatch_request({"method": "personalization.next", "params": {"lessonId": "loops", "seed": 2}}, storage, BUNDLE)
                 with self.assertRaisesRegex(ValueError, "未找到"):
