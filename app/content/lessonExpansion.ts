@@ -177,7 +177,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const graphDetail = track.id === "langgraph" && ["StateGraph", "Checkpoint", "Interrupt", "恢复执行"].includes(topic);
   return {
     id, stageId, order: index + 1, title: topicSpec ? `${topic}：写出可验证的实现` : `${topic}：从概念到练习（第 ${index + 1} 节）`,
-    kicker: `${track.shortTitle} 学习`, summary: ragDetail ? `把 ${topic} 放进 indexing → retrieval 数据流，比较召回结果并保留来源。` : graphDetail ? `围绕 ${topic} 描述 State 输入、节点更新和恢复边界。` : `理解 ${topic} 的输入、处理过程和边界，并完成一个可验证练习。`, minutes: 35,
+    kicker: `${track.shortTitle} 学习`, summary: topicSpec?.summary ?? (ragDetail ? `把 ${topic} 放进 indexing → retrieval 数据流，比较召回结果并保留来源。` : graphDetail ? `围绕 ${topic} 描述 State 输入、节点更新和恢复边界。` : `理解 ${topic} 的输入、处理过程和边界，并完成一个可验证练习。`), minutes: 35,
     prerequisites: previous ? [previous] : [], difficulty: index < 3 ? "beginner" : index < 8 ? "intermediate" : "advanced",
     tags: [track.id, `stage-${stageId}`], guide: [
       { kind: "概念入门", title: "先建立心智模型", body: "明确输入、处理步骤和输出，不把框架魔法当作黑盒。", bullets: ["写出输入", "标出状态", "说明输出"], example: "input -> process -> output" },
