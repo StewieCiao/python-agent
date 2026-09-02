@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "fb01542eec4b39b0d0472f82274100c51c0b3b67cdf5bd151cd810f3e0b215e9",
+  "catalogHash": "ba2da970e2295beb21d17f6fa3b1e06a17a6339e4d06a596d8d46bd756502af3",
   "familyHash": "a7f21ad0eeed56e358276823559163da88ed30f1fffc5e6082b68cf4bfea7e5a",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -10392,12 +10392,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“结构化输出迁移练习 3”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“结构化输出迁移练习 3：从概念到练习（第 43 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
@@ -10480,12 +10480,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“Runnable 组合迁移练习 3”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“Runnable 组合迁移练习 3：从概念到练习（第 44 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
@@ -10568,12 +10568,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“模型配置迁移练习 3”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“模型配置迁移练习 3：从概念到练习（第 45 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
@@ -10656,12 +10656,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "prompt": "阶段项目：围绕“文档加载迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
               "hints": [
-                "先定义统一的 Document 形状。",
-                "清洗正文后再判断是否为空。",
-                "来源放入 metadata，而不是丢在正文里。"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "def normalize_documents(records):\n    documents = []\n    for record in records:\n        text = record[\"text\"].strip()\n        if text:\n            documents.append({\"text\": text, \"metadata\": {\"source\": record[\"source\"]}})\n    return documents\n"
             },
@@ -14167,12 +14167,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“并行分支迁移练习 2”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“并行分支迁移练习 2：从概念到练习（第 36 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
@@ -14255,12 +14255,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“Supervisor迁移练习 2”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“Supervisor迁移练习 2：从概念到练习（第 37 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
@@ -14343,12 +14343,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“多 Agent 协作迁移练习 2”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“多 Agent 协作迁移练习 2：从概念到练习（第 38 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
@@ -14431,12 +14431,12 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“人工审核迁移练习 2”练习并通过行为检查。",
+              "prompt": "阶段项目：围绕“人工审核迁移练习 2：从概念到练习（第 39 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先拆成一个能独立运行的最小里程碑。",
+                "让每个中间结果可观察，并为失败保留真实原因。",
+                "最后用未出现在示例中的输入和边界情况回归。"
               ],
               "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },

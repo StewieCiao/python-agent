@@ -400,6 +400,11 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
       if (!lesson.project) { lesson.project = true; projects += 1; }
     }
   }
+  for (const lesson of lessons) {
+    if (!lesson.project || !lesson.id.includes("-lesson-")) continue;
+    lesson.exercise.prompt = `阶段项目：围绕“${lesson.title}”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。`;
+    lesson.exercise.hints = ["先拆成一个能独立运行的最小里程碑。", "让每个中间结果可观察，并为失败保留真实原因。", "最后用未出现在示例中的输入和边界情况回归。"];
+  }
   const projectIdsByStage = new Map<string, string>();
   for (const project of lessons.filter(({ project }) => project)) {
     if (!projectIdsByStage.has(project.stageId)) projectIdsByStage.set(project.stageId, project.id);
