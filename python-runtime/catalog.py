@@ -6,7 +6,7 @@ from pathlib import Path
 
 SCHEMA_VERSION = "stewie-catalog-v1"
 HASH_PATTERN = re.compile(r"^[0-9a-f]{64}$")
-SNAPSHOT_KEYS = {"schemaVersion", "catalogHash", "familyHash", "catalog", "checks"}
+SNAPSHOT_KEYS = {"schemaVersion", "catalogHash", "familyHash", "catalog", "checks", "families"}
 
 
 def _sha256_json(value):
@@ -21,15 +21,15 @@ def load_learning_bundle(path):
         raise ValueError("learning-service.json 顶层结构无效")
     if bundle["schemaVersion"] != SCHEMA_VERSION:
         raise ValueError("learning-service.json schema version 无效")
-    if not isinstance(bundle["catalog"], dict) or not isinstance(bundle["checks"], dict):
-        raise ValueError("learning-service.json catalog/checks 无效")
+    if not isinstance(bundle["catalog"], dict) or not isinstance(bundle["checks"], dict) or not isinstance(bundle["families"], dict):
+        raise ValueError("learning-service.json catalog/checks/families 无效")
     if not HASH_PATTERN.fullmatch(bundle["catalogHash"]):
         raise ValueError("learning-service.json catalogHash 格式无效")
     if not HASH_PATTERN.fullmatch(bundle["familyHash"]):
         raise ValueError("learning-service.json familyHash 格式无效")
     if _sha256_json(bundle["catalog"]) != bundle["catalogHash"]:
         raise ValueError("learning-service.json catalogHash 校验失败")
-    if _sha256_json(bundle["checks"]) != bundle["familyHash"]:
+    if _sha256_json({"checks": bundle["checks"], "families": bundle["families"]}) != bundle["familyHash"]:
         raise ValueError("learning-service.json familyHash 校验失败")
     lesson_ids = {
         lesson["id"]
@@ -40,4 +40,3 @@ def load_learning_bundle(path):
     if set(bundle["checks"]) != lesson_ids:
         raise ValueError("learning-service.json checks 与课程 id 不一致")
     return bundle
-

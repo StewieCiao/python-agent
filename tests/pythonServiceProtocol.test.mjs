@@ -24,7 +24,7 @@ const HEALTH_RESULT = {
   catalog: {
     schemaVersion: "stewie-catalog-v1",
     catalogHash: "f0c4890684ad7f0b960b4c476a0f0d12d3382ef74efc4641b99937c5c1b80af2",
-    familyHash: "d027066a7cc1caf17663ae84138d42f40a914de9b87f1bf071f4d1b3a71e6ef6",
+    familyHash: "c2e82cbbd701b3262578c84729b68a96f3215f4337a3a09c0db80e6a756fbb03",
   },
 };
 const DATABASE_PATH = join("Library", "Application Support", "Stewie LearnOS", "stewie.db");

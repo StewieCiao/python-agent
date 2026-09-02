@@ -205,7 +205,7 @@ test("build-learning 生成两个带真实 catalog/family 哈希的确定性快�
   assert.deepEqual(serviceSnapshot.catalog, publicSnapshot.catalog);
   assert.equal(publicSnapshot.catalogHash, sha256(canonicalJson(publicSnapshot.catalog)));
   assert.equal(serviceSnapshot.catalogHash, publicSnapshot.catalogHash);
-  assert.equal(publicSnapshot.familyHash, sha256(canonicalJson(serviceSnapshot.checks)));
+  assert.equal(publicSnapshot.familyHash, sha256(canonicalJson({ checks: serviceSnapshot.checks, families: serviceSnapshot.families })));
   assert.equal(serviceSnapshot.familyHash, publicSnapshot.familyHash);
   assert.deepEqual(
     serviceSnapshot.checks,

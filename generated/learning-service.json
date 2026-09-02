@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
   "catalogHash": "f0c4890684ad7f0b960b4c476a0f0d12d3382ef74efc4641b99937c5c1b80af2",
-  "familyHash": "d027066a7cc1caf17663ae84138d42f40a914de9b87f1bf071f4d1b3a71e6ef6",
+  "familyHash": "c2e82cbbd701b3262578c84729b68a96f3215f4337a3a09c0db80e6a756fbb03",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -3970,6 +3970,120 @@
         ]
       }
     ]
+  },
+  "families": {
+    "python-output-v1": {
+      "id": "python-output-v1",
+      "lessonIds": [
+        "first-output"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-line",
+        "missing-expression"
+      ],
+      "constraints": [
+        "two output lines",
+        "second print contains multiplication"
+      ]
+    },
+    "python-loops-v1": {
+      "id": "python-loops-v1",
+      "lessonIds": [
+        "loops"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "missing-loop",
+        "wrong-boundary"
+      ],
+      "constraints": [
+        "sum even values",
+        "one loop in target function"
+      ]
+    },
+    "python-lists-v1": {
+      "id": "python-lists-v1",
+      "lessonIds": [
+        "lists"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-filter",
+        "wrong-cap"
+      ],
+      "constraints": [
+        "return a transformed list",
+        "preserve input order"
+      ]
+    },
+    "python-dictionaries-v1": {
+      "id": "python-dictionaries-v1",
+      "lessonIds": [
+        "dictionaries"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "hard-coded-key",
+        "wrong-count"
+      ],
+      "constraints": [
+        "count every input key",
+        "support unseen keys"
+      ]
+    },
+    "python-exceptions-v1": {
+      "id": "python-exceptions-v1",
+      "lessonIds": [
+        "exceptions"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-handler",
+        "swallowed-type-error"
+      ],
+      "constraints": [
+        "catch ValueError only",
+        "let TypeError escape"
+      ]
+    },
+    "python-decorators-v1": {
+      "id": "python-decorators-v1",
+      "lessonIds": [
+        "decorators"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "lost-kwargs",
+        "wrong-call-count"
+      ],
+      "constraints": [
+        "preserve positional and keyword arguments",
+        "call wrapped function twice"
+      ]
+    },
+    "python-expense-v1": {
+      "id": "python-expense-v1",
+      "lessonIds": [
+        "project-expense"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "hard-coded-category",
+        "extra-traversal"
+      ],
+      "constraints": [
+        "aggregate arbitrary categories",
+        "one loop in summarize"
+      ]
+    }
   },
   "checks": {
     "first-output": [

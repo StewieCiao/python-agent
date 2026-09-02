@@ -27,7 +27,7 @@ class CatalogTest(unittest.TestCase):
         )
         self.assertEqual(
             bundle["familyHash"],
-            hashlib.sha256(canonical_json(bundle["checks"]).encode("utf-8")).hexdigest(),
+            hashlib.sha256(canonical_json({"checks": bundle["checks"], "families": bundle["families"]}).encode("utf-8")).hexdigest(),
         )
 
     def test_rejects_changed_catalog_without_new_hash(self):

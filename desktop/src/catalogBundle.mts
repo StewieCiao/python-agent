@@ -13,9 +13,10 @@ export function getPublicCatalogHashes(): { catalogHash: string; familyHash: str
   const checks = Object.fromEntries(
     catalog.tracks.flatMap((track) => track.lessons.map((lesson) => [lesson.id, lesson.browserChecks])),
   );
+  const families = snapshot.families;
   return {
     catalogHash: sha256(canonicalJson(catalog)),
-    familyHash: sha256(canonicalJson(checks)),
+    familyHash: sha256(canonicalJson({ checks, families })),
   };
 }
 
