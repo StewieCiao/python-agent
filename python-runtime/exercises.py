@@ -97,6 +97,10 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
         "validatorVersion": selection.get("validatorVersion", "1"),
         "prompt": prompt,
         "starterCode": "# 在这里完成练习\n",
-        "hints": ["先写最小可运行版本，再用题目给出的新输入验证。"],
+        "hints": [
+            "先定位本题 family 正在练习的核心能力。",
+            "把输入、处理中间值和返回结果分别写出来，再实现最小版本。",
+            "用题目给出的新输入和一个边界输入复测，确认没有写死示例。",
+        ],
         "parameters": {"seed": seed, "label": label, "values": values},
     }

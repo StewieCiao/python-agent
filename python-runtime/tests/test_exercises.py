@@ -81,6 +81,7 @@ class ExerciseTest(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(first["familyId"], "python-loops-v1")
         self.assertIn("输入", first["prompt"])
+        self.assertEqual(len(first["hints"]), 3)
         with self.assertRaisesRegex(ValueError, "重复"):
             generate_personalized_exercise(selection, 4, [first["prompt"]])
 
