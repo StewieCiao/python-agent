@@ -1017,6 +1017,12 @@ export function LearningApp() {
                       <span>{item.minutes} 分钟</span>
                       <span>{(item.browserChecks ?? []).length} 项验收</span>
                     </div>
+                    <ol className="project-milestones">
+                      <li>写清目标与输入输出</li>
+                      <li>完成最小可运行版本</li>
+                      <li>补边界测试并记录失败</li>
+                      <li>整理 README 与演示步骤</li>
+                    </ol>
                     <button disabled={isRunning} onClick={() => {
                       setActiveTrackId(track.id);
                       setActiveLearningLessonId(item.id);
