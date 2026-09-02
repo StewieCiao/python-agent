@@ -53,6 +53,11 @@ export type MasteryResult = {
   reviewQueue: string[];
 };
 
+export type PersonalizedExerciseResult = {
+  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown> };
+  recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
+};
+
 export type LegacyConversation = { courseId: string; lessonId: string; messages: PythonChatMessage[] };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -107,6 +112,11 @@ function isMasteryResult(value: unknown): value is MasteryResult {
     if (!isRecord(item) || !hasExactKeys(item, ["familyId", "score", "attempts", "mistakeCodes", "lastAttemptAt"])) return false;
     return typeof item.familyId === "string" && typeof item.score === "number" && Number.isFinite(item.score) && typeof item.attempts === "number" && Number.isInteger(item.attempts) && item.attempts >= 1 && Array.isArray(item.mistakeCodes) && item.mistakeCodes.every((code) => typeof code === "string") && typeof item.lastAttemptAt === "string";
   });
+}
+
+function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExerciseResult {
+  if (!isRecord(value) || !hasExactKeys(value, ["exercise", "recommendation"]) || !isRecord(value.exercise) || !isRecord(value.recommendation)) return false;
+  return hasExactKeys(value.exercise, ["familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters"]) && typeof value.exercise.familyId === "string" && typeof value.exercise.validatorVersion === "string" && typeof value.exercise.prompt === "string" && typeof value.exercise.starterCode === "string" && Array.isArray(value.exercise.hints) && value.exercise.hints.every((hint) => typeof hint === "string") && isRecord(value.exercise.parameters) && hasExactKeys(value.recommendation, ["lessonId", "familyId", "mistakeCodes", "difficulty"]) && typeof value.recommendation.lessonId === "string" && typeof value.recommendation.familyId === "string" && Array.isArray(value.recommendation.mistakeCodes) && value.recommendation.mistakeCodes.every((code) => typeof code === "string") && typeof value.recommendation.difficulty === "string";
 }
 
 function isPromptException(value: unknown): value is PromptException {
@@ -335,6 +345,10 @@ export class PythonServiceClient {
 
   getMastery(now: string): Promise<MasteryResult> {
     return this.#requestChecked("mastery.get", { now }, isMasteryResult, "掌握度响应结构无效");
+  }
+
+  getPersonalizedExercise(lessonId: string, seed: number): Promise<PersonalizedExerciseResult> {
+    return this.#requestChecked("personalization.next", { lessonId, seed }, isPersonalizedExerciseResult, "个性题响应结构无效");
   }
 
   importLegacyLearningState(

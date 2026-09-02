@@ -228,6 +228,15 @@ export async function loadMastery(now = new Date().toISOString()): Promise<Maste
   return unwrapDesktop(await desktop.getMastery(now));
 }
 
+export async function loadPersonalizedExercise(lessonId: string, seed: number): Promise<{
+  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown> };
+  recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
+}> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "个性题生成仅在桌面版可用。");
+  return unwrapDesktop(await desktop.getPersonalizedExercise(lessonId, seed));
+}
+
 export function platformServiceLabel(): string {
   if (typeof window !== "undefined" && window.stewie) return "内置桌面服务";
   return isDesktopBuild() ? "桌面安全桥接不可用" : LOCAL_SERVICE_URL;

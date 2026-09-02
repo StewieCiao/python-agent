@@ -226,6 +226,7 @@ void runStartupTask(app.whenReady().then(async () => {
   ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
   ipcMain.handle("mastery:record", trustedIpc((event: MasteryEvent) => activePythonService().recordMasteryAttempt(event)));
   ipcMain.handle("mastery:get", trustedIpc((now: string) => activePythonService().getMastery(now)));
+  ipcMain.handle("personalization:next", trustedIpc((lessonId: string, seed: number) => activePythonService().getPersonalizedExercise(lessonId, seed)));
   ipcMain.handle("learning:import-legacy", trustedIpc((state: PythonLearningState, rawSource: string) => {
     const sourceHash = createHash("sha256").update(rawSource, "utf8").digest("hex");
     return activePythonService().importLegacyLearningState(state, sourceHash);

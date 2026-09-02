@@ -1,7 +1,7 @@
 import type { PythonHealth } from "./pythonService.mjs";
 import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelConfig.ts";
 import type { ModelMessage } from "./modelClient.mjs";
-import type { LegacyConversation, MasteryEvent, MasteryResult, PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
+import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
   name: string;
@@ -40,6 +40,7 @@ export type StewieDesktopBridge = {
   saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;
   recordMasteryAttempt(event: MasteryEvent): Promise<DesktopIpcResult<{ recorded: true }>>;
   getMastery(now: string): Promise<DesktopIpcResult<MasteryResult>>;
+  getPersonalizedExercise(lessonId: string, seed: number): Promise<DesktopIpcResult<PersonalizedExerciseResult>>;
   importLegacyLearningState(state: PythonLearningState, rawSource: string): Promise<DesktopIpcResult<{
     imported: boolean;
     state: PythonLearningState;
