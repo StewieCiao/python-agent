@@ -17,6 +17,7 @@ def select_family(bundle, lesson_id, mistake_codes):
         return {
             "lessonId": lesson_id,
             "familyId": family["id"],
+            "validatorVersion": family["validatorVersion"],
             "difficulty": family["difficulty"],
             "mistakeCodes": list(mistake_codes),
             "constraints": list(family["constraints"]),
@@ -39,3 +40,46 @@ def validate_generated_exercise(family, candidate):
     if not isinstance(candidate["hints"], list) or not all(isinstance(hint, str) and hint.strip() for hint in candidate["hints"]):
         raise ValueError("题目字段无效")
     return {"accepted": False, "reason": "需要真实 family 验证器"}
+
+
+_VARIANTS = {
+    "python-loops-v1": [
+        ("输入 [14, 3, 8, 11]", "[14, 3, 8, 11]"),
+        ("输入 [5, 12, 17, 20]", "[5, 12, 17, 20]"),
+        ("输入 [-4, 7, 0, 9]", "[-4, 7, 0, 9]"),
+    ],
+    "python-lists-v1": [
+        ("输入 [41, 60, 99]", "[41, 60, 99]"),
+        ("输入 [58, 76, 101]", "[58, 76, 101]"),
+        ("输入 [0, 64, 97]", "[0, 64, 97]"),
+    ],
+    "python-dictionaries-v1": [
+        ("输入 ['go', 'py', 'go', 'rs']", "['go', 'py', 'go', 'rs']"),
+        ("输入 ['js', 'ts', 'js', 'go', 'ts']", "['js', 'ts', 'js', 'go', 'ts']"),
+        ("输入 ['rust', 'go', 'rust']", "['rust', 'go', 'rust']"),
+    ],
+    "python-output-v1": [("计算 9 * 6", "9 * 6"), ("计算 11 * 5", "11 * 5"), ("计算 12 * 4", "12 * 4")],
+    "python-exceptions-v1": [("文本 '42'", "'42'"), ("文本 'oops'", "'oops'"), ("文本 '3.5'", "'3.5'")],
+    "python-decorators-v1": [("调用 multiply(3, factor=4)", "3, factor=4"), ("调用 multiply(5, factor=2)", "5, factor=2"), ("调用 multiply(7, factor=3)", "7, factor=3")],
+    "python-expense-v1": [("记录 food=12、travel=30", "food=12, travel=30"), ("记录 books=18、food=9", "books=18, food=9"), ("记录 travel=7、tools=25", "travel=7, tools=25")],
+}
+
+
+def generate_personalized_exercise(selection, seed, recent_prompts):
+    if not isinstance(selection, dict) or not isinstance(seed, int) or not isinstance(recent_prompts, list):
+        raise ValueError("个性题选择输入无效")
+    family_id = selection.get("familyId")
+    variants = _VARIANTS.get(family_id)
+    if not variants:
+        raise ValueError("family 没有已审校的题目变体")
+    label, _ = variants[seed % len(variants)]
+    prompt = f"针对 {label} 完成题目要求，并保留 family 的教学约束。"
+    if prompt in recent_prompts:
+        raise ValueError("生成题目与最近练习重复")
+    return {
+        "familyId": family_id,
+        "validatorVersion": selection.get("validatorVersion", "1"),
+        "prompt": prompt,
+        "starterCode": "# 在这里完成练习\n",
+        "hints": ["先写最小可运行版本，再用题目给出的新输入验证。"],
+    }

@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from exercises import select_family, validate_generated_exercise
+from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
 
 
 class ExerciseTest(unittest.TestCase):
@@ -25,6 +25,7 @@ class ExerciseTest(unittest.TestCase):
         self.assertEqual(selected["familyId"], "python-loops-v1")
         self.assertEqual(selected["mistakeCodes"], ["wrong-boundary"])
         self.assertEqual(selected["difficulty"], "beginner")
+        self.assertEqual(selected["validatorVersion"], "1")
 
     def test_select_family_rejects_unknown_or_invalid_mistake(self):
         bundle = {"families": {}}
@@ -59,6 +60,22 @@ class ExerciseTest(unittest.TestCase):
         invalid["prompt"] = ""
         with self.assertRaisesRegex(ValueError, "题目字段"):
             validate_generated_exercise(family, invalid)
+
+    def test_personalized_variant_is_deterministic_and_not_recent_duplicate(self):
+        bundle = {"families": {
+            "python-loops-v1": {
+                "id": "python-loops-v1", "lessonIds": ["loops"], "difficulty": "beginner",
+                "validatorVersion": "1", "mistakeCodes": ["missing-loop"], "constraints": ["sum even values"],
+            }
+        }}
+        selection = select_family(bundle, "loops", ["missing-loop"])
+        first = generate_personalized_exercise(selection, 4, [])
+        second = generate_personalized_exercise(selection, 4, [])
+        self.assertEqual(first, second)
+        self.assertEqual(first["familyId"], "python-loops-v1")
+        self.assertIn("输入", first["prompt"])
+        with self.assertRaisesRegex(ValueError, "重复"):
+            generate_personalized_exercise(selection, 4, [first["prompt"]])
 
 
 if __name__ == "__main__":
