@@ -1002,8 +1002,8 @@ export function LearningApp() {
           <section className="library-view">
             <div className="library-heading">
               <span>BUILD TO LEARN</span>
-              <h2>把范式拼成真正可运行的 Agent。</h2>
-              <p>从工具调用到旅行助手与 DeepResearch：仍然是读契约、写代码、看真实反馈、逐项通过测试。</p>
+              <h2>把知识变成真正可交付的项目。</h2>
+              <p>从 Python 工具到 RAG 与 LangGraph 工作流：读契约、做最小实现、看真实反馈，再整理测试和演示。</p>
             </div>
             <div className="project-grid">
               {learningTracks.flatMap((track) => track.lessons.filter((item) => item.project).map((item) => ({ track, item }))).map(({ track, item }) => {
