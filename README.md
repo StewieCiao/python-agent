@@ -1,6 +1,6 @@
-# Python → Agent
+# Stewie LearnOS
 
-一个仅在本机使用的智能体开发闯关工作台：学 Python → 写组件 → 运行判题 → 看反馈 → 复习错题 → 构建 Agent。
+一个本机优先的个人学习站：学习 Python、LangChain/RAG 与 LangGraph，运行练习、复盘错题、生成个性化练习，并完成可写入简历的项目。
 
 ## 使用
 
@@ -15,9 +15,9 @@ npm run dev
 
 ## 单文件离线版
 
-直接双击项目根目录的 `Python-Agent-离线学习.html` 即可使用，不需要安装 Python、Node.js，也不需要启动本地服务器。
+直接双击项目根目录的 `Stewie-个人学习站-离线版.html` 即可使用，不需要安装 Python、Node.js，也不需要启动本地服务器。
 
-- 内含全部 25 关题目、提示、代码编辑区和参考答案
+- 内含 Python 64 节、LangChain/RAG 48 节、LangGraph 42 节课程地图、提示、项目和参考答案
 - 不加载外部资源，不发送网络请求，也不执行学习者代码
 - 草稿和完成进度只保存在当前浏览器；可通过“导出记录 / 导入记录”迁移到其他电脑
 - 参考答案默认折叠，建议完成练习后再展开对照
@@ -26,14 +26,15 @@ npm run dev
 
 ## 课程与反馈
 
-- 25 个关卡，从 Python 起步与工程能力，逐步进入 ReAct、Plan-and-Solve、Reflection、Memory/RAG、多 Agent 协作。
+- 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
 - 每关提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐行代码示例和阅读要点照顾零基础学习者。
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
-- Agent 关卡使用确定性的本地工具与模型响应模拟，不需要 API Key；重点先掌握循环、状态、工具契约和错误边界。
+- 桌面版可在模型设置中保存 OpenAI-compatible 配置；API Key 只进入操作系统安全存储，不回显给页面。
+- 桌面导师支持把本地多文档交给真实 Embedding 检索并返回来源；模型不可用时保留真实错误。
 - Python 在独立 Web Worker 中真实运行；无限循环超过 4 秒会被终止，页面不会冻结。
 - 反馈直接展示标准输出、标准错误、异常类型、行号、真实 traceback，以及每项测试的实际结果、期望结果、行为规则或教学构造。
-- 进度、草稿和错题只保存在当前浏览器的本地存储。
+- 进度、草稿和错题保存在本地；桌面版使用 SQLite，离线版使用浏览器本地存储。
 - “复制求助内容”会生成结构化 JSON 数据，保留本次运行的代码与反馈快照，默认要求 GPT 只给最小提示。
 
 ## 检查
