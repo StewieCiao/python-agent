@@ -138,3 +138,24 @@ test("schema validator rejects unsafe video domains and incomplete migrations", 
     /guide/,
   );
 });
+
+test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
+  const { pythonLessons } = await import("../app/content/python/index.ts");
+  assert.equal(pythonLessons.length, 25);
+  assert.deepEqual(
+    pythonLessons.map(({ id }) => id),
+    [
+      "first-output", "variables", "strings", "branches", "loops", "functions",
+      "lists", "dictionaries", "exceptions", "classes", "generators", "decorators",
+      "project-text", "project-expense", "project-tasks", "agent-tool-registry",
+      "agent-action-parser", "agent-react-loop", "agent-plan-solve", "agent-reflection",
+      "agent-memory-retrieval", "agent-handoff", "agent-travel-project",
+      "agent-deep-research-project", "agent-framework-capstone",
+    ],
+  );
+  for (const lesson of pythonLessons) {
+    assert.ok(lesson.guide.length >= 1);
+    assert.ok(lesson.exercise.solution);
+    assert.ok(lesson.browserChecks.length >= 1);
+  }
+});
