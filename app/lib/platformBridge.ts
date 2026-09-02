@@ -203,6 +203,31 @@ export async function importLearningData(): Promise<{ status: "cancelled" } | { 
   return unwrapDesktop(await desktop.importLearningData());
 }
 
+export type MasteryEvent = {
+  lessonId: string;
+  familyId: string;
+  outcome: "pass" | "fail";
+  mistakeCodes: string[];
+  createdAt: string;
+};
+
+export type MasteryResult = {
+  mastery: Record<string, { familyId: string; score: number; attempts: number; mistakeCodes: string[]; lastAttemptAt: string }>;
+  reviewQueue: string[];
+};
+
+export async function recordMasteryAttempt(event: MasteryEvent): Promise<void> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "掌握度记录仅在桌面版可用。");
+  unwrapDesktop(await desktop.recordMasteryAttempt(event));
+}
+
+export async function loadMastery(now = new Date().toISOString()): Promise<MasteryResult> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "掌握度读取仅在桌面版可用。");
+  return unwrapDesktop(await desktop.getMastery(now));
+}
+
 export function platformServiceLabel(): string {
   if (typeof window !== "undefined" && window.stewie) return "内置桌面服务";
   return isDesktopBuild() ? "桌面安全桥接不可用" : LOCAL_SERVICE_URL;

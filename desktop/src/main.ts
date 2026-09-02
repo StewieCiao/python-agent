@@ -32,6 +32,7 @@ import {
   type LegacyConversation,
   type PythonChatMessage,
   type PythonLearningState,
+  type MasteryEvent,
   type PythonServiceClient,
 } from "./pythonService.mjs";
 import {
@@ -223,6 +224,8 @@ void runStartupTask(app.whenReady().then(async () => {
   })));
   ipcMain.handle("learning:get", trustedIpc(() => activePythonService().getLearningState()));
   ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
+  ipcMain.handle("mastery:record", trustedIpc((event: MasteryEvent) => activePythonService().recordMasteryAttempt(event)));
+  ipcMain.handle("mastery:get", trustedIpc((now: string) => activePythonService().getMastery(now)));
   ipcMain.handle("learning:import-legacy", trustedIpc((state: PythonLearningState, rawSource: string) => {
     const sourceHash = createHash("sha256").update(rawSource, "utf8").digest("hex");
     return activePythonService().importLegacyLearningState(state, sourceHash);

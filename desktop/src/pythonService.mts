@@ -40,6 +40,19 @@ export type PythonChatMessage = {
   createdAt: string;
 };
 
+export type MasteryEvent = {
+  lessonId: string;
+  familyId: string;
+  outcome: "pass" | "fail";
+  mistakeCodes: string[];
+  createdAt: string;
+};
+
+export type MasteryResult = {
+  mastery: Record<string, { familyId: string; score: number; attempts: number; mistakeCodes: string[]; lastAttemptAt: string }>;
+  reviewQueue: string[];
+};
+
 export type LegacyConversation = { courseId: string; lessonId: string; messages: PythonChatMessage[] };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -85,6 +98,15 @@ function isLearningState(value: unknown): value is PythonLearningState {
     Object.values(value.drafts).every((item) => typeof item === "string") &&
     Array.isArray(value.mistakes) && value.mistakes.every(isMistake)
   );
+}
+
+function isMasteryResult(value: unknown): value is MasteryResult {
+  if (!isRecord(value) || !hasExactKeys(value, ["mastery", "reviewQueue"]) || !isRecord(value.mastery) || !Array.isArray(value.reviewQueue)) return false;
+  if (!value.reviewQueue.every((id) => typeof id === "string")) return false;
+  return Object.values(value.mastery).every((item) => {
+    if (!isRecord(item) || !hasExactKeys(item, ["familyId", "score", "attempts", "mistakeCodes", "lastAttemptAt"])) return false;
+    return typeof item.familyId === "string" && typeof item.score === "number" && Number.isFinite(item.score) && typeof item.attempts === "number" && Number.isInteger(item.attempts) && item.attempts >= 1 && Array.isArray(item.mistakeCodes) && item.mistakeCodes.every((code) => typeof code === "string") && typeof item.lastAttemptAt === "string";
+  });
 }
 
 function isPromptException(value: unknown): value is PromptException {
@@ -305,6 +327,14 @@ export class PythonServiceClient {
       isLearningState,
       "学习状态响应结构无效",
     );
+  }
+
+  recordMasteryAttempt(event: MasteryEvent): Promise<{ recorded: true }> {
+    return this.#requestChecked("mastery.record", { event }, (value): value is { recorded: true } => isRecord(value) && hasExactKeys(value, ["recorded"]) && value.recorded === true, "掌握度记录响应结构无效");
+  }
+
+  getMastery(now: string): Promise<MasteryResult> {
+    return this.#requestChecked("mastery.get", { now }, isMasteryResult, "掌握度响应结构无效");
   }
 
   importLegacyLearningState(
