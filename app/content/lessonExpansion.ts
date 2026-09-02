@@ -31,8 +31,8 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
     solution: "def make_counter(start):\n    current = start\n    def next_value():\n        nonlocal current\n        current += 1\n        return current\n    return next_value\n",
     hints: ["先找出需要跨调用保留的值。", "把状态放在外层函数的局部作用域。", "内部函数修改外层变量时需要声明 nonlocal。"],
     checks: [
-      { name: "连续调用递增", expression: "_counter_probe(make_counter, 4) == [5, 6, 7]", failure: "同一个计数器应连续递增。", kind: "behavior" },
-      { name: "实例彼此隔离", expression: "_counter_isolated(make_counter)", failure: "两个计数器不能共享可变全局状态。", kind: "behavior" },
+      { name: "连续调用递增", expression: "((lambda counter: [counter(), counter(), counter()])(make_counter(4))) == [5, 6, 7]", failure: "同一个计数器应连续递增。", kind: "behavior" },
+      { name: "实例彼此隔离", expression: "((lambda a, b: (a(), b(), a(), b()))(make_counter(0), make_counter(10))) == (1, 11, 2, 12)", failure: "两个计数器不能共享可变全局状态。", kind: "behavior" },
     ],
   },
   "列表与切片": {
@@ -43,7 +43,7 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
     hints: ["切片格式是 start:stop:step。", "步长为 2 可以跳过一个元素。", "切片会产生新列表，检查空列表和单元素输入。"],
     checks: [
       { name: "保留顺序", expression: "take_every_other([10, 20, 30, 40, 50]) == [10, 30, 50]", failure: "应从首元素开始每隔一个取值。", kind: "behavior" },
-      { name: "不修改原列表", expression: "_preserves_input(take_every_other)", failure: "函数不应就地修改输入列表。", kind: "behavior" },
+      { name: "不修改原列表", expression: "((lambda items: (take_every_other(items), items))([10, 20, 30])) == ([10, 30], [10, 20, 30])", failure: "函数不应就地修改输入列表。", kind: "behavior" },
     ],
   },
   "字典聚合": {

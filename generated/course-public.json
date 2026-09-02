@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "30f1f9b6c1260b3234d73c4a3574da2552a2e2e94289317612e561e60dc51d6b",
-  "familyHash": "f8bad6fa2938311b4b50d18353f0801a7f3341044e648919726f68aa0ed71534",
+  "catalogHash": "643ad47a26a65dbbce33a16de1b381be66a79cfe8f5ed9617dea6942479f0137",
+  "familyHash": "81fab92f0e9ea91669344682a99a6d4dba811de55c4b8c07d3212b2c96b680e0",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2741,13 +2741,13 @@
             "browserChecks": [
               {
                 "name": "连续调用递增",
-                "expression": "_counter_probe(make_counter, 4) == [5, 6, 7]",
+                "expression": "((lambda counter: [counter(), counter(), counter()])(make_counter(4))) == [5, 6, 7]",
                 "failure": "同一个计数器应连续递增。",
                 "kind": "behavior"
               },
               {
                 "name": "实例彼此隔离",
-                "expression": "_counter_isolated(make_counter)",
+                "expression": "((lambda a, b: (a(), b(), a(), b()))(make_counter(0), make_counter(10))) == (1, 11, 2, 12)",
                 "failure": "两个计数器不能共享可变全局状态。",
                 "kind": "behavior"
               }
@@ -2835,7 +2835,7 @@
               },
               {
                 "name": "不修改原列表",
-                "expression": "_preserves_input(take_every_other)",
+                "expression": "((lambda items: (take_every_other(items), items))([10, 20, 30])) == ([10, 30], [10, 20, 30])",
                 "failure": "函数不应就地修改输入列表。",
                 "kind": "behavior"
               }
@@ -4507,13 +4507,13 @@
             "browserChecks": [
               {
                 "name": "连续调用递增",
-                "expression": "_counter_probe(make_counter, 4) == [5, 6, 7]",
+                "expression": "((lambda counter: [counter(), counter(), counter()])(make_counter(4))) == [5, 6, 7]",
                 "failure": "同一个计数器应连续递增。",
                 "kind": "behavior"
               },
               {
                 "name": "实例彼此隔离",
-                "expression": "_counter_isolated(make_counter)",
+                "expression": "((lambda a, b: (a(), b(), a(), b()))(make_counter(0), make_counter(10))) == (1, 11, 2, 12)",
                 "failure": "两个计数器不能共享可变全局状态。",
                 "kind": "behavior"
               }
@@ -4601,7 +4601,7 @@
               },
               {
                 "name": "不修改原列表",
-                "expression": "_preserves_input(take_every_other)",
+                "expression": "((lambda items: (take_every_other(items), items))([10, 20, 30])) == ([10, 30], [10, 20, 30])",
                 "failure": "函数不应就地修改输入列表。",
                 "kind": "behavior"
               }
