@@ -282,6 +282,19 @@ test("项目节点覆盖多个阶段并优先连接同阶段项目", async () =>
   }
 });
 
+test("自动生成项目课包含可交付验收契约", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const generatedProjects = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter(({ project, id }) => project && id.includes("-lesson-")));
+  assert.ok(generatedProjects.length >= 5);
+  for (const lesson of generatedProjects) {
+    assert.match(lesson.exercise.prompt, /阶段项目/);
+    assert.match(lesson.exercise.prompt, /失败状态/);
+    assert.match(lesson.exercise.prompt, /边界测试/);
+    assert.match(lesson.exercise.prompt, /README/);
+    assert.equal(lesson.exercise.hints.length, 3);
+  }
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
