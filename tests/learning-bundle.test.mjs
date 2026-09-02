@@ -240,6 +240,8 @@ test("完整课程地图达到三条路线的目标规模与项目数", async ()
     assert.equal(track.lessons.length, lessonCount, `${track.id} lesson 数量`);
     assert.equal(track.stages.length, stageCount, `${track.id} stage 数量`);
     assert.equal(track.lessons.filter(({ project }) => project).length, projectCount, `${track.id} project 数量`);
+    const projectIds = new Set(track.lessons.filter(({ project }) => project).map(({ id }) => id));
+    for (const lesson of track.lessons) assert.ok(lesson.projectLinks.every((id) => projectIds.has(id)), `${track.id}/${lesson.id} projectLinks 必须指向项目课`);
   }
 });
 

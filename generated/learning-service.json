@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "62715708536cbeead86df80644ce8d409bc2abf9a90be2640d91a710250acf93",
+  "catalogHash": "f4da14d64a8e05a44da24629d4b2c6bfce05c72b6993438f855caf5730db436d",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -203,7 +203,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "第一行输出“我的第一段 Python”；中英文之间有无空格都可以\n第二个 print() 的括号中直接写乘法表达式并输出 56；8*7、7*8，以及运算符两侧加空格都可以",
               "starterCode": "# 在这里写下你的第一段代码\nprint(\"你好，Python\")\n",
@@ -301,7 +303,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "创建变量 name，值为“小派”\n创建变量 level，值为 1\n输出：小派正在挑战第 1 关",
               "starterCode": "name = \"\"\nlevel = 0\n\nprint()\n",
@@ -399,7 +403,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 normalize_title(text)\n返回去除两端空格并转为小写的新字符串\n不要在函数内 print",
               "starterCode": "def normalize_title(text):\n    # 返回清理后的新字符串\n    pass\n",
@@ -486,7 +492,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现函数 grade(score)\n90 分及以上返回 A；60–89 返回 B；低于 60 返回 C",
               "starterCode": "def grade(score):\n    # 在这里完成分支\n    pass\n",
@@ -585,7 +593,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 sum_even(numbers)\n用 for 遍历传入序列\n返回其中所有偶数的总和",
               "starterCode": "def sum_even(numbers):\n    total = 0\n    # 用循环更新 total\n    return total\n",
@@ -683,7 +693,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现函数 shipping_fee(price, member)\n会员或满 99 元免运费\n其他情况返回 10\n返回数字，不在函数内 print",
               "starterCode": "def shipping_fee(price, member):\n    pass\n",
@@ -782,7 +794,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 improve_scores(scores)\n选出及格分数（>= 60）并各加 5 分，最高不超过 100\n使用列表推导式返回新列表",
               "starterCode": "def improve_scores(scores):\n    # 用一个列表推导式返回结果\n    pass\n",
@@ -881,7 +895,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 word_counts(words)\n返回每个单词及其出现次数组成的字典\n用 for 遍历输入，不提前写死任何单词键",
               "starterCode": "def word_counts(words):\n    counts = {}\n    # 遍历并统计\n    return counts\n",
@@ -980,7 +996,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 parse_age(text)\n有效整数返回 int\n仅当无法转为整数时返回 None\n不要捕获 Exception 或 BaseException",
               "starterCode": "def parse_age(text):\n    # 只处理可预期的输入错误\n    pass\n",
@@ -1089,7 +1107,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 Wallet 类，初始 balance 为 0\ndeposit(amount) 增加余额并返回新余额\namount <= 0 时抛出 ValueError",
               "starterCode": "class Wallet:\n    def __init__(self):\n        pass\n\n    def deposit(self, amount):\n        pass\n",
@@ -1187,7 +1207,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 even_numbers(limit)\n依次 yield 0 到 limit 以内的偶数\n不创建中间列表",
               "starterCode": "def even_numbers(limit):\n    pass\n",
@@ -1286,7 +1308,9 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 twice 装饰器\n被装饰函数每次调用两遍\n返回第二次调用的结果\n支持任意参数",
               "starterCode": "def twice(func):\n    # 返回包装函数\n    pass\n\n@twice\ndef add(a, b):\n    return a + b\n",
@@ -1675,7 +1699,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 ToolRegistry 类，实例内维护 tools 字典\nregister(name, func) 注册工具；重复名称抛出 ValueError\nexecute(name, payload) 使用 func(**payload) 调用；未知名称抛出 KeyError\n原样返回工具结果，不打印、不伪造成功",
               "starterCode": "class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        pass\n\n    def execute(self, name, payload):\n        pass\n",
@@ -1769,7 +1795,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 parse_action(text)\n忽略整段文本首尾空白，解析第一个 [ 与最后一个 ] 之间的完整内容\n合法输入返回 (name, payload)，payload 可以包含换行\n缺少动作名、方括号不完整或括号后还有内容时返回 (None, None)",
               "starterCode": "def parse_action(text):\n    # 返回 (action_name, payload)\n    pass\n",
@@ -1874,7 +1902,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 run_react(actions, tools, max_steps=5)\n工具动作通过 tools[name](payload) 执行，并把 action、input、observation 写入 history\n遇到 Finish 返回其中答案；未遇到则 answer 为 None\n返回 {'answer': ..., 'history': [...], 'steps': 实际读取动作数}\n未知工具保留真实 KeyError；最多处理 max_steps 个动作",
               "starterCode": "def parse_action(text):\n    text = text.strip()\n    if '[' not in text or not text.endswith(']'):\n        return None, None\n    name, payload = text[:-1].split('[', 1)\n    return (name, payload) if name else (None, None)\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    # 完成 Action → Observation 循环\n    pass\n",
@@ -1979,7 +2009,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 execute_plan(steps, executor)\n按输入顺序执行每个 {'id', 'task'} 步骤\nexecutor(task, context) 中的 context 是此前 id 到 result 的新字典\n返回 [{'id': id, 'result': result}, ...]；空计划返回 []",
               "starterCode": "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    # 逐步求解并更新 context\n    return results\n",
@@ -2073,7 +2105,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 reflection_loop(draft, evaluate, revise, max_rounds=3)\n每轮先调用 evaluate(draft)；True 时立即返回当前 draft\nFalse 时调用 revise(draft) 并计为一次改进，最多改进 max_rounds 次\nmax_rounds < 0 时抛出 ValueError；达到上限返回最后版本",
               "starterCode": "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    # 执行 → 评估 → 改进\n    pass\n",
@@ -2178,7 +2212,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 retrieve_memories(memories, query, limit=2)\nmemory 含 content 与 importance；按空白分词并忽略大小写\n只保留至少命中一个查询词的记忆\n依次按命中词数、importance 降序，最后按原始顺序；返回 content 列表\nlimit <= 0 或没有命中时返回 []",
               "starterCode": "def retrieve_memories(memories, query, limit=2):\n    # 计算关键词重叠并排序\n    pass\n",
@@ -2272,7 +2308,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "实现 handoff(sender, task, agents)\ntask 含 capability 与 description；agents 按顺序含 name 与 capabilities 列表\n选择第一个具备能力的 Agent，返回 {'from', 'to', 'task'}\n找不到匹配 Agent 时抛出 LookupError，不修改 task 或 agents",
               "starterCode": "def handoff(sender, task, agents):\n    # 找到第一个具备 task['capability'] 的 Agent\n    pass\n",
@@ -2662,7 +2700,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“作用域”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -2748,7 +2788,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“列表与切片”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -2834,7 +2876,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“字典聚合”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -2920,7 +2964,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“集合运算”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3006,7 +3052,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“异常边界”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3092,7 +3140,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“类与对象”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3178,7 +3228,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“生成器”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3264,7 +3316,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“装饰器”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3350,7 +3404,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“模块拆分”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3436,7 +3492,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“文件读写”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3522,7 +3580,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“测试设计”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3608,7 +3668,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“数据清洗”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3694,7 +3756,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“命令行工具”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3780,7 +3844,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“并发基础”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3866,7 +3932,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -3952,7 +4020,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“变量与类型”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4038,7 +4108,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“字符串处理”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4124,7 +4196,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“条件分支”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4210,7 +4284,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“循环与迭代”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4296,7 +4372,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“函数参数”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4382,7 +4460,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“作用域”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4468,7 +4548,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“列表与切片”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4554,7 +4636,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“字典聚合”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4640,7 +4724,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“集合运算”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4726,7 +4812,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“异常边界”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4812,7 +4900,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“类与对象”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4898,7 +4988,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“生成器”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -4984,7 +5076,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“装饰器”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5070,7 +5164,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“模块拆分”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5156,7 +5252,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“文件读写”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5242,7 +5340,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“测试设计”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5328,7 +5428,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“数据清洗”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5414,7 +5516,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“命令行工具”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5500,7 +5604,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“并发基础”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5586,7 +5692,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5672,7 +5780,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“变量与类型”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5758,7 +5868,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“字符串处理”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5844,7 +5956,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“条件分支”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -5930,7 +6044,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "project-text"
+            ],
             "exercise": {
               "prompt": "完成“循环与迭代”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
@@ -6583,7 +6699,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "画出并用函数名表达离线 indexing 与在线 retrieval 两条流程，说明每一步的失败状态。",
               "starterCode": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass",
@@ -6724,7 +6842,9 @@
               }
             ],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
               "starterCode": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)",
@@ -6824,7 +6944,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "为 RAG 工具定义输入、输出、允许失败和日志字段，确保任何失败都不会返回伪答案。",
               "starterCode": "def search_knowledge(query: str):\n    pass",
@@ -6915,7 +7037,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
               "starterCode": "topic = \"\"\nmessages = []",
@@ -7011,7 +7135,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。",
               "starterCode": "result = {}\nvalid = False",
@@ -7107,7 +7233,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
               "starterCode": "template = None\nmodel = None\nparser = None",
@@ -7195,7 +7323,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“混合检索”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7281,7 +7411,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“重排”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7367,7 +7499,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“引用生成”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7453,7 +7587,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“无答案边界”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7539,7 +7675,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“RAG 评估”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7625,7 +7763,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“追踪与观测”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7711,7 +7851,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“工具调用”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7797,7 +7939,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Agent 循环”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7883,7 +8027,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“多查询检索”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -7969,7 +8115,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“RAG 项目”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8055,7 +8203,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“消息角色”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8141,7 +8291,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Prompt 模板”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8227,7 +8379,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“结构化输出”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8313,7 +8467,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Runnable 组合”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8399,7 +8555,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“模型配置”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8485,7 +8643,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“文档加载”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8571,7 +8731,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“文本切分”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8657,7 +8819,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Embedding”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8743,7 +8907,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“向量存储”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8829,7 +8995,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“相似度检索”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -8915,7 +9083,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“混合检索”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9001,7 +9171,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“重排”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9087,7 +9259,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“引用生成”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9173,7 +9347,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“无答案边界”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9259,7 +9435,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“RAG 评估”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9345,7 +9523,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“追踪与观测”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9431,7 +9611,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“工具调用”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9517,7 +9699,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Agent 循环”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9603,7 +9787,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“多查询检索”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9689,7 +9875,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“RAG 项目”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9775,7 +9963,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“消息角色”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9861,7 +10051,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Prompt 模板”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -9947,7 +10139,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“结构化输出”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10033,7 +10227,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Runnable 组合”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10119,7 +10315,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“模型配置”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10205,7 +10403,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“文档加载”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10291,7 +10491,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“文本切分”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10377,7 +10579,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "memory-modernization"
+            ],
             "exercise": {
               "prompt": "完成“Embedding”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10866,7 +11070,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
               "starterCode": "def approve_email(state):\n    pass",
@@ -10934,7 +11140,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "把三个研究主题并行分发，使用 reducer 汇总 findings，再生成报告。",
               "starterCode": "def fan_out(state):\n    pass",
@@ -11022,7 +11230,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "列出研究助手的 thread state、Store memory、节点和人工中断点，保证两类状态不混用。",
               "starterCode": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\"",
@@ -11097,7 +11307,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“thread_id”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11183,7 +11395,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“短期记忆”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11269,7 +11483,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Store”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11355,7 +11571,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“长期记忆”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11441,7 +11659,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Interrupt”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11527,7 +11747,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“恢复执行”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11613,7 +11835,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“流式事件”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11699,7 +11923,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“子图”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11785,7 +12011,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“并行分支”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11871,7 +12099,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Supervisor”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -11957,7 +12187,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12043,7 +12275,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“人工审核”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12129,7 +12363,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Graph 项目”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12215,7 +12451,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“StateGraph”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12301,7 +12539,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“节点与边”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12387,7 +12627,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“状态更新”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12473,7 +12715,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“条件路由”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12559,7 +12803,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“循环终止”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12645,7 +12891,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Reducer”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12731,7 +12979,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Checkpoint”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12817,7 +13067,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“thread_id”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12903,7 +13155,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“短期记忆”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -12989,7 +13243,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Store”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13075,7 +13331,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“长期记忆”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13161,7 +13419,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Interrupt”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13247,7 +13507,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“恢复执行”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13333,7 +13595,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“流式事件”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13419,7 +13683,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“子图”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13505,7 +13771,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“并行分支”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13591,7 +13859,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Supervisor”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13677,7 +13947,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13763,7 +14035,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“人工审核”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13849,7 +14123,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“Graph 项目”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -13935,7 +14211,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“StateGraph”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -14021,7 +14299,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "graph-foundations"
+            ],
             "exercise": {
               "prompt": "完成“节点与边”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",

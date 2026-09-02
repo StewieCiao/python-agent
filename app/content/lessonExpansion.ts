@@ -53,5 +53,9 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     if (projects < expansion.projectCount && !lesson.project) { lesson.project = true; projects += 1; }
     stage.lessonIds.push(lesson.id);
   }
+  const projectIds = lessons.filter(({ project }) => project).map(({ id }) => id);
+  for (const lesson of lessons) {
+    if (!lesson.project && projectIds.length > 0 && lesson.projectLinks.length === 0) lesson.projectLinks = [projectIds[0]];
+  }
   return { ...track, stages, lessons };
 }
