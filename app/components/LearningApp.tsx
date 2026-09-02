@@ -735,6 +735,12 @@ export function LearningApp() {
                       <strong>{personalized.prompt}</strong>
                       <pre><code>{personalized.starterCode}</code></pre>
                       {personalized.hints.map((hint) => <p key={hint}>提示：{hint}</p>)}
+                      <button type="button" onClick={() => {
+                        codeRef.current = personalized.starterCode;
+                        setCode(personalized.starterCode);
+                        setRunRecord(null);
+                        setNotice("个性题已载入当前编辑器，可以开始运行。");
+                      }}>载入编辑器</button>
                     </div>}
                   </div>
                 </div>
