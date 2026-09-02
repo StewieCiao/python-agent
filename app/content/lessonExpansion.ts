@@ -54,8 +54,11 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     const stage = stages[lesson.order % stages.length];
     lesson.stageId = stage.id;
     lesson.order = lessons.indexOf(lesson) + 1;
-    if (projects < expansion.projectCount && !lesson.project) { lesson.project = true; projects += 1; }
     stage.lessonIds.push(lesson.id);
+  }
+  for (const lesson of [...lessons].reverse()) {
+    if (projects >= expansion.projectCount) break;
+    if (!lesson.project) { lesson.project = true; projects += 1; }
   }
   const projectIds = lessons.filter(({ project }) => project).map(({ id }) => id);
   for (const lesson of lessons) {

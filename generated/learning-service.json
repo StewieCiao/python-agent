@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "24d7782533c117be65826c43ca9ec3bd1c53c3021aeba8504452ac64432ce479",
+  "catalogHash": "6a636ea1783b557b2ef21aafbbbc4be04d8e0b419121aa95015e96bb035c771f",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6363,8 +6363,10 @@
                 }
               }
             ],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langchain-rag-lesson-44"
+            ],
             "exercise": {
               "prompt": "分别写出 thread_id 短期记忆和 user_id 长期记忆的适用场景，并把课程中的 JSON 历史准确重命名。",
               "starterCode": "memory_terms = {\n    \"json_history\": \"\",\n    \"checkpointer\": \"\",\n    \"store\": \"\",\n}",
@@ -6474,8 +6476,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langchain-rag-lesson-44"
+            ],
             "exercise": {
               "prompt": "加载 PDF 后打印第一页正文长度、source 与 page 元数据，确认数据可追踪。",
               "starterCode": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页",
@@ -6569,8 +6573,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langchain-rag-lesson-44"
+            ],
             "exercise": {
               "prompt": "对三段带 source 元数据的文本切分并检索，输出命中文本和来源。",
               "starterCode": "# 建立 chunks 和 vector_store 后检索“退款”",
@@ -6664,8 +6670,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langchain-rag-lesson-44"
+            ],
             "exercise": {
               "prompt": "实现 format_docs，输出正文与 source；资料为空时返回明确的“没有检索到资料”。",
               "starterCode": "def format_docs(docs):\n    pass",
@@ -6769,7 +6777,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "画出并用函数名表达离线 indexing 与在线 retrieval 两条流程，说明每一步的失败状态。",
@@ -6923,7 +6931,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
@@ -7036,7 +7044,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "为 RAG 工具定义输入、输出、允许失败和日志字段，确保任何失败都不会返回伪答案。",
@@ -7129,7 +7137,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
@@ -7227,7 +7235,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。",
@@ -7325,7 +7333,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
@@ -7415,7 +7423,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“混合检索”练习并通过行为检查。",
@@ -7503,7 +7511,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“重排”练习并通过行为检查。",
@@ -7591,7 +7599,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“引用生成”练习并通过行为检查。",
@@ -7679,7 +7687,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“无答案边界”练习并通过行为检查。",
@@ -7767,7 +7775,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“RAG 评估”练习并通过行为检查。",
@@ -7855,7 +7863,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“追踪与观测”练习并通过行为检查。",
@@ -7943,7 +7951,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“工具调用”练习并通过行为检查。",
@@ -8031,7 +8039,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Agent 循环”练习并通过行为检查。",
@@ -8119,7 +8127,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“多查询检索”练习并通过行为检查。",
@@ -8207,7 +8215,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“RAG 项目”练习并通过行为检查。",
@@ -8295,7 +8303,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“消息角色”练习并通过行为检查。",
@@ -8383,7 +8391,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Prompt 模板”练习并通过行为检查。",
@@ -8471,7 +8479,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“结构化输出”练习并通过行为检查。",
@@ -8559,7 +8567,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Runnable 组合”练习并通过行为检查。",
@@ -8647,7 +8655,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“模型配置”练习并通过行为检查。",
@@ -8735,7 +8743,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“文档加载”练习并通过行为检查。",
@@ -8823,7 +8831,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“文本切分”练习并通过行为检查。",
@@ -8911,7 +8919,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
@@ -8999,7 +9007,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "用两条不同主题的文档验证 向量存储：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
@@ -9087,7 +9095,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "用两条不同主题的文档验证 相似度检索：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
@@ -9175,7 +9183,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“混合检索”练习并通过行为检查。",
@@ -9263,7 +9271,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“重排”练习并通过行为检查。",
@@ -9351,7 +9359,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“引用生成”练习并通过行为检查。",
@@ -9439,7 +9447,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“无答案边界”练习并通过行为检查。",
@@ -9527,7 +9535,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“RAG 评估”练习并通过行为检查。",
@@ -9615,7 +9623,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“追踪与观测”练习并通过行为检查。",
@@ -9703,7 +9711,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“工具调用”练习并通过行为检查。",
@@ -9791,7 +9799,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Agent 循环”练习并通过行为检查。",
@@ -9879,7 +9887,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“多查询检索”练习并通过行为检查。",
@@ -9967,7 +9975,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“RAG 项目”练习并通过行为检查。",
@@ -10055,7 +10063,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“消息角色”练习并通过行为检查。",
@@ -10143,7 +10151,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Prompt 模板”练习并通过行为检查。",
@@ -10231,7 +10239,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“结构化输出”练习并通过行为检查。",
@@ -10319,7 +10327,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "memory-modernization"
+              "langchain-rag-lesson-44"
             ],
             "exercise": {
               "prompt": "完成“Runnable 组合”练习并通过行为检查。",
@@ -10405,10 +10413,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "memory-modernization"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“模型配置”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10493,10 +10499,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "memory-modernization"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“文档加载”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10581,10 +10585,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "memory-modernization"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“文本切分”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
@@ -10669,10 +10671,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "memory-modernization"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
               "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
@@ -10885,8 +10885,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langgraph-lesson-38"
+            ],
             "exercise": {
               "prompt": "创建一个接收 topic、生成 outline、再生成 answer 的两节点图。",
               "starterCode": "builder = StateGraph(State)\n# 添加 outline 和 answer 节点",
@@ -10964,8 +10966,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langgraph-lesson-38"
+            ],
             "exercise": {
               "prompt": "为草稿审查图增加 revise/finish 条件路由，并通过 attempts 限制最多修改两次。",
               "starterCode": "def route(state):\n    pass",
@@ -11049,8 +11053,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langgraph-lesson-38"
+            ],
             "exercise": {
               "prompt": "用两个 thread_id 调用同一图，验证同线程连续、不同线程隔离。",
               "starterCode": "config_a = {\"configurable\": {\"thread_id\": \"\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"\"}}",
@@ -11136,8 +11142,10 @@
               }
             ],
             "migrations": [],
-            "project": true,
-            "projectLinks": [],
+            "project": false,
+            "projectLinks": [
+              "langgraph-lesson-38"
+            ],
             "exercise": {
               "prompt": "设计 profile 与 learning_events 两类 namespace，分别处理覆盖更新和追加记录。",
               "starterCode": "profile_namespace = ()\nevents_namespace = ()",
@@ -11217,7 +11225,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
@@ -11298,7 +11306,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "把三个研究主题并行分发，使用 reducer 汇总 findings，再生成报告。",
@@ -11399,7 +11407,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "列出研究助手的 thread state、Store memory、节点和人工中断点，保证两类状态不混用。",
@@ -11476,7 +11484,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“thread_id”练习并通过行为检查。",
@@ -11564,7 +11572,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“短期记忆”练习并通过行为检查。",
@@ -11652,7 +11660,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Store”练习并通过行为检查。",
@@ -11740,7 +11748,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“长期记忆”练习并通过行为检查。",
@@ -11828,7 +11836,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -11916,7 +11924,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -12004,7 +12012,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“流式事件”练习并通过行为检查。",
@@ -12092,7 +12100,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“子图”练习并通过行为检查。",
@@ -12180,7 +12188,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“并行分支”练习并通过行为检查。",
@@ -12268,7 +12276,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Supervisor”练习并通过行为检查。",
@@ -12356,7 +12364,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
@@ -12444,7 +12452,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“人工审核”练习并通过行为检查。",
@@ -12532,7 +12540,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Graph 项目”练习并通过行为检查。",
@@ -12620,7 +12628,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -12708,7 +12716,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“节点与边”练习并通过行为检查。",
@@ -12796,7 +12804,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“状态更新”练习并通过行为检查。",
@@ -12884,7 +12892,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“条件路由”练习并通过行为检查。",
@@ -12972,7 +12980,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“循环终止”练习并通过行为检查。",
@@ -13060,7 +13068,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Reducer”练习并通过行为检查。",
@@ -13148,7 +13156,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 Checkpoint 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -13236,7 +13244,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“thread_id”练习并通过行为检查。",
@@ -13324,7 +13332,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“短期记忆”练习并通过行为检查。",
@@ -13412,7 +13420,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Store”练习并通过行为检查。",
@@ -13500,7 +13508,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“长期记忆”练习并通过行为检查。",
@@ -13588,7 +13596,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -13676,7 +13684,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
@@ -13764,7 +13772,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“流式事件”练习并通过行为检查。",
@@ -13852,7 +13860,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“子图”练习并通过行为检查。",
@@ -13940,7 +13948,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“并行分支”练习并通过行为检查。",
@@ -14028,7 +14036,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“Supervisor”练习并通过行为检查。",
@@ -14116,7 +14124,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "graph-foundations"
+              "langgraph-lesson-38"
             ],
             "exercise": {
               "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
@@ -14202,10 +14210,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "graph-foundations"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“人工审核”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -14290,10 +14296,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "graph-foundations"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“Graph 项目”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
@@ -14378,10 +14382,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "graph-foundations"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
@@ -14466,10 +14468,8 @@
               }
             ],
             "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "graph-foundations"
-            ],
+            "project": true,
+            "projectLinks": [],
             "exercise": {
               "prompt": "完成“节点与边”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
