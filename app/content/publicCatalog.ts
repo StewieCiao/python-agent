@@ -27,6 +27,7 @@ type PublicLesson = Omit<Lesson, "concepts"> & {
 
 export const lessons: PublicLesson[] = pythonTrack.lessons.map((lesson) => ({
   id: lesson.id,
+  familyId: lesson.familyId,
   module: pythonTrack.stages.find(({ id }) => id === lesson.stageId)?.title as Lesson["module"],
   number: lesson.order,
   title: lesson.title,

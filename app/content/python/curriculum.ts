@@ -13,6 +13,7 @@ export type LessonTest = {
 
 export type Lesson = {
   id: string;
+  familyId?: string;
   module:
     | "Python 起步"
     | "Python 工程能力"

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f0c4890684ad7f0b960b4c476a0f0d12d3382ef74efc4641b99937c5c1b80af2",
+  "catalogHash": "abff618139124c28409a4c2229f1072fafd31c567595b8b2705a0abc55889092",
   "familyHash": "c2e82cbbd701b3262578c84729b68a96f3215f4337a3a09c0db80e6a756fbb03",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -97,6 +97,7 @@
         "lessons": [
           {
             "id": "first-output",
+            "familyId": "python-output-v1",
             "stageId": "python-Python 起步",
             "order": 1,
             "title": "让 Python 开口",
@@ -478,6 +479,7 @@
           },
           {
             "id": "loops",
+            "familyId": "python-loops-v1",
             "stageId": "python-Python 工程能力",
             "order": 5,
             "title": "批量处理数据",
@@ -674,6 +676,7 @@
           },
           {
             "id": "lists",
+            "familyId": "python-lists-v1",
             "stageId": "python-Python 工程能力",
             "order": 7,
             "title": "组织一组数据",
@@ -772,6 +775,7 @@
           },
           {
             "id": "dictionaries",
+            "familyId": "python-dictionaries-v1",
             "stageId": "python-Python 工程能力",
             "order": 8,
             "title": "建立键值关系",
@@ -870,6 +874,7 @@
           },
           {
             "id": "exceptions",
+            "familyId": "python-exceptions-v1",
             "stageId": "python-Python 工程能力",
             "order": 9,
             "title": "只捕获能处理的错误",
@@ -1175,6 +1180,7 @@
           },
           {
             "id": "decorators",
+            "familyId": "python-decorators-v1",
             "stageId": "python-Python 工程能力",
             "order": 12,
             "title": "为函数增加能力",
@@ -1349,6 +1355,7 @@
           },
           {
             "id": "project-expense",
+            "familyId": "python-expense-v1",
             "stageId": "python-Python 综合训练",
             "order": 14,
             "title": "Agent 调用成本汇总器",

@@ -5,6 +5,7 @@ import {
 import { lessonGuides } from "./lessonGuides.ts";
 import { lessonSolutions } from "./solutions.ts";
 import type { CourseLesson, CourseStage } from "../schema.ts";
+import { exerciseFamilies } from "../../exercises/families.ts";
 
 const stageNames = [
   "Python 起步",
@@ -41,6 +42,7 @@ export const pythonStages: CourseStage[] = stageNames.map((name, index) => ({
 
 export const pythonLessons: CourseLesson[] = lessons.map((lesson) => ({
   id: lesson.id,
+  ...(exerciseFamilies.find((family) => family.lessonIds[0] === lesson.id)?.id ? { familyId: exerciseFamilies.find((family) => family.lessonIds[0] === lesson.id)?.id } : {}),
   stageId: stageIds.get(lesson.module)!,
   order: lesson.number,
   title: lesson.title,

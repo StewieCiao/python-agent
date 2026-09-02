@@ -69,6 +69,7 @@ export type BrowserCheck = {
 
 export type CourseLesson = {
   id: string;
+  familyId?: string;
   stageId: string;
   order: number;
   title: string;

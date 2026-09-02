@@ -7,7 +7,7 @@ import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
 import type { LessonTest } from "../content/python/curriculum";
 import type { LearningTrack } from "../content/learningCatalog";
-import { loadPersonalizedExercise, pythonWorkerUrl } from "../lib/platformBridge";
+import { loadPersonalizedExercise, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,
   type GptHelpPromptInput,
@@ -418,6 +418,16 @@ export function LearningApp() {
         execution.exception === null &&
         execution.tests.length > 0 &&
         execution.tests.every((test) => test.passed);
+
+      if (lesson.familyId) {
+        await recordMasteryAttempt({
+          lessonId: snapshot.lessonId,
+          familyId: lesson.familyId,
+          outcome: passed ? "pass" : "fail",
+          mistakeCodes: execution.tests.filter((test) => !test.passed).map((test) => test.name),
+          createdAt: new Date().toISOString(),
+        });
+      }
 
       if (passed) {
         setProgress((current) => ({
