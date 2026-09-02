@@ -60,7 +60,7 @@ class ExerciseTest(unittest.TestCase):
             validate_generated_exercise(family, invalid)
 
     def test_generated_variant_passes_known_parameter_validator(self):
-        selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner"}
+        selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner", "constraints": ["sum even values"]}
         candidate = generate_personalized_exercise(selection, 1, [])
         checked = validate_generated_exercise(
             {"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"]},
@@ -94,7 +94,7 @@ class ExerciseTest(unittest.TestCase):
         for family_id in family_ids:
             prompts = {
                 generate_personalized_exercise(
-                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner"},
+                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner", "constraints": ["verified family behavior"]},
                     seed,
                     [],
                 )["prompt"]

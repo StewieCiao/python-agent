@@ -89,7 +89,10 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     if not variants:
         raise ValueError("family 没有已审校的题目变体")
     label, values = variants[seed % len(variants)]
-    prompt = f"针对 {label} 完成题目要求，并保留 family 的教学约束。"
+    constraints = selection.get("constraints", [])
+    if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
+        raise ValueError("family 约束无效")
+    prompt = f"针对 {label} 完成题目要求。教学约束：{'；'.join(constraints)}。"
     if prompt in recent_prompts:
         raise ValueError("生成题目与最近练习重复")
     return {
