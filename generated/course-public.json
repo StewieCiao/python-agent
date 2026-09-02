@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "a71095a4f073e46738a2a0a9724e14832b1657b4d6192d43d4daa4466498035c",
+  "catalogHash": "15662b6bf9d9a3ad09763b218b15254a6b2ab5684c15da5463eca18efc2b8f1d",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -11605,7 +11605,7 @@
             "order": 12,
             "title": "Interrupt：从概念到练习（第 12 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Interrupt 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 Interrupt 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -11663,14 +11663,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“Interrupt”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -11693,7 +11693,7 @@
             "order": 13,
             "title": "恢复执行：从概念到练习（第 13 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 恢复执行 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 恢复执行 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -11751,14 +11751,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“恢复执行”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -12397,7 +12397,7 @@
             "order": 21,
             "title": "StateGraph：从概念到练习（第 21 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 StateGraph 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 StateGraph 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -12455,14 +12455,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“StateGraph”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -12925,7 +12925,7 @@
             "order": 27,
             "title": "Checkpoint：从概念到练习（第 27 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Checkpoint 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 Checkpoint 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -12983,14 +12983,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“Checkpoint”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 Checkpoint 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -13365,7 +13365,7 @@
             "order": 32,
             "title": "Interrupt：从概念到练习（第 32 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Interrupt 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 Interrupt 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13423,14 +13423,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“Interrupt”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -13453,7 +13453,7 @@
             "order": 33,
             "title": "恢复执行：从概念到练习（第 33 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 恢复执行 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 恢复执行 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13511,14 +13511,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“恢复执行”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
@@ -14157,7 +14157,7 @@
             "order": 41,
             "title": "StateGraph：从概念到练习（第 41 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 StateGraph 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "围绕 StateGraph 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14215,14 +14215,14 @@
               "graph-foundations"
             ],
             "exercise": {
-              "prompt": "完成“StateGraph”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先写 State 字段",
+                "记录节点返回的更新",
+                "用另一个 thread 验证隔离"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
             },
             "browserChecks": [
               {
