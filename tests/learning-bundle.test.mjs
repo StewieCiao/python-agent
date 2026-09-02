@@ -159,3 +159,17 @@ test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案�
     assert.ok(lesson.browserChecks.length >= 1);
   }
 });
+
+test("作者目录聚合三条路线且 lesson id 不重复", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  assert.deepEqual(
+    authoredCatalog.tracks.map(({ id }) => id),
+    ["python", "langchain-rag", "langgraph"],
+  );
+  assert.deepEqual(
+    authoredCatalog.tracks.map(({ lessons }) => lessons.length),
+    [25, 7, 7],
+  );
+  const ids = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.map(({ id }) => id));
+  assert.equal(new Set(ids).size, ids.length);
+});

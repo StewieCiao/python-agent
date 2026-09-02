@@ -194,7 +194,7 @@ function validateLesson(value: unknown, path: string, stageIds: Set<string>, les
   requireString(value.exercise.starterCode, `${path}.exercise.starterCode`);
   requireStringArray(value.exercise.hints, `${path}.exercise.hints`);
   requireString(value.exercise.solution, `${path}.exercise.solution`);
-  if (!Array.isArray(value.browserChecks) || value.browserChecks.length === 0) throw new Error(`${path}.browserChecks 不能为空`);
+  if (!Array.isArray(value.browserChecks)) throw new Error(`${path}.browserChecks 必须是数组`);
   for (const [index, source] of value.officialSources.entries()) validateSource(source, `${path}.officialSources[${index}]`);
   for (const [index, source] of value.migrations.entries()) {
     if (!isRecord(source) || !Array.isArray(source.officialSources) || source.officialSources.length === 0) {
