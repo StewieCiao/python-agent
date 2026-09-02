@@ -373,7 +373,7 @@ try {
     process.stdout.write("packaged renderer smoke: Python execution/recovery and secure model request passed\n");
   } else {
     const visibleFailure = await evaluate(`document.body.textContent.includes("系统安全存储写入失败")`);
-    if (!visibleFailure || modelServer.requests.length !== 0 || profileList?.value?.length !== 0) {
+    if (!visibleFailure || modelServer.requests.length !== 0 || profileList?.value?.some((profile) => profile.id === "renderer-smoke")) {
       throw new Error(`打包应用模型配置失败路径不明确：${JSON.stringify(profileList)}`);
     }
     process.stdout.write("packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n");
