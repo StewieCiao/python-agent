@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "575c25cc63d076f0d72320986406dff54622a0c854db5941c9677268fcb5f80f",
+  "catalogHash": "212461443356ff606e9f6d4ddb13d466510f39c0501c1037cf979929077b1b6e",
   "familyHash": "d460bff813e25e21590ac53952ce2c28acc6efadcb1971e43c6dd0016f966a7d",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -2667,7 +2667,7 @@
             "id": "python-lesson-25",
             "stageId": "python-stage-2",
             "order": 26,
-            "title": "作用域：写出可验证的实现",
+            "title": "作用域迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
             "minutes": 35,
@@ -2729,7 +2729,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。",
+              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def make_counter(start):\n    pass\n",
               "hints": [
                 "先找出需要跨调用保留的值。",
@@ -2757,7 +2757,7 @@
             "id": "python-lesson-26",
             "stageId": "python-stage-3",
             "order": 27,
-            "title": "列表与切片：写出可验证的实现",
+            "title": "列表与切片迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
@@ -2817,7 +2817,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。",
+              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def take_every_other(items):\n    pass\n",
               "hints": [
                 "切片格式是 start:stop:step。",
@@ -2845,7 +2845,7 @@
             "id": "python-lesson-27",
             "stageId": "python-stage-4",
             "order": 28,
-            "title": "字典聚合：写出可验证的实现",
+            "title": "字典聚合迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
@@ -2905,7 +2905,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。",
+              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def count_categories(records):\n    counts = {}\n    return counts\n",
               "hints": [
                 "每条记录都提供一个 category。",
@@ -2933,9 +2933,9 @@
             "id": "python-lesson-28",
             "stageId": "python-stage-5",
             "order": 29,
-            "title": "集合运算：从概念到练习（第 29 节）",
+            "title": "集合运算迁移练习 2：从概念到练习（第 29 节）",
             "kicker": "Python 学习",
-            "summary": "理解 集合运算 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 集合运算迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -2993,7 +2993,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“集合运算”练习并通过行为检查。",
+              "prompt": "完成“集合运算迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3021,7 +3021,7 @@
             "id": "python-lesson-29",
             "stageId": "python-stage-6",
             "order": 30,
-            "title": "异常边界：写出可验证的实现",
+            "title": "异常边界迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
@@ -3081,7 +3081,7 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。",
+              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def parse_positive_int(text):\n    pass\n",
               "hints": [
                 "int(text) 可能抛出 ValueError。",
@@ -3115,9 +3115,9 @@
             "id": "python-lesson-30",
             "stageId": "python-stage-7",
             "order": 31,
-            "title": "类与对象：从概念到练习（第 31 节）",
+            "title": "类与对象迁移练习 2：从概念到练习（第 31 节）",
             "kicker": "Python 学习",
-            "summary": "理解 类与对象 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 类与对象迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3175,7 +3175,7 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“类与对象”练习并通过行为检查。",
+              "prompt": "完成“类与对象迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3203,9 +3203,9 @@
             "id": "python-lesson-31",
             "stageId": "python-stage-8",
             "order": 32,
-            "title": "生成器：从概念到练习（第 32 节）",
+            "title": "生成器迁移练习 2：从概念到练习（第 32 节）",
             "kicker": "Python 学习",
-            "summary": "理解 生成器 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 生成器迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3263,7 +3263,7 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“生成器”练习并通过行为检查。",
+              "prompt": "完成“生成器迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3291,9 +3291,9 @@
             "id": "python-lesson-32",
             "stageId": "python-stage-1",
             "order": 33,
-            "title": "装饰器：从概念到练习（第 33 节）",
+            "title": "装饰器迁移练习 2：从概念到练习（第 33 节）",
             "kicker": "Python 学习",
-            "summary": "理解 装饰器 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 装饰器迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3351,7 +3351,7 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“装饰器”练习并通过行为检查。",
+              "prompt": "完成“装饰器迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3379,9 +3379,9 @@
             "id": "python-lesson-33",
             "stageId": "python-stage-2",
             "order": 34,
-            "title": "模块拆分：从概念到练习（第 34 节）",
+            "title": "模块拆分迁移练习 2：从概念到练习（第 34 节）",
             "kicker": "Python 学习",
-            "summary": "理解 模块拆分 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 模块拆分迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3439,7 +3439,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“模块拆分”练习并通过行为检查。",
+              "prompt": "完成“模块拆分迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3467,9 +3467,9 @@
             "id": "python-lesson-34",
             "stageId": "python-stage-3",
             "order": 35,
-            "title": "文件读写：从概念到练习（第 35 节）",
+            "title": "文件读写迁移练习 2：从概念到练习（第 35 节）",
             "kicker": "Python 学习",
-            "summary": "理解 文件读写 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 文件读写迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3527,7 +3527,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“文件读写”练习并通过行为检查。",
+              "prompt": "完成“文件读写迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3555,9 +3555,9 @@
             "id": "python-lesson-35",
             "stageId": "python-stage-4",
             "order": 36,
-            "title": "测试设计：从概念到练习（第 36 节）",
+            "title": "测试设计迁移练习 2：从概念到练习（第 36 节）",
             "kicker": "Python 学习",
-            "summary": "理解 测试设计 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 测试设计迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3615,7 +3615,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“测试设计”练习并通过行为检查。",
+              "prompt": "完成“测试设计迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3643,9 +3643,9 @@
             "id": "python-lesson-36",
             "stageId": "python-stage-5",
             "order": 37,
-            "title": "数据清洗：从概念到练习（第 37 节）",
+            "title": "数据清洗迁移练习 2：从概念到练习（第 37 节）",
             "kicker": "Python 学习",
-            "summary": "理解 数据清洗 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 数据清洗迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3703,7 +3703,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“数据清洗”练习并通过行为检查。",
+              "prompt": "完成“数据清洗迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3731,9 +3731,9 @@
             "id": "python-lesson-37",
             "stageId": "python-stage-6",
             "order": 38,
-            "title": "命令行工具：从概念到练习（第 38 节）",
+            "title": "命令行工具迁移练习 2：从概念到练习（第 38 节）",
             "kicker": "Python 学习",
-            "summary": "理解 命令行工具 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 命令行工具迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3791,7 +3791,7 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "完成“命令行工具”练习并通过行为检查。",
+              "prompt": "完成“命令行工具迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3819,9 +3819,9 @@
             "id": "python-lesson-38",
             "stageId": "python-stage-7",
             "order": 39,
-            "title": "并发基础：从概念到练习（第 39 节）",
+            "title": "并发基础迁移练习 2：从概念到练习（第 39 节）",
             "kicker": "Python 学习",
-            "summary": "理解 并发基础 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 并发基础迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3879,7 +3879,7 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“并发基础”练习并通过行为检查。",
+              "prompt": "完成“并发基础迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3907,9 +3907,9 @@
             "id": "python-lesson-39",
             "stageId": "python-stage-8",
             "order": 40,
-            "title": "Agent 工具契约：从概念到练习（第 40 节）",
+            "title": "Agent 工具契约迁移练习 2：从概念到练习（第 40 节）",
             "kicker": "Python 学习",
-            "summary": "理解 Agent 工具契约 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Agent 工具契约迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3967,7 +3967,7 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
+              "prompt": "完成“Agent 工具契约迁移练习 2”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -3995,9 +3995,9 @@
             "id": "python-lesson-40",
             "stageId": "python-stage-1",
             "order": 41,
-            "title": "变量与类型：从概念到练习（第 41 节）",
+            "title": "变量与类型迁移练习 3：从概念到练习（第 41 节）",
             "kicker": "Python 学习",
-            "summary": "理解 变量与类型 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 变量与类型迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4055,7 +4055,7 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“变量与类型”练习并通过行为检查。",
+              "prompt": "完成“变量与类型迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4083,9 +4083,9 @@
             "id": "python-lesson-41",
             "stageId": "python-stage-2",
             "order": 42,
-            "title": "字符串处理：从概念到练习（第 42 节）",
+            "title": "字符串处理迁移练习 3：从概念到练习（第 42 节）",
             "kicker": "Python 学习",
-            "summary": "理解 字符串处理 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 字符串处理迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4143,7 +4143,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“字符串处理”练习并通过行为检查。",
+              "prompt": "完成“字符串处理迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4171,9 +4171,9 @@
             "id": "python-lesson-42",
             "stageId": "python-stage-3",
             "order": 43,
-            "title": "条件分支：从概念到练习（第 43 节）",
+            "title": "条件分支迁移练习 3：从概念到练习（第 43 节）",
             "kicker": "Python 学习",
-            "summary": "理解 条件分支 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 条件分支迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4231,7 +4231,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“条件分支”练习并通过行为检查。",
+              "prompt": "完成“条件分支迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4259,9 +4259,9 @@
             "id": "python-lesson-43",
             "stageId": "python-stage-4",
             "order": 44,
-            "title": "循环与迭代：从概念到练习（第 44 节）",
+            "title": "循环与迭代迁移练习 3：从概念到练习（第 44 节）",
             "kicker": "Python 学习",
-            "summary": "理解 循环与迭代 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 循环与迭代迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4319,7 +4319,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“循环与迭代”练习并通过行为检查。",
+              "prompt": "完成“循环与迭代迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4347,9 +4347,9 @@
             "id": "python-lesson-44",
             "stageId": "python-stage-5",
             "order": 45,
-            "title": "函数参数：从概念到练习（第 45 节）",
+            "title": "函数参数迁移练习 3：从概念到练习（第 45 节）",
             "kicker": "Python 学习",
-            "summary": "理解 函数参数 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 函数参数迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4407,7 +4407,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“函数参数”练习并通过行为检查。",
+              "prompt": "完成“函数参数迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4435,7 +4435,7 @@
             "id": "python-lesson-45",
             "stageId": "python-stage-6",
             "order": 46,
-            "title": "作用域：写出可验证的实现",
+            "title": "作用域迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
             "minutes": 35,
@@ -4495,7 +4495,7 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。",
+              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def make_counter(start):\n    pass\n",
               "hints": [
                 "先找出需要跨调用保留的值。",
@@ -4523,7 +4523,7 @@
             "id": "python-lesson-46",
             "stageId": "python-stage-7",
             "order": 47,
-            "title": "列表与切片：写出可验证的实现",
+            "title": "列表与切片迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
@@ -4583,7 +4583,7 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。",
+              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def take_every_other(items):\n    pass\n",
               "hints": [
                 "切片格式是 start:stop:step。",
@@ -4611,7 +4611,7 @@
             "id": "python-lesson-47",
             "stageId": "python-stage-8",
             "order": 48,
-            "title": "字典聚合：写出可验证的实现",
+            "title": "字典聚合迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
@@ -4671,7 +4671,7 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。",
+              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def count_categories(records):\n    counts = {}\n    return counts\n",
               "hints": [
                 "每条记录都提供一个 category。",
@@ -4699,9 +4699,9 @@
             "id": "python-lesson-48",
             "stageId": "python-stage-1",
             "order": 49,
-            "title": "集合运算：从概念到练习（第 49 节）",
+            "title": "集合运算迁移练习 3：从概念到练习（第 49 节）",
             "kicker": "Python 学习",
-            "summary": "理解 集合运算 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 集合运算迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4759,7 +4759,7 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“集合运算”练习并通过行为检查。",
+              "prompt": "完成“集合运算迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4787,7 +4787,7 @@
             "id": "python-lesson-49",
             "stageId": "python-stage-2",
             "order": 50,
-            "title": "异常边界：写出可验证的实现",
+            "title": "异常边界迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
@@ -4847,7 +4847,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。",
+              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def parse_positive_int(text):\n    pass\n",
               "hints": [
                 "int(text) 可能抛出 ValueError。",
@@ -4881,9 +4881,9 @@
             "id": "python-lesson-50",
             "stageId": "python-stage-3",
             "order": 51,
-            "title": "类与对象：从概念到练习（第 51 节）",
+            "title": "类与对象迁移练习 3：从概念到练习（第 51 节）",
             "kicker": "Python 学习",
-            "summary": "理解 类与对象 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 类与对象迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4941,7 +4941,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“类与对象”练习并通过行为检查。",
+              "prompt": "完成“类与对象迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -4969,9 +4969,9 @@
             "id": "python-lesson-51",
             "stageId": "python-stage-4",
             "order": 52,
-            "title": "生成器：从概念到练习（第 52 节）",
+            "title": "生成器迁移练习 3：从概念到练习（第 52 节）",
             "kicker": "Python 学习",
-            "summary": "理解 生成器 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 生成器迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5029,7 +5029,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“生成器”练习并通过行为检查。",
+              "prompt": "完成“生成器迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5057,9 +5057,9 @@
             "id": "python-lesson-52",
             "stageId": "python-stage-5",
             "order": 53,
-            "title": "装饰器：从概念到练习（第 53 节）",
+            "title": "装饰器迁移练习 3：从概念到练习（第 53 节）",
             "kicker": "Python 学习",
-            "summary": "理解 装饰器 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 装饰器迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5117,7 +5117,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“装饰器”练习并通过行为检查。",
+              "prompt": "完成“装饰器迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5145,9 +5145,9 @@
             "id": "python-lesson-53",
             "stageId": "python-stage-6",
             "order": 54,
-            "title": "模块拆分：从概念到练习（第 54 节）",
+            "title": "模块拆分迁移练习 3：从概念到练习（第 54 节）",
             "kicker": "Python 学习",
-            "summary": "理解 模块拆分 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 模块拆分迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5205,7 +5205,7 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "完成“模块拆分”练习并通过行为检查。",
+              "prompt": "完成“模块拆分迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5233,9 +5233,9 @@
             "id": "python-lesson-54",
             "stageId": "python-stage-7",
             "order": 55,
-            "title": "文件读写：从概念到练习（第 55 节）",
+            "title": "文件读写迁移练习 3：从概念到练习（第 55 节）",
             "kicker": "Python 学习",
-            "summary": "理解 文件读写 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 文件读写迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5293,7 +5293,7 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“文件读写”练习并通过行为检查。",
+              "prompt": "完成“文件读写迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5321,9 +5321,9 @@
             "id": "python-lesson-55",
             "stageId": "python-stage-8",
             "order": 56,
-            "title": "测试设计：从概念到练习（第 56 节）",
+            "title": "测试设计迁移练习 3：从概念到练习（第 56 节）",
             "kicker": "Python 学习",
-            "summary": "理解 测试设计 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 测试设计迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5381,7 +5381,7 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“测试设计”练习并通过行为检查。",
+              "prompt": "完成“测试设计迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5409,9 +5409,9 @@
             "id": "python-lesson-56",
             "stageId": "python-stage-1",
             "order": 57,
-            "title": "数据清洗：从概念到练习（第 57 节）",
+            "title": "数据清洗迁移练习 3：从概念到练习（第 57 节）",
             "kicker": "Python 学习",
-            "summary": "理解 数据清洗 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 数据清洗迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5469,7 +5469,7 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“数据清洗”练习并通过行为检查。",
+              "prompt": "完成“数据清洗迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5497,9 +5497,9 @@
             "id": "python-lesson-57",
             "stageId": "python-stage-2",
             "order": 58,
-            "title": "命令行工具：从概念到练习（第 58 节）",
+            "title": "命令行工具迁移练习 3：从概念到练习（第 58 节）",
             "kicker": "Python 学习",
-            "summary": "理解 命令行工具 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 命令行工具迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5557,7 +5557,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“命令行工具”练习并通过行为检查。",
+              "prompt": "完成“命令行工具迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5585,9 +5585,9 @@
             "id": "python-lesson-58",
             "stageId": "python-stage-3",
             "order": 59,
-            "title": "并发基础：从概念到练习（第 59 节）",
+            "title": "并发基础迁移练习 3：从概念到练习（第 59 节）",
             "kicker": "Python 学习",
-            "summary": "理解 并发基础 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 并发基础迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5645,7 +5645,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“并发基础”练习并通过行为检查。",
+              "prompt": "完成“并发基础迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5673,9 +5673,9 @@
             "id": "python-lesson-59",
             "stageId": "python-stage-4",
             "order": 60,
-            "title": "Agent 工具契约：从概念到练习（第 60 节）",
+            "title": "Agent 工具契约迁移练习 3：从概念到练习（第 60 节）",
             "kicker": "Python 学习",
-            "summary": "理解 Agent 工具契约 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Agent 工具契约迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5733,7 +5733,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
+              "prompt": "完成“Agent 工具契约迁移练习 3”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5761,9 +5761,9 @@
             "id": "python-lesson-60",
             "stageId": "python-stage-5",
             "order": 61,
-            "title": "变量与类型：从概念到练习（第 61 节）",
+            "title": "变量与类型迁移练习 4：从概念到练习（第 61 节）",
             "kicker": "Python 学习",
-            "summary": "理解 变量与类型 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 变量与类型迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5821,7 +5821,7 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“变量与类型”练习并通过行为检查。",
+              "prompt": "完成“变量与类型迁移练习 4”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5849,9 +5849,9 @@
             "id": "python-lesson-61",
             "stageId": "python-stage-6",
             "order": 62,
-            "title": "字符串处理：从概念到练习（第 62 节）",
+            "title": "字符串处理迁移练习 4：从概念到练习（第 62 节）",
             "kicker": "Python 学习",
-            "summary": "理解 字符串处理 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 字符串处理迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5909,7 +5909,7 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "完成“字符串处理”练习并通过行为检查。",
+              "prompt": "完成“字符串处理迁移练习 4”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -5937,9 +5937,9 @@
             "id": "python-lesson-62",
             "stageId": "python-stage-7",
             "order": 63,
-            "title": "条件分支：从概念到练习（第 63 节）",
+            "title": "条件分支迁移练习 4：从概念到练习（第 63 节）",
             "kicker": "Python 学习",
-            "summary": "理解 条件分支 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 条件分支迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5997,7 +5997,7 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“条件分支”练习并通过行为检查。",
+              "prompt": "完成“条件分支迁移练习 4”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -6025,9 +6025,9 @@
             "id": "python-lesson-63",
             "stageId": "python-stage-8",
             "order": 64,
-            "title": "循环与迭代：从概念到练习（第 64 节）",
+            "title": "循环与迭代迁移练习 4：从概念到练习（第 64 节）",
             "kicker": "Python 学习",
-            "summary": "理解 循环与迭代 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 循环与迭代迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -6085,7 +6085,7 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“循环与迭代”练习并通过行为检查。",
+              "prompt": "完成“循环与迭代迁移练习 4”练习并通过行为检查。",
               "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8258,9 +8258,9 @@
             "id": "langchain-rag-lesson-20",
             "stageId": "langchain-rag-stage-7",
             "order": 21,
-            "title": "消息角色：从概念到练习（第 21 节）",
+            "title": "消息角色迁移练习 2：从概念到练习（第 21 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 消息角色 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 消息角色迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8318,7 +8318,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“消息角色”练习并通过行为检查。",
+              "prompt": "完成“消息角色迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8346,9 +8346,9 @@
             "id": "langchain-rag-lesson-21",
             "stageId": "langchain-rag-stage-1",
             "order": 22,
-            "title": "Prompt 模板：从概念到练习（第 22 节）",
+            "title": "Prompt 模板迁移练习 2：从概念到练习（第 22 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Prompt 模板 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Prompt 模板迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8406,7 +8406,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“Prompt 模板”练习并通过行为检查。",
+              "prompt": "完成“Prompt 模板迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8434,9 +8434,9 @@
             "id": "langchain-rag-lesson-22",
             "stageId": "langchain-rag-stage-2",
             "order": 23,
-            "title": "结构化输出：从概念到练习（第 23 节）",
+            "title": "结构化输出迁移练习 2：从概念到练习（第 23 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 结构化输出 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 结构化输出迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8494,7 +8494,7 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "完成“结构化输出”练习并通过行为检查。",
+              "prompt": "完成“结构化输出迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8522,9 +8522,9 @@
             "id": "langchain-rag-lesson-23",
             "stageId": "langchain-rag-stage-3",
             "order": 24,
-            "title": "Runnable 组合：从概念到练习（第 24 节）",
+            "title": "Runnable 组合迁移练习 2：从概念到练习（第 24 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Runnable 组合 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Runnable 组合迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8582,7 +8582,7 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“Runnable 组合”练习并通过行为检查。",
+              "prompt": "完成“Runnable 组合迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8610,9 +8610,9 @@
             "id": "langchain-rag-lesson-24",
             "stageId": "langchain-rag-stage-4",
             "order": 25,
-            "title": "模型配置：从概念到练习（第 25 节）",
+            "title": "模型配置迁移练习 2：从概念到练习（第 25 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 模型配置 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 模型配置迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8670,7 +8670,7 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“模型配置”练习并通过行为检查。",
+              "prompt": "完成“模型配置迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -8698,7 +8698,7 @@
             "id": "langchain-rag-lesson-25",
             "stageId": "langchain-rag-stage-5",
             "order": 26,
-            "title": "文档加载：写出可验证的实现",
+            "title": "文档加载迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
             "minutes": 35,
@@ -8758,7 +8758,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。",
+              "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
               "hints": [
                 "先定义统一的 Document 形状。",
@@ -8786,7 +8786,7 @@
             "id": "langchain-rag-lesson-26",
             "stageId": "langchain-rag-stage-6",
             "order": 27,
-            "title": "文本切分：写出可验证的实现",
+            "title": "文本切分迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
             "minutes": 35,
@@ -8846,7 +8846,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。",
+              "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_text(text, size):\n    pass\n",
               "hints": [
                 "先处理空文本边界。",
@@ -8874,9 +8874,9 @@
             "id": "langchain-rag-lesson-27",
             "stageId": "langchain-rag-stage-7",
             "order": 28,
-            "title": "Embedding：从概念到练习（第 28 节）",
+            "title": "Embedding迁移练习 2：从概念到练习（第 28 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 Embedding 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把 Embedding迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8934,7 +8934,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "prompt": "用两条不同主题的文档验证 Embedding迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
               "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
                 "先保留 page_content 与 source",
@@ -8962,9 +8962,9 @@
             "id": "langchain-rag-lesson-28",
             "stageId": "langchain-rag-stage-1",
             "order": 29,
-            "title": "向量存储：从概念到练习（第 29 节）",
+            "title": "向量存储迁移练习 2：从概念到练习（第 29 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 向量存储 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把 向量存储迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9022,7 +9022,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 向量存储：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "prompt": "用两条不同主题的文档验证 向量存储迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
               "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
                 "先保留 page_content 与 source",
@@ -9050,9 +9050,9 @@
             "id": "langchain-rag-lesson-29",
             "stageId": "langchain-rag-stage-2",
             "order": 30,
-            "title": "相似度检索：从概念到练习（第 30 节）",
+            "title": "相似度检索迁移练习 2：从概念到练习（第 30 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 相似度检索 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把 相似度检索迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9110,7 +9110,7 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 相似度检索：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "prompt": "用两条不同主题的文档验证 相似度检索迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
               "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
                 "先保留 page_content 与 source",
@@ -9138,9 +9138,9 @@
             "id": "langchain-rag-lesson-30",
             "stageId": "langchain-rag-stage-3",
             "order": 31,
-            "title": "混合检索：从概念到练习（第 31 节）",
+            "title": "混合检索迁移练习 2：从概念到练习（第 31 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 混合检索 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 混合检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9198,7 +9198,7 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“混合检索”练习并通过行为检查。",
+              "prompt": "完成“混合检索迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9226,9 +9226,9 @@
             "id": "langchain-rag-lesson-31",
             "stageId": "langchain-rag-stage-4",
             "order": 32,
-            "title": "重排：从概念到练习（第 32 节）",
+            "title": "重排迁移练习 2：从概念到练习（第 32 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 重排 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 重排迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9286,7 +9286,7 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“重排”练习并通过行为检查。",
+              "prompt": "完成“重排迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9314,7 +9314,7 @@
             "id": "langchain-rag-lesson-32",
             "stageId": "langchain-rag-stage-5",
             "order": 33,
-            "title": "引用生成：写出可验证的实现",
+            "title": "引用生成迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
             "minutes": 35,
@@ -9374,7 +9374,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。",
+              "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def format_citations(results):\n    pass\n",
               "hints": [
                 "先明确无检索结果的用户可见状态。",
@@ -9402,7 +9402,7 @@
             "id": "langchain-rag-lesson-33",
             "stageId": "langchain-rag-stage-6",
             "order": 34,
-            "title": "无答案边界：写出可验证的实现",
+            "title": "无答案边界迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "在相似度不足时停止生成，区分无资料和资料不足。",
             "minutes": 35,
@@ -9462,7 +9462,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。",
+              "prompt": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def choose_context(results, threshold):\n    pass\n",
               "hints": [
                 "阈值比较应包含等于边界。",
@@ -9490,9 +9490,9 @@
             "id": "langchain-rag-lesson-34",
             "stageId": "langchain-rag-stage-7",
             "order": 35,
-            "title": "RAG 评估：从概念到练习（第 35 节）",
+            "title": "RAG 评估迁移练习 2：从概念到练习（第 35 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 评估 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 RAG 评估迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9550,7 +9550,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 评估”练习并通过行为检查。",
+              "prompt": "完成“RAG 评估迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9578,9 +9578,9 @@
             "id": "langchain-rag-lesson-35",
             "stageId": "langchain-rag-stage-1",
             "order": 36,
-            "title": "追踪与观测：从概念到练习（第 36 节）",
+            "title": "追踪与观测迁移练习 2：从概念到练习（第 36 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 追踪与观测 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 追踪与观测迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9638,7 +9638,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“追踪与观测”练习并通过行为检查。",
+              "prompt": "完成“追踪与观测迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9666,9 +9666,9 @@
             "id": "langchain-rag-lesson-36",
             "stageId": "langchain-rag-stage-2",
             "order": 37,
-            "title": "工具调用：从概念到练习（第 37 节）",
+            "title": "工具调用迁移练习 2：从概念到练习（第 37 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 工具调用 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 工具调用迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9726,7 +9726,7 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "完成“工具调用”练习并通过行为检查。",
+              "prompt": "完成“工具调用迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9754,9 +9754,9 @@
             "id": "langchain-rag-lesson-37",
             "stageId": "langchain-rag-stage-3",
             "order": 38,
-            "title": "Agent 循环：从概念到练习（第 38 节）",
+            "title": "Agent 循环迁移练习 2：从概念到练习（第 38 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Agent 循环 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Agent 循环迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9814,7 +9814,7 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“Agent 循环”练习并通过行为检查。",
+              "prompt": "完成“Agent 循环迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9842,9 +9842,9 @@
             "id": "langchain-rag-lesson-38",
             "stageId": "langchain-rag-stage-4",
             "order": 39,
-            "title": "多查询检索：从概念到练习（第 39 节）",
+            "title": "多查询检索迁移练习 2：从概念到练习（第 39 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 多查询检索 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 多查询检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9902,7 +9902,7 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“多查询检索”练习并通过行为检查。",
+              "prompt": "完成“多查询检索迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -9930,9 +9930,9 @@
             "id": "langchain-rag-lesson-39",
             "stageId": "langchain-rag-stage-5",
             "order": 40,
-            "title": "RAG 项目：从概念到练习（第 40 节）",
+            "title": "RAG 项目迁移练习 2：从概念到练习（第 40 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 项目 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 RAG 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9990,7 +9990,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 项目”练习并通过行为检查。",
+              "prompt": "完成“RAG 项目迁移练习 2”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10018,9 +10018,9 @@
             "id": "langchain-rag-lesson-40",
             "stageId": "langchain-rag-stage-6",
             "order": 41,
-            "title": "消息角色：从概念到练习（第 41 节）",
+            "title": "消息角色迁移练习 3：从概念到练习（第 41 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 消息角色 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 消息角色迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10078,7 +10078,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“消息角色”练习并通过行为检查。",
+              "prompt": "完成“消息角色迁移练习 3”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10106,9 +10106,9 @@
             "id": "langchain-rag-lesson-41",
             "stageId": "langchain-rag-stage-7",
             "order": 42,
-            "title": "Prompt 模板：从概念到练习（第 42 节）",
+            "title": "Prompt 模板迁移练习 3：从概念到练习（第 42 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Prompt 模板 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Prompt 模板迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10166,7 +10166,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“Prompt 模板”练习并通过行为检查。",
+              "prompt": "完成“Prompt 模板迁移练习 3”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10194,9 +10194,9 @@
             "id": "langchain-rag-lesson-42",
             "stageId": "langchain-rag-stage-1",
             "order": 43,
-            "title": "结构化输出：从概念到练习（第 43 节）",
+            "title": "结构化输出迁移练习 3：从概念到练习（第 43 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 结构化输出 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 结构化输出迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10252,7 +10252,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“结构化输出”练习并通过行为检查。",
+              "prompt": "完成“结构化输出迁移练习 3”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10280,9 +10280,9 @@
             "id": "langchain-rag-lesson-43",
             "stageId": "langchain-rag-stage-2",
             "order": 44,
-            "title": "Runnable 组合：从概念到练习（第 44 节）",
+            "title": "Runnable 组合迁移练习 3：从概念到练习（第 44 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Runnable 组合 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Runnable 组合迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10338,7 +10338,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“Runnable 组合”练习并通过行为检查。",
+              "prompt": "完成“Runnable 组合迁移练习 3”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10366,9 +10366,9 @@
             "id": "langchain-rag-lesson-44",
             "stageId": "langchain-rag-stage-3",
             "order": 45,
-            "title": "模型配置：从概念到练习（第 45 节）",
+            "title": "模型配置迁移练习 3：从概念到练习（第 45 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 模型配置 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 模型配置迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10424,7 +10424,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“模型配置”练习并通过行为检查。",
+              "prompt": "完成“模型配置迁移练习 3”练习并通过行为检查。",
               "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -10452,7 +10452,7 @@
             "id": "langchain-rag-lesson-45",
             "stageId": "langchain-rag-stage-4",
             "order": 46,
-            "title": "文档加载：写出可验证的实现",
+            "title": "文档加载迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
             "minutes": 35,
@@ -10510,7 +10510,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。",
+              "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
               "hints": [
                 "先定义统一的 Document 形状。",
@@ -10538,7 +10538,7 @@
             "id": "langchain-rag-lesson-46",
             "stageId": "langchain-rag-stage-5",
             "order": 47,
-            "title": "文本切分：写出可验证的实现",
+            "title": "文本切分迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
             "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
             "minutes": 35,
@@ -10598,7 +10598,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。",
+              "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_text(text, size):\n    pass\n",
               "hints": [
                 "先处理空文本边界。",
@@ -10626,9 +10626,9 @@
             "id": "langchain-rag-lesson-47",
             "stageId": "langchain-rag-stage-6",
             "order": 48,
-            "title": "Embedding：从概念到练习（第 48 节）",
+            "title": "Embedding迁移练习 3：从概念到练习（第 48 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 Embedding 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把 Embedding迁移练习 3 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10686,7 +10686,7 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "prompt": "用两条不同主题的文档验证 Embedding迁移练习 3：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
               "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
                 "先保留 page_content 与 source",
@@ -12583,9 +12583,9 @@
             "id": "langgraph-lesson-20",
             "stageId": "langgraph-stage-7",
             "order": 21,
-            "title": "StateGraph：从概念到练习（第 21 节）",
+            "title": "StateGraph迁移练习 2：从概念到练习（第 21 节）",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 StateGraph 描述 State 输入、节点更新和恢复边界。",
+            "summary": "围绕 StateGraph迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -12643,7 +12643,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "prompt": "为 StateGraph迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
                 "先写 State 字段",
@@ -12671,9 +12671,9 @@
             "id": "langgraph-lesson-21",
             "stageId": "langgraph-stage-1",
             "order": 22,
-            "title": "节点与边：从概念到练习（第 22 节）",
+            "title": "节点与边迁移练习 2：从概念到练习（第 22 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 节点与边 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 节点与边迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -12731,7 +12731,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“节点与边”练习并通过行为检查。",
+              "prompt": "完成“节点与边迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -12759,7 +12759,7 @@
             "id": "langgraph-lesson-22",
             "stageId": "langgraph-stage-2",
             "order": 23,
-            "title": "状态更新：写出可验证的实现",
+            "title": "状态更新迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
             "summary": "让节点返回局部更新，由图运行时统一合并状态。",
             "minutes": 35,
@@ -12819,7 +12819,7 @@
               "langgraph-lesson-36"
             ],
             "exercise": {
-              "prompt": "实现 add_observation(state, text)，返回只包含 observations 更新的字典，不直接修改输入 state。",
+              "prompt": "实现 add_observation(state, text)，返回只包含 observations 更新的字典，不直接修改输入 state。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def add_observation(state, text):\n    pass\n",
               "hints": [
                 "节点输出是更新，不是完整状态副本。",
@@ -12847,7 +12847,7 @@
             "id": "langgraph-lesson-23",
             "stageId": "langgraph-stage-3",
             "order": 24,
-            "title": "条件路由：写出可验证的实现",
+            "title": "条件路由迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
             "summary": "把状态判断和图的下一步名称分开，确保每个分支都可解释。",
             "minutes": 35,
@@ -12907,7 +12907,7 @@
               "langgraph-lesson-37"
             ],
             "exercise": {
-              "prompt": "实现 route_review(state)：score >= 0.8 返回 finish，否则返回 revise；不要修改 state。",
+              "prompt": "实现 route_review(state)：score >= 0.8 返回 finish，否则返回 revise；不要修改 state。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def route_review(state):\n    pass\n",
               "hints": [
                 "路由函数只返回有限的名称。",
@@ -12935,7 +12935,7 @@
             "id": "langgraph-lesson-24",
             "stageId": "langgraph-stage-4",
             "order": 25,
-            "title": "循环终止：写出可验证的实现",
+            "title": "循环终止迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
             "summary": "为循环同时设置业务完成条件和步数上限，避免图无限运行。",
             "minutes": 35,
@@ -12995,7 +12995,7 @@
               "langgraph-lesson-38"
             ],
             "exercise": {
-              "prompt": "实现 should_continue(state)：完成或 attempts >= 3 时返回 end，否则返回 revise。",
+              "prompt": "实现 should_continue(state)：完成或 attempts >= 3 时返回 end，否则返回 revise。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def should_continue(state):\n    pass\n",
               "hints": [
                 "两个终止原因都要覆盖。",
@@ -13023,9 +13023,9 @@
             "id": "langgraph-lesson-25",
             "stageId": "langgraph-stage-5",
             "order": 26,
-            "title": "Reducer：从概念到练习（第 26 节）",
+            "title": "Reducer迁移练习 2：从概念到练习（第 26 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Reducer 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Reducer迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13083,7 +13083,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“Reducer”练习并通过行为检查。",
+              "prompt": "完成“Reducer迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13111,9 +13111,9 @@
             "id": "langgraph-lesson-26",
             "stageId": "langgraph-stage-6",
             "order": 27,
-            "title": "Checkpoint：从概念到练习（第 27 节）",
+            "title": "Checkpoint迁移练习 2：从概念到练习（第 27 节）",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 Checkpoint 描述 State 输入、节点更新和恢复边界。",
+            "summary": "围绕 Checkpoint迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13171,7 +13171,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 Checkpoint 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "prompt": "为 Checkpoint迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
                 "先写 State 字段",
@@ -13199,7 +13199,7 @@
             "id": "langgraph-lesson-27",
             "stageId": "langgraph-stage-7",
             "order": 28,
-            "title": "thread_id：写出可验证的实现",
+            "title": "thread_id迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
             "summary": "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
             "minutes": 35,
@@ -13259,7 +13259,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。",
+              "prompt": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def get_thread_state(store, thread_id):\n    pass\n",
               "hints": [
                 "把 thread_id 当作唯一键。",
@@ -13287,9 +13287,9 @@
             "id": "langgraph-lesson-28",
             "stageId": "langgraph-stage-1",
             "order": 29,
-            "title": "短期记忆：从概念到练习（第 29 节）",
+            "title": "短期记忆迁移练习 2：从概念到练习（第 29 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 短期记忆 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 短期记忆迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13347,7 +13347,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“短期记忆”练习并通过行为检查。",
+              "prompt": "完成“短期记忆迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13375,9 +13375,9 @@
             "id": "langgraph-lesson-29",
             "stageId": "langgraph-stage-2",
             "order": 30,
-            "title": "Store：从概念到练习（第 30 节）",
+            "title": "Store迁移练习 2：从概念到练习（第 30 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Store 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Store迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13435,7 +13435,7 @@
               "langgraph-lesson-36"
             ],
             "exercise": {
-              "prompt": "完成“Store”练习并通过行为检查。",
+              "prompt": "完成“Store迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13463,9 +13463,9 @@
             "id": "langgraph-lesson-30",
             "stageId": "langgraph-stage-3",
             "order": 31,
-            "title": "长期记忆：从概念到练习（第 31 节）",
+            "title": "长期记忆迁移练习 2：从概念到练习（第 31 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 长期记忆 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 长期记忆迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13523,7 +13523,7 @@
               "langgraph-lesson-37"
             ],
             "exercise": {
-              "prompt": "完成“长期记忆”练习并通过行为检查。",
+              "prompt": "完成“长期记忆迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13551,9 +13551,9 @@
             "id": "langgraph-lesson-31",
             "stageId": "langgraph-stage-4",
             "order": 32,
-            "title": "Interrupt：从概念到练习（第 32 节）",
+            "title": "Interrupt迁移练习 2：从概念到练习（第 32 节）",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 Interrupt 描述 State 输入、节点更新和恢复边界。",
+            "summary": "围绕 Interrupt迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13611,7 +13611,7 @@
               "langgraph-lesson-38"
             ],
             "exercise": {
-              "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "prompt": "为 Interrupt迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
                 "先写 State 字段",
@@ -13639,9 +13639,9 @@
             "id": "langgraph-lesson-32",
             "stageId": "langgraph-stage-5",
             "order": 33,
-            "title": "恢复执行：从概念到练习（第 33 节）",
+            "title": "恢复执行迁移练习 2：从概念到练习（第 33 节）",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 恢复执行 描述 State 输入、节点更新和恢复边界。",
+            "summary": "围绕 恢复执行迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13699,7 +13699,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "prompt": "为 恢复执行迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
                 "先写 State 字段",
@@ -13727,9 +13727,9 @@
             "id": "langgraph-lesson-33",
             "stageId": "langgraph-stage-6",
             "order": 34,
-            "title": "流式事件：从概念到练习（第 34 节）",
+            "title": "流式事件迁移练习 2：从概念到练习（第 34 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 流式事件 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 流式事件迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13787,7 +13787,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“流式事件”练习并通过行为检查。",
+              "prompt": "完成“流式事件迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13815,9 +13815,9 @@
             "id": "langgraph-lesson-34",
             "stageId": "langgraph-stage-7",
             "order": 35,
-            "title": "子图：从概念到练习（第 35 节）",
+            "title": "子图迁移练习 2：从概念到练习（第 35 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 子图 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 子图迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13875,7 +13875,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“子图”练习并通过行为检查。",
+              "prompt": "完成“子图迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13903,9 +13903,9 @@
             "id": "langgraph-lesson-35",
             "stageId": "langgraph-stage-1",
             "order": 36,
-            "title": "并行分支：从概念到练习（第 36 节）",
+            "title": "并行分支迁移练习 2：从概念到练习（第 36 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 并行分支 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 并行分支迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13961,7 +13961,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“并行分支”练习并通过行为检查。",
+              "prompt": "完成“并行分支迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -13989,9 +13989,9 @@
             "id": "langgraph-lesson-36",
             "stageId": "langgraph-stage-2",
             "order": 37,
-            "title": "Supervisor：从概念到练习（第 37 节）",
+            "title": "Supervisor迁移练习 2：从概念到练习（第 37 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Supervisor 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Supervisor迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14047,7 +14047,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“Supervisor”练习并通过行为检查。",
+              "prompt": "完成“Supervisor迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -14075,9 +14075,9 @@
             "id": "langgraph-lesson-37",
             "stageId": "langgraph-stage-3",
             "order": 38,
-            "title": "多 Agent 协作：从概念到练习（第 38 节）",
+            "title": "多 Agent 协作迁移练习 2：从概念到练习（第 38 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 多 Agent 协作 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 多 Agent 协作迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14133,7 +14133,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
+              "prompt": "完成“多 Agent 协作迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -14161,9 +14161,9 @@
             "id": "langgraph-lesson-38",
             "stageId": "langgraph-stage-4",
             "order": 39,
-            "title": "人工审核：从概念到练习（第 39 节）",
+            "title": "人工审核迁移练习 2：从概念到练习（第 39 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 人工审核 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 人工审核迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14219,7 +14219,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成“人工审核”练习并通过行为检查。",
+              "prompt": "完成“人工审核迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -14247,9 +14247,9 @@
             "id": "langgraph-lesson-39",
             "stageId": "langgraph-stage-5",
             "order": 40,
-            "title": "Graph 项目：从概念到练习（第 40 节）",
+            "title": "Graph 项目迁移练习 2：从概念到练习（第 40 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Graph 项目 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 Graph 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14307,7 +14307,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“Graph 项目”练习并通过行为检查。",
+              "prompt": "完成“Graph 项目迁移练习 2”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
@@ -14335,9 +14335,9 @@
             "id": "langgraph-lesson-40",
             "stageId": "langgraph-stage-6",
             "order": 41,
-            "title": "StateGraph：从概念到练习（第 41 节）",
+            "title": "StateGraph迁移练习 3：从概念到练习（第 41 节）",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 StateGraph 描述 State 输入、节点更新和恢复边界。",
+            "summary": "围绕 StateGraph迁移练习 3 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14395,7 +14395,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 StateGraph 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
+              "prompt": "为 StateGraph迁移练习 3 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
               "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
               "hints": [
                 "先写 State 字段",
@@ -14423,9 +14423,9 @@
             "id": "langgraph-lesson-41",
             "stageId": "langgraph-stage-7",
             "order": 42,
-            "title": "节点与边：从概念到练习（第 42 节）",
+            "title": "节点与边迁移练习 3：从概念到练习（第 42 节）",
             "kicker": "LangGraph 学习",
-            "summary": "理解 节点与边 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "理解 节点与边迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -14483,7 +14483,7 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“节点与边”练习并通过行为检查。",
+              "prompt": "完成“节点与边迁移练习 3”练习并通过行为检查。",
               "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
