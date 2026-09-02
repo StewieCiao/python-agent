@@ -113,6 +113,61 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "不存在文件报错", expression: "_raises_file_not_found(read_nonempty_lines)", failure: "不要把真实文件错误伪装成空列表。", kind: "behavior" },
     ],
   },
+  "函数参数": {
+    summary: "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
+    prompt: "实现 describe_task(name, priority=\"normal\")，返回包含任务名和优先级的字典；调用者可用关键字覆盖默认值。",
+    starterCode: "def describe_task(name, priority=\"normal\"):\n    pass\n",
+    solution: "def describe_task(name, priority=\"normal\"):\n    return {\"name\": name, \"priority\": priority}\n",
+    hints: ["默认参数只在调用者未提供时生效。", "返回结构应由参数组成，不要写死任务名。", "分别用位置和关键字调用验证。"],
+    checks: [
+      { name: "默认参数", expression: "describe_task(\"整理笔记\") == {\"name\": \"整理笔记\", \"priority\": \"normal\"}", failure: "省略 priority 时应使用 normal。", kind: "behavior" },
+      { name: "关键字覆盖", expression: "describe_task(\"修复测试\", priority=\"high\")[\"priority\"] == \"high\"", failure: "关键字参数应覆盖默认值。", kind: "behavior" },
+    ],
+  },
+  "集合运算": {
+    summary: "用集合表达去重与成员关系，明确是否保留顺序。",
+    prompt: "实现 common_tags(left, right)，返回两个列表共有标签的排序后列表，重复标签只保留一次。",
+    starterCode: "def common_tags(left, right):\n    pass\n",
+    solution: "def common_tags(left, right):\n    return sorted(set(left) & set(right))\n",
+    hints: ["先把列表转换为集合去重。", "交集运算符是 &。", "排序让返回结果稳定、便于测试。"],
+    checks: [
+      { name: "交集去重", expression: "common_tags([\"rag\", \"python\", \"rag\"], [\"graph\", \"rag\"]) == [\"rag\"]", failure: "应只返回共有且去重后的标签。", kind: "behavior" },
+      { name: "无交集", expression: "common_tags([\"a\"], [\"b\"]) == []", failure: "没有共有标签时应返回空列表。", kind: "behavior" },
+    ],
+  },
+  "测试设计": {
+    summary: "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
+    prompt: "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。",
+    starterCode: "def is_valid_username(name):\n    pass\n",
+    solution: "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n",
+    hints: ["先检查长度的两个边界。", "replace 后用 isalnum 检查允许字符。", "测试空串、3 个字符、12 个字符和非法符号。"],
+    checks: [
+      { name: "合法边界", expression: "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)", failure: "长度边界内的合法名字应通过。", kind: "behavior" },
+      { name: "非法输入", expression: "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")", failure: "过短或含非法符号的名字应拒绝。", kind: "behavior" },
+    ],
+  },
+  "数据清洗": {
+    summary: "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
+    prompt: "实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。",
+    starterCode: "def clean_scores(values):\n    pass\n",
+    solution: "def clean_scores(values):\n    scores = []\n    for value in values:\n        try:\n            score = int(value)\n        except (TypeError, ValueError):\n            continue\n        if 0 <= score <= 100:\n            scores.append(score)\n    return scores\n",
+    hints: ["转换失败和范围不合法是两类不同边界。", "只把通过两层检查的值加入结果。", "使用字符串、数字、None 和超范围值混合测试。"],
+    checks: [
+      { name: "混合输入", expression: "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]", failure: "应保留可转换且在范围内的分数。", kind: "behavior" },
+      { name: "空输入", expression: "clean_scores([]) == []", failure: "空输入应返回空列表。", kind: "behavior" },
+    ],
+  },
+  "Agent 工具契约": {
+    summary: "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。",
+    prompt: "实现 weather_tool(city)，返回包含 city 和 condition 的字典；空城市名应抛出 ValueError，不返回伪造天气。",
+    starterCode: "def weather_tool(city):\n    pass\n",
+    solution: "def weather_tool(city):\n    if not isinstance(city, str) or not city.strip():\n        raise ValueError(\"city is required\")\n    return {\"city\": city.strip(), \"condition\": \"unknown\"}\n",
+    hints: ["工具先验证输入契约，再执行实际工作。", "错误输入不能返回看似成功的默认结果。", "输出字段要稳定，便于模型和测试读取。"],
+    checks: [
+      { name: "输出契约", expression: "weather_tool(\" 成都 \") == {\"city\": \"成都\", \"condition\": \"unknown\"}", failure: "工具应返回稳定字段并清理城市名。", kind: "behavior" },
+      { name: "输入失败", expression: "_raises_value_error(lambda: weather_tool(\"\"))", failure: "空城市名应明确失败，不能伪造结果。", kind: "behavior" },
+    ],
+  },
 };
 
 const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {

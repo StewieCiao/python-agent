@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "c607e4ea8e19eb72653cd5f6ab8582ceef3ff6e2001355a40920d73ec7c170f0",
-  "familyHash": "141e4967b23bb56900b3bac707758d992a637c1b0334a3b9d58f37e10c96eee0",
+  "catalogHash": "1553a1a59c4f97fc09a589c0437f339b4910503abb826674e4151801dd3f03c5",
+  "familyHash": "bd7232af1423e4dc22621eaf113669680a4b1537327c196df26c77b04846e1f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2937,9 +2937,9 @@
             "id": "python-lesson-28",
             "stageId": "python-stage-5",
             "order": 29,
-            "title": "集合运算迁移练习 2：从概念到练习（第 29 节）",
+            "title": "集合运算迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 集合运算迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-27"
@@ -2999,26 +2999,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“集合运算迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 common_tags(left, right)，返回两个列表共有标签的排序后列表，重复标签只保留一次。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def common_tags(left, right):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先把列表转换为集合去重。",
+                "交集运算符是 &。",
+                "排序让返回结果稳定、便于测试。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def common_tags(left, right):\n    return sorted(set(left) & set(right))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "交集去重",
+                "expression": "common_tags([\"rag\", \"python\", \"rag\"], [\"graph\", \"rag\"]) == [\"rag\"]",
+                "failure": "应只返回共有且去重后的标签。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无交集",
+                "expression": "common_tags([\"a\"], [\"b\"]) == []",
+                "failure": "没有共有标签时应返回空列表。",
                 "kind": "behavior"
               }
             ]
@@ -3573,9 +3573,9 @@
             "id": "python-lesson-35",
             "stageId": "python-stage-4",
             "order": 36,
-            "title": "测试设计迁移练习 2：从概念到练习（第 36 节）",
+            "title": "测试设计迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 测试设计迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-34"
@@ -3635,26 +3635,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“测试设计迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def is_valid_username(name):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先检查长度的两个边界。",
+                "replace 后用 isalnum 检查允许字符。",
+                "测试空串、3 个字符、12 个字符和非法符号。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合法边界",
+                "expression": "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)",
+                "failure": "长度边界内的合法名字应通过。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "非法输入",
+                "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
+                "failure": "过短或含非法符号的名字应拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -3663,9 +3663,9 @@
             "id": "python-lesson-36",
             "stageId": "python-stage-5",
             "order": 37,
-            "title": "数据清洗迁移练习 2：从概念到练习（第 37 节）",
+            "title": "数据清洗迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 数据清洗迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-35"
@@ -3725,26 +3725,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“数据清洗迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def clean_scores(values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "转换失败和范围不合法是两类不同边界。",
+                "只把通过两层检查的值加入结果。",
+                "使用字符串、数字、None 和超范围值混合测试。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def clean_scores(values):\n    scores = []\n    for value in values:\n        try:\n            score = int(value)\n        except (TypeError, ValueError):\n            continue\n        if 0 <= score <= 100:\n            scores.append(score)\n    return scores\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "混合输入",
+                "expression": "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]",
+                "failure": "应保留可转换且在范围内的分数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空输入",
+                "expression": "clean_scores([]) == []",
+                "failure": "空输入应返回空列表。",
                 "kind": "behavior"
               }
             ]
@@ -3933,9 +3933,9 @@
             "id": "python-lesson-39",
             "stageId": "python-stage-8",
             "order": 40,
-            "title": "Agent 工具契约迁移练习 2：从概念到练习（第 40 节）",
+            "title": "Agent 工具契约迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 Agent 工具契约迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-38"
@@ -3995,26 +3995,26 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“Agent 工具契约迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 weather_tool(city)，返回包含 city 和 condition 的字典；空城市名应抛出 ValueError，不返回伪造天气。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def weather_tool(city):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "工具先验证输入契约，再执行实际工作。",
+                "错误输入不能返回看似成功的默认结果。",
+                "输出字段要稳定，便于模型和测试读取。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def weather_tool(city):\n    if not isinstance(city, str) or not city.strip():\n        raise ValueError(\"city is required\")\n    return {\"city\": city.strip(), \"condition\": \"unknown\"}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "输出契约",
+                "expression": "weather_tool(\" 成都 \") == {\"city\": \"成都\", \"condition\": \"unknown\"}",
+                "failure": "工具应返回稳定字段并清理城市名。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "输入失败",
+                "expression": "_raises_value_error(lambda: weather_tool(\"\"))",
+                "failure": "空城市名应明确失败，不能伪造结果。",
                 "kind": "behavior"
               }
             ]
@@ -4383,9 +4383,9 @@
             "id": "python-lesson-44",
             "stageId": "python-stage-5",
             "order": 45,
-            "title": "函数参数迁移练习 3：从概念到练习（第 45 节）",
+            "title": "函数参数迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 函数参数迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-43"
@@ -4445,26 +4445,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“函数参数迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 describe_task(name, priority=\"normal\")，返回包含任务名和优先级的字典；调用者可用关键字覆盖默认值。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def describe_task(name, priority=\"normal\"):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "默认参数只在调用者未提供时生效。",
+                "返回结构应由参数组成，不要写死任务名。",
+                "分别用位置和关键字调用验证。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def describe_task(name, priority=\"normal\"):\n    return {\"name\": name, \"priority\": priority}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "默认参数",
+                "expression": "describe_task(\"整理笔记\") == {\"name\": \"整理笔记\", \"priority\": \"normal\"}",
+                "failure": "省略 priority 时应使用 normal。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "关键字覆盖",
+                "expression": "describe_task(\"修复测试\", priority=\"high\")[\"priority\"] == \"high\"",
+                "failure": "关键字参数应覆盖默认值。",
                 "kind": "behavior"
               }
             ]
@@ -4743,9 +4743,9 @@
             "id": "python-lesson-48",
             "stageId": "python-stage-1",
             "order": 49,
-            "title": "集合运算迁移练习 3：从概念到练习（第 49 节）",
+            "title": "集合运算迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 集合运算迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-47"
@@ -4805,26 +4805,26 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“集合运算迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 common_tags(left, right)，返回两个列表共有标签的排序后列表，重复标签只保留一次。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def common_tags(left, right):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先把列表转换为集合去重。",
+                "交集运算符是 &。",
+                "排序让返回结果稳定、便于测试。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def common_tags(left, right):\n    return sorted(set(left) & set(right))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "交集去重",
+                "expression": "common_tags([\"rag\", \"python\", \"rag\"], [\"graph\", \"rag\"]) == [\"rag\"]",
+                "failure": "应只返回共有且去重后的标签。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无交集",
+                "expression": "common_tags([\"a\"], [\"b\"]) == []",
+                "failure": "没有共有标签时应返回空列表。",
                 "kind": "behavior"
               }
             ]
@@ -5379,9 +5379,9 @@
             "id": "python-lesson-55",
             "stageId": "python-stage-8",
             "order": 56,
-            "title": "测试设计迁移练习 3：从概念到练习（第 56 节）",
+            "title": "测试设计迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 测试设计迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-54"
@@ -5441,26 +5441,26 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“测试设计迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def is_valid_username(name):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先检查长度的两个边界。",
+                "replace 后用 isalnum 检查允许字符。",
+                "测试空串、3 个字符、12 个字符和非法符号。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合法边界",
+                "expression": "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)",
+                "failure": "长度边界内的合法名字应通过。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "非法输入",
+                "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
+                "failure": "过短或含非法符号的名字应拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -5469,9 +5469,9 @@
             "id": "python-lesson-56",
             "stageId": "python-stage-1",
             "order": 57,
-            "title": "数据清洗迁移练习 3：从概念到练习（第 57 节）",
+            "title": "数据清洗迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 数据清洗迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-55"
@@ -5531,26 +5531,26 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“数据清洗迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def clean_scores(values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "转换失败和范围不合法是两类不同边界。",
+                "只把通过两层检查的值加入结果。",
+                "使用字符串、数字、None 和超范围值混合测试。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def clean_scores(values):\n    scores = []\n    for value in values:\n        try:\n            score = int(value)\n        except (TypeError, ValueError):\n            continue\n        if 0 <= score <= 100:\n            scores.append(score)\n    return scores\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "混合输入",
+                "expression": "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]",
+                "failure": "应保留可转换且在范围内的分数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空输入",
+                "expression": "clean_scores([]) == []",
+                "failure": "空输入应返回空列表。",
                 "kind": "behavior"
               }
             ]
@@ -5739,9 +5739,9 @@
             "id": "python-lesson-59",
             "stageId": "python-stage-4",
             "order": 60,
-            "title": "Agent 工具契约迁移练习 3：从概念到练习（第 60 节）",
+            "title": "Agent 工具契约迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 Agent 工具契约迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-58"
@@ -5801,26 +5801,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“Agent 工具契约迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 weather_tool(city)，返回包含 city 和 condition 的字典；空城市名应抛出 ValueError，不返回伪造天气。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def weather_tool(city):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "工具先验证输入契约，再执行实际工作。",
+                "错误输入不能返回看似成功的默认结果。",
+                "输出字段要稳定，便于模型和测试读取。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def weather_tool(city):\n    if not isinstance(city, str) or not city.strip():\n        raise ValueError(\"city is required\")\n    return {\"city\": city.strip(), \"condition\": \"unknown\"}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "输出契约",
+                "expression": "weather_tool(\" 成都 \") == {\"city\": \"成都\", \"condition\": \"unknown\"}",
+                "failure": "工具应返回稳定字段并清理城市名。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "输入失败",
+                "expression": "_raises_value_error(lambda: weather_tool(\"\"))",
+                "failure": "空城市名应明确失败，不能伪造结果。",
                 "kind": "behavior"
               }
             ]
