@@ -1,6 +1,6 @@
-import { lessons as pythonLessons } from "./curriculum.ts";
-import { lessonGuides } from "./lessonGuides.ts";
-import { lessonSolutions } from "./solutions.ts";
+import { lessons as pythonLessons } from "./python/curriculum.ts";
+import { lessonGuides } from "./python/lessonGuides.ts";
+import { lessonSolutions } from "./python/solutions.ts";
 
 export type VideoResource = {
   title: string;

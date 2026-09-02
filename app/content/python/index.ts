@@ -1,9 +1,9 @@
 import {
   lessons,
   type LessonTest,
-} from "../../lib/curriculum.ts";
-import { lessonGuides } from "../../lib/lessonGuides.ts";
-import { lessonSolutions } from "../../lib/solutions.ts";
+} from "./curriculum.ts";
+import { lessonGuides } from "./lessonGuides.ts";
+import { lessonSolutions } from "./solutions.ts";
 import type { CourseLesson, CourseStage } from "../schema.ts";
 
 const stageNames = [
@@ -70,4 +70,3 @@ export const pythonLessons: CourseLesson[] = lessons.map((lesson) => ({
   },
   browserChecks: lesson.tests.map(browserCheck),
 }));
-

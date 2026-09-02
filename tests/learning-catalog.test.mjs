@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   learningTracks,
   validateLearningCatalog,
-} from "../app/lib/learningCatalog.ts";
+} from "../app/content/learningCatalog.ts";
 
 test("学习目录以一组不变量阻止重复标识、无来源迁移和不可信视频", () => {
   assert.doesNotThrow(() => validateLearningCatalog(learningTracks));

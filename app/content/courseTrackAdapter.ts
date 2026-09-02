@@ -1,4 +1,4 @@
-import type { LearningLesson, LearningTrack } from "../lib/learningCatalog.ts";
+import type { LearningLesson, LearningTrack } from "./learningCatalog.ts";
 import type { CourseLesson, CourseSource, CourseStage } from "./schema.ts";
 
 function source(value: { label: string; url: string }): CourseSource {
@@ -57,4 +57,3 @@ export function adaptLegacyTrack(track: LearningTrack): { stages: CourseStage[];
     })),
   };
 }
-

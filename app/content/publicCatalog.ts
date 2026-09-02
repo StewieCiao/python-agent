@@ -1,6 +1,6 @@
 import snapshot from "../../generated/course-public.json";
-import type { Lesson, LessonTest } from "../lib/curriculum.ts";
-import type { LearningTrack } from "../lib/learningCatalog.ts";
+import type { Lesson, LessonTest } from "./python/curriculum.ts";
+import type { LearningTrack } from "./learningCatalog.ts";
 import type { CourseTrack } from "./schema.ts";
 
 const publicSnapshot = snapshot as {

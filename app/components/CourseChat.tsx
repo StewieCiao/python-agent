@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { LearningLesson, LearningTrack } from "../lib/learningCatalog";
+import type { LearningLesson, LearningTrack } from "../content/learningCatalog";
 import {
   clearCourseHistory,
   listModelProfiles,

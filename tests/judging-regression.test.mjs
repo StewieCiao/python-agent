@@ -2,8 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { loadPyodide } from "pyodide";
-import { lessons, MODULE_ORDER } from "../app/lib/curriculum.ts";
-import { lessonSolutions } from "../app/lib/solutions.ts";
+import { lessons, MODULE_ORDER } from "../app/content/python/curriculum.ts";
+import { lessonSolutions } from "../app/content/python/solutions.ts";
 
 const workerSource = await readFile(
   new URL("../public/python-worker.js", import.meta.url),

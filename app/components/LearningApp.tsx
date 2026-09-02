@@ -5,8 +5,8 @@ import { CatalogLesson } from "./CatalogLesson";
 import { CourseChat } from "./CourseChat";
 import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
-import type { LessonTest } from "../lib/curriculum";
-import type { LearningTrack } from "../lib/learningCatalog";
+import type { LessonTest } from "../content/python/curriculum";
+import type { LearningTrack } from "../content/learningCatalog";
 import { pythonWorkerUrl } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,

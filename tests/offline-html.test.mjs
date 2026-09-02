@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { learningTracks } from "../app/lib/learningCatalog.ts";
+import { learningTracks } from "../app/content/learningCatalog.ts";
 
 const offlineHtml = await readFile(
   new URL("../Stewie-个人学习站-离线版.html", import.meta.url),

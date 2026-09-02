@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { LearningLesson, LearningTrack } from "../lib/learningCatalog";
+import type { LearningLesson, LearningTrack } from "../content/learningCatalog";
 
 export function CatalogLesson({ track, lesson, onOpenChat }: {
   track: LearningTrack;

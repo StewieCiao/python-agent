@@ -1,4 +1,4 @@
-import type { Lesson } from "./curriculum";
+import type { Lesson } from "../content/python/curriculum";
 
 export type RunSnapshot = Readonly<{
   token: string;

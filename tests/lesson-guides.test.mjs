@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { lessons } from "../app/lib/curriculum.ts";
-import { lessonGuides } from "../app/lib/lessonGuides.ts";
+import { lessons } from "../app/content/python/curriculum.ts";
+import { lessonGuides } from "../app/content/python/lessonGuides.ts";
 
 const expectedKinds = ["概念入门", "逐步拆解", "常见误区"];
 
