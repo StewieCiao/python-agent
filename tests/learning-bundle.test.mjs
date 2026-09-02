@@ -55,6 +55,8 @@ const validCatalog = {
               bullets: ["要点"],
               example: "print(1)",
             },
+            { kind: "逐步拆解", title: "步骤", body: "拆开", bullets: ["步骤"], example: "x = 1" },
+            { kind: "常见误区", title: "边界", body: "检查", bullets: ["边界"], example: "assert x == 1" },
           ],
           videos: [],
           officialSources: [
@@ -71,7 +73,7 @@ const validCatalog = {
           exercise: {
             prompt: "输出 1",
             starterCode: "print()",
-            hints: ["调用 print"],
+            hints: ["调用 print", "检查参数", "运行验证"],
             solution: "print(1)",
           },
           browserChecks: [

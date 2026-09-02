@@ -184,7 +184,8 @@ function validateLesson(value: unknown, path: string, stageIds: Set<string>, les
   if (!["beginner", "intermediate", "advanced"].includes(value.difficulty as string)) throw new Error(`${path}.difficulty 无效`);
   requireStringArray(value.prerequisites, `${path}.prerequisites`);
   requireStringArray(value.tags, `${path}.tags`);
-  if (!Array.isArray(value.guide) || value.guide.length === 0) throw new Error(`${path}.guide 不能为空`);
+  if (!Array.isArray(value.guide) || value.guide.length !== 3) throw new Error(`${path}.guide 必须正好包含三张讲解卡`);
+  if (new Set(value.guide.map((item) => isRecord(item) ? item.kind : "")).size !== 3) throw new Error(`${path}.guide 的 kind 必须各不相同`);
   if (!Array.isArray(value.videos) || !Array.isArray(value.officialSources) || !Array.isArray(value.migrations)) {
     throw new Error(`${path} 缺少来源或资源数组`);
   }
@@ -194,6 +195,7 @@ function validateLesson(value: unknown, path: string, stageIds: Set<string>, les
   requireString(value.exercise.prompt, `${path}.exercise.prompt`);
   requireString(value.exercise.starterCode, `${path}.exercise.starterCode`);
   requireStringArray(value.exercise.hints, `${path}.exercise.hints`);
+  if (value.exercise.hints.length !== 3 || new Set(value.exercise.hints).size !== 3) throw new Error(`${path}.exercise.hints 必须是三层不重复提示`);
   requireString(value.exercise.solution, `${path}.exercise.solution`);
   if (!Array.isArray(value.browserChecks)) throw new Error(`${path}.browserChecks 必须是数组`);
   for (const [index, source] of value.officialSources.entries()) validateSource(source, `${path}.officialSources[${index}]`);
