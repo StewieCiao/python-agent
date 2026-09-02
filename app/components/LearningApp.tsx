@@ -1006,23 +1006,23 @@ export function LearningApp() {
               <p>从工具调用到旅行助手与 DeepResearch：仍然是读契约、写代码、看真实反馈、逐项通过测试。</p>
             </div>
             <div className="project-grid">
-              {lessons.filter((item) => item.project).map((item) => {
-                const index = lessons.findIndex((candidate) => candidate.id === item.id);
+              {learningTracks.flatMap((track) => track.lessons.filter((item) => item.project).map((item) => ({ track, item }))).map(({ track, item }) => {
                 const completed = progress.completed.includes(item.id);
                 return (
-                  <article className="project-card" key={item.id}>
-                    <div className="project-number">PROJECT {String(item.number - 12).padStart(2, "0")}</div>
+                  <article className="project-card" key={`${track.id}/${item.id}`}>
+                    <div className="project-number">{track.shortTitle} · PROJECT</div>
                     <h3>{item.title}</h3>
-                    <p>{item.goal}</p>
+                    <p>{item.summary}</p>
                     <div className="project-tags">
                       <span>{item.minutes} 分钟</span>
-                      <span>{item.tests.length} 项验收</span>
+                      <span>{(item.browserChecks ?? []).length} 项验收</span>
                     </div>
                     <button disabled={isRunning} onClick={() => {
-                      setActiveTrackId("python");
-                      openLesson(index);
+                      setActiveTrackId(track.id);
+                      setActiveLearningLessonId(item.id);
+                      setViewMode("learn");
                     }} type="button">
-                      {completed ? "重新练习" : "开始 Agent 项目"} →
+                      {completed ? "重新查看" : "开始项目"} →
                     </button>
                   </article>
                 );
