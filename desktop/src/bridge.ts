@@ -1,6 +1,7 @@
 import type { PythonHealth } from "./pythonService.mjs";
 import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelConfig.ts";
 import type { ModelMessage } from "./modelClient.mjs";
+import type { PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
   name: string;
@@ -35,6 +36,17 @@ export type StewieDesktopBridge = {
   deleteModelProfile(profileId: string): Promise<DesktopIpcResult<{ deleted: true }>>;
   testModelProfile(profileId: string): Promise<DesktopIpcResult<{ reply: string }>>;
   chatWithModel(input: { profileId: string; messages: ModelMessage[] }): Promise<DesktopIpcResult<{ reply: string }>>;
+  getLearningState(): Promise<DesktopIpcResult<PythonLearningState>>;
+  saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;
+  importLegacyLearningState(state: PythonLearningState, rawSource: string): Promise<DesktopIpcResult<{
+    imported: boolean;
+    state: PythonLearningState;
+  }>>;
+  listChatMessages(courseId: string, lessonId: string): Promise<DesktopIpcResult<PythonChatMessage[]>>;
+  appendChatMessages(courseId: string, lessonId: string, messages: readonly PythonChatMessage[]): Promise<DesktopIpcResult<PythonChatMessage[]>>;
+  clearChatMessages(courseId: string, lessonId: string): Promise<DesktopIpcResult<{ cleared: true }>>;
+  onBeforeClose(callback: () => void): () => void;
+  confirmClose(): Promise<DesktopIpcResult<{ closed: true }>>;
 };
 
 declare global {

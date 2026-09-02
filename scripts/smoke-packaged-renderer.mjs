@@ -2,7 +2,7 @@ import { spawn } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
 import { createServer as createHttpServer } from "node:http";
 import { createServer as createNetServer } from "node:net";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { packagedExecutablePath } from "./desktopPackagePaths.mjs";
 
@@ -158,34 +158,44 @@ function setLabeledInputExpression(label, value) {
   })()`;
 }
 
-const executable = process.env.STEWIE_PACKAGED_EXECUTABLE || packagedExecutablePath(process.platform, process.arch);
+const executable = process.env.STEWIE_PACKAGED_EXECUTABLE || resolve(packagedExecutablePath(process.platform, process.arch));
 const port = await reservePort();
 const modelServer = await startModelServer();
 const userDataDirectory = await mkdtemp(join(tmpdir(), "stewie-renderer-smoke-"));
 const stderr = [];
-const child = spawn(executable, [
-  `--remote-debugging-port=${port}`,
-  `--user-data-dir=${userDataDirectory}`,
-  "--no-first-run",
-], { stdio: ["ignore", "ignore", "pipe"] });
-child.stderr.setEncoding("utf8");
-child.stderr.on("data", (chunk) => stderr.push(chunk));
+let child;
 let childFailure = null;
 let childExitState = null;
-const childStopped = new Promise((resolve) => {
-  child.once("error", (error) => {
-    childFailure = error;
-    resolve();
+let childStopped;
+
+function launchChild() {
+  childFailure = null;
+  childExitState = null;
+  child = spawn(executable, [
+    `--remote-debugging-port=${port}`,
+    `--user-data-dir=${userDataDirectory}`,
+    "--no-first-run",
+  ], { stdio: ["ignore", "ignore", "pipe"] });
+  child.stderr.setEncoding("utf8");
+  child.stderr.on("data", (chunk) => stderr.push(chunk));
+  childStopped = new Promise((resolve) => {
+    child.once("error", (error) => {
+      childFailure = error;
+      resolve();
+    });
+    child.once("exit", (code, signal) => {
+      childExitState = { code, signal };
+      resolve();
+    });
   });
-  child.once("exit", (code, signal) => {
-    childExitState = { code, signal };
-    resolve();
-  });
-});
+}
+
+launchChild();
 
 let socket;
 try {
-  const page = await waitFor(async () => {
+  async function connectRenderer() {
+    const page = await waitFor(async () => {
     if (childFailure) throw new Error(`打包应用无法启动：${childFailure.message}`);
     if (childExitState) {
       throw new Error(`打包应用提前退出：code=${childExitState.code}, signal=${childExitState.signal ?? "none"}`);
@@ -200,20 +210,24 @@ try {
     } catch {
       return null;
     }
-  }, "未找到打包后的 stewie://app 页面", READY_TIMEOUT_MS);
+    }, "未找到打包后的 stewie://app 页面", READY_TIMEOUT_MS);
 
-  socket = new WebSocket(page.webSocketDebuggerUrl);
-  await withTimeout(
-    new Promise((resolve, reject) => {
-      socket.addEventListener("open", resolve, { once: true });
-      socket.addEventListener("error", reject, { once: true });
-    }),
-    "CDP WebSocket 未连接",
-  );
-  const send = createCdpClient(socket);
-  await send("Runtime.enable");
+    socket = new WebSocket(page.webSocketDebuggerUrl);
+    await withTimeout(
+      new Promise((resolve, reject) => {
+        socket.addEventListener("open", resolve, { once: true });
+        socket.addEventListener("error", reject, { once: true });
+      }),
+      "CDP WebSocket 未连接",
+    );
+    const cdpSend = createCdpClient(socket);
+    await cdpSend("Runtime.enable");
+    return cdpSend;
+  }
 
-  async function evaluate(expression) {
+  let send = await connectRenderer();
+
+  let evaluate = async function evaluateExpression(expression) {
     const result = await send("Runtime.evaluate", {
       expression,
       awaitPromise: true,
@@ -244,6 +258,49 @@ try {
 
   await setCodeAndRun('print("我的第一段 Python")\nprint(8 * 7)');
   await waitForText("全部通过 · 可以进入下一关");
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  const persistedAfterRun = await evaluate(`window.stewie.getLearningState()`);
+  if (!persistedAfterRun?.ok || !persistedAfterRun.value?.completed?.includes("first-output")) {
+    throw new Error(`打包应用没有把完成进度写入 SQLite：${JSON.stringify(persistedAfterRun)}`);
+  }
+  if (!await evaluate(setCodeExpression("draft-first"))) throw new Error("无法写入第一版草稿");
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  if (!await evaluate(setCodeExpression("draft-latest"))) throw new Error("无法写入最新草稿");
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  const persistedDraft = await evaluate(`window.stewie.getLearningState()`);
+  if (persistedDraft?.value?.drafts?.["first-output"] !== "draft-latest") {
+    throw new Error(`打包应用没有保留最新草稿：${JSON.stringify(persistedDraft)}`);
+  }
+
+  void send("Browser.close").catch(() => undefined);
+  await withTimeout(childStopped, "打包应用关闭握手未完成", READY_TIMEOUT_MS);
+  socket?.close();
+  socket = null;
+  launchChild();
+  send = await connectRenderer();
+  evaluate = async function evaluateAfterRestart(expression) {
+    const result = await send("Runtime.evaluate", {
+      expression,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    if (result.exceptionDetails) {
+      throw new Error(result.exceptionDetails.exception?.description ?? result.exceptionDetails.text);
+    }
+    return result.result.value;
+  };
+  await waitForText("Python 314.0.3 就绪", READY_TIMEOUT_MS);
+  const restoredState = await evaluate(`window.stewie.getLearningState()`);
+  if (
+    !restoredState?.ok ||
+    !restoredState.value?.completed?.includes("first-output") ||
+    restoredState.value?.drafts?.["first-output"] !== "draft-latest"
+  ) {
+    throw new Error(`重启后未恢复 SQLite 学习状态：${JSON.stringify(restoredState)}`);
+  }
+  if (!await evaluate(clickButtonExpression("Python"))) throw new Error("重启后无法切换到 Python 课程");
+  if (!await evaluate(clickButtonExpression("让 Python 开口"))) throw new Error("重启后无法打开第一节 Python 课程");
 
   await setCodeAndRun("if True");
   await waitForText("SyntaxError · 第 1 行");
@@ -300,6 +357,22 @@ try {
       modelServer.requests[0].url !== "/v1/chat/completions"
     ) {
       throw new Error(`打包应用模型请求合同不符：${JSON.stringify(modelServer.requests)}`);
+    }
+    const chatMessage = { role: "user", content: "smoke", createdAt: new Date().toISOString() };
+    const chatReply = { role: "assistant", content: "PACKAGED_OK", createdAt: new Date().toISOString() };
+    const append = await evaluate(`window.stewie.appendChatMessages("python", "chat-smoke", [${JSON.stringify(chatMessage)}, ${JSON.stringify(chatReply)}])`);
+    if (!append?.ok) throw new Error(`打包应用聊天写入失败：${JSON.stringify(append)}`);
+    const isolated = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
+    if (!isolated?.ok || isolated.value.length !== 0) throw new Error(`聊天记录未按关卡隔离：${JSON.stringify(isolated)}`);
+    const cleared = await evaluate(`window.stewie.clearChatMessages("python", "chat-smoke")`);
+    if (!cleared?.ok || !cleared.value?.cleared) throw new Error(`聊天记录清除失败：${JSON.stringify(cleared)}`);
+    const currentAfterClear = await evaluate(`window.stewie.listChatMessages("python", "chat-smoke")`);
+    if (!currentAfterClear?.ok || currentAfterClear.value.length !== 0) {
+      throw new Error(`聊天记录清除后当前关卡仍有记录：${JSON.stringify(currentAfterClear)}`);
+    }
+    const unrelatedAfterClear = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
+    if (!unrelatedAfterClear?.ok || unrelatedAfterClear.value.length !== 0) {
+      throw new Error(`清除聊天记录影响了其他关卡：${JSON.stringify(unrelatedAfterClear)}`);
     }
     process.stdout.write("packaged renderer smoke: Python execution/recovery and secure model request passed\n");
   } else {

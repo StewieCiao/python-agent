@@ -11,6 +11,7 @@ import {
 } from "electron";
 import started from "electron-squirrel-startup";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
 import type { DesktopAppInfo } from "./bridge";
 import type { DesktopIpcError, DesktopIpcResult } from "./bridge";
@@ -25,7 +26,12 @@ import {
   createModelProfileService,
   type ModelProfileService,
 } from "./modelProfileService.mjs";
-import { startPythonService, type PythonServiceClient } from "./pythonService.mjs";
+import {
+  startPythonService,
+  type PythonChatMessage,
+  type PythonLearningState,
+  type PythonServiceClient,
+} from "./pythonService.mjs";
 import {
   createDesktopSecurityPolicy,
   createWindowOptions,
@@ -59,11 +65,13 @@ const securityPolicy = createDesktopSecurityPolicy(devServerUrl);
 let pythonService: PythonServiceClient | undefined;
 let modelProfiles: ModelProfileService | undefined;
 let modelClient: ModelClient | undefined;
+const closingWindows = new WeakSet<BrowserWindow>();
 const runStartupTask = createStartupBoundary({
   showError(message) {
     dialog.showErrorBox("Stewie LearnOS 启动失败", message);
   },
   quit() {
+    for (const window of BrowserWindow.getAllWindows()) closingWindows.add(window);
     app.quit();
   },
 });
@@ -72,6 +80,15 @@ async function createWindow(): Promise<BrowserWindow> {
   const window = new BrowserWindow(
     createWindowOptions(join(__dirname, "preload.js"), app.isPackaged),
   );
+  let rendererReady = false;
+  window.webContents.once("did-finish-load", () => {
+    rendererReady = true;
+  });
+  window.on("close", (event) => {
+    if (closingWindows.has(window) || !rendererReady) return;
+    event.preventDefault();
+    window.webContents.send("app:prepare-close");
+  });
 
   window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   window.webContents.on("will-navigate", (event, url) => {
@@ -133,6 +150,11 @@ function activeModelClient(): ModelClient {
   return modelClient;
 }
 
+function activePythonService(): PythonServiceClient {
+  if (!pythonService) throw new Error("Python 服务尚未就绪");
+  return pythonService;
+}
+
 void runStartupTask(app.whenReady().then(async () => {
   session.defaultSession.setPermissionCheckHandler(securityPolicy.permissionCheckHandler);
   session.defaultSession.setPermissionRequestHandler(securityPolicy.permissionRequestHandler);
@@ -188,6 +210,20 @@ void runStartupTask(app.whenReady().then(async () => {
   ipcMain.handle("models:chat", trustedIpc(async (input: { profileId: string; messages: ModelMessage[] }) => ({
     reply: await activeModelClient().chat(input.profileId, input.messages),
   })));
+  ipcMain.handle("learning:get", trustedIpc(() => activePythonService().getLearningState()));
+  ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
+  ipcMain.handle("learning:import-legacy", trustedIpc((state: PythonLearningState, rawSource: string) => {
+    const sourceHash = createHash("sha256").update(rawSource, "utf8").digest("hex");
+    return activePythonService().importLegacyLearningState(state, sourceHash);
+  }));
+  ipcMain.handle("chat:list", trustedIpc((courseId: string, lessonId: string) => activePythonService().listChatMessages(courseId, lessonId)));
+  ipcMain.handle("chat:append", trustedIpc((courseId: string, lessonId: string, messages: readonly PythonChatMessage[]) => activePythonService().appendChatMessages(courseId, lessonId, messages)));
+  ipcMain.handle("chat:clear", trustedIpc((courseId: string, lessonId: string) => activePythonService().clearChatMessages(courseId, lessonId)));
+  ipcMain.handle("app:close-ready", trustedIpc(async () => {
+    for (const window of BrowserWindow.getAllWindows()) closingWindows.add(window);
+    app.quit();
+    return { closed: true as const };
+  }));
 
   await createWindow();
 
@@ -209,6 +245,6 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-app.on("before-quit", () => {
+app.on("will-quit", () => {
   pythonService?.stop();
 });

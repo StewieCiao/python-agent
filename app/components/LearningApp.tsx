@@ -19,11 +19,10 @@ import {
   snapshotMatches,
   type RunSnapshot,
 } from "../lib/runSnapshot.mjs";
-import { parseStoredProgress } from "../lib/storageState.mjs";
+import { loadLearningState, saveLearningState } from "../lib/desktopState.ts";
 
 const PYODIDE_VERSION = "314.0.3";
 const EXECUTION_TIMEOUT_MS = 4_000;
-const STORAGE_KEY = "python-agent-path-progress-v2";
 
 type TestResult = PromptTestResult;
 
@@ -135,6 +134,7 @@ export function LearningApp() {
   const [viewMode, setViewMode] = useState<ViewMode>("learn");
   const [progress, setProgress] = useState<StoredProgress>(EMPTY_PROGRESS);
   const [hydrated, setHydrated] = useState(false);
+  const [persistenceEnabled, setPersistenceEnabled] = useState(false);
   const [storageError, setStorageError] = useState("");
   const [code, setCode] = useState(lessons[0].starterCode);
   const [runRecord, setRunRecord] = useState<RunRecord | null>(null);
@@ -147,9 +147,15 @@ export function LearningApp() {
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
+  const progressRef = useRef(progress);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const saveVersionRef = useRef(0);
+  const saveChainRef = useRef(Promise.resolve());
+  const flushProgressSaveRef = useRef<() => Promise<void>>(() => Promise.resolve());
   const currentLessonIdRef = useRef(currentLessonId);
   const codeRef = useRef(code);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
+  progressRef.current = progress;
 
   const currentIndex = lessons.findIndex((lesson) => lesson.id === currentLessonId);
   const lesson = lessons[currentIndex];
@@ -163,32 +169,71 @@ export function LearningApp() {
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
 
   useEffect(() => {
-    let stored = EMPTY_PROGRESS;
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        stored = parseStoredProgress(raw, lessons.map((item) => item.id));
-      }
-    } catch (error) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- One-time client hydration must surface corrupt local data immediately.
+    let active = true;
+    void loadLearningState(lessons.map((item) => item.id)).then((loaded) => {
+      if (!active) return;
+      const initialCode = loaded.state.drafts[lessons[0].id] ?? lessons[0].starterCode;
+      codeRef.current = initialCode;
+      setProgress(loaded.state);
+      setCode(initialCode);
+      setPersistenceEnabled(!loaded.migrationError);
+      if (loaded.migrationError) setStorageError(loaded.migrationError);
+      setHydrated(true);
+    }).catch((error) => {
+      if (!active) return;
       setStorageError(`本地学习记录无法读取：${errorMessage(error)}。已使用空白进度。`);
-    }
-    setProgress(stored);
-    const initialCode = stored.drafts[lessons[0].id] ?? lessons[0].starterCode;
-    codeRef.current = initialCode;
-    setCode(initialCode);
-    setHydrated(true);
+      setPersistenceEnabled(false);
+      setHydrated(false);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-    } catch (error) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- A failed external write is user-visible state, not derived render state.
-      setStorageError(`本地学习记录保存失败：${errorMessage(error)}`);
-    }
-  }, [hydrated, progress]);
+    if (!hydrated || !persistenceEnabled) return;
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    const version = ++saveVersionRef.current;
+    saveTimerRef.current = setTimeout(() => {
+      saveTimerRef.current = null;
+      enqueueProgressSave(progress, version);
+    }, 300);
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [hydrated, persistenceEnabled, progress]);
+
+  function enqueueProgressSave(snapshot: StoredProgress, version: number): Promise<void> {
+    const task = saveChainRef.current.then(() => saveLearningState(snapshot));
+    saveChainRef.current = task.then(() => undefined, () => undefined);
+    void task.catch((error) => {
+      if (version === saveVersionRef.current) {
+        setStorageError(`本地学习记录保存失败：${errorMessage(error)}`);
+      }
+    });
+    return task;
+  }
+
+  function flushProgressSave(): Promise<void> {
+    if (!hydrated || !persistenceEnabled) return Promise.resolve();
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = null;
+    const version = ++saveVersionRef.current;
+    return enqueueProgressSave(progressRef.current, version);
+  }
+
+  flushProgressSaveRef.current = flushProgressSave;
+
+  useEffect(() => {
+    const desktop = typeof window === "undefined" ? null : window.stewie;
+    if (!desktop) return;
+    return desktop.onBeforeClose(() => {
+      void flushProgressSaveRef.current().then(
+        () => desktop.confirmClose(),
+        (error) => setStorageError(`关闭前保存学习记录失败：${errorMessage(error)}`),
+      );
+    });
+  }, [persistenceEnabled]);
 
   useEffect(() => {
     initializeWorker();
@@ -283,6 +328,7 @@ export function LearningApp() {
 
   function openLesson(index: number, restoredCode?: string) {
     if (runLockRef.current) return;
+    flushProgressSave();
     const nextLesson = lessons[index];
     const nextCode = restoredCode ?? progress.drafts[nextLesson.id] ?? nextLesson.starterCode;
     currentLessonIdRef.current = nextLesson.id;
@@ -325,6 +371,7 @@ export function LearningApp() {
 
   async function handleRun() {
     if (runLockRef.current || runtimeState !== "ready") return;
+    flushProgressSave();
     runLockRef.current = true;
     const token = crypto.randomUUID();
     const snapshot = createRunSnapshot({
@@ -685,6 +732,7 @@ export function LearningApp() {
                     aria-label="Python 代码编辑器"
                     data-testid="code-editor"
                     onChange={(event) => updateCode(event.target.value)}
+                    onBlur={flushProgressSave}
                     onKeyDown={(event) => {
                       if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
                         event.preventDefault();

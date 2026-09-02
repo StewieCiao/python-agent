@@ -9,6 +9,18 @@ const bridge: StewieDesktopBridge = Object.freeze({
   deleteModelProfile: (profileId) => ipcRenderer.invoke("profiles:delete", profileId),
   testModelProfile: (profileId) => ipcRenderer.invoke("models:test", profileId),
   chatWithModel: (input) => ipcRenderer.invoke("models:chat", input),
+  getLearningState: () => ipcRenderer.invoke("learning:get"),
+  saveLearningState: (state) => ipcRenderer.invoke("learning:save", state),
+  importLegacyLearningState: (state, rawSource) => ipcRenderer.invoke("learning:import-legacy", state, rawSource),
+  listChatMessages: (courseId, lessonId) => ipcRenderer.invoke("chat:list", courseId, lessonId),
+  appendChatMessages: (courseId, lessonId, messages) => ipcRenderer.invoke("chat:append", courseId, lessonId, messages),
+  clearChatMessages: (courseId, lessonId) => ipcRenderer.invoke("chat:clear", courseId, lessonId),
+  onBeforeClose: (callback) => {
+    const listener = () => callback();
+    ipcRenderer.on("app:prepare-close", listener);
+    return () => ipcRenderer.removeListener("app:prepare-close", listener);
+  },
+  confirmClose: () => ipcRenderer.invoke("app:close-ready"),
 });
 
 contextBridge.exposeInMainWorld("stewie", bridge);

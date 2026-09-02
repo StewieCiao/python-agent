@@ -98,7 +98,13 @@ export async function loadCourseHistory(courseId: string, lessonId: string): Pro
   messages: ChatMessage[];
   persisted: boolean;
 }> {
-  if (desktopBridge()) return { messages: [], persisted: false };
+  const desktop = desktopBridge();
+  if (desktop) {
+    return {
+      messages: unwrapDesktop(await desktop.listChatMessages(courseId, lessonId)),
+      persisted: true,
+    };
+  }
   const result = await localServiceRequest<{ messages: ChatMessage[] }>(
     `/chat-history?courseId=${encodeURIComponent(courseId)}&lessonId=${encodeURIComponent(lessonId)}`,
   );
@@ -106,7 +112,11 @@ export async function loadCourseHistory(courseId: string, lessonId: string): Pro
 }
 
 export async function clearCourseHistory(courseId: string, lessonId: string): Promise<void> {
-  if (desktopBridge()) return;
+  const desktop = desktopBridge();
+  if (desktop) {
+    unwrapDesktop(await desktop.clearChatMessages(courseId, lessonId));
+    return;
+  }
   await localServiceRequest(
     `/chat-history?courseId=${encodeURIComponent(courseId)}&lessonId=${encodeURIComponent(lessonId)}`,
     { method: "DELETE" },
@@ -130,10 +140,15 @@ export async function sendCourseChat(input: {
       history: input.history,
       message: input.message,
     });
-    return unwrapDesktop<{ reply: string }>(await desktop.chatWithModel({
+    const reply = unwrapDesktop<{ reply: string }>(await desktop.chatWithModel({
       profileId: input.profileId,
       messages,
     })).reply;
+    unwrapDesktop(await desktop.appendChatMessages(input.courseId, input.lessonId, [
+      { role: "user", content: input.message, createdAt: new Date().toISOString() },
+      { role: "assistant", content: reply, createdAt: new Date().toISOString() },
+    ]));
+    return reply;
   }
   return (await localServiceRequest<{ reply: string }>("/chat", {
     method: "POST",

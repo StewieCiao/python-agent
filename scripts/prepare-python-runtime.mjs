@@ -34,6 +34,7 @@ const SERVICE_FILES = [
   "service.py",
   "storage.py",
   "migrations/001-model-profiles.sql",
+  "migrations/002-learning-state.sql",
 ];
 
 async function pathExists(path) {
