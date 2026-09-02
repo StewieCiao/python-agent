@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "6a636ea1783b557b2ef21aafbbbc4be04d8e0b419121aa95015e96bb035c771f",
-  "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
+  "catalogHash": "30f1f9b6c1260b3234d73c4a3574da2552a2e2e94289317612e561e60dc51d6b",
+  "familyHash": "f8bad6fa2938311b4b50d18353f0801a7f3341044e648919726f68aa0ed71534",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2667,7 +2667,7 @@
             "id": "python-lesson-25",
             "stageId": "python-stage-3",
             "order": 26,
-            "title": "作用域：从概念到练习（第 26 节）",
+            "title": "作用域：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 作用域 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -2729,26 +2729,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“作用域”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。",
+              "starterCode": "def make_counter(start):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先找出需要跨调用保留的值。",
+                "把状态放在外层函数的局部作用域。",
+                "内部函数修改外层变量时需要声明 nonlocal。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def make_counter(start):\n    current = start\n    def next_value():\n        nonlocal current\n        current += 1\n        return current\n    return next_value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "连续调用递增",
+                "expression": "_counter_probe(make_counter, 4) == [5, 6, 7]",
+                "failure": "同一个计数器应连续递增。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "实例彼此隔离",
+                "expression": "_counter_isolated(make_counter)",
+                "failure": "两个计数器不能共享可变全局状态。",
                 "kind": "behavior"
               }
             ]
@@ -2757,7 +2757,7 @@
             "id": "python-lesson-26",
             "stageId": "python-stage-4",
             "order": 27,
-            "title": "列表与切片：从概念到练习（第 27 节）",
+            "title": "列表与切片：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 列表与切片 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -2817,26 +2817,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“列表与切片”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。",
+              "starterCode": "def take_every_other(items):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "切片格式是 start:stop:step。",
+                "步长为 2 可以跳过一个元素。",
+                "切片会产生新列表，检查空列表和单元素输入。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def take_every_other(items):\n    return items[::2]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保留顺序",
+                "expression": "take_every_other([10, 20, 30, 40, 50]) == [10, 30, 50]",
+                "failure": "应从首元素开始每隔一个取值。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不修改原列表",
+                "expression": "_preserves_input(take_every_other)",
+                "failure": "函数不应就地修改输入列表。",
                 "kind": "behavior"
               }
             ]
@@ -2845,7 +2845,7 @@
             "id": "python-lesson-27",
             "stageId": "python-stage-5",
             "order": 28,
-            "title": "字典聚合：从概念到练习（第 28 节）",
+            "title": "字典聚合：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 字典聚合 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -2905,26 +2905,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“字典聚合”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。",
+              "starterCode": "def count_categories(records):\n    counts = {}\n    return counts\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "每条记录都提供一个 category。",
+                "用 get(category, 0) 处理第一次出现。",
+                "用未在示例出现的 category 验证动态建键。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def count_categories(records):\n    counts = {}\n    for record in records:\n        category = record[\"category\"]\n        counts[category] = counts.get(category, 0) + 1\n    return counts\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "动态统计",
+                "expression": "count_categories([{\"category\": \"rust\"}, {\"category\": \"py\"}, {\"category\": \"rust\"}]) == {\"rust\": 2, \"py\": 1}",
+                "failure": "应按输入记录动态统计每个类别。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空输入",
+                "expression": "count_categories([]) == {}",
+                "failure": "空输入应返回空字典。",
                 "kind": "behavior"
               }
             ]
@@ -3021,7 +3021,7 @@
             "id": "python-lesson-29",
             "stageId": "python-stage-7",
             "order": 30,
-            "title": "异常边界：从概念到练习（第 30 节）",
+            "title": "异常边界：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 异常边界 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -3081,26 +3081,32 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“异常边界”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。",
+              "starterCode": "def parse_positive_int(text):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "int(text) 可能抛出 ValueError。",
+                "捕获范围只覆盖允许恢复的转换错误。",
+                "用 None 与 TypeError 探针分别验证两种边界。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def parse_positive_int(text):\n    try:\n        value = int(text)\n    except ValueError:\n        return None\n    return value if value > 0 else None\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "有效值",
+                "expression": "parse_positive_int(\"12\") == 12",
+                "failure": "合法正整数应返回 int。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无效值",
+                "expression": "parse_positive_int(\"0\") is None and parse_positive_int(\"x\") is None",
+                "failure": "零和非数字文本应返回 None。",
+                "kind": "behavior"
+              },
+              {
+                "name": "TypeError 外溢",
+                "expression": "_raises_type_error(lambda: parse_positive_int(None))",
+                "failure": "不要把 None 这类编程错误静默吞掉。",
                 "kind": "behavior"
               }
             ]
@@ -4429,7 +4435,7 @@
             "id": "python-lesson-45",
             "stageId": "python-stage-7",
             "order": 46,
-            "title": "作用域：从概念到练习（第 46 节）",
+            "title": "作用域：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 作用域 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -4489,26 +4495,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“作用域”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。",
+              "starterCode": "def make_counter(start):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先找出需要跨调用保留的值。",
+                "把状态放在外层函数的局部作用域。",
+                "内部函数修改外层变量时需要声明 nonlocal。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def make_counter(start):\n    current = start\n    def next_value():\n        nonlocal current\n        current += 1\n        return current\n    return next_value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "连续调用递增",
+                "expression": "_counter_probe(make_counter, 4) == [5, 6, 7]",
+                "failure": "同一个计数器应连续递增。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "实例彼此隔离",
+                "expression": "_counter_isolated(make_counter)",
+                "failure": "两个计数器不能共享可变全局状态。",
                 "kind": "behavior"
               }
             ]
@@ -4517,7 +4523,7 @@
             "id": "python-lesson-46",
             "stageId": "python-stage-8",
             "order": 47,
-            "title": "列表与切片：从概念到练习（第 47 节）",
+            "title": "列表与切片：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 列表与切片 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -4577,26 +4583,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“列表与切片”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。",
+              "starterCode": "def take_every_other(items):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "切片格式是 start:stop:step。",
+                "步长为 2 可以跳过一个元素。",
+                "切片会产生新列表，检查空列表和单元素输入。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def take_every_other(items):\n    return items[::2]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保留顺序",
+                "expression": "take_every_other([10, 20, 30, 40, 50]) == [10, 30, 50]",
+                "failure": "应从首元素开始每隔一个取值。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不修改原列表",
+                "expression": "_preserves_input(take_every_other)",
+                "failure": "函数不应就地修改输入列表。",
                 "kind": "behavior"
               }
             ]
@@ -4605,7 +4611,7 @@
             "id": "python-lesson-47",
             "stageId": "python-stage-1",
             "order": 48,
-            "title": "字典聚合：从概念到练习（第 48 节）",
+            "title": "字典聚合：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 字典聚合 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -4665,26 +4671,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“字典聚合”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。",
+              "starterCode": "def count_categories(records):\n    counts = {}\n    return counts\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "每条记录都提供一个 category。",
+                "用 get(category, 0) 处理第一次出现。",
+                "用未在示例出现的 category 验证动态建键。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def count_categories(records):\n    counts = {}\n    for record in records:\n        category = record[\"category\"]\n        counts[category] = counts.get(category, 0) + 1\n    return counts\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "动态统计",
+                "expression": "count_categories([{\"category\": \"rust\"}, {\"category\": \"py\"}, {\"category\": \"rust\"}]) == {\"rust\": 2, \"py\": 1}",
+                "failure": "应按输入记录动态统计每个类别。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空输入",
+                "expression": "count_categories([]) == {}",
+                "failure": "空输入应返回空字典。",
                 "kind": "behavior"
               }
             ]
@@ -4781,7 +4787,7 @@
             "id": "python-lesson-49",
             "stageId": "python-stage-3",
             "order": 50,
-            "title": "异常边界：从概念到练习（第 50 节）",
+            "title": "异常边界：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "理解 异常边界 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
@@ -4841,26 +4847,32 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“异常边界”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。",
+              "starterCode": "def parse_positive_int(text):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "int(text) 可能抛出 ValueError。",
+                "捕获范围只覆盖允许恢复的转换错误。",
+                "用 None 与 TypeError 探针分别验证两种边界。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def parse_positive_int(text):\n    try:\n        value = int(text)\n    except ValueError:\n        return None\n    return value if value > 0 else None\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "有效值",
+                "expression": "parse_positive_int(\"12\") == 12",
+                "failure": "合法正整数应返回 int。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无效值",
+                "expression": "parse_positive_int(\"0\") is None and parse_positive_int(\"x\") is None",
+                "failure": "零和非数字文本应返回 None。",
+                "kind": "behavior"
+              },
+              {
+                "name": "TypeError 外溢",
+                "expression": "_raises_type_error(lambda: parse_positive_int(None))",
+                "failure": "不要把 None 这类编程错误静默吞掉。",
                 "kind": "behavior"
               }
             ]
