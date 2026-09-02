@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "dcd189d473b185175c5dad738077fc3bd13dd0c7d0b2dedd95ed8ed8481d6fab",
+  "catalogHash": "585f1bae34c9aa13c8619c366fd40047c388b20c2c5acda5cbfa4eace7d05f67",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6080,7 +6080,11 @@
             "kicker": "langchain-rag 学习",
             "summary": "把第 37–38 节的 History 类放回正确位置，区分持久化消息、线程状态和跨线程记忆。",
             "minutes": 55,
-            "prerequisites": [],
+            "prerequisites": [
+              "functions",
+              "dictionaries",
+              "exceptions"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -10517,7 +10521,11 @@
             "kicker": "langgraph 学习",
             "summary": "先把图看成共享状态上的函数流程，再学习 Agent。",
             "minutes": 50,
-            "prerequisites": [],
+            "prerequisites": [
+              "functions",
+              "model-messages-prompts",
+              "runnable-pipeline"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [

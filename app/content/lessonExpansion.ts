@@ -31,6 +31,8 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   const stages: CourseStage[] = expansion.stageTitles.map((title, index) => ({ id: `${track.id}-stage-${index + 1}`, order: index + 1, title, description: `${title} 的核心概念与实践。`, lessonIds: [] }));
   const lessons = [...track.lessons];
   while (lessons.length < expansion.targetLessons) lessons.push(generatedLesson(track, lessons.length, stages[lessons.length % stages.length].id, false));
+  if (track.id === "langchain-rag") lessons[0].prerequisites = ["functions", "dictionaries", "exceptions"];
+  if (track.id === "langgraph") lessons[0].prerequisites = ["functions", "model-messages-prompts", "runnable-pipeline"];
   let projects = lessons.filter(({ project }) => project).length;
   for (const lesson of lessons) {
     const stage = stages[lesson.order % stages.length];
