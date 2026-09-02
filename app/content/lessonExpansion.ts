@@ -205,13 +205,29 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     lesson.order = lessons.indexOf(lesson) + 1;
     stage.lessonIds.push(lesson.id);
   }
-  for (const lesson of [...lessons].reverse()) {
+  const stageProjectCandidates = stages.map((stage) => [...lessons].reverse().find((lesson) => lesson.stageId === stage.id && !lesson.project)).filter((lesson): lesson is CourseLesson => Boolean(lesson));
+  for (const lesson of stageProjectCandidates) {
     if (projects >= expansion.projectCount) break;
-    if (!lesson.project) { lesson.project = true; projects += 1; }
+    lesson.project = true;
+    projects += 1;
   }
-  const projectIds = lessons.filter(({ project }) => project).map(({ id }) => id);
+  if (projects < expansion.projectCount) {
+    for (const lesson of [...lessons].reverse()) {
+      if (projects >= expansion.projectCount) break;
+      if (!lesson.project) { lesson.project = true; projects += 1; }
+    }
+  }
+  const projectIdsByStage = new Map<string, string>();
+  for (const project of lessons.filter(({ project }) => project)) {
+    if (!projectIdsByStage.has(project.stageId)) projectIdsByStage.set(project.stageId, project.id);
+  }
   for (const lesson of lessons) {
-    if (!lesson.project && projectIds.length > 0 && lesson.projectLinks.length === 0) lesson.projectLinks = [projectIds[0]];
+    if (!lesson.project && lesson.projectLinks.length === 0) {
+      const sameStageProject = projectIdsByStage.get(lesson.stageId);
+      const fallbackProject = lessons.find((candidate) => candidate.project)?.id;
+      const projectId = sameStageProject ?? fallbackProject;
+      if (projectId) lesson.projectLinks = [projectId];
+    }
   }
   return { ...track, stages, lessons };
 }
