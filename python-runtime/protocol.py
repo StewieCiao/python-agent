@@ -12,6 +12,12 @@ METHOD_PARAMS = {
     "profile.activate": {"profileId"},
     "profile.delete": {"profileId"},
     "profile.upsert": {"profile", "apiKeyCiphertext", "makeActive"},
+    "learning.get": set(),
+    "learning.save": {"state"},
+    "learning.importLegacy": {"state", "sourceHash"},
+    "chat.list": {"courseId", "lessonId"},
+    "chat.append": {"courseId", "lessonId", "messages"},
+    "chat.clear": {"courseId", "lessonId"},
 }
 
 
@@ -42,6 +48,18 @@ def decode_request(frame):
             raise ProtocolError("apiKeyCiphertext 必须是字符串或 null")
         if not isinstance(params["makeActive"], bool):
             raise ProtocolError("makeActive 必须是布尔值")
+    if request["method"] in {"learning.save", "learning.importLegacy"}:
+        if not isinstance(params["state"], dict):
+            raise ProtocolError("state 必须是对象")
+    if request["method"] == "learning.importLegacy":
+        if not isinstance(params["sourceHash"], str) or not params["sourceHash"]:
+            raise ProtocolError("sourceHash 必须是非空字符串")
+    if request["method"] in {"chat.list", "chat.append", "chat.clear"}:
+        for field in ("courseId", "lessonId"):
+            if not isinstance(params[field], str) or not params[field]:
+                raise ProtocolError(f"{field} 必须是非空字符串")
+    if request["method"] == "chat.append" and not isinstance(params["messages"], list):
+        raise ProtocolError("messages 必须是数组")
     return request
 
 

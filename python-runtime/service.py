@@ -1,6 +1,7 @@
 import argparse
 import importlib
 import importlib.metadata
+import json
 import platform
 import sqlite3
 import sys
@@ -78,12 +79,37 @@ def dispatch_request(request, storage):
         return storage.set_active_profile(params["profileId"])
     if method == "profile.delete":
         return storage.delete_profile(params["profileId"])
+    if method == "learning.get":
+        return storage.get_learning_state()
+    if method == "learning.save":
+        return storage.save_learning_state(params["state"])
+    if method == "learning.importLegacy":
+        return storage.import_legacy_learning_state(params["state"], params["sourceHash"])
+    if method == "chat.list":
+        return storage.list_chat_messages(params["courseId"], params["lessonId"])
+    if method == "chat.append":
+        return storage.append_chat_messages(
+            params["courseId"], params["lessonId"], params["messages"]
+        )
+    if method == "chat.clear":
+        return storage.clear_chat_messages(params["courseId"], params["lessonId"])
     raise ValueError("不支持的服务方法")
 
 
 def serve(input_stream, output_stream, storage):
     for frame in input_stream:
         request_id = None
+        try:
+            raw_request = json.loads(frame)
+        except json.JSONDecodeError:
+            raw_request = None
+        if (
+            isinstance(raw_request, dict)
+            and isinstance(raw_request.get("id"), str)
+            and raw_request["id"]
+            and len(raw_request["id"]) <= 128
+        ):
+            request_id = raw_request["id"]
         try:
             request = decode_request(frame)
             request_id = request["id"]

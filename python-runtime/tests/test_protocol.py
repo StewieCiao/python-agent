@@ -62,6 +62,40 @@ class ProtocolTest(unittest.TestCase):
                 with self.assertRaises(ProtocolError):
                     decode_request(frame)
 
+    def test_learning_and_chat_methods_accept_only_exact_parameter_contracts(self):
+        valid_requests = [
+            {"id": "l1", "method": "learning.get", "params": {}},
+            {"id": "l2", "method": "learning.save", "params": {"state": {}}},
+            {
+                "id": "l3",
+                "method": "learning.importLegacy",
+                "params": {"state": {}, "sourceHash": "sha256"},
+            },
+            {"id": "c1", "method": "chat.list", "params": {"courseId": "python", "lessonId": "one"}},
+            {
+                "id": "c2",
+                "method": "chat.append",
+                "params": {"courseId": "python", "lessonId": "one", "messages": []},
+            },
+            {"id": "c3", "method": "chat.clear", "params": {"courseId": "python", "lessonId": "one"}},
+        ]
+        for request in valid_requests:
+            with self.subTest(method=request["method"]):
+                self.assertEqual(decode_request(json.dumps(request)), request)
+
+        invalid_requests = [
+            {"id": "x", "method": "learning.get", "params": {"state": {}}},
+            {"id": "x", "method": "learning.save", "params": {"state": []}},
+            {"id": "x", "method": "learning.importLegacy", "params": {"state": {}, "sourceHash": ""}},
+            {"id": "x", "method": "chat.list", "params": {"courseId": "", "lessonId": "one"}},
+            {"id": "x", "method": "chat.append", "params": {"courseId": "python", "lessonId": "one", "messages": {}}},
+            {"id": "x", "method": "chat.clear", "params": {"courseId": "python", "lessonId": "one", "extra": True}},
+        ]
+        for request in invalid_requests:
+            with self.subTest(method=request["method"]):
+                with self.assertRaises(ProtocolError):
+                    decode_request(json.dumps(request))
+
 
 if __name__ == "__main__":
     unittest.main()

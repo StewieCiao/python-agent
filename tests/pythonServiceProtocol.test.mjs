@@ -148,6 +148,98 @@ test("健康握手超时会明确失败并终止服务，不自动重试", async
   assert.equal(child.killed, true);
 });
 
+test("桌面客户端暴露学习与聊天的严格服务调用", async () => {
+  const { startPythonService } = await loadPythonService();
+  const requests = [];
+  const state = { completed: ["lesson-1"], drafts: {}, mistakes: [] };
+  const child = createChild((requestLine, process) => {
+    const request = JSON.parse(requestLine);
+    requests.push(request);
+    const result = request.method === "health"
+      ? HEALTH_RESULT
+      : request.method === "learning.get" || request.method === "learning.save"
+        ? state
+        : request.method === "learning.importLegacy"
+          ? { imported: true, state }
+          : request.method === "chat.clear"
+            ? { cleared: true }
+            : [];
+    process.stdout.write(`${JSON.stringify({ id: request.id, ok: true, result })}\n`);
+  });
+  const client = await startPythonService({
+    resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
+    platform: "darwin",
+    databasePath: DATABASE_PATH,
+    timeoutMs: 100,
+    spawnProcess: () => child,
+    onFailure(error) {
+      assert.fail(error.message);
+    },
+  });
+
+  assert.deepEqual(await client.getLearningState(), state);
+  assert.deepEqual(await client.saveLearningState(state), state);
+  assert.deepEqual(await client.importLegacyLearningState(state, "hash-1"), { imported: true, state });
+  assert.deepEqual(await client.listChatMessages("python", "lesson-1"), []);
+  assert.deepEqual(await client.appendChatMessages("python", "lesson-1", []), []);
+  assert.deepEqual(await client.clearChatMessages("python", "lesson-1"), { cleared: true });
+  assert.deepEqual(
+    requests.slice(1).map(({ method, params }) => ({ method, params })),
+    [
+      { method: "learning.get", params: {} },
+      { method: "learning.save", params: { state } },
+      { method: "learning.importLegacy", params: { state, sourceHash: "hash-1" } },
+      { method: "chat.list", params: { courseId: "python", lessonId: "lesson-1" } },
+      { method: "chat.append", params: { courseId: "python", lessonId: "lesson-1", messages: [] } },
+      { method: "chat.clear", params: { courseId: "python", lessonId: "lesson-1" } },
+    ],
+  );
+  client.stop();
+});
+
+test("客户端拒绝畸形学习成功结果并通知故障边界", async () => {
+  const { startPythonService } = await loadPythonService();
+  const failures = [];
+  const child = createChild((requestLine, process) => {
+    const request = JSON.parse(requestLine);
+    const result = request.method === "health" ? HEALTH_RESULT : {};
+    process.stdout.write(`${JSON.stringify({ id: request.id, ok: true, result })}\n`);
+  });
+  const client = await startPythonService({
+    resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
+    platform: "darwin",
+    databasePath: DATABASE_PATH,
+    timeoutMs: 100,
+    spawnProcess: () => child,
+    onFailure: (error) => failures.push(error.message),
+  });
+
+  await assert.rejects(client.getLearningState(), /学习状态响应结构无效/);
+  assert.deepEqual(failures, ["学习状态响应结构无效"]);
+  client.stop();
+});
+
+test("客户端拒绝字段不完整的错题响应", async () => {
+  const { startPythonService } = await loadPythonService();
+  const child = createChild((requestLine, process) => {
+    const request = JSON.parse(requestLine);
+    const result = request.method === "health"
+      ? HEALTH_RESULT
+      : { completed: [], drafts: {}, mistakes: [{}] };
+    process.stdout.write(`${JSON.stringify({ id: request.id, ok: true, result })}\n`);
+  });
+  const client = await startPythonService({
+    resourcesPath: join("Applications", "Stewie LearnOS", "Resources"),
+    platform: "darwin",
+    databasePath: DATABASE_PATH,
+    timeoutMs: 100,
+    spawnProcess: () => child,
+    onFailure() {},
+  });
+  await assert.rejects(client.getLearningState(), /学习状态响应结构无效/);
+  client.stop();
+});
+
 test("SQLite 事务或 FTS5 探针失败时拒绝就绪", async () => {
   const { startPythonService } = await loadPythonService();
 

@@ -3,6 +3,8 @@ import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { join } from "node:path";
 import { createInterface } from "node:readline";
 import { pythonExecutableRelativePath } from "../../scripts/python-runtime-manifest.mjs";
+import type { ValidatedMistake, ValidatedProgress } from "../../app/lib/storageState.mjs";
+import type { PromptException, PromptTestResult } from "../../app/lib/gptPrompt.mjs";
 
 const PACKAGE_NAMES = [
   "langchain",
@@ -24,6 +26,14 @@ export type PythonHealth = {
 export type PythonServiceFrame =
   | { id: string; ok: true; result: unknown }
   | { id: string; ok: false; error: { type: string; message: string } };
+
+export type PythonLearningState = ValidatedProgress;
+
+export type PythonChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  createdAt: string;
+};
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -51,6 +61,81 @@ function isHealth(value: unknown): value is PythonHealth {
     typeof value.sqlite.transaction === "boolean" &&
     typeof value.sqlite.fts5 === "boolean"
   );
+}
+
+function isLearningState(value: unknown): value is PythonLearningState {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["completed", "drafts", "mistakes"]) &&
+    Array.isArray(value.completed) &&
+    value.completed.every((item) => typeof item === "string") &&
+    isRecord(value.drafts) &&
+    Object.values(value.drafts).every((item) => typeof item === "string") &&
+    Array.isArray(value.mistakes) && value.mistakes.every(isMistake)
+  );
+}
+
+function isPromptException(value: unknown): value is PromptException {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["type", "message", "traceback", "line"]) &&
+    typeof value.type === "string" &&
+    typeof value.message === "string" &&
+    typeof value.traceback === "string" &&
+    (value.line === null || typeof value.line === "number")
+  );
+}
+
+function isTestResult(value: unknown): value is PromptTestResult {
+  if (!isRecord(value)) return false;
+  const allowed = ["name", "passed", "detail", "expected", "actual", "rule", "kind"];
+  return (
+    ["name", "passed", "detail"].every((key) => key in value) &&
+    Object.keys(value).every((key) => allowed.includes(key)) &&
+    typeof value.name === "string" &&
+    typeof value.passed === "boolean" &&
+    typeof value.detail === "string" &&
+    (value.expected === undefined || typeof value.expected === "string") &&
+    (value.actual === undefined || typeof value.actual === "string") &&
+    (value.rule === undefined || typeof value.rule === "string") &&
+    (value.kind === undefined || value.kind === "behavior" || value.kind === "structure")
+  );
+}
+
+function isMistake(value: unknown): value is ValidatedMistake {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["id", "lessonId", "createdAt", "code", "output", "stderr", "exception", "tests"]) &&
+    ["id", "lessonId", "createdAt", "code", "output", "stderr"].every(
+      (key) => typeof value[key] === "string",
+    ) &&
+    (value.exception === null || isPromptException(value.exception)) &&
+    Array.isArray(value.tests) &&
+    value.tests.every(isTestResult)
+  );
+}
+
+function isChatMessages(value: unknown): value is PythonChatMessage[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (message) =>
+        isRecord(message) &&
+        hasExactKeys(message, ["role", "content", "createdAt"]) &&
+        (message.role === "user" || message.role === "assistant") &&
+        typeof message.content === "string" &&
+        typeof message.createdAt === "string",
+    )
+  );
+}
+
+function isImportResult(value: unknown): value is { imported: boolean; state: PythonLearningState } {
+  return isRecord(value) && hasExactKeys(value, ["imported", "state"]) &&
+    typeof value.imported === "boolean" && isLearningState(value.state);
+}
+
+function isClearedResult(value: unknown): value is { cleared: true } {
+  return isRecord(value) && hasExactKeys(value, ["cleared"]) && value.cleared === true;
 }
 
 export function resolvePythonServicePaths(resourcesPath: string, platform: string) {
@@ -167,6 +252,82 @@ export class PythonServiceClient {
       this.#pending.set(id, { timer, resolve, reject });
       this.#child.stdin.write(`${JSON.stringify({ id, method, params })}\n`);
     });
+  }
+
+  getLearningState(): Promise<PythonLearningState> {
+    return this.#requestChecked(
+      "learning.get",
+      {},
+      isLearningState,
+      "学习状态响应结构无效",
+    );
+  }
+
+  saveLearningState(state: PythonLearningState): Promise<PythonLearningState> {
+    return this.#requestChecked(
+      "learning.save",
+      { state },
+      isLearningState,
+      "学习状态响应结构无效",
+    );
+  }
+
+  importLegacyLearningState(
+    state: PythonLearningState,
+    sourceHash: string,
+  ): Promise<{ imported: boolean; state: PythonLearningState }> {
+    return this.#requestChecked(
+      "learning.importLegacy",
+      { state, sourceHash },
+      isImportResult,
+      "学习状态迁移响应结构无效",
+    );
+  }
+
+  listChatMessages(courseId: string, lessonId: string): Promise<PythonChatMessage[]> {
+    return this.#requestChecked(
+      "chat.list",
+      { courseId, lessonId },
+      isChatMessages,
+      "聊天历史响应结构无效",
+    );
+  }
+
+  appendChatMessages(
+    courseId: string,
+    lessonId: string,
+    messages: readonly PythonChatMessage[],
+  ): Promise<PythonChatMessage[]> {
+    return this.#requestChecked(
+      "chat.append",
+      { courseId, lessonId, messages },
+      isChatMessages,
+      "聊天历史响应结构无效",
+    );
+  }
+
+  clearChatMessages(courseId: string, lessonId: string): Promise<{ cleared: true }> {
+    return this.#requestChecked(
+      "chat.clear",
+      { courseId, lessonId },
+      isClearedResult,
+      "清除聊天响应结构无效",
+    );
+  }
+
+  async #requestChecked<T>(
+    method: string,
+    params: Record<string, unknown>,
+    isValid: (value: unknown) => value is T,
+    errorMessage: string,
+  ): Promise<T> {
+    const result = await this.request(method, params);
+    if (!isValid(result)) {
+      const error = new Error(errorMessage);
+      this.#fail(error);
+      throw error;
+    }
+    return result;
   }
 
   async #requestHealth(timeoutMs: number): Promise<PythonHealth> {

@@ -8,7 +8,8 @@ from pathlib import Path
 RUNTIME_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RUNTIME_ROOT))
 
-from service import build_health_result
+from service import build_health_result, dispatch_request
+from storage import Storage
 
 
 class ServiceTest(unittest.TestCase):
@@ -64,6 +65,37 @@ class ServiceTest(unittest.TestCase):
         )
         self.assertEqual((responses[2]["id"], responses[2]["ok"]), ("second", True))
 
+    def test_protocol_error_keeps_valid_request_id_and_service_continues(self):
+        frames = "\n".join(
+            [
+                '{"id":"bad-1","method":"learning.save","params":{"state":[]}}',
+                '{"id":"good-1","method":"health","params":{}}',
+            ]
+        ) + "\n"
+        with tempfile.TemporaryDirectory() as directory:
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNTIME_ROOT / "service.py"),
+                    "--database",
+                    str(Path(directory) / "stewie.db"),
+                ],
+                input=frames,
+                text=True,
+                capture_output=True,
+                check=True,
+            )
+        responses = [json.loads(line) for line in completed.stdout.splitlines()]
+        self.assertEqual(
+            responses[0],
+            {
+                "id": "bad-1",
+                "ok": False,
+                "error": {"type": "ProtocolError", "message": "state 必须是对象"},
+            },
+        )
+        self.assertEqual((responses[1]["id"], responses[1]["ok"]), ("good-1", True))
+
     def test_service_persists_opaque_profile_ciphertext(self):
         profile = {
             "id": "primary",
@@ -106,6 +138,62 @@ class ServiceTest(unittest.TestCase):
         responses = [json.loads(line) for line in completed.stdout.splitlines()]
         self.assertEqual(responses[0]["ok"], True)
         self.assertEqual(responses[1]["result"][0]["apiKeyCiphertext"], "Y2lwaGVydGV4dA==")
+
+    def test_service_dispatches_learning_and_chat_methods_to_storage(self):
+        state = {"completed": ["lesson-1"], "drafts": {"lesson-1": "print(1)"}, "mistakes": []}
+        with tempfile.TemporaryDirectory() as directory:
+            storage = Storage(Path(directory) / "stewie.db")
+            try:
+                self.assertEqual(
+                    dispatch_request(
+                        {"method": "learning.save", "params": {"state": state}}, storage
+                    ),
+                    state,
+                )
+                self.assertEqual(
+                    dispatch_request({"method": "learning.get", "params": {}}, storage), state
+                )
+                message = {
+                    "role": "user",
+                    "content": "问题",
+                    "createdAt": "2026-09-02T10:00:00+00:00",
+                }
+                self.assertEqual(
+                    dispatch_request(
+                        {
+                            "method": "chat.append",
+                            "params": {
+                                "courseId": "python",
+                                "lessonId": "lesson-1",
+                                "messages": [message],
+                            },
+                        },
+                        storage,
+                    ),
+                    [message],
+                )
+                self.assertEqual(
+                    dispatch_request(
+                        {
+                            "method": "chat.list",
+                            "params": {"courseId": "python", "lessonId": "lesson-1"},
+                        },
+                        storage,
+                    ),
+                    [message],
+                )
+                self.assertEqual(
+                    dispatch_request(
+                        {
+                            "method": "chat.clear",
+                            "params": {"courseId": "python", "lessonId": "lesson-1"},
+                        },
+                        storage,
+                    ),
+                    {"cleared": True},
+                )
+            finally:
+                storage.close()
 
 
 if __name__ == "__main__":
