@@ -7,7 +7,7 @@ import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
 import type { LessonTest } from "../content/python/curriculum";
 import type { LearningTrack } from "../content/learningCatalog";
-import { loadPersonalizedExercise, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
+import { loadMastery, loadPersonalizedExercise, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,
   type GptHelpPromptInput,
@@ -147,6 +147,7 @@ export function LearningApp() {
   const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
   const [personalizedStatus, setPersonalizedStatus] = useState("");
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
+  const [reviewQueueCount, setReviewQueueCount] = useState<number | null>(null);
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
@@ -213,6 +214,13 @@ export function LearningApp() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.stewie) return;
+    void loadMastery().then((mastery) => setReviewQueueCount(mastery.reviewQueue.length)).catch((error) => {
+      setStorageError(`复习队列无法读取：${errorMessage(error)}`);
+    });
+  }, [progress.mistakes.length]);
 
   useEffect(() => {
     if (!hydrated || !persistenceEnabled) return;
@@ -544,6 +552,7 @@ export function LearningApp() {
             <span style={{ width: `${completedPercent}%` }} />
           </div>
           <small>{progress.completed.length} / {lessons.length} 个练习完成 · 不锁定顺序</small>
+          {reviewQueueCount !== null && <small>待复习 {reviewQueueCount} 项</small>}
         </div>
 
         <nav className="course-nav" aria-label="个人学习课程">
