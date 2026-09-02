@@ -4,9 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CatalogLesson } from "./CatalogLesson";
 import { CourseChat } from "./CourseChat";
 import { ModelSettings } from "./ModelSettings";
-import { lessons, lessonsByModule, type LessonTest } from "../lib/curriculum";
-import { learningTracks, type LearningTrack } from "../lib/learningCatalog";
-import { lessonGuides } from "../lib/lessonGuides";
+import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
+import type { LessonTest } from "../lib/curriculum";
+import type { LearningTrack } from "../lib/learningCatalog";
 import { pythonWorkerUrl } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,
@@ -642,7 +642,7 @@ export function LearningApp() {
                   </div>
                 </div>
                 <div className="guide-list">
-                  {lessonGuides[lesson.id].map((guide, index) => (
+                  {lesson.concepts.map((guide, index) => (
                     <article className="guide-card" key={guide.title}>
                       <div className="guide-marker">
                         <span>{String(index + 1).padStart(2, "0")}</span>

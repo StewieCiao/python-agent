@@ -1,34 +1,16 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { lessons } from "../app/lib/curriculum.ts";
-import { lessonGuides } from "../app/lib/lessonGuides.ts";
-import { lessonSolutions } from "../app/lib/solutions.ts";
-import { learningTracks } from "../app/lib/learningCatalog.ts";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(scriptDirectory);
 const templatePath = join(projectRoot, "offline", "template.html");
 const outputPath = join(projectRoot, "Stewie-个人学习站-离线版.html");
 
-const missingSolutions = lessons
-  .filter((lesson) => typeof lessonSolutions[lesson.id] !== "string")
-  .map((lesson) => lesson.id);
-
-if (missingSolutions.length > 0) {
-  throw new Error(`以下关卡缺少参考答案：${missingSolutions.join(", ")}`);
-}
-
-const missingGuides = lessons
-  .filter((lesson) => !Array.isArray(lessonGuides[lesson.id]))
-  .map((lesson) => lesson.id);
-
-if (missingGuides.length > 0) {
-  throw new Error(`以下关卡缺少知识讲解：${missingGuides.join(", ")}`);
-}
+const publicSnapshot = JSON.parse(await readFile(join(projectRoot, "generated", "course-public.json"), "utf8"));
 
 const course = {
-  tracks: learningTracks,
+  tracks: publicSnapshot.catalog.tracks,
 };
 
 const template = await readFile(templatePath, "utf8");
