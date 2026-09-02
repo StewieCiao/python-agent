@@ -15,6 +15,10 @@ const bridge: StewieDesktopBridge = Object.freeze({
   listChatMessages: (courseId, lessonId) => ipcRenderer.invoke("chat:list", courseId, lessonId),
   appendChatMessages: (courseId, lessonId, messages) => ipcRenderer.invoke("chat:append", courseId, lessonId, messages),
   clearChatMessages: (courseId, lessonId) => ipcRenderer.invoke("chat:clear", courseId, lessonId),
+  importLegacyDesktopData: (input) => ipcRenderer.invoke("legacy:import", input),
+  recordLegacyDesktopFailure: (input) => ipcRenderer.invoke("legacy:record-failure", input),
+  exportLearningData: () => ipcRenderer.invoke("learning:export"),
+  importLearningData: () => ipcRenderer.invoke("learning:import-export"),
   onBeforeClose: (callback) => {
     const listener = () => callback();
     ipcRenderer.on("app:prepare-close", listener);

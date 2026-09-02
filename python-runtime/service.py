@@ -93,6 +93,18 @@ def dispatch_request(request, storage):
         )
     if method == "chat.clear":
         return storage.clear_chat_messages(params["courseId"], params["lessonId"])
+    if method == "legacy.import":
+        return storage.import_legacy(
+            params["sourceKind"], params["sourceHash"], params["profiles"], params["conversations"]
+        )
+    if method == "legacy.recordFailure":
+        return storage.record_legacy_failure(
+            params["sourceKind"], params["sourceHash"], params["errorMessage"]
+        )
+    if method == "learning.export":
+        return storage.export_learning()
+    if method == "learning.importExport":
+        return storage.import_learning_export(params["document"])
     raise ValueError("不支持的服务方法")
 
 

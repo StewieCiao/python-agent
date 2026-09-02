@@ -13,6 +13,7 @@ import started from "electron-squirrel-startup";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { pathToFileURL } from "node:url";
+import { readFile, writeFile } from "node:fs/promises";
 import type { DesktopAppInfo } from "./bridge";
 import type { DesktopIpcError, DesktopIpcResult } from "./bridge";
 import {
@@ -28,6 +29,7 @@ import {
 } from "./modelProfileService.mjs";
 import {
   startPythonService,
+  type LegacyConversation,
   type PythonChatMessage,
   type PythonLearningState,
   type PythonServiceClient,
@@ -38,6 +40,7 @@ import {
   resolveAppAsset,
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
+import { migrateLegacyDesktopFiles } from "./legacyMigration.mjs";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -187,6 +190,10 @@ void runStartupTask(app.whenReady().then(async () => {
     modelClient = createModelClient({
       getProfileForRequest: (profileId) => activeProfiles().getProfileForRequest(profileId),
     });
+    const migrationFailures = await migrateLegacyDesktopFiles({ service: pythonService });
+    if (migrationFailures.length > 0) {
+      dialog.showErrorBox("旧桌面数据未完全迁移", migrationFailures.join("\n"));
+    }
   }
 
   ipcMain.handle("app:info", (event): DesktopAppInfo => {
@@ -219,6 +226,30 @@ void runStartupTask(app.whenReady().then(async () => {
   ipcMain.handle("chat:list", trustedIpc((courseId: string, lessonId: string) => activePythonService().listChatMessages(courseId, lessonId)));
   ipcMain.handle("chat:append", trustedIpc((courseId: string, lessonId: string, messages: readonly PythonChatMessage[]) => activePythonService().appendChatMessages(courseId, lessonId, messages)));
   ipcMain.handle("chat:clear", trustedIpc((courseId: string, lessonId: string) => activePythonService().clearChatMessages(courseId, lessonId)));
+  ipcMain.handle("legacy:import", trustedIpc((input: { sourceKind: "model-profiles" | "chat-history"; sourceHash: string; profiles: unknown[] | null; conversations: LegacyConversation[] | null }) => activePythonService().importLegacy(input.sourceKind, input.sourceHash, input.profiles, input.conversations)));
+  ipcMain.handle("legacy:record-failure", trustedIpc((input: { sourceKind: "model-profiles" | "chat-history"; sourceHash: string; errorMessage: string }) => activePythonService().recordLegacyFailure(input.sourceKind, input.sourceHash, input.errorMessage)));
+  ipcMain.handle("learning:export", trustedIpc(async () => {
+    const target = await dialog.showSaveDialog({
+      title: "导出 Stewie 学习数据",
+      defaultPath: join(app.getPath("documents"), "stewie-learning-export.json"),
+      filters: [{ name: "JSON", extensions: ["json"] }],
+    });
+    if (target.canceled || !target.filePath) return { status: "cancelled" as const };
+    const document = await activePythonService().exportLearning();
+    await writeFile(target.filePath, `${JSON.stringify(document)}\n`, { encoding: "utf8", flag: "w" });
+    return { status: "saved" as const, path: target.filePath };
+  }));
+  ipcMain.handle("learning:import-export", trustedIpc(async () => {
+    const selection = await dialog.showOpenDialog({
+      title: "导入 Stewie 学习数据",
+      properties: ["openFile"],
+      filters: [{ name: "JSON", extensions: ["json"] }],
+    });
+    if (selection.canceled || selection.filePaths.length === 0) return { status: "cancelled" as const };
+    const document = JSON.parse(await readFile(selection.filePaths[0], "utf8")) as Record<string, unknown>;
+    const result = await activePythonService().importLearningExport(document);
+    return { status: "imported" as const, counts: result.counts };
+  }));
   ipcMain.handle("app:close-ready", trustedIpc(async () => {
     for (const window of BrowserWindow.getAllWindows()) closingWindows.add(window);
     app.quit();

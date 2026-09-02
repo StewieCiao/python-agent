@@ -1,7 +1,7 @@
 import type { PythonHealth } from "./pythonService.mjs";
 import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelConfig.ts";
 import type { ModelMessage } from "./modelClient.mjs";
-import type { PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
+import type { LegacyConversation, PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
   name: string;
@@ -45,6 +45,10 @@ export type StewieDesktopBridge = {
   listChatMessages(courseId: string, lessonId: string): Promise<DesktopIpcResult<PythonChatMessage[]>>;
   appendChatMessages(courseId: string, lessonId: string, messages: readonly PythonChatMessage[]): Promise<DesktopIpcResult<PythonChatMessage[]>>;
   clearChatMessages(courseId: string, lessonId: string): Promise<DesktopIpcResult<{ cleared: true }>>;
+  importLegacyDesktopData(input: { sourceKind: "model-profiles" | "chat-history"; sourceHash: string; profiles: unknown[] | null; conversations: LegacyConversation[] | null }): Promise<DesktopIpcResult<{ imported: boolean }>>;
+  recordLegacyDesktopFailure(input: { sourceKind: "model-profiles" | "chat-history"; sourceHash: string; errorMessage: string }): Promise<DesktopIpcResult<{ recorded: true }>>;
+  exportLearningData(): Promise<DesktopIpcResult<{ status: "cancelled" } | { status: "saved"; path: string }>>;
+  importLearningData(): Promise<DesktopIpcResult<{ status: "cancelled" } | { status: "imported"; counts: Record<string, number> }>>;
   onBeforeClose(callback: () => void): () => void;
   confirmClose(): Promise<DesktopIpcResult<{ closed: true }>>;
 };

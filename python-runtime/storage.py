@@ -149,6 +149,13 @@ def _validate_chat_key(course_id, lesson_id):
         raise ValueError("lesson_id 必须是非空字符串")
 
 
+def _validate_source(source_kind, source_hash):
+    if source_kind not in {"model-profiles", "chat-history"}:
+        raise ValueError("迁移源类型无效")
+    if not isinstance(source_hash, str) or not source_hash:
+        raise ValueError("迁移源 hash 无效")
+
+
 class Storage:
     def __init__(self, database_path, migrations_path=None):
         self.database_path = Path(database_path)
@@ -462,3 +469,134 @@ class Storage:
                 (course_id, lesson_id),
             )
         return {"cleared": True}
+
+    def import_legacy(self, source_kind, source_hash, profiles, conversations):
+        _validate_source(source_kind, source_hash)
+        if source_kind == "model-profiles":
+            if not isinstance(profiles, list) or not profiles:
+                raise ValueError("旧模型配置必须是非空数组")
+            validated = []
+            for profile in profiles:
+                profile = _validated_profile(profile)
+                validated.append(profile)
+            if len({profile["id"] for profile in validated}) != len(validated):
+                raise ValueError("旧模型配置 id 不得重复")
+        elif conversations is None or not isinstance(conversations, list):
+            raise ValueError("旧聊天历史必须是数组")
+        existing = self.connection.execute(
+            "SELECT status FROM migration_sources WHERE source_kind = ? AND source_hash = ?",
+            (source_kind, source_hash),
+        ).fetchone()
+        if existing is not None:
+            return {"imported": existing["status"] == "imported"}
+        with self.connection:
+            if source_kind == "model-profiles":
+                conflict = self.connection.execute(
+                    f"SELECT id FROM model_profiles WHERE id IN ({','.join('?' for _ in validated)}) LIMIT 1",
+                    [profile["id"] for profile in validated],
+                ).fetchone()
+                if conflict is not None:
+                    raise ValueError(f"模型配置 id 已存在：{conflict['id']}")
+                has_active = self.connection.execute(
+                    "SELECT 1 FROM model_profiles WHERE active = 1 LIMIT 1"
+                ).fetchone() is not None
+                for index, profile in enumerate(validated):
+                    self.connection.execute(
+                        """INSERT INTO model_profiles
+                        (id,name,base_url,provider_origin,model,embedding_model,temperature,max_tokens,timeout_ms,api_key_ciphertext,active)
+                        VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                        (profile["id"], profile["name"], profile["baseUrl"], profile["origin"], profile["model"],
+                         profile["embeddingModel"], profile["temperature"], profile["maxTokens"], profile["timeoutMs"], None,
+                         int(not has_active and index == 0)),
+                    )
+            else:
+                for conversation in conversations:
+                    if not isinstance(conversation, dict) or set(conversation) != {"courseId", "lessonId", "messages"}:
+                        raise ValueError("旧聊天记录字段无效")
+                    _validate_chat_key(conversation["courseId"], conversation["lessonId"])
+                    _validate_chat_messages(conversation["messages"])
+                    exists = self.connection.execute(
+                        "SELECT 1 FROM chat_messages WHERE course_id = ? AND lesson_id = ? LIMIT 1",
+                        (conversation["courseId"], conversation["lessonId"]),
+                    ).fetchone()
+                    if exists is not None:
+                        raise ValueError("旧聊天记录与现有记录冲突")
+                for conversation in conversations:
+                    course_id, lesson_id = conversation["courseId"], conversation["lessonId"]
+                    self.connection.execute(
+                        "INSERT INTO chat_threads(course_id, lesson_id) VALUES (?, ?)"
+                        "ON CONFLICT(course_id, lesson_id) DO NOTHING",
+                        (course_id, lesson_id),
+                    )
+                    for sequence, message in enumerate(conversation["messages"]):
+                        self.connection.execute(
+                            "INSERT INTO chat_messages(course_id, lesson_id, sequence, role, content, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                            (course_id, lesson_id, sequence, message["role"], message["content"], message["createdAt"]),
+                        )
+            self.connection.execute(
+                "INSERT INTO migration_sources(source_kind,source_hash,status) VALUES (?,?, 'imported')",
+                (source_kind, source_hash),
+            )
+        return {"imported": True}
+
+    def record_legacy_failure(self, source_kind, source_hash, error_message):
+        _validate_source(source_kind, source_hash)
+        if not isinstance(error_message, str) or not error_message:
+            raise ValueError("迁移失败原因无效")
+        with self.connection:
+            self.connection.execute(
+                "INSERT OR IGNORE INTO migration_sources(source_kind,source_hash,status,error_message) VALUES (?,?, 'failed', ?)",
+                (source_kind, source_hash, error_message),
+            )
+        return {"recorded": True}
+
+    def export_learning(self):
+        chats = []
+        for row in self.connection.execute("SELECT course_id, lesson_id FROM chat_threads ORDER BY course_id, lesson_id"):
+            chats.append({
+                "courseId": row["course_id"],
+                "lessonId": row["lesson_id"],
+                "messages": self.list_chat_messages(row["course_id"], row["lesson_id"]),
+            })
+        return {
+            "schema": "stewie-learning-export-v1",
+            "exportedAt": datetime.now().astimezone().isoformat(),
+            "learning": self.get_learning_state(),
+            "chats": chats,
+        }
+
+    def import_learning_export(self, document):
+        if not isinstance(document, dict) or set(document) != {"schema", "exportedAt", "learning", "chats"}:
+            raise ValueError("学习导入文件字段无效")
+        if document["schema"] != "stewie-learning-export-v1":
+            raise ValueError("学习导入文件版本不支持")
+        _validate_timestamp(document["exportedAt"])
+        _validate_learning_state(document["learning"])
+        if not isinstance(document["chats"], list):
+            raise ValueError("学习导入聊天字段无效")
+        for conversation in document["chats"]:
+            if not isinstance(conversation, dict) or set(conversation) != {"courseId", "lessonId", "messages"}:
+                raise ValueError("学习导入聊天字段无效")
+            _validate_chat_key(conversation["courseId"], conversation["lessonId"])
+            _validate_chat_messages(conversation["messages"])
+        with self.connection:
+            self._replace_learning_state(document["learning"])
+            self.connection.execute("DELETE FROM chat_threads")
+            for conversation in document["chats"]:
+                course_id, lesson_id = conversation["courseId"], conversation["lessonId"]
+                self.connection.execute("INSERT INTO chat_threads(course_id, lesson_id) VALUES (?, ?)", (course_id, lesson_id))
+                self.connection.executemany(
+                    "INSERT INTO chat_messages(course_id, lesson_id, sequence, role, content, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                    [(course_id, lesson_id, index, message["role"], message["content"], message["createdAt"])
+                     for index, message in enumerate(conversation["messages"])],
+                )
+        return {
+            "imported": True,
+            "counts": {
+                "completed": len(document["learning"]["completed"]),
+                "drafts": len(document["learning"]["drafts"]),
+                "mistakes": len(document["learning"]["mistakes"]),
+                "threads": len(document["chats"]),
+                "messages": sum(len(item["messages"]) for item in document["chats"]),
+            },
+        }

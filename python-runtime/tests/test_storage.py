@@ -222,6 +222,30 @@ class StorageTest(unittest.TestCase):
             self.storage.save_learning_state(invalid)
         self.assertEqual(self.storage.get_learning_state(), original)
 
+    def test_legacy_import_conflict_is_atomic_and_keyless(self):
+        profile = {
+            "id": "legacy", "name": "Legacy", "baseUrl": "https://example.com/v1", "origin": "https://example.com",
+            "model": "model", "embeddingModel": None, "temperature": 0, "maxTokens": 10, "timeoutMs": 1000,
+        }
+        self.storage.import_legacy("model-profiles", "profile-hash", [profile], None)
+        imported = self.storage.get_profile("legacy")
+        self.assertIsNone(imported["apiKeyCiphertext"])
+        self.assertTrue(imported["active"])
+        self.assertEqual(self.storage.import_legacy("model-profiles", "profile-hash", [profile], None), {"imported": True})
+
+    def test_learning_export_import_replaces_only_learning_and_chat(self):
+        state = learning_state(completed=["lesson-1"], drafts={"lesson-1": "exact"})
+        self.storage.save_learning_state(state)
+        messages = [{"role": "user", "content": "hello", "createdAt": "2026-09-02T10:00:00+00:00"}]
+        self.storage.append_chat_messages("python", "lesson-1", messages)
+        exported = self.storage.export_learning()
+        self.assertEqual(exported["learning"], state)
+        self.assertEqual(exported["chats"][0]["messages"], messages)
+        imported = self.storage.import_learning_export(exported)
+        self.assertEqual(imported["counts"], {"completed": 1, "drafts": 1, "mistakes": 0, "threads": 1, "messages": 1})
+        self.assertEqual(self.storage.get_learning_state(), state)
+        self.assertEqual(self.storage.list_chat_messages("python", "lesson-1"), messages)
+
 
 if __name__ == "__main__":
     unittest.main()

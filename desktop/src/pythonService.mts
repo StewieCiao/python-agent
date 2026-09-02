@@ -35,6 +35,8 @@ export type PythonChatMessage = {
   createdAt: string;
 };
 
+export type LegacyConversation = { courseId: string; lessonId: string; messages: PythonChatMessage[] };
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -136,6 +138,24 @@ function isImportResult(value: unknown): value is { imported: boolean; state: Py
 
 function isClearedResult(value: unknown): value is { cleared: true } {
   return isRecord(value) && hasExactKeys(value, ["cleared"]) && value.cleared === true;
+}
+
+function isImportedResult(value: unknown): value is { imported: boolean } {
+  return isRecord(value) && hasExactKeys(value, ["imported"]) && typeof value.imported === "boolean";
+}
+
+function isRecordedResult(value: unknown): value is { recorded: true } {
+  return isRecord(value) && hasExactKeys(value, ["recorded"]) && value.recorded === true;
+}
+
+function isLearningExport(value: unknown): value is Record<string, unknown> {
+  return isRecord(value) && value.schema === "stewie-learning-export-v1" && typeof value.exportedAt === "string" && isLearningState(value.learning) && Array.isArray(value.chats);
+}
+
+function isImportExportResult(value: unknown): value is { imported: true; counts: Record<string, number> } {
+  if (!isRecord(value) || value.imported !== true || !isRecord(value.counts)) return false;
+  const counts = value.counts;
+  return ["completed", "drafts", "mistakes", "threads", "messages"].every((key) => Number.isInteger(counts[key]) && (counts[key] as number) >= 0);
 }
 
 export function resolvePythonServicePaths(resourcesPath: string, platform: string) {
@@ -313,6 +333,32 @@ export class PythonServiceClient {
       isClearedResult,
       "清除聊天响应结构无效",
     );
+  }
+
+  importLegacy(sourceKind: "model-profiles" | "chat-history", sourceHash: string, profiles: unknown[] | null, conversations: LegacyConversation[] | null): Promise<{ imported: boolean }> {
+    return this.#requestChecked(
+      "legacy.import",
+      { sourceKind, sourceHash, profiles, conversations },
+      isImportedResult,
+      "旧桌面数据迁移响应结构无效",
+    );
+  }
+
+  recordLegacyFailure(sourceKind: "model-profiles" | "chat-history", sourceHash: string, errorMessage: string): Promise<{ recorded: true }> {
+    return this.#requestChecked(
+      "legacy.recordFailure",
+      { sourceKind, sourceHash, errorMessage },
+      isRecordedResult,
+      "旧桌面数据失败记录响应结构无效",
+    );
+  }
+
+  exportLearning(): Promise<Record<string, unknown>> {
+    return this.#requestChecked("learning.export", {}, isLearningExport, "学习导出响应结构无效");
+  }
+
+  importLearningExport(document: Record<string, unknown>): Promise<{ imported: true; counts: Record<string, number> }> {
+    return this.#requestChecked("learning.importExport", { document }, isImportExportResult, "学习导入响应结构无效");
   }
 
   async #requestChecked<T>(

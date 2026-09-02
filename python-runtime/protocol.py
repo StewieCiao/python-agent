@@ -18,6 +18,10 @@ METHOD_PARAMS = {
     "chat.list": {"courseId", "lessonId"},
     "chat.append": {"courseId", "lessonId", "messages"},
     "chat.clear": {"courseId", "lessonId"},
+    "legacy.import": {"sourceKind", "sourceHash", "profiles", "conversations"},
+    "legacy.recordFailure": {"sourceKind", "sourceHash", "errorMessage"},
+    "learning.export": set(),
+    "learning.importExport": {"document"},
 }
 
 
@@ -60,6 +64,22 @@ def decode_request(frame):
                 raise ProtocolError(f"{field} 必须是非空字符串")
     if request["method"] == "chat.append" and not isinstance(params["messages"], list):
         raise ProtocolError("messages 必须是数组")
+    if request["method"] == "legacy.import":
+        if params["sourceKind"] not in {"model-profiles", "chat-history"}:
+            raise ProtocolError("sourceKind 无效")
+        if not isinstance(params["sourceHash"], str) or not params["sourceHash"]:
+            raise ProtocolError("sourceHash 必须是非空字符串")
+        if params["sourceKind"] == "model-profiles" and (not isinstance(params["profiles"], list) or params["conversations"] is not None):
+            raise ProtocolError("legacy.import 数据字段无效")
+        if params["sourceKind"] == "chat-history" and (params["profiles"] is not None or not isinstance(params["conversations"], list)):
+            raise ProtocolError("legacy.import 数据字段无效")
+    if request["method"] == "legacy.recordFailure":
+        if params["sourceKind"] not in {"model-profiles", "chat-history"}:
+            raise ProtocolError("sourceKind 无效")
+        if not isinstance(params["sourceHash"], str) or not params["sourceHash"] or not isinstance(params["errorMessage"], str) or not params["errorMessage"]:
+            raise ProtocolError("legacy.recordFailure 字段无效")
+    if request["method"] == "learning.importExport" and not isinstance(params["document"], dict):
+        raise ProtocolError("document 必须是对象")
     return request
 
 
