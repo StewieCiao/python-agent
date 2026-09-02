@@ -2,6 +2,8 @@
 
 ## Phase 0–1（2026-09-02）
 
+阶段主题核对参考了 [LangChain Academy](https://github.com/langchain-ai/langchain-academy)、[langgraph-101](https://github.com/langchain-ai/langgraph-101)、[learning-langchain](https://github.com/langchain-ai/learning-langchain) 以及 [LangChain Retrieval 官方教程](https://docs.langchain.com/oss/python/langchain/retrieval)。这些链接只作为路线参考，课程正文仍以锁定版本的官方文档为准。
+
 - 作者目录已统一从 `app/content/catalog.ts` 生成，离线 HTML 与公开快照使用同一份数据。
 - 当前课程地图：Python 64 节 / 6 个项目，LangChain-RAG 48 节 / 4 个项目，LangGraph 42 节 / 4 个项目；阶段数分别为 8 / 7 / 7。
 - LangChain 草稿的官方文档已归入 `officialSources`，视频仅使用允许的视频域名。
