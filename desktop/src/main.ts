@@ -41,6 +41,8 @@ import {
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
 import { migrateLegacyDesktopFiles } from "./legacyMigration.mjs";
+import { lessons } from "../../app/lib/curriculum.ts";
+import { parseLearningExport } from "../../app/lib/learningExport.ts";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -246,8 +248,9 @@ void runStartupTask(app.whenReady().then(async () => {
       filters: [{ name: "JSON", extensions: ["json"] }],
     });
     if (selection.canceled || selection.filePaths.length === 0) return { status: "cancelled" as const };
-    const document = JSON.parse(await readFile(selection.filePaths[0], "utf8")) as Record<string, unknown>;
-    const result = await activePythonService().importLearningExport(document);
+    const raw = await readFile(selection.filePaths[0], "utf8");
+    const document = parseLearningExport(raw, lessons.map((lesson) => lesson.id));
+    const result = await activePythonService().importLearningExport(document as unknown as Record<string, unknown>);
     return { status: "imported" as const, counts: result.counts };
   }));
   ipcMain.handle("app:close-ready", trustedIpc(async () => {

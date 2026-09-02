@@ -149,7 +149,11 @@ function isRecordedResult(value: unknown): value is { recorded: true } {
 }
 
 function isLearningExport(value: unknown): value is Record<string, unknown> {
-  return isRecord(value) && value.schema === "stewie-learning-export-v1" && typeof value.exportedAt === "string" && isLearningState(value.learning) && Array.isArray(value.chats);
+  if (!isRecord(value) || !hasExactKeys(value, ["schema", "exportedAt", "learning", "chats"]) || value.schema !== "stewie-learning-export-v1" || typeof value.exportedAt !== "string" || !isLearningState(value.learning) || !Array.isArray(value.chats)) return false;
+  return value.chats.every((item) => {
+    if (!isRecord(item) || !hasExactKeys(item, ["courseId", "lessonId", "messages"]) || typeof item.courseId !== "string" || typeof item.lessonId !== "string" || !Array.isArray(item.messages)) return false;
+    return item.messages.every((message) => isRecord(message) && hasExactKeys(message, ["role", "content", "createdAt"]) && (message.role === "user" || message.role === "assistant") && typeof message.content === "string" && message.content.length > 0 && typeof message.createdAt === "string");
+  });
 }
 
 function isImportExportResult(value: unknown): value is { imported: true; counts: Record<string, number> } {

@@ -240,6 +240,21 @@ test("客户端拒绝字段不完整的错题响应", async () => {
   client.stop();
 });
 
+test("客户端拒绝带密文或畸形聊天的学习导出响应", async () => {
+  const { startPythonService } = await loadPythonService();
+  const child = createChild((requestLine, process) => {
+    const request = JSON.parse(requestLine);
+    const result = request.method === "health" ? HEALTH_RESULT : {
+      schema: "stewie-learning-export-v1", exportedAt: "2026-09-02T00:00:00Z",
+      learning: { completed: [], drafts: {}, mistakes: [] }, chats: [], apiKeyCiphertext: "secret",
+    };
+    process.stdout.write(`${JSON.stringify({ id: request.id, ok: true, result })}\n`);
+  });
+  const client = await startPythonService({ resourcesPath: join("Applications", "Stewie LearnOS", "Resources"), platform: "darwin", databasePath: DATABASE_PATH, timeoutMs: 100, spawnProcess: () => child, onFailure() {} });
+  await assert.rejects(client.exportLearning(), /学习导出响应结构无效/);
+  client.stop();
+});
+
 test("SQLite 事务或 FTS5 探针失败时拒绝就绪", async () => {
   const { startPythonService } = await loadPythonService();
 

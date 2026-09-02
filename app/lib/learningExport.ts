@@ -1,4 +1,5 @@
-import { parseStoredProgress, type StoredProgress } from "./storageState.mjs";
+import { parseStoredProgress } from "./storageState.mjs";
+import type { ValidatedProgress as StoredProgress } from "./storageState.mjs";
 
 export type LearningExportV1 = {
   schema: "stewie-learning-export-v1";
