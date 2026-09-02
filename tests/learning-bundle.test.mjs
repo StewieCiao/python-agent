@@ -226,10 +226,21 @@ test("作者目录聚合三条路线且 lesson id 不重复", async () => {
   );
   assert.deepEqual(
     authoredCatalog.tracks.map(({ lessons }) => lessons.length),
-    [25, 10, 7],
+    [64, 48, 42],
   );
   const ids = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.map(({ id }) => id));
   assert.equal(new Set(ids).size, ids.length);
+});
+
+test("完整课程地图达到三条路线的目标规模与项目数", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const expectations = { python: [64, 8, 6], "langchain-rag": [48, 7, 4], langgraph: [42, 7, 4] };
+  for (const track of authoredCatalog.tracks) {
+    const [lessonCount, stageCount, projectCount] = expectations[track.id];
+    assert.equal(track.lessons.length, lessonCount, `${track.id} lesson 数量`);
+    assert.equal(track.stages.length, stageCount, `${track.id} stage 数量`);
+    assert.equal(track.lessons.filter(({ project }) => project).length, projectCount, `${track.id} project 数量`);
+  }
 });
 
 function canonicalJson(value) {

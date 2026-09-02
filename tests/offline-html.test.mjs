@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { learningTracks } from "../app/content/learningCatalog.ts";
+import { authoredCatalog } from "../app/content/catalog.ts";
 
 const offlineHtml = await readFile(
   new URL("../Stewie-个人学习站-离线版.html", import.meta.url),
@@ -21,7 +21,7 @@ test("离线文件内嵌完整课程与参考答案", () => {
       currentLessonId,
       lessonIds: lessons.map((lesson) => lesson.id),
     })),
-    learningTracks.map(({ id, currentLessonId, lessons }) => ({
+    authoredCatalog.tracks.map(({ id, currentLessonId, lessons }) => ({
       id,
       currentLessonId,
       lessonIds: lessons.map((lesson) => lesson.id),
@@ -58,6 +58,6 @@ test("课程 JSON 使用脚本安全序列化", () => {
   assert.doesNotMatch(dataMatch[1], /<\/script/i);
   assert.deepEqual(
     JSON.parse(dataMatch[1]).tracks.map((track) => track.lessons.length),
-    learningTracks.map((track) => track.lessons.length),
+    authoredCatalog.tracks.map((track) => track.lessons.length),
   );
 });
