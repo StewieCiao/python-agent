@@ -26,6 +26,18 @@ test("RAG 没有达到相似度阈值时保留无匹配状态", async () => {
   assert.match(calls[0][1].content, /无匹配资料/);
 });
 
+test("RAG 相似度相同时保持来源输入顺序", async () => {
+  const service = createRagService({
+    embeddings: async (_profile, inputs) => inputs.map(() => [1, 0]),
+    chat: async () => "答案",
+  });
+  const result = await service.answer("p1", "问题", [
+    { id: "first", text: "一", source: "first.md" },
+    { id: "second", text: "二", source: "second.md" },
+  ]);
+  assert.deepEqual(result.sources, ["first.md", "second.md"]);
+});
+
 test("RAG 拒绝空问题或空文档，不调用模型", async () => {
   let called = false;
   const service = createRagService({ embeddings: async () => { called = true; return []; }, chat: async () => "" });
