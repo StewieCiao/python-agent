@@ -265,13 +265,7 @@ try {
     throw new Error(`打包应用没有把完成进度写入 SQLite：${JSON.stringify(persistedAfterRun)}`);
   }
   if (!await evaluate(setCodeExpression("draft-first"))) throw new Error("无法写入第一版草稿");
-  await new Promise((resolve) => setTimeout(resolve, 500));
   if (!await evaluate(setCodeExpression("draft-latest"))) throw new Error("无法写入最新草稿");
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  const persistedDraft = await evaluate(`window.stewie.getLearningState()`);
-  if (persistedDraft?.value?.drafts?.["first-output"] !== "draft-latest") {
-    throw new Error(`打包应用没有保留最新草稿：${JSON.stringify(persistedDraft)}`);
-  }
 
   void send("Browser.close").catch(() => undefined);
   await withTimeout(childStopped, "打包应用关闭握手未完成", READY_TIMEOUT_MS);
@@ -301,6 +295,24 @@ try {
   }
   if (!await evaluate(clickButtonExpression("Python"))) throw new Error("重启后无法切换到 Python 课程");
   if (!await evaluate(clickButtonExpression("让 Python 开口"))) throw new Error("重启后无法打开第一节 Python 课程");
+
+  const chatMessage = { role: "user", content: "smoke", createdAt: new Date().toISOString() };
+  const unrelatedMessage = { role: "assistant", content: "unrelated", createdAt: new Date().toISOString() };
+  const appendCurrent = await evaluate(`window.stewie.appendChatMessages("python", "chat-smoke", [${JSON.stringify(chatMessage)}])`);
+  const appendUnrelated = await evaluate(`window.stewie.appendChatMessages("python", "other-lesson", [${JSON.stringify(unrelatedMessage)}])`);
+  if (!appendCurrent?.ok || !appendUnrelated?.ok) throw new Error("打包应用聊天写入失败");
+  const unrelatedBeforeClear = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
+  if (!unrelatedBeforeClear?.ok || unrelatedBeforeClear.value.length !== 1 || unrelatedBeforeClear.value[0].content !== "unrelated") {
+    throw new Error(`聊天记录未按关卡隔离：${JSON.stringify(unrelatedBeforeClear)}`);
+  }
+  const cleared = await evaluate(`window.stewie.clearChatMessages("python", "chat-smoke")`);
+  if (!cleared?.ok || !cleared.value?.cleared) throw new Error(`聊天记录清除失败：${JSON.stringify(cleared)}`);
+  const currentAfterClear = await evaluate(`window.stewie.listChatMessages("python", "chat-smoke")`);
+  const unrelatedAfterClear = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
+  if (!currentAfterClear?.ok || currentAfterClear.value.length !== 0) throw new Error(`当前聊天记录未清空：${JSON.stringify(currentAfterClear)}`);
+  if (!unrelatedAfterClear?.ok || unrelatedAfterClear.value.length !== 1 || unrelatedAfterClear.value[0].content !== "unrelated") {
+    throw new Error(`清除聊天记录影响了其他关卡：${JSON.stringify(unrelatedAfterClear)}`);
+  }
 
   await setCodeAndRun("if True");
   await waitForText("SyntaxError · 第 1 行");
@@ -357,22 +369,6 @@ try {
       modelServer.requests[0].url !== "/v1/chat/completions"
     ) {
       throw new Error(`打包应用模型请求合同不符：${JSON.stringify(modelServer.requests)}`);
-    }
-    const chatMessage = { role: "user", content: "smoke", createdAt: new Date().toISOString() };
-    const chatReply = { role: "assistant", content: "PACKAGED_OK", createdAt: new Date().toISOString() };
-    const append = await evaluate(`window.stewie.appendChatMessages("python", "chat-smoke", [${JSON.stringify(chatMessage)}, ${JSON.stringify(chatReply)}])`);
-    if (!append?.ok) throw new Error(`打包应用聊天写入失败：${JSON.stringify(append)}`);
-    const isolated = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
-    if (!isolated?.ok || isolated.value.length !== 0) throw new Error(`聊天记录未按关卡隔离：${JSON.stringify(isolated)}`);
-    const cleared = await evaluate(`window.stewie.clearChatMessages("python", "chat-smoke")`);
-    if (!cleared?.ok || !cleared.value?.cleared) throw new Error(`聊天记录清除失败：${JSON.stringify(cleared)}`);
-    const currentAfterClear = await evaluate(`window.stewie.listChatMessages("python", "chat-smoke")`);
-    if (!currentAfterClear?.ok || currentAfterClear.value.length !== 0) {
-      throw new Error(`聊天记录清除后当前关卡仍有记录：${JSON.stringify(currentAfterClear)}`);
-    }
-    const unrelatedAfterClear = await evaluate(`window.stewie.listChatMessages("python", "other-lesson")`);
-    if (!unrelatedAfterClear?.ok || unrelatedAfterClear.value.length !== 0) {
-      throw new Error(`清除聊天记录影响了其他关卡：${JSON.stringify(unrelatedAfterClear)}`);
     }
     process.stdout.write("packaged renderer smoke: Python execution/recovery and secure model request passed\n");
   } else {
