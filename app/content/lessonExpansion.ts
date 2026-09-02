@@ -24,6 +24,39 @@ type TopicSpec = {
 };
 
 const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
+  "字符串处理": {
+    summary: "组合字符串方法完成清洗，同时保留输入语义和顺序。",
+    prompt: "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。",
+    starterCode: "def slugify(title):\n    pass\n",
+    solution: "def slugify(title):\n    return \"-\".join(title.strip().lower().split())\n",
+    hints: ["strip 处理两端空白。", "split 不带参数可以合并连续空白。", "用 join 重新组合清洗后的片段。"],
+    checks: [
+      { name: "清洗文本", expression: "slugify(\"  Hello   Python  \") == \"hello-python\"", failure: "应同时清理两端和连续空白。", kind: "behavior" },
+      { name: "中文保持", expression: "slugify(\" RAG 学习 \") == \"rag-学习\"", failure: "清洗不应破坏非 ASCII 文字。", kind: "behavior" },
+    ],
+  },
+  "条件分支": {
+    summary: "用互斥边界表达业务分类，让每个输入只落入一个结果。",
+    prompt: "实现 shipping_level(weight)：weight <= 0 返回 invalid；小于 1 返回 light；1–5 返回 standard；大于 5 返回 heavy。",
+    starterCode: "def shipping_level(weight):\n    pass\n",
+    solution: "def shipping_level(weight):\n    if weight <= 0:\n        return \"invalid\"\n    if weight < 1:\n        return \"light\"\n    if weight <= 5:\n        return \"standard\"\n    return \"heavy\"\n",
+    hints: ["先处理无效输入，避免它落入正常区间。", "按边界从小到大检查。", "测试 0、0.5、1、5 和 5.1。"],
+    checks: [
+      { name: "边界分类", expression: "[shipping_level(x) for x in [0, 0.5, 1, 5, 6]] == [\"invalid\", \"light\", \"standard\", \"standard\", \"heavy\"]", failure: "各重量边界应进入正确分类。", kind: "behavior" },
+      { name: "负数", expression: "shipping_level(-2) == \"invalid\"", failure: "负重量必须被拒绝。", kind: "behavior" },
+    ],
+  },
+  "循环与迭代": {
+    summary: "用一次清晰遍历完成筛选和汇总，并处理空输入。",
+    prompt: "实现 longest_word(words)，返回最长单词；空列表返回 None，长度相同返回先出现的单词。",
+    starterCode: "def longest_word(words):\n    pass\n",
+    solution: "def longest_word(words):\n    if not words:\n        return None\n    longest = words[0]\n    for word in words[1:]:\n        if len(word) > len(longest):\n            longest = word\n    return longest\n",
+    hints: ["先定义空列表的结果。", "把第一个元素作为当前最佳值。", "只在严格更长时替换，保持同长度的先后顺序。"],
+    checks: [
+      { name: "最长值", expression: "longest_word([\"api\", \"langchain\", \"rag\"]) == \"langchain\"", failure: "应返回实际最长单词。", kind: "behavior" },
+      { name: "空与并列", expression: "longest_word([]) is None and longest_word([\"ab\", \"cd\"]) == \"ab\"", failure: "应明确处理空输入和并列长度。", kind: "behavior" },
+    ],
+  },
   "作用域": {
     summary: "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
     prompt: "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。",

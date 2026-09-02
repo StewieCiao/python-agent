@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1553a1a59c4f97fc09a589c0437f339b4910503abb826674e4151801dd3f03c5",
-  "familyHash": "bd7232af1423e4dc22621eaf113669680a4b1537327c196df26c77b04846e1f8",
+  "catalogHash": "fb01542eec4b39b0d0472f82274100c51c0b3b67cdf5bd151cd810f3e0b215e9",
+  "familyHash": "a7f21ad0eeed56e358276823559163da88ed30f1fffc5e6082b68cf4bfea7e5a",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -4113,9 +4113,9 @@
             "id": "python-lesson-41",
             "stageId": "python-stage-2",
             "order": 42,
-            "title": "字符串处理迁移练习 3：从概念到练习（第 42 节）",
+            "title": "字符串处理迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 字符串处理迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-40"
@@ -4175,26 +4175,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“字符串处理迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def slugify(title):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "strip 处理两端空白。",
+                "split 不带参数可以合并连续空白。",
+                "用 join 重新组合清洗后的片段。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def slugify(title):\n    return \"-\".join(title.strip().lower().split())\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "清洗文本",
+                "expression": "slugify(\"  Hello   Python  \") == \"hello-python\"",
+                "failure": "应同时清理两端和连续空白。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "中文保持",
+                "expression": "slugify(\" RAG 学习 \") == \"rag-学习\"",
+                "failure": "清洗不应破坏非 ASCII 文字。",
                 "kind": "behavior"
               }
             ]
@@ -4203,9 +4203,9 @@
             "id": "python-lesson-42",
             "stageId": "python-stage-3",
             "order": 43,
-            "title": "条件分支迁移练习 3：从概念到练习（第 43 节）",
+            "title": "条件分支迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 条件分支迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-41"
@@ -4265,26 +4265,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“条件分支迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 shipping_level(weight)：weight <= 0 返回 invalid；小于 1 返回 light；1–5 返回 standard；大于 5 返回 heavy。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def shipping_level(weight):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理无效输入，避免它落入正常区间。",
+                "按边界从小到大检查。",
+                "测试 0、0.5、1、5 和 5.1。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def shipping_level(weight):\n    if weight <= 0:\n        return \"invalid\"\n    if weight < 1:\n        return \"light\"\n    if weight <= 5:\n        return \"standard\"\n    return \"heavy\"\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "边界分类",
+                "expression": "[shipping_level(x) for x in [0, 0.5, 1, 5, 6]] == [\"invalid\", \"light\", \"standard\", \"standard\", \"heavy\"]",
+                "failure": "各重量边界应进入正确分类。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "负数",
+                "expression": "shipping_level(-2) == \"invalid\"",
+                "failure": "负重量必须被拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -4293,9 +4293,9 @@
             "id": "python-lesson-43",
             "stageId": "python-stage-4",
             "order": 44,
-            "title": "循环与迭代迁移练习 3：从概念到练习（第 44 节）",
+            "title": "循环与迭代迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 循环与迭代迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-42"
@@ -4355,26 +4355,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“循环与迭代迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 longest_word(words)，返回最长单词；空列表返回 None，长度相同返回先出现的单词。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def longest_word(words):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先定义空列表的结果。",
+                "把第一个元素作为当前最佳值。",
+                "只在严格更长时替换，保持同长度的先后顺序。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def longest_word(words):\n    if not words:\n        return None\n    longest = words[0]\n    for word in words[1:]:\n        if len(word) > len(longest):\n            longest = word\n    return longest\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "最长值",
+                "expression": "longest_word([\"api\", \"langchain\", \"rag\"]) == \"langchain\"",
+                "failure": "应返回实际最长单词。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空与并列",
+                "expression": "longest_word([]) is None and longest_word([\"ab\", \"cd\"]) == \"ab\"",
+                "failure": "应明确处理空输入和并列长度。",
                 "kind": "behavior"
               }
             ]
@@ -5919,9 +5919,9 @@
             "id": "python-lesson-61",
             "stageId": "python-stage-6",
             "order": 62,
-            "title": "字符串处理迁移练习 4：从概念到练习（第 62 节）",
+            "title": "字符串处理迁移练习 4：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 字符串处理迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-60"
@@ -5981,26 +5981,26 @@
               "project-expense"
             ],
             "exercise": {
-              "prompt": "完成“字符串处理迁移练习 4”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。\n迁移要求：改用第 4 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def slugify(title):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "strip 处理两端空白。",
+                "split 不带参数可以合并连续空白。",
+                "用 join 重新组合清洗后的片段。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def slugify(title):\n    return \"-\".join(title.strip().lower().split())\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "清洗文本",
+                "expression": "slugify(\"  Hello   Python  \") == \"hello-python\"",
+                "failure": "应同时清理两端和连续空白。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "中文保持",
+                "expression": "slugify(\" RAG 学习 \") == \"rag-学习\"",
+                "failure": "清洗不应破坏非 ASCII 文字。",
                 "kind": "behavior"
               }
             ]
@@ -6009,9 +6009,9 @@
             "id": "python-lesson-62",
             "stageId": "python-stage-7",
             "order": 63,
-            "title": "条件分支迁移练习 4：从概念到练习（第 63 节）",
+            "title": "条件分支迁移练习 4：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 条件分支迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-61"
@@ -6071,26 +6071,26 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“条件分支迁移练习 4”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 shipping_level(weight)：weight <= 0 返回 invalid；小于 1 返回 light；1–5 返回 standard；大于 5 返回 heavy。\n迁移要求：改用第 4 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def shipping_level(weight):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理无效输入，避免它落入正常区间。",
+                "按边界从小到大检查。",
+                "测试 0、0.5、1、5 和 5.1。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def shipping_level(weight):\n    if weight <= 0:\n        return \"invalid\"\n    if weight < 1:\n        return \"light\"\n    if weight <= 5:\n        return \"standard\"\n    return \"heavy\"\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "边界分类",
+                "expression": "[shipping_level(x) for x in [0, 0.5, 1, 5, 6]] == [\"invalid\", \"light\", \"standard\", \"standard\", \"heavy\"]",
+                "failure": "各重量边界应进入正确分类。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "负数",
+                "expression": "shipping_level(-2) == \"invalid\"",
+                "failure": "负重量必须被拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -6099,9 +6099,9 @@
             "id": "python-lesson-63",
             "stageId": "python-stage-8",
             "order": 64,
-            "title": "循环与迭代迁移练习 4：从概念到练习（第 64 节）",
+            "title": "循环与迭代迁移练习 4：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 循环与迭代迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-62"
@@ -6161,26 +6161,26 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“循环与迭代迁移练习 4”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 longest_word(words)，返回最长单词；空列表返回 None，长度相同返回先出现的单词。\n迁移要求：改用第 4 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def longest_word(words):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先定义空列表的结果。",
+                "把第一个元素作为当前最佳值。",
+                "只在严格更长时替换，保持同长度的先后顺序。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def longest_word(words):\n    if not words:\n        return None\n    longest = words[0]\n    for word in words[1:]:\n        if len(word) > len(longest):\n            longest = word\n    return longest\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "最长值",
+                "expression": "longest_word([\"api\", \"langchain\", \"rag\"]) == \"langchain\"",
+                "failure": "应返回实际最长单词。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空与并列",
+                "expression": "longest_word([]) is None and longest_word([\"ab\", \"cd\"]) == \"ab\"",
+                "failure": "应明确处理空输入和并列长度。",
                 "kind": "behavior"
               }
             ]
