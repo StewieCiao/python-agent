@@ -270,6 +270,18 @@ test("行为导向扩展课不使用占位判题表达式", async () => {
   }
 });
 
+test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    const projectStages = new Set(track.lessons.filter(({ project }) => project).map(({ stageId }) => stageId));
+    assert.ok(projectStages.size >= 2, `${track.id} 项目应分布在多个阶段`);
+    for (const lesson of track.lessons.filter(({ project }) => !project)) {
+      const sameStageProject = track.lessons.find((candidate) => candidate.project && candidate.stageId === lesson.stageId);
+      if (sameStageProject) assert.ok(lesson.projectLinks.includes(sameStageProject.id), `${track.id}/${lesson.id} 应连接同阶段项目`);
+    }
+  }
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
