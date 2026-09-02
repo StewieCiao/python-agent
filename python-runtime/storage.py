@@ -2,7 +2,7 @@ import base64
 import binascii
 import json
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
@@ -417,11 +417,23 @@ class Storage:
                 if code not in mistake_codes:
                     mistake_codes.append(code)
         selection = select_family(learning_bundle, lesson_id, mistake_codes)
-        exercise = generate_personalized_exercise(selection, seed, [])
+        recent_prompts = [
+            row["prompt"]
+            for row in self.connection.execute(
+                "SELECT prompt FROM personalized_exercises WHERE lesson_id = ? ORDER BY id DESC LIMIT 3",
+                (lesson_id,),
+            )
+        ]
+        exercise = generate_personalized_exercise(selection, seed, recent_prompts)
         family = learning_bundle["families"][selection["familyId"]]
         checked = validate_generated_exercise(family, exercise)
         if not checked["accepted"]:
             raise ValueError("个性题未通过 family 验证")
+        with self.connection:
+            self.connection.execute(
+                "INSERT INTO personalized_exercises (lesson_id, family_id, prompt, created_at) VALUES (?, ?, ?, ?)",
+                (lesson_id, selection["familyId"], exercise["prompt"], datetime.now(timezone.utc).isoformat()),
+            )
         return {"exercise": checked["exercise"], "recommendation": {"lessonId": lesson_id, "familyId": selection["familyId"], "mistakeCodes": mistake_codes, "difficulty": selection["difficulty"]}}
 
     def import_legacy_learning_state(self, state, source_hash):
