@@ -1,6 +1,8 @@
 import base64
 import binascii
+import json
 import sqlite3
+from datetime import datetime
 from pathlib import Path
 
 
@@ -46,6 +48,105 @@ def _decode_ciphertext(value):
 
 def _encode_ciphertext(value):
     return base64.b64encode(value).decode("ascii") if value is not None else None
+
+
+def _validate_timestamp(value):
+    if not isinstance(value, str) or not value:
+        raise ValueError("时间戳必须是非空字符串")
+    try:
+        datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as error:
+        raise ValueError("时间戳不是有效 ISO 格式") from error
+
+
+def _validate_mistake(value):
+    fields = {"id", "lessonId", "createdAt", "code", "output", "stderr", "exception", "tests"}
+    if not isinstance(value, dict) or set(value) != fields:
+        raise ValueError("错题字段无效")
+    for field in ("id", "lessonId", "createdAt"):
+        if not isinstance(value[field], str) or not value[field]:
+            raise ValueError(f"错题 {field} 无效")
+    for field in ("code", "output", "stderr"):
+        if not isinstance(value[field], str):
+            raise ValueError(f"错题 {field} 无效")
+    _validate_timestamp(value["createdAt"])
+    exception = value["exception"]
+    if exception is not None:
+        exception_fields = {"type", "message", "traceback", "line"}
+        if not isinstance(exception, dict) or set(exception) != exception_fields:
+            raise ValueError("错题 exception 无效")
+        if not all(isinstance(exception[field], str) for field in ("type", "message", "traceback")):
+            raise ValueError("错题 exception 文本无效")
+        if exception["line"] is not None and (
+            not isinstance(exception["line"], int) or isinstance(exception["line"], bool)
+        ):
+            raise ValueError("错题 exception 行号无效")
+    if not isinstance(value["tests"], list):
+        raise ValueError("错题 tests 无效")
+    for test in value["tests"]:
+        if not isinstance(test, dict):
+            raise ValueError("错题测试项无效")
+        required = {"name", "passed", "detail"}
+        allowed = required | {"expected", "actual", "rule", "kind"}
+        if (
+            not required.issubset(test)
+            or set(test) - allowed
+            or not isinstance(test["name"], str)
+        ):
+            raise ValueError("错题测试项字段无效")
+        if not isinstance(test["passed"], bool) or not isinstance(test["detail"], str):
+            raise ValueError("错题测试项类型无效")
+        for field in ("expected", "actual", "rule"):
+            if field in test and not isinstance(test[field], str):
+                raise ValueError(f"错题测试项 {field} 无效")
+        if "kind" in test and test["kind"] not in {"behavior", "structure"}:
+            raise ValueError("错题测试项 kind 无效")
+
+
+def _validate_learning_state(state):
+    fields = {"completed", "drafts", "mistakes"}
+    if not isinstance(state, dict) or set(state) != fields:
+        raise ValueError("学习进度字段无效")
+    if not isinstance(state["completed"], list) or any(
+        not isinstance(lesson_id, str) or not lesson_id for lesson_id in state["completed"]
+    ):
+        raise ValueError("completed 无效")
+    if len(set(state["completed"])) != len(state["completed"]):
+        raise ValueError("completed 不得重复")
+    drafts = state["drafts"]
+    if not isinstance(drafts, dict) or any(
+        not isinstance(lesson_id, str) or not isinstance(code, str)
+        for lesson_id, code in drafts.items()
+    ):
+        raise ValueError("drafts 无效")
+    if not isinstance(state["mistakes"], list):
+        raise ValueError("mistakes 无效")
+    for item in state["mistakes"]:
+        _validate_mistake(item)
+    mistake_ids = [item["id"] for item in state["mistakes"]]
+    if len(set(mistake_ids)) != len(mistake_ids):
+        raise ValueError("错题 id 不得重复")
+    return state
+
+
+def _validate_chat_messages(messages):
+    if not isinstance(messages, list):
+        raise ValueError("messages 必须是数组")
+    for message in messages:
+        if not isinstance(message, dict) or set(message) != {"role", "content", "createdAt"}:
+            raise ValueError("聊天消息字段无效")
+        if message["role"] not in {"user", "assistant"}:
+            raise ValueError("聊天消息 role 无效")
+        if not isinstance(message["content"], str) or not message["content"]:
+            raise ValueError("聊天消息 content 无效")
+        _validate_timestamp(message["createdAt"])
+
+
+def _validate_chat_key(course_id, lesson_id):
+    if not isinstance(course_id, str) or not course_id:
+        raise ValueError("course_id 必须是非空字符串")
+    if not isinstance(lesson_id, str) or not lesson_id:
+        raise ValueError("lesson_id 必须是非空字符串")
 
 
 class Storage:
@@ -195,3 +296,169 @@ class Storage:
                         (next_profile["id"],),
                     )
         return {"deleted": True}
+
+    def get_learning_state(self):
+        completed = [
+            row["lesson_id"]
+            for row in self.connection.execute(
+                "SELECT lesson_id FROM lesson_progress WHERE completed = 1 ORDER BY position ASC"
+            )
+        ]
+        drafts = {
+            row["lesson_id"]: row["code"]
+            for row in self.connection.execute(
+                "SELECT lesson_id, code FROM lesson_drafts ORDER BY lesson_id"
+            )
+        }
+        mistakes = []
+        for row in self.connection.execute("SELECT * FROM mistakes ORDER BY position ASC"):
+            mistakes.append(
+                {
+                    "id": row["id"],
+                    "lessonId": row["lesson_id"],
+                    "createdAt": row["created_at"],
+                    "code": row["code"],
+                    "output": row["output"],
+                    "stderr": row["stderr"],
+                    "exception": json.loads(row["exception_json"])
+                    if row["exception_json"] is not None
+                    else None,
+                    "tests": json.loads(row["tests_json"]),
+                }
+            )
+        return {"completed": completed, "drafts": drafts, "mistakes": mistakes}
+
+    def _replace_learning_state(self, state):
+        self.connection.execute("DELETE FROM lesson_progress")
+        self.connection.execute("DELETE FROM lesson_drafts")
+        self.connection.execute("DELETE FROM mistakes")
+        self.connection.executemany(
+            "INSERT INTO lesson_progress (lesson_id, completed, position) VALUES (?, 1, ?)",
+            [(lesson_id, position) for position, lesson_id in enumerate(state["completed"])],
+        )
+        self.connection.executemany(
+            "INSERT INTO lesson_drafts (lesson_id, code) VALUES (?, ?)",
+            list(state["drafts"].items()),
+        )
+        self.connection.executemany(
+            """
+            INSERT INTO mistakes (
+                id, position, lesson_id, created_at, code, output, stderr,
+                exception_json, tests_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            [
+                (
+                    item["id"],
+                    position,
+                    item["lessonId"],
+                    item["createdAt"],
+                    item["code"],
+                    item["output"],
+                    item["stderr"],
+                    json.dumps(item["exception"], ensure_ascii=False, separators=(",", ":"))
+                    if item["exception"] is not None
+                    else None,
+                    json.dumps(item["tests"], ensure_ascii=False, separators=(",", ":")),
+                )
+                for position, item in enumerate(state["mistakes"])
+            ],
+        )
+
+    def save_learning_state(self, state):
+        _validate_learning_state(state)
+        with self.connection:
+            self._replace_learning_state(state)
+        return self.get_learning_state()
+
+    def import_legacy_learning_state(self, state, source_hash):
+        _validate_learning_state(state)
+        if not isinstance(source_hash, str) or not source_hash:
+            raise ValueError("迁移源 hash 无效")
+        existing = self.connection.execute(
+            "SELECT status FROM migration_sources WHERE source_kind = 'learning-progress' AND source_hash = ?",
+            (source_hash,),
+        ).fetchone()
+        if existing is not None:
+            return {"imported": False, "state": self.get_learning_state()}
+        with self.connection:
+            self._replace_learning_state(state)
+            self.connection.execute(
+                """
+                INSERT INTO migration_sources (source_kind, source_hash, status)
+                VALUES ('learning-progress', ?, 'imported')
+                """,
+                (source_hash,),
+            )
+        return {"imported": True, "state": self.get_learning_state()}
+
+    def list_chat_messages(self, course_id, lesson_id):
+        _validate_chat_key(course_id, lesson_id)
+        return [
+            {
+                "role": row["role"],
+                "content": row["content"],
+                "createdAt": row["created_at"],
+            }
+            for row in self.connection.execute(
+                """
+                SELECT role, content, created_at FROM chat_messages
+                WHERE course_id = ? AND lesson_id = ? ORDER BY sequence ASC
+                """,
+                (course_id, lesson_id),
+            )
+        ]
+
+    def append_chat_messages(self, course_id, lesson_id, messages):
+        _validate_chat_key(course_id, lesson_id)
+        _validate_chat_messages(messages)
+        with self.connection:
+            self.connection.execute(
+                """
+                INSERT INTO chat_threads (course_id, lesson_id) VALUES (?, ?)
+                ON CONFLICT(course_id, lesson_id) DO NOTHING
+                """,
+                (course_id, lesson_id),
+            )
+            next_sequence = self.connection.execute(
+                """
+                SELECT COALESCE(MAX(sequence), -1) + 1 FROM chat_messages
+                WHERE course_id = ? AND lesson_id = ?
+                """,
+                (course_id, lesson_id),
+            ).fetchone()[0]
+            self.connection.executemany(
+                """
+                INSERT INTO chat_messages
+                    (course_id, lesson_id, sequence, role, content, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (
+                        course_id,
+                        lesson_id,
+                        next_sequence + offset,
+                        message["role"],
+                        message["content"],
+                        message["createdAt"],
+                    )
+                    for offset, message in enumerate(messages)
+                ],
+            )
+            self.connection.execute(
+                """
+                UPDATE chat_threads SET updated_at = CURRENT_TIMESTAMP
+                WHERE course_id = ? AND lesson_id = ?
+                """,
+                (course_id, lesson_id),
+            )
+        return self.list_chat_messages(course_id, lesson_id)
+
+    def clear_chat_messages(self, course_id, lesson_id):
+        _validate_chat_key(course_id, lesson_id)
+        with self.connection:
+            self.connection.execute(
+                "DELETE FROM chat_threads WHERE course_id = ? AND lesson_id = ?",
+                (course_id, lesson_id),
+            )
+        return {"cleared": True}
