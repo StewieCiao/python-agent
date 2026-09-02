@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "15662b6bf9d9a3ad09763b218b15254a6b2ab5684c15da5463eca18efc2b8f1d",
+  "catalogHash": "24d7782533c117be65826c43ca9ec3bd1c53c3021aeba8504452ac64432ce479",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -211,7 +211,8 @@
               "starterCode": "# 在这里写下你的第一段代码\nprint(\"你好，Python\")\n",
               "hints": [
                 "需要调用两次 print()。",
-                "乘法运算符是 *，不要手算后直接写 56。"
+                "乘法运算符是 *，不要手算后直接写 56。",
+                "用边界输入复测"
               ],
               "solution": "print(\"我的第一段 Python\")\nprint(8 * 7)"
             },
@@ -311,7 +312,8 @@
               "starterCode": "name = \"\"\nlevel = 0\n\nprint()\n",
               "hints": [
                 "字符串需要引号，数字不需要。",
-                "试试：print(f\"{name}正在挑战第 {level} 关\")，留意文字中的空格。"
+                "试试：print(f\"{name}正在挑战第 {level} 关\")，留意文字中的空格。",
+                "用边界输入复测"
               ],
               "solution": "name = \"小派\"\nlevel = 1\n\nprint(f\"{name}正在挑战第 {level} 关\")"
             },
@@ -411,7 +413,8 @@
               "starterCode": "def normalize_title(text):\n    # 返回清理后的新字符串\n    pass\n",
               "hints": [
                 "可以连续调用 .strip().lower()。",
-                "直接 return 清理结果，不需要额外变量。"
+                "直接 return 清理结果，不需要额外变量。",
+                "用边界输入复测"
               ],
               "solution": "def normalize_title(text):\n    return text.strip().lower()"
             },
@@ -500,7 +503,8 @@
               "starterCode": "def grade(score):\n    # 在这里完成分支\n    pass\n",
               "hints": [
                 "建议使用 if / elif / else，或用提前 return 表达互斥边界。",
-                "先判断 score >= 90，再判断 score >= 60。"
+                "先判断 score >= 90，再判断 score >= 60。",
+                "用边界输入复测"
               ],
               "solution": "def grade(score):\n    if score < 60:\n        return \"C\"\n    if score < 90:\n        return \"B\"\n    return \"A\""
             },
@@ -601,7 +605,8 @@
               "starterCode": "def sum_even(numbers):\n    total = 0\n    # 用循环更新 total\n    return total\n",
               "hints": [
                 "偶数满足 number % 2 == 0。",
-                "只有条件成立时才执行 total += number。"
+                "只有条件成立时才执行 total += number。",
+                "用边界输入复测"
               ],
               "solution": "def sum_even(numbers):\n    total = 0\n    for number in numbers:\n        if number % 2 == 0:\n            total += number\n    return total"
             },
@@ -701,7 +706,8 @@
               "starterCode": "def shipping_fee(price, member):\n    pass\n",
               "hints": [
                 "“或”对应 or。",
-                "免费条件成立时 return 0，否则 return 10。"
+                "免费条件成立时 return 0，否则 return 10。",
+                "用边界输入复测"
               ],
               "solution": "def shipping_fee(price, member):\n    return 0 if member or price >= 99 else 10"
             },
@@ -802,7 +808,8 @@
               "starterCode": "def improve_scores(scores):\n    # 用一个列表推导式返回结果\n    pass\n",
               "hints": [
                 "先筛选 score >= 60。",
-                "min(score + 5, 100) 可以限制上限。"
+                "min(score + 5, 100) 可以限制上限。",
+                "用边界输入复测"
               ],
               "solution": "def improve_scores(scores):\n    return [min(score + 5, 100) for score in scores if score >= 60]"
             },
@@ -903,7 +910,8 @@
               "starterCode": "def word_counts(words):\n    counts = {}\n    # 遍历并统计\n    return counts\n",
               "hints": [
                 "每轮用 word 作为 counts 的键。",
-                "右侧可以写 counts.get(word, 0) + 1。"
+                "右侧可以写 counts.get(word, 0) + 1。",
+                "用边界输入复测"
               ],
               "solution": "def word_counts(words):\n    result = {}\n    for word in words:\n        result[word] = result.get(word, 0) + 1\n    return result"
             },
@@ -1004,7 +1012,8 @@
               "starterCode": "def parse_age(text):\n    # 只处理可预期的输入错误\n    pass\n",
               "hints": [
                 "int(text) 失败时会抛出 ValueError。",
-                "try 中直接 return int(text)，except ValueError 中 return None。"
+                "try 中直接 return int(text)，except ValueError 中 return None。",
+                "用边界输入复测"
               ],
               "solution": "def parse_age(text):\n    try:\n        return int(text)\n    except ValueError:\n        return None"
             },
@@ -1115,7 +1124,8 @@
               "starterCode": "class Wallet:\n    def __init__(self):\n        pass\n\n    def deposit(self, amount):\n        pass\n",
               "hints": [
                 "初始化时写 self.balance = 0。",
-                "非法 amount 用 raise ValueError(...) 主动拒绝。"
+                "非法 amount 用 raise ValueError(...) 主动拒绝。",
+                "用边界输入复测"
               ],
               "solution": "class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError(\"amount must be positive\")\n        self.balance += amount\n        return self.balance"
             },
@@ -1215,7 +1225,8 @@
               "starterCode": "def even_numbers(limit):\n    pass\n",
               "hints": [
                 "range(0, limit + 1, 2) 会依次产生偶数。",
-                "循环中使用 yield number，而不是 return。"
+                "循环中使用 yield number，而不是 return。",
+                "用边界输入复测"
               ],
               "solution": "def even_numbers(limit):\n    for number in range(0, limit + 1, 2):\n        yield number"
             },
@@ -1316,7 +1327,8 @@
               "starterCode": "def twice(func):\n    # 返回包装函数\n    pass\n\n@twice\ndef add(a, b):\n    return a + b\n",
               "hints": [
                 "在 twice 内定义 wrapper(*args, **kwargs)。",
-                "调用两次 func；第一次不保存，第二次 return。"
+                "调用两次 func；第一次不保存，第二次 return。",
+                "用边界输入复测"
               ],
               "solution": "def twice(func):\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper"
             },
@@ -1392,7 +1404,8 @@
               "starterCode": "def analyze(text):\n    # 1. 清洗并分词\n    # 2. 统计次数\n    # 3. 返回结果\n    pass\n",
               "hints": [
                 "words 数量是 len(words)，unique 是 len(counts)。",
-                "非空时 max(counts, key=counts.get) 会在同频时保留最先插入的键。"
+                "非空时 max(counts, key=counts.get) 会在同频时保留最先插入的键。",
+                "用边界输入复测"
               ],
               "solution": "def analyze(text):\n    words = text.lower().split()\n    counts = {}\n    for word in words:\n        counts[word] = counts.get(word, 0) + 1\n    top = max(counts, key=counts.get) if counts else None\n    return {\"words\": len(words), \"unique\": len(counts), \"top\": top}"
             },
@@ -1491,7 +1504,8 @@
               "starterCode": "def summarize(records):\n    total = 0\n    by_category = {}\n    # 完成一次遍历\n    return {\"total\": total, \"by_category\": by_category}\n",
               "hints": [
                 "每条 record 用 record['amount'] 和 record['category'] 取值。",
-                "在同一个 for 循环中更新 total 与 by_category。"
+                "在同一个 for 循环中更新 total 与 by_category。",
+                "用边界输入复测"
               ],
               "solution": "def summarize(records):\n    total = 0\n    by_category = {}\n    for record in records:\n        total += record[\"amount\"]\n        category = record[\"category\"]\n        by_category[category] = by_category.get(category, 0) + record[\"amount\"]\n    return {\"total\": total, \"by_category\": by_category}"
             },
@@ -1589,7 +1603,8 @@
               "starterCode": "def plan(tasks):\n    # 验证后排序，返回名称列表\n    pass\n",
               "hints": [
                 "先循环验证 priority，再调用 sorted。",
-                "排序键可用 (-task['priority'], task['name'])。"
+                "排序键可用 (-task['priority'], task['name'])。",
+                "用边界输入复测"
               ],
               "solution": "def plan(tasks):\n    for task in tasks:\n        if task[\"priority\"] not in range(1, 6):\n            raise ValueError(\"priority must be 1-5\")\n    ordered = sorted(\n        tasks,\n        key=lambda task: (-task[\"priority\"], task[\"name\"]),\n    )\n    return [task[\"name\"] for task in ordered]"
             },
@@ -1707,7 +1722,8 @@
               "starterCode": "class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        pass\n\n    def execute(self, name, payload):\n        pass\n",
               "hints": [
                 "先检查 name 是否已经存在，再保存 func。",
-                "执行时从 self.tools[name] 取函数，并用 **payload 展开关键字参数。"
+                "执行时从 self.tools[name] 取函数，并用 **payload 展开关键字参数。",
+                "用边界输入复测"
               ],
               "solution": "class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        if name in self.tools:\n            raise ValueError(\"duplicate tool\")\n        self.tools[name] = func\n\n    def execute(self, name, payload):\n        return self.tools[name](**payload)"
             },
@@ -1803,7 +1819,8 @@
               "starterCode": "def parse_action(text):\n    # 返回 (action_name, payload)\n    pass\n",
               "hints": [
                 "先用 strip() 清理整段文本。",
-                "可检查 '[' 的位置和字符串是否以 ']' 结尾，再用 split('[', 1)。"
+                "可检查 '[' 的位置和字符串是否以 ']' 结尾，再用 split('[', 1)。",
+                "用边界输入复测"
               ],
               "solution": "def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    if not name:\n        return None, None\n    return name, payload"
             },
@@ -1910,7 +1927,8 @@
               "starterCode": "def parse_action(text):\n    text = text.strip()\n    if '[' not in text or not text.endswith(']'):\n        return None, None\n    name, payload = text[:-1].split('[', 1)\n    return (name, payload) if name else (None, None)\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    # 完成 Action → Observation 循环\n    pass\n",
               "hints": [
                 "遍历 actions[:max_steps]，每读一个动作就更新 steps。",
-                "先处理 Finish；否则从 tools 字典取函数并记录 observation。"
+                "先处理 Finish；否则从 tools 字典取函数并记录 observation。",
+                "用边界输入复测"
               ],
               "solution": "def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    return (name, payload) if name else (None, None)\n\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    steps = 0\n    for action_text in actions[:max_steps]:\n        steps += 1\n        name, payload = parse_action(action_text)\n        if name == \"Finish\":\n            return {\"answer\": payload, \"history\": history, \"steps\": steps}\n        observation = tools[name](payload)\n        history.append({\n            \"action\": name,\n            \"input\": payload,\n            \"observation\": observation,\n        })\n    return {\"answer\": None, \"history\": history, \"steps\": steps}"
             },
@@ -2017,7 +2035,8 @@
               "starterCode": "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    # 逐步求解并更新 context\n    return results\n",
               "hints": [
                 "每步调用 executor(step['task'], context.copy())。",
-                "先把结果加入 results，再用当前 id 更新 context。"
+                "先把结果加入 results，再用当前 id 更新 context。",
+                "用边界输入复测"
               ],
               "solution": "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    for step in steps:\n        result = executor(step[\"task\"], context.copy())\n        results.append({\"id\": step[\"id\"], \"result\": result})\n        context[step[\"id\"]] = result\n    return results"
             },
@@ -2113,7 +2132,8 @@
               "starterCode": "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    # 执行 → 评估 → 改进\n    pass\n",
               "hints": [
                 "先验证 max_rounds，再用 range(max_rounds) 控制改进次数。",
-                "循环后还未达标时，返回最后一次 revise 的结果。"
+                "循环后还未达标时，返回最后一次 revise 的结果。",
+                "用边界输入复测"
               ],
               "solution": "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    if max_rounds < 0:\n        raise ValueError(\"max_rounds must be non-negative\")\n    for _ in range(max_rounds):\n        if evaluate(draft):\n            return draft\n        draft = revise(draft)\n    return draft"
             },
@@ -2220,7 +2240,8 @@
               "starterCode": "def retrieve_memories(memories, query, limit=2):\n    # 计算关键词重叠并排序\n    pass\n",
               "hints": [
                 "用 set(query.lower().split()) 得到查询词集合。",
-                "把 (命中数, importance, 原索引, content) 放进列表后统一排序。"
+                "把 (命中数, importance, 原索引, content) 放进列表后统一排序。",
+                "用边界输入复测"
               ],
               "solution": "def retrieve_memories(memories, query, limit=2):\n    if limit <= 0:\n        return []\n    query_words = set(query.lower().split())\n    scored = []\n    for index, memory in enumerate(memories):\n        content_words = set(memory[\"content\"].lower().split())\n        overlap = len(query_words & content_words)\n        if overlap:\n            scored.append((\n                overlap,\n                memory[\"importance\"],\n                index,\n                memory[\"content\"],\n            ))\n    scored.sort(key=lambda item: (-item[0], -item[1], item[2]))\n    return [item[3] for item in scored[:limit]]"
             },
@@ -2316,7 +2337,8 @@
               "starterCode": "def handoff(sender, task, agents):\n    # 找到第一个具备 task['capability'] 的 Agent\n    pass\n",
               "hints": [
                 "按 agents 原顺序遍历。",
-                "命中时只构造新字典；遍历结束仍未命中再 raise LookupError。"
+                "命中时只构造新字典；遍历结束仍未命中再 raise LookupError。",
+                "用边界输入复测"
               ],
               "solution": "def handoff(sender, task, agents):\n    for agent in agents:\n        if task[\"capability\"] in agent[\"capabilities\"]:\n            return {\n                \"from\": sender,\n                \"to\": agent[\"name\"],\n                \"task\": task[\"description\"],\n            }\n    raise LookupError(f\"no agent for {task['capability']}\")"
             },
@@ -2410,7 +2432,8 @@
               "starterCode": "def build_trip(city, tools):\n    trace = []\n    # 1. 查询天气并记录\n    # 2. 根据天气查询景点并记录\n    # 3. 返回结构化行程\n    pass\n",
               "hints": [
                 "先把 weather 结果保存下来，第二个工具需要其中的 condition。",
-                "trace 的 observation 应保存工具原始返回值。"
+                "trace 的 observation 应保存工具原始返回值。",
+                "用边界输入复测"
               ],
               "solution": "def build_trip(city, tools):\n    trace = []\n    weather = tools[\"weather\"](city)\n    trace.append({\n        \"tool\": \"weather\",\n        \"input\": city,\n        \"observation\": weather,\n    })\n    condition = weather[\"condition\"]\n    attractions = tools[\"attraction\"](city, condition)\n    trace.append({\n        \"tool\": \"attraction\",\n        \"input\": {\"city\": city, \"condition\": condition},\n        \"observation\": attractions,\n    })\n    return {\n        \"city\": city,\n        \"weather\": weather,\n        \"attractions\": attractions,\n        \"trace\": trace,\n    }"
             },
@@ -2504,7 +2527,8 @@
               "starterCode": "def build_research_report(topic, tasks, search):\n    sections = []\n    sources = []\n    # 逐个检索子任务并汇总引用\n    return {\"topic\": topic, \"sections\": sections, \"sources\": sources}\n",
               "hints": [
                 "每个 task 的 search 结果先生成本节 findings 与 section_sources。",
-                "顶层 sources 用成员检查去重，但不要改变各 section 的来源。"
+                "顶层 sources 用成员检查去重，但不要改变各 section 的来源。",
+                "用边界输入复测"
               ],
               "solution": "def build_research_report(topic, tasks, search):\n    sections = []\n    sources = []\n    for task in tasks:\n        results = search(task)\n        findings = [item[\"snippet\"] for item in results]\n        section_sources = [item[\"url\"] for item in results]\n        sections.append({\n            \"title\": task,\n            \"findings\": findings,\n            \"sources\": section_sources,\n        })\n        for url in section_sources:\n            if url not in sources:\n                sources.append(url)\n    return {\"topic\": topic, \"sections\": sections, \"sources\": sources}"
             },
@@ -2598,7 +2622,8 @@
               "starterCode": "class Agent:\n    def __init__(self, name, max_steps=5):\n        pass\n\n    def register_tool(self, name, func):\n        pass\n\n    def run(self, actions):\n        pass\n",
               "hints": [
                 "把解析 action 的小逻辑放成类内私有方法会更清晰。",
-                "run 开头重置 self.history；遍历 actions[:self.max_steps]。"
+                "run 开头重置 self.history；遍历 actions[:self.max_steps]。",
+                "用边界输入复测"
               ],
               "solution": "class Agent:\n    def __init__(self, name, max_steps=5):\n        self.name = name\n        self.max_steps = max_steps\n        self.tools = {}\n        self.history = []\n\n    def register_tool(self, name, func):\n        if name in self.tools:\n            raise ValueError(\"duplicate tool\")\n        self.tools[name] = func\n\n    def run(self, actions):\n        self.history = []\n        for action_text in actions[:self.max_steps]:\n            if \"[\" not in action_text or not action_text.endswith(\"]\"):\n                continue\n            name, payload = action_text[:-1].split(\"[\", 1)\n            if name == \"Finish\":\n                return {\"answer\": payload, \"history\": self.history.copy()}\n            observation = self.tools[name](payload)\n            self.history.append({\n                \"action\": name,\n                \"input\": payload,\n                \"observation\": observation,\n            })\n        return {\"answer\": None, \"history\": self.history.copy()}"
             },
@@ -6385,6 +6410,17 @@
                   "加载后先抽样检查文本和 metadata"
                 ],
                 "example": "for doc in docs[:2]:\n    print(len(doc.page_content))\n    print(doc.metadata.get(\"source\"))"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -6485,6 +6521,17 @@
                   "检索结果应保留来源"
                 ],
                 "example": "vector_store.add_documents(chunks)\nresults = vector_store.similarity_search(\"退货期限\", k=3)\nfor doc in results:\n    print(doc.page_content, doc.metadata)"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -6569,6 +6616,17 @@
                   "不要在格式化阶段偷偷调用模型"
                 ],
                 "example": "def format_docs(docs):\n    return \"\n\n\".join(\n        f\"来源: {d.metadata.get('source')}\n{d.page_content}\" for d in docs\n    )"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -6653,6 +6711,17 @@
                   "回答附带真实来源"
                 ],
                 "example": "docs = retriever.invoke(question)\nanswer = rag_chain.invoke({\"question\": question, \"context\": format_docs(docs)})\nhistory.add_messages([HumanMessage(question), AIMessage(answer)])"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -6747,6 +6816,17 @@
                   "不要吞掉工具异常"
                 ],
                 "example": "agent = create_agent(\n    model,\n    tools=[search_docs],\n    middleware=[summarization_middleware],\n)"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -6890,6 +6970,17 @@
                   "失败保留原始阶段"
                 ],
                 "example": "logger.info(\"tool_complete\", extra={\"tool\": \"search_knowledge\", \"count\": len(docs)})"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -10754,6 +10845,17 @@
                   "避免把每行代码拆成节点"
                 ],
                 "example": "builder = StateGraph(State)\nbuilder.add_node(\"draft\", draft)\nbuilder.add_edge(START, \"draft\")\nbuilder.add_edge(\"draft\", END)\ngraph = builder.compile()"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -10830,6 +10932,17 @@
                   "循环必须有退出条件"
                 ],
                 "example": "def route(state):\n    return \"revise\" if state[\"score\"] < 0.8 else \"finish\"\n\nbuilder.add_conditional_edges(\"review\", route, {\"revise\": \"draft\", \"finish\": END})"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -10898,6 +11011,17 @@
                   "跨 thread 数据交给 Store"
                 ],
                 "example": "same_thread = {\"configurable\": {\"thread_id\": \"chat-42\"}}\nnew_thread = {\"configurable\": {\"thread_id\": \"chat-43\"}}"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -10972,6 +11096,17 @@
                   "召回结果仍需检查相关性"
                 ],
                 "example": "item = store.get((\"memories\", user_id), \"profile\")\npreferred_language = item.value[\"language\"] if item else \"zh-CN\""
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -11048,6 +11183,17 @@
                   "拒绝和批准都要有明确分支"
                 ],
                 "example": "approved = interrupt({\"action\": \"send_email\", \"recipient\": recipient})\nif not approved:\n    return {\"status\": \"cancelled\"}"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -11118,6 +11264,17 @@
                   "汇总节点处理空结果与失败列表"
                 ],
                 "example": "def fan_out(state):\n    return [Send(\"research_section\", {\"topic\": topic}) for topic in state[\"topics\"]]"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
@@ -11188,6 +11345,17 @@
                   "长期偏好不覆盖当前用户指令"
                 ],
                 "example": "preferences = store.get((\"users\", user_id), \"report_preferences\")\nconfig = {\"configurable\": {\"thread_id\": research_id}}\ngraph.invoke({\"topic\": topic, \"preferences\": preferences.value}, config)"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个没有出现在示例中的输入复查理解。",
+                "bullets": [
+                  "改变输入",
+                  "记录实际结果",
+                  "说明失败原因"
+                ],
+                "example": "assert result == expected"
               }
             ],
             "videos": [
