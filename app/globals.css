@@ -622,6 +622,67 @@ textarea:focus-visible {
   content: "";
 }
 
+.personalized-practice {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8e2;
+}
+
+.personalized-practice > div:first-child p,
+.personalized-status,
+.personalized-result p {
+  margin: 4px 0 0;
+  color: #68736c;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.personalized-practice > button {
+  justify-self: start;
+  padding: 8px 12px;
+  border: 1px solid #aac3b2;
+  border-radius: 8px;
+  background: #f4faf4;
+  color: #24533c;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.personalized-practice > button:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.personalized-status { color: #a3543d; }
+
+.personalized-result {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f1f5ef;
+}
+
+.personalized-result > span {
+  color: #557664;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 10px;
+}
+
+.personalized-result > strong { font-size: 12px; line-height: 1.5; }
+
+.personalized-result pre {
+  margin: 0;
+  padding: 10px;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: #172e26;
+  color: #edf8ef;
+  font-size: 11px;
+}
+
 .hint-section {
   margin-top: 14px;
 }

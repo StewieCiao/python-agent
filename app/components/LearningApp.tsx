@@ -7,7 +7,7 @@ import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
 import type { LessonTest } from "../content/python/curriculum";
 import type { LearningTrack } from "../content/learningCatalog";
-import { pythonWorkerUrl } from "../lib/platformBridge";
+import { loadPersonalizedExercise, pythonWorkerUrl } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,
   type GptHelpPromptInput,
@@ -144,6 +144,9 @@ export function LearningApp() {
   const [revealedHints, setRevealedHints] = useState<Record<string, number>>({});
   const [notice, setNotice] = useState("");
   const [chatOpen, setChatOpen] = useState(false);
+  const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
+  const [personalizedStatus, setPersonalizedStatus] = useState("");
+  const [personalizedLoading, setPersonalizedLoading] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
@@ -167,6 +170,27 @@ export function LearningApp() {
   const completedPercent = Math.round((progress.completed.length / lessons.length) * 100);
   const visibleHintCount = revealedHints[lesson.id] ?? 0;
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
+
+  async function requestPersonalizedExercise() {
+    setPersonalizedLoading(true);
+    setPersonalizedStatus("");
+    try {
+      const result = await loadPersonalizedExercise(lesson.id, Date.now());
+      setPersonalized({
+        prompt: result.exercise.prompt,
+        starterCode: result.exercise.starterCode,
+        hints: result.exercise.hints,
+        recommendation: result.recommendation.mistakeCodes.length > 0
+          ? `根据错题模式：${result.recommendation.mistakeCodes.join("、")}`
+          : "根据当前练习 family 推荐",
+      });
+    } catch (error) {
+      setPersonalized(null);
+      setPersonalizedStatus(`暂时无法生成个性题：${errorMessage(error)}`);
+    } finally {
+      setPersonalizedLoading(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -678,6 +702,22 @@ export function LearningApp() {
                       <li key={requirement}>{requirement}</li>
                     ))}
                   </ul>
+                  <div className="personalized-practice">
+                    <div>
+                      <strong>根据错题生成一题</strong>
+                      <p>只使用本机保存的错误模式，不发送代码或 API Key。</p>
+                    </div>
+                    <button disabled={personalizedLoading || isRunning} onClick={() => void requestPersonalizedExercise()} type="button">
+                      {personalizedLoading ? "生成中…" : "生成个性题"}
+                    </button>
+                    {personalizedStatus && <p className="personalized-status" role="alert">{personalizedStatus}</p>}
+                    {personalized && <div className="personalized-result">
+                      <span>{personalized.recommendation}</span>
+                      <strong>{personalized.prompt}</strong>
+                      <pre><code>{personalized.starterCode}</code></pre>
+                      {personalized.hints.map((hint) => <p key={hint}>提示：{hint}</p>)}
+                    </div>}
+                  </div>
                 </div>
               </section>
 
