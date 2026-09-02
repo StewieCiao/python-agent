@@ -9,6 +9,7 @@ const bridge: StewieDesktopBridge = Object.freeze({
   deleteModelProfile: (profileId) => ipcRenderer.invoke("profiles:delete", profileId),
   testModelProfile: (profileId) => ipcRenderer.invoke("models:test", profileId),
   chatWithModel: (input) => ipcRenderer.invoke("models:chat", input),
+  answerWithRag: (input) => ipcRenderer.invoke("models:rag", input),
   getLearningState: () => ipcRenderer.invoke("learning:get"),
   saveLearningState: (state) => ipcRenderer.invoke("learning:save", state),
   recordMasteryAttempt: (event) => ipcRenderer.invoke("mastery:record", event),

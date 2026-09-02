@@ -45,6 +45,7 @@ import { migrateLegacyDesktopFiles } from "./legacyMigration.mjs";
 import { lessons } from "../../app/content/publicCatalog.ts";
 import { parseLearningExport } from "../../app/lib/learningExport.ts";
 import { assertCatalogHashes } from "./catalogBundle.mts";
+import { createRagService } from "./ragService.mjs";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -222,6 +223,7 @@ void runStartupTask(app.whenReady().then(async () => {
   ipcMain.handle("models:chat", trustedIpc(async (input: { profileId: string; messages: ModelMessage[] }) => ({
     reply: await activeModelClient().chat(input.profileId, input.messages),
   })));
+  ipcMain.handle("models:rag", trustedIpc(async (input: { profileId: string; query: string; documents: Array<{ id: string; text: string; source: string }> }) => createRagService(activeModelClient()).answer(input.profileId, input.query, input.documents)));
   ipcMain.handle("learning:get", trustedIpc(() => activePythonService().getLearningState()));
   ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
   ipcMain.handle("mastery:record", trustedIpc((event: MasteryEvent) => activePythonService().recordMasteryAttempt(event)));

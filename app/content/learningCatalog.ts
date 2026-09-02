@@ -32,7 +32,7 @@ export type LearningGuide = {
 export type LearningExercise = {
   prompt: string;
   starterCode: string;
-  hints: string[];
+  hints?: string[];
   solution: string;
 };
 
@@ -41,17 +41,17 @@ export type LearningLesson = {
   title: string;
   summary: string;
   minutes: number;
-  prerequisites: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-  tags: string[];
+  prerequisites?: string[];
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  tags?: string[];
   guide: LearningGuide[];
   videos: VideoResource[];
   officialSources: Array<{ label: string; url: string }>;
   migrations: MigrationNote[];
-  project: boolean;
-  projectLinks: string[];
+  project?: boolean;
+  projectLinks?: string[];
   exercise: LearningExercise;
-  browserChecks: Array<{
+  browserChecks?: Array<{
     name: string;
     expression: string;
     failure: string;
@@ -476,7 +476,7 @@ const langchainTrack: LearningTrack = {
     {
       id: "model-messages-prompts",
       title: "模型、消息与 Prompt 模板",
-      prerequisites: ["memory-modernization"], difficulty: "beginner", tags: ["messages", "prompts"], project: false, projectLinks: [],
+      prerequisites: ["memory-modernization"], difficulty: "beginner", tags: ["messages", "prompts"],
       summary: "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",
       minutes: 35,
       guide: [
@@ -491,7 +491,7 @@ const langchainTrack: LearningTrack = {
     {
       id: "structured-output",
       title: "结构化输出与失败边界",
-      prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["structured-output", "validation"], project: false, projectLinks: [],
+      prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["structured-output", "validation"],
       summary: "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
       minutes: 40,
       guide: [
@@ -505,7 +505,7 @@ const langchainTrack: LearningTrack = {
     {
       id: "runnable-pipeline",
       title: "Runnable 组合的第一条链",
-      prerequisites: ["structured-output"], difficulty: "intermediate", tags: ["runnable", "composition"], project: false, projectLinks: [],
+      prerequisites: ["structured-output"], difficulty: "intermediate", tags: ["runnable", "composition"],
       summary: "把模板、模型和解析器组成可观察的 Runnable 管道。",
       minutes: 45,
       guide: [
