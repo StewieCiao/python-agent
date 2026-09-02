@@ -7,6 +7,7 @@ import {
   listModelProfiles,
   loadCourseHistory,
   sendCourseChat,
+  answerWithRag,
 } from "../lib/platformBridge";
 import {
   type ChatMessage,
@@ -25,6 +26,10 @@ export function CourseChat({ track, lesson, onClose }: {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("正在读取本节聊天记录…");
   const [busy, setBusy] = useState(false);
+  const [ragText, setRagText] = useState("");
+  const [ragSource, setRagSource] = useState("本地资料");
+  const [ragQuery, setRagQuery] = useState("");
+  const [ragResult, setRagResult] = useState<{ answer: string; sources: string[] } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -68,6 +73,19 @@ export function CourseChat({ track, lesson, onClose }: {
           <label>模型配置<select value={profileId} onChange={(event) => setProfileId(event.target.value)}>{profiles.map((profile) => <option key={profile.id} value={profile.id}>{profile.name} · {profile.model}</option>)}</select></label>
           <div className="mode-switch"><button className={mode === "lesson" ? "active" : ""} onClick={() => setMode("lesson")} type="button">课程模式</button><button className={mode === "general" ? "active" : ""} onClick={() => setMode("general")} type="button">普通模式</button></div>
         </div>
+
+        {mode === "lesson" && <details className="rag-panel">
+          <summary>用本地资料做一次 RAG 检索</summary>
+          <p>资料只在本次桌面请求中使用，不会写入聊天历史；API Key 仍由桌面安全存储管理。</p>
+          <textarea aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragText} onChange={(event) => setRagText(event.target.value)} />
+          <input aria-label="RAG 资料来源" placeholder="来源名称或文件名" value={ragSource} onChange={(event) => setRagSource(event.target.value)} />
+          <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
+          <button disabled={busy || !profileId || !ragText.trim() || !ragQuery.trim()} onClick={() => void perform(async () => {
+            const result = await answerWithRag({ profileId, query: ragQuery, documents: [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }] });
+            setRagResult(result);
+          })} type="button">检索并回答</button>
+          {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.sources.join("、")}</small></div>}
+        </details>}
 
         <div className="chat-messages">
           {history.length === 0 && !status && <div className="chat-empty"><strong>从当前知识点开始提问</strong><p>课程模式会把本节讲义作为 JSON 数据发送给模型，不会把讲义中的文本当成指令。</p></div>}
