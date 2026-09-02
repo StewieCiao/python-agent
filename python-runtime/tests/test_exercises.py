@@ -84,6 +84,23 @@ class ExerciseTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "重复"):
             generate_personalized_exercise(selection, 4, [first["prompt"]])
 
+    def test_each_verified_family_has_six_transfer_variants(self):
+        family_ids = [
+            "python-output-v1", "python-loops-v1", "python-lists-v1",
+            "python-dictionaries-v1", "python-exceptions-v1", "python-decorators-v1",
+            "python-expense-v1",
+        ]
+        for family_id in family_ids:
+            prompts = {
+                generate_personalized_exercise(
+                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner"},
+                    seed,
+                    [],
+                )["prompt"]
+                for seed in range(6)
+            }
+            self.assertEqual(len(prompts), 6, family_id)
+
 
 if __name__ == "__main__":
     unittest.main()
