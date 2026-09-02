@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "bbe276ff1c2214ab589b84f90c22803e9b8aeb4412f6ec6a5ec13899eae45b94",
+  "catalogHash": "c607e4ea8e19eb72653cd5f6ab8582ceef3ff6e2001355a40920d73ec7c170f0",
   "familyHash": "141e4967b23bb56900b3bac707758d992a637c1b0334a3b9d58f37e10c96eee0",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -2761,7 +2761,9 @@
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-25"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -2849,7 +2851,9 @@
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-26"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -2937,7 +2941,9 @@
             "kicker": "Python 学习",
             "summary": "理解 集合运算迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-27"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3025,7 +3031,9 @@
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-28"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3119,7 +3127,9 @@
             "kicker": "Python 学习",
             "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-29"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3207,7 +3217,9 @@
             "kicker": "Python 学习",
             "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-30"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3295,7 +3307,9 @@
             "kicker": "Python 学习",
             "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-31"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3383,7 +3397,9 @@
             "kicker": "Python 学习",
             "summary": "理解 模块拆分迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-32"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3471,7 +3487,9 @@
             "kicker": "Python 学习",
             "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-33"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3559,7 +3577,9 @@
             "kicker": "Python 学习",
             "summary": "理解 测试设计迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-34"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3647,7 +3667,9 @@
             "kicker": "Python 学习",
             "summary": "理解 数据清洗迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-35"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3735,7 +3757,9 @@
             "kicker": "Python 学习",
             "summary": "理解 命令行工具迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-36"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3823,7 +3847,9 @@
             "kicker": "Python 学习",
             "summary": "理解 并发基础迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-37"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3911,7 +3937,9 @@
             "kicker": "Python 学习",
             "summary": "理解 Agent 工具契约迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-38"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -3999,7 +4027,9 @@
             "kicker": "Python 学习",
             "summary": "理解 变量与类型迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-39"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4087,7 +4117,9 @@
             "kicker": "Python 学习",
             "summary": "理解 字符串处理迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-40"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4175,7 +4207,9 @@
             "kicker": "Python 学习",
             "summary": "理解 条件分支迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-41"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4263,7 +4297,9 @@
             "kicker": "Python 学习",
             "summary": "理解 循环与迭代迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-42"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4351,7 +4387,9 @@
             "kicker": "Python 学习",
             "summary": "理解 函数参数迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-43"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4439,7 +4477,9 @@
             "kicker": "Python 学习",
             "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-44"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4527,7 +4567,9 @@
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-45"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4615,7 +4657,9 @@
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-46"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4703,7 +4747,9 @@
             "kicker": "Python 学习",
             "summary": "理解 集合运算迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-47"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4791,7 +4837,9 @@
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-48"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4885,7 +4933,9 @@
             "kicker": "Python 学习",
             "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-49"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -4973,7 +5023,9 @@
             "kicker": "Python 学习",
             "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-50"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5061,7 +5113,9 @@
             "kicker": "Python 学习",
             "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-51"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5149,7 +5203,9 @@
             "kicker": "Python 学习",
             "summary": "理解 模块拆分迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-52"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5237,7 +5293,9 @@
             "kicker": "Python 学习",
             "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-53"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5325,7 +5383,9 @@
             "kicker": "Python 学习",
             "summary": "理解 测试设计迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-54"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5413,7 +5473,9 @@
             "kicker": "Python 学习",
             "summary": "理解 数据清洗迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-55"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5501,7 +5563,9 @@
             "kicker": "Python 学习",
             "summary": "理解 命令行工具迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-56"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5589,7 +5653,9 @@
             "kicker": "Python 学习",
             "summary": "理解 并发基础迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-57"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5677,7 +5743,9 @@
             "kicker": "Python 学习",
             "summary": "理解 Agent 工具契约迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-58"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5765,7 +5833,9 @@
             "kicker": "Python 学习",
             "summary": "理解 变量与类型迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-59"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5853,7 +5923,9 @@
             "kicker": "Python 学习",
             "summary": "理解 字符串处理迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-60"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -5941,7 +6013,9 @@
             "kicker": "Python 学习",
             "summary": "理解 条件分支迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-61"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -6029,7 +6103,9 @@
             "kicker": "Python 学习",
             "summary": "理解 循环与迭代迁移练习 4 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "python-lesson-62"
+            ],
             "difficulty": "advanced",
             "tags": [
               "python",
@@ -7470,7 +7546,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 重排 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-10"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7558,7 +7636,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-11"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7646,7 +7726,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "在相似度不足时停止生成，区分无资料和资料不足。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-12"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7734,7 +7816,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 RAG 评估 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-13"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7822,7 +7906,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 追踪与观测 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-14"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7910,7 +7996,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 工具调用 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-15"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -7998,7 +8086,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Agent 循环 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-16"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8086,7 +8176,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 多查询检索 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-17"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8174,7 +8266,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 RAG 项目 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-18"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8262,7 +8356,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 消息角色迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-19"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8350,7 +8446,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Prompt 模板迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-20"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8438,7 +8536,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 结构化输出迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-21"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8526,7 +8626,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Runnable 组合迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-22"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8614,7 +8716,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 模型配置迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-23"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8702,7 +8806,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-24"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8790,7 +8896,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-25"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8878,7 +8986,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-26"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -8966,7 +9076,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "把 向量存储迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-27"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9054,7 +9166,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "按可解释的相似度排序返回文档，并保留分数与来源。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-28"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9142,7 +9256,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 混合检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-29"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9230,7 +9346,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 重排迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-30"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9318,7 +9436,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-31"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9406,7 +9526,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "在相似度不足时停止生成，区分无资料和资料不足。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-32"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9494,7 +9616,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 RAG 评估迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-33"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9582,7 +9706,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 追踪与观测迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-34"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9670,7 +9796,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 工具调用迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-35"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9758,7 +9886,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Agent 循环迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-36"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9846,7 +9976,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 多查询检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-37"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -9934,7 +10066,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 RAG 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-38"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10022,7 +10156,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 消息角色迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-39"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10110,7 +10246,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Prompt 模板迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-40"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10198,7 +10336,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 结构化输出迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-41"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10284,7 +10424,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 Runnable 组合迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-42"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10370,7 +10512,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "理解 模型配置迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-43"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10456,7 +10600,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-44"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10542,7 +10688,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-45"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -10630,7 +10778,9 @@
             "kicker": "LangChain / RAG 学习",
             "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langchain-rag-lesson-46"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langchain-rag",
@@ -11531,7 +11681,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 短期记忆 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-07"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -11619,7 +11771,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Store 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-08"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -11707,7 +11861,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 长期记忆 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-09"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -11795,7 +11951,9 @@
             "kicker": "LangGraph 学习",
             "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-10"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -11883,7 +12041,9 @@
             "kicker": "LangGraph 学习",
             "summary": "围绕 恢复执行 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-11"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -11971,7 +12131,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 流式事件 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-12"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12059,7 +12221,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 子图 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-13"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12147,7 +12311,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 并行分支 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-14"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12235,7 +12401,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Supervisor 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-15"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12323,7 +12491,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 多 Agent 协作 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-16"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12411,7 +12581,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 人工审核 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-17"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12499,7 +12671,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Graph 项目 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-18"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12587,7 +12761,9 @@
             "kicker": "LangGraph 学习",
             "summary": "围绕 StateGraph迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-19"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12675,7 +12851,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 节点与边迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-20"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12763,7 +12941,9 @@
             "kicker": "LangGraph 学习",
             "summary": "让节点返回局部更新，由图运行时统一合并状态。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-21"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12851,7 +13031,9 @@
             "kicker": "LangGraph 学习",
             "summary": "把状态判断和图的下一步名称分开，确保每个分支都可解释。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-22"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -12939,7 +13121,9 @@
             "kicker": "LangGraph 学习",
             "summary": "为循环同时设置业务完成条件和步数上限，避免图无限运行。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-23"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13027,7 +13211,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Reducer迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-24"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13115,7 +13301,9 @@
             "kicker": "LangGraph 学习",
             "summary": "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-25"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13203,7 +13391,9 @@
             "kicker": "LangGraph 学习",
             "summary": "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-26"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13291,7 +13481,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 短期记忆迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-27"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13379,7 +13571,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Store迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-28"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13467,7 +13661,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 长期记忆迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-29"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13555,7 +13751,9 @@
             "kicker": "LangGraph 学习",
             "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-30"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13643,7 +13841,9 @@
             "kicker": "LangGraph 学习",
             "summary": "围绕 恢复执行迁移练习 2 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-31"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13731,7 +13931,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 流式事件迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-32"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13819,7 +14021,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 子图迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-33"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13907,7 +14111,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 并行分支迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-34"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -13993,7 +14199,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Supervisor迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-35"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -14079,7 +14287,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 多 Agent 协作迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-36"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -14165,7 +14375,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 人工审核迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-37"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -14251,7 +14463,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 Graph 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-38"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -14339,7 +14553,9 @@
             "kicker": "LangGraph 学习",
             "summary": "围绕 StateGraph迁移练习 3 描述 State 输入、节点更新和恢复边界。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-39"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
@@ -14427,7 +14643,9 @@
             "kicker": "LangGraph 学习",
             "summary": "理解 节点与边迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "langgraph-lesson-40"
+            ],
             "difficulty": "advanced",
             "tags": [
               "langgraph",
