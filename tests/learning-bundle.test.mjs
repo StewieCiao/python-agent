@@ -1,5 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 
 const schema = await import("../app/content/schema.ts");
 
@@ -172,4 +176,43 @@ test("作者目录聚合三条路线且 lesson id 不重复", async () => {
   );
   const ids = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.map(({ id }) => id));
   assert.equal(new Set(ids).size, ids.length);
+});
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value && typeof value === "object") {
+    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function sha256(value) {
+  return createHash("sha256").update(value, "utf8").digest("hex");
+}
+
+test("build-learning 生成两个带真实 catalog/family 哈希的确定性快照", async () => {
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  execFileSync(process.execPath, ["--experimental-strip-types", "scripts/build-learning-bundle.mjs"], {
+    cwd: root,
+    stdio: "pipe",
+  });
+  const publicText = await readFile(new URL("../generated/course-public.json", import.meta.url), "utf8");
+  const serviceText = await readFile(new URL("../generated/learning-service.json", import.meta.url), "utf8");
+  const publicSnapshot = JSON.parse(publicText);
+  const serviceSnapshot = JSON.parse(serviceText);
+  assert.equal(publicSnapshot.schemaVersion, "stewie-catalog-v1");
+  assert.equal(serviceSnapshot.schemaVersion, "stewie-catalog-v1");
+  assert.deepEqual(serviceSnapshot.catalog, publicSnapshot.catalog);
+  assert.equal(publicSnapshot.catalogHash, sha256(canonicalJson(publicSnapshot.catalog)));
+  assert.equal(serviceSnapshot.catalogHash, publicSnapshot.catalogHash);
+  assert.equal(publicSnapshot.familyHash, sha256(canonicalJson(serviceSnapshot.checks)));
+  assert.equal(serviceSnapshot.familyHash, publicSnapshot.familyHash);
+  assert.deepEqual(
+    serviceSnapshot.checks,
+    Object.fromEntries(serviceSnapshot.catalog.tracks.flatMap((track) => track.lessons.map((lesson) => [lesson.id, lesson.browserChecks]))),
+  );
+  const secondPublic = await readFile(new URL("../generated/course-public.json", import.meta.url), "utf8");
+  const secondService = await readFile(new URL("../generated/learning-service.json", import.meta.url), "utf8");
+  assert.equal(secondPublic, publicText);
+  assert.equal(secondService, serviceText);
 });

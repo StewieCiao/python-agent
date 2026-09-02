@@ -9,6 +9,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "build:learning": "node --experimental-strip-types scripts/build-learning-bundle.mjs",
     "build:offline": "node --experimental-strip-types scripts/build-offline-html.mjs",
     "desktop:dev": "npm run start --workspace @stewie/desktop",
     "desktop:make": "npm run make --workspace @stewie/desktop",
