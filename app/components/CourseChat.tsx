@@ -28,6 +28,7 @@ export function CourseChat({ track, lesson, onClose }: {
   const [busy, setBusy] = useState(false);
   const [ragText, setRagText] = useState("");
   const [ragSource, setRagSource] = useState("本地资料");
+  const [ragDocuments, setRagDocuments] = useState<Array<{ id: string; text: string; source: string }>>([]);
   const [ragQuery, setRagQuery] = useState("");
   const [ragResult, setRagResult] = useState<{ answer: string; sources: string[] } | null>(null);
 
@@ -79,9 +80,13 @@ export function CourseChat({ track, lesson, onClose }: {
           <p>资料只在本次桌面请求中使用，不会写入聊天历史；API Key 仍由桌面安全存储管理。</p>
           <textarea aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragText} onChange={(event) => setRagText(event.target.value)} />
           <input aria-label="RAG 资料来源" placeholder="来源名称或文件名" value={ragSource} onChange={(event) => setRagSource(event.target.value)} />
+          <label>或导入本地文本文件<input type="file" accept=".txt,.md,.markdown,.csv" multiple onChange={(event) => {
+            void Promise.all(Array.from(event.target.files ?? []).map(async (file) => ({ id: `${file.name}-${file.lastModified}`, text: await file.text(), source: file.name })) ).then(setRagDocuments);
+          }} /></label>
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
-          <button disabled={busy || !profileId || !ragText.trim() || !ragQuery.trim()} onClick={() => void perform(async () => {
-            const result = await answerWithRag({ profileId, query: ragQuery, documents: [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }] });
+          <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
+            const documents = ragDocuments.length > 0 ? ragDocuments : [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }];
+            const result = await answerWithRag({ profileId, query: ragQuery, documents });
             setRagResult(result);
           })} type="button">检索并回答</button>
           {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.sources.join("、")}</small></div>}

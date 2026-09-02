@@ -1922,6 +1922,7 @@ textarea:focus-visible {
 .rag-panel summary { cursor: pointer; font-weight: 700; }
 .rag-panel p { margin: 8px 0; font-size: 12px; color: #647066; }
 .rag-panel textarea, .rag-panel input { width: 100%; box-sizing: border-box; margin-top: 8px; padding: 8px; border: 1px solid #cfd8cf; border-radius: 6px; font: inherit; }
+.rag-panel label { display: block; margin-top: 8px; font-size: 12px; color: #536156; }
 .rag-panel textarea { min-height: 76px; resize: vertical; }
 .rag-panel button { margin-top: 8px; }
 .rag-result { margin-top: 10px; display: grid; gap: 5px; font-size: 13px; white-space: pre-wrap; }
