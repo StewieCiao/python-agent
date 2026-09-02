@@ -200,7 +200,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   for (const lesson of lessons) {
     while (lesson.guide.length < 3) lesson.guide.push({ kind: "常见误区", title: "验证边界", body: "用一个没有出现在示例中的输入复查理解。", bullets: ["改变输入", "记录实际结果", "说明失败原因"], example: "assert result == expected" });
     while ((lesson.exercise.hints ?? []).length < 3) lesson.exercise.hints = [...(lesson.exercise.hints ?? []), "用边界输入复测"];
-    const stage = stages[lesson.order % stages.length];
+    const stage = stages[(lesson.order - 1) % stages.length];
     lesson.stageId = stage.id;
     lesson.order = lessons.indexOf(lesson) + 1;
     stage.lessonIds.push(lesson.id);
