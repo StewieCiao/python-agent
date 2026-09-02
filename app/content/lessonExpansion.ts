@@ -69,6 +69,50 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "TypeError 外溢", expression: "_raises_type_error(lambda: parse_positive_int(None))", failure: "不要把 None 这类编程错误静默吞掉。", kind: "behavior" },
     ],
   },
+  "类与对象": {
+    summary: "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
+    prompt: "实现 Wallet 类：初始余额为 0，deposit(amount) 只接受正数并增加余额，balance() 返回当前余额。",
+    starterCode: "class Wallet:\n    pass\n",
+    solution: "class Wallet:\n    def __init__(self):\n        self._amount = 0\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError(\"amount must be positive\")\n        self._amount += amount\n\n    def balance(self):\n        return self._amount\n",
+    hints: ["把余额放在实例属性，而不是类属性。", "存款前先验证边界。", "分别测试两个 Wallet，确认状态不共享。"],
+    checks: [
+      { name: "连续存款", expression: "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12", failure: "连续存款应累加余额。", kind: "behavior" },
+      { name: "拒绝非正数", expression: "_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-1))", failure: "零和负数存款应抛出 ValueError。", kind: "behavior" },
+    ],
+  },
+  "生成器": {
+    summary: "用 yield 延迟产生值，处理大输入时只保留当前元素。",
+    prompt: "实现 positive_numbers(values)，按原顺序逐个 yield 大于 0 的数字，不返回预先构造的列表。",
+    starterCode: "def positive_numbers(values):\n    pass\n",
+    solution: "def positive_numbers(values):\n    for value in values:\n        if value > 0:\n            yield value\n",
+    hints: ["函数中使用 yield 就会得到生成器。", "在循环中判断每个值。", "用 list() 只在测试时收集结果，函数本身不要建立结果列表。"],
+    checks: [
+      { name: "延迟遍历", expression: "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]", failure: "应以生成器形式按需产生正数。", kind: "behavior" },
+      { name: "空与负数", expression: "list(positive_numbers([])) == [] and list(positive_numbers([-3, -1])) == []", failure: "没有正数时应自然结束。", kind: "behavior" },
+    ],
+  },
+  "装饰器": {
+    summary: "在不改变被装饰函数签名的前提下记录调用次数与结果。",
+    prompt: "实现 twice(func) 装饰器：保留位置参数和关键字参数，每次调用原函数两次并返回第二次结果。",
+    starterCode: "def twice(func):\n    pass\n",
+    solution: "from functools import wraps\n\ndef twice(func):\n    @wraps(func)\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper\n",
+    hints: ["包装器需要接收任意位置和关键字参数。", "第一次调用的返回值可以丢弃。", "第二次调用的返回值才是装饰器结果。"],
+    checks: [
+      { name: "位置参数", expression: "_decorator_probe(twice)", failure: "两次调用的参数和结果必须保持一致。", kind: "behavior" },
+      { name: "关键字参数", expression: "_decorator_kwargs_probe(twice)", failure: "不能丢失关键字参数。", kind: "behavior" },
+    ],
+  },
+  "文件读写": {
+    summary: "用上下文管理器可靠地打开、读取和关闭文件。",
+    prompt: "实现 read_nonempty_lines(path)，读取文件并返回去除换行的非空行列表；文件必须由 with 管理。",
+    starterCode: "def read_nonempty_lines(path):\n    pass\n",
+    solution: "def read_nonempty_lines(path):\n    with open(path, encoding=\"utf-8\") as file:\n        return [line.strip() for line in file if line.strip()]\n",
+    hints: ["with open 可以保证离开代码块时关闭文件。", "逐行处理比一次性猜测格式更清楚。", "先 strip，再过滤空行。"],
+    checks: [
+      { name: "保留非空行", expression: "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]", failure: "应清理换行并跳过空行。", kind: "behavior" },
+      { name: "不存在文件报错", expression: "_raises_file_not_found(read_nonempty_lines)", failure: "不要把真实文件错误伪装成空列表。", kind: "behavior" },
+    ],
+  },
 };
 
 const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
@@ -114,6 +158,50 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "阈值过滤", expression: "choose_context([{\"score\": 0.8}, {\"score\": 0.5}], 0.6) == [{\"score\": 0.8}]", failure: "只应保留达到阈值的结果。", kind: "behavior" },
       { name: "无答案", expression: "choose_context([{\"score\": 0.4}], 0.6) is None", failure: "没有合格资料时必须返回 None。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:Embedding": {
+    summary: "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
+    prompt: "实现 pair_embeddings(texts, vectors)，返回包含 text 和 embedding 的记录；长度不一致时抛出 ValueError。",
+    starterCode: "def pair_embeddings(texts, vectors):\n    pass\n",
+    solution: "def pair_embeddings(texts, vectors):\n    if len(texts) != len(vectors):\n        raise ValueError(\"texts and vectors must have equal length\")\n    return [{\"text\": text, \"embedding\": vector} for text, vector in zip(texts, vectors)]\n",
+    hints: ["先验证两个输入长度相同。", "zip 能保持文本与向量位置对应。", "不要只返回向量而丢掉原文。"],
+    checks: [
+      { name: "保持对应关系", expression: "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]", failure: "每个向量必须对应原文本。", kind: "behavior" },
+      { name: "长度边界", expression: "_raises_value_error(lambda: pair_embeddings([\"a\"], []))", failure: "输入数量不一致时应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:相似度检索": {
+    summary: "按可解释的相似度排序返回文档，并保留分数与来源。",
+    prompt: "实现 top_k(results, k)，按 score 从高到低返回最多 k 条；k <= 0 返回空列表。",
+    starterCode: "def top_k(results, k):\n    pass\n",
+    solution: "def top_k(results, k):\n    if k <= 0:\n        return []\n    return sorted(results, key=lambda item: item[\"score\"], reverse=True)[:k]\n",
+    hints: ["先处理 k 的边界。", "排序键是 score，方向为降序。", "切片限制返回数量，不删除来源字段。"],
+    checks: [
+      { name: "排序与截断", expression: "top_k([{\"score\": 0.3, \"source\": \"a\"}, {\"score\": 0.9, \"source\": \"b\"}], 1) == [{\"score\": 0.9, \"source\": \"b\"}]", failure: "应返回分数最高的前 k 条。", kind: "behavior" },
+      { name: "零数量", expression: "top_k([{\"score\": 1}], 0) == []", failure: "k 为零时不应返回结果。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Checkpoint": {
+    summary: "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
+    prompt: "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。",
+    starterCode: "def save_checkpoint(checkpoints, thread_id, state):\n    pass\n",
+    solution: "def save_checkpoint(checkpoints, thread_id, state):\n    updated = dict(checkpoints)\n    updated[thread_id] = dict(state)\n    return updated\n",
+    hints: ["先复制外层字典。", "thread_id 是隔离状态的键。", "复制 state，避免调用者之后修改检查点。"],
+    checks: [
+      { name: "写入线程", expression: "save_checkpoint({\"a\": {\"step\": 1}}, \"b\", {\"step\": 2}) == {\"a\": {\"step\": 1}, \"b\": {\"step\": 2}}", failure: "应只新增或更新指定 thread。", kind: "behavior" },
+      { name: "不修改原值", expression: "((lambda original: (save_checkpoint(original, \"a\", {\"step\": 2}), original))({\"a\": {\"step\": 1}}))[1][\"a\"][\"step\"] == 1", failure: "保存检查点不应改写调用者字典。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Interrupt": {
+    summary: "在高风险节点前暂停，把明确的待确认动作交还给人。",
+    prompt: "实现 approval_route(approved)，approved 为 True 返回 execute，否则返回 cancel；不要用默认分支掩盖未知值。",
+    starterCode: "def approval_route(approved):\n    pass\n",
+    solution: "def approval_route(approved):\n    if approved is True:\n        return \"execute\"\n    if approved is False:\n        return \"cancel\"\n    raise ValueError(\"approval must be boolean\")\n",
+    hints: ["批准和拒绝是两个明确状态。", "不要把 None 当成批准或拒绝。", "未知输入应留下真实错误。"],
+    checks: [
+      { name: "批准与拒绝", expression: "approval_route(True) == \"execute\" and approval_route(False) == \"cancel\"", failure: "批准与拒绝必须走不同分支。", kind: "behavior" },
+      { name: "未知状态", expression: "_raises_value_error(lambda: approval_route(None))", failure: "未知确认值不能静默继续。", kind: "behavior" },
     ],
   },
   "langgraph:状态更新": {

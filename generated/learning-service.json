@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "212461443356ff606e9f6d4ddb13d466510f39c0501c1037cf979929077b1b6e",
-  "familyHash": "d460bff813e25e21590ac53952ce2c28acc6efadcb1971e43c6dd0016f966a7d",
+  "catalogHash": "bbe276ff1c2214ab589b84f90c22803e9b8aeb4412f6ec6a5ec13899eae45b94",
+  "familyHash": "141e4967b23bb56900b3bac707758d992a637c1b0334a3b9d58f37e10c96eee0",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -3115,9 +3115,9 @@
             "id": "python-lesson-30",
             "stageId": "python-stage-7",
             "order": 31,
-            "title": "类与对象迁移练习 2：从概念到练习（第 31 节）",
+            "title": "类与对象迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 类与对象迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3175,26 +3175,26 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“类与对象迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 Wallet 类：初始余额为 0，deposit(amount) 只接受正数并增加余额，balance() 返回当前余额。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "class Wallet:\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "把余额放在实例属性，而不是类属性。",
+                "存款前先验证边界。",
+                "分别测试两个 Wallet，确认状态不共享。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "class Wallet:\n    def __init__(self):\n        self._amount = 0\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError(\"amount must be positive\")\n        self._amount += amount\n\n    def balance(self):\n        return self._amount\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "连续存款",
+                "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
+                "failure": "连续存款应累加余额。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝非正数",
+                "expression": "_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-1))",
+                "failure": "零和负数存款应抛出 ValueError。",
                 "kind": "behavior"
               }
             ]
@@ -3203,9 +3203,9 @@
             "id": "python-lesson-31",
             "stageId": "python-stage-8",
             "order": 32,
-            "title": "生成器迁移练习 2：从概念到练习（第 32 节）",
+            "title": "生成器迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 生成器迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3263,26 +3263,26 @@
               "agent-deep-research-project"
             ],
             "exercise": {
-              "prompt": "完成“生成器迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 positive_numbers(values)，按原顺序逐个 yield 大于 0 的数字，不返回预先构造的列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def positive_numbers(values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "函数中使用 yield 就会得到生成器。",
+                "在循环中判断每个值。",
+                "用 list() 只在测试时收集结果，函数本身不要建立结果列表。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def positive_numbers(values):\n    for value in values:\n        if value > 0:\n            yield value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "延迟遍历",
+                "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
+                "failure": "应以生成器形式按需产生正数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空与负数",
+                "expression": "list(positive_numbers([])) == [] and list(positive_numbers([-3, -1])) == []",
+                "failure": "没有正数时应自然结束。",
                 "kind": "behavior"
               }
             ]
@@ -3291,9 +3291,9 @@
             "id": "python-lesson-32",
             "stageId": "python-stage-1",
             "order": 33,
-            "title": "装饰器迁移练习 2：从概念到练习（第 33 节）",
+            "title": "装饰器迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 装饰器迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3351,26 +3351,26 @@
               "agent-framework-capstone"
             ],
             "exercise": {
-              "prompt": "完成“装饰器迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 twice(func) 装饰器：保留位置参数和关键字参数，每次调用原函数两次并返回第二次结果。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def twice(func):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "包装器需要接收任意位置和关键字参数。",
+                "第一次调用的返回值可以丢弃。",
+                "第二次调用的返回值才是装饰器结果。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "from functools import wraps\n\ndef twice(func):\n    @wraps(func)\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "位置参数",
+                "expression": "_decorator_probe(twice)",
+                "failure": "两次调用的参数和结果必须保持一致。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "关键字参数",
+                "expression": "_decorator_kwargs_probe(twice)",
+                "failure": "不能丢失关键字参数。",
                 "kind": "behavior"
               }
             ]
@@ -3467,9 +3467,9 @@
             "id": "python-lesson-34",
             "stageId": "python-stage-3",
             "order": 35,
-            "title": "文件读写迁移练习 2：从概念到练习（第 35 节）",
+            "title": "文件读写迁移练习 2：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 文件读写迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -3527,26 +3527,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“文件读写迁移练习 2”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 read_nonempty_lines(path)，读取文件并返回去除换行的非空行列表；文件必须由 with 管理。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def read_nonempty_lines(path):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "with open 可以保证离开代码块时关闭文件。",
+                "逐行处理比一次性猜测格式更清楚。",
+                "先 strip，再过滤空行。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def read_nonempty_lines(path):\n    with open(path, encoding=\"utf-8\") as file:\n        return [line.strip() for line in file if line.strip()]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保留非空行",
+                "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
+                "failure": "应清理换行并跳过空行。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不存在文件报错",
+                "expression": "_raises_file_not_found(read_nonempty_lines)",
+                "failure": "不要把真实文件错误伪装成空列表。",
                 "kind": "behavior"
               }
             ]
@@ -4881,9 +4881,9 @@
             "id": "python-lesson-50",
             "stageId": "python-stage-3",
             "order": 51,
-            "title": "类与对象迁移练习 3：从概念到练习（第 51 节）",
+            "title": "类与对象迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 类与对象迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -4941,26 +4941,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“类与对象迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 Wallet 类：初始余额为 0，deposit(amount) 只接受正数并增加余额，balance() 返回当前余额。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "class Wallet:\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "把余额放在实例属性，而不是类属性。",
+                "存款前先验证边界。",
+                "分别测试两个 Wallet，确认状态不共享。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "class Wallet:\n    def __init__(self):\n        self._amount = 0\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError(\"amount must be positive\")\n        self._amount += amount\n\n    def balance(self):\n        return self._amount\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "连续存款",
+                "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
+                "failure": "连续存款应累加余额。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝非正数",
+                "expression": "_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-1))",
+                "failure": "零和负数存款应抛出 ValueError。",
                 "kind": "behavior"
               }
             ]
@@ -4969,9 +4969,9 @@
             "id": "python-lesson-51",
             "stageId": "python-stage-4",
             "order": 52,
-            "title": "生成器迁移练习 3：从概念到练习（第 52 节）",
+            "title": "生成器迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 生成器迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5029,26 +5029,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“生成器迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 positive_numbers(values)，按原顺序逐个 yield 大于 0 的数字，不返回预先构造的列表。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def positive_numbers(values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "函数中使用 yield 就会得到生成器。",
+                "在循环中判断每个值。",
+                "用 list() 只在测试时收集结果，函数本身不要建立结果列表。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def positive_numbers(values):\n    for value in values:\n        if value > 0:\n            yield value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "延迟遍历",
+                "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
+                "failure": "应以生成器形式按需产生正数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空与负数",
+                "expression": "list(positive_numbers([])) == [] and list(positive_numbers([-3, -1])) == []",
+                "failure": "没有正数时应自然结束。",
                 "kind": "behavior"
               }
             ]
@@ -5057,9 +5057,9 @@
             "id": "python-lesson-52",
             "stageId": "python-stage-5",
             "order": 53,
-            "title": "装饰器迁移练习 3：从概念到练习（第 53 节）",
+            "title": "装饰器迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 装饰器迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5117,26 +5117,26 @@
               "project-text"
             ],
             "exercise": {
-              "prompt": "完成“装饰器迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 twice(func) 装饰器：保留位置参数和关键字参数，每次调用原函数两次并返回第二次结果。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def twice(func):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "包装器需要接收任意位置和关键字参数。",
+                "第一次调用的返回值可以丢弃。",
+                "第二次调用的返回值才是装饰器结果。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "from functools import wraps\n\ndef twice(func):\n    @wraps(func)\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "位置参数",
+                "expression": "_decorator_probe(twice)",
+                "failure": "两次调用的参数和结果必须保持一致。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "关键字参数",
+                "expression": "_decorator_kwargs_probe(twice)",
+                "failure": "不能丢失关键字参数。",
                 "kind": "behavior"
               }
             ]
@@ -5233,9 +5233,9 @@
             "id": "python-lesson-54",
             "stageId": "python-stage-7",
             "order": 55,
-            "title": "文件读写迁移练习 3：从概念到练习（第 55 节）",
+            "title": "文件读写迁移练习 3：写出可验证的实现",
             "kicker": "Python 学习",
-            "summary": "理解 文件读写迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -5293,26 +5293,26 @@
               "project-tasks"
             ],
             "exercise": {
-              "prompt": "完成“文件读写迁移练习 3”练习并通过行为检查。",
-              "starterCode": "value = 2\nresult = None",
+              "prompt": "实现 read_nonempty_lines(path)，读取文件并返回去除换行的非空行列表；文件必须由 with 管理。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def read_nonempty_lines(path):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "with open 可以保证离开代码块时关闭文件。",
+                "逐行处理比一次性猜测格式更清楚。",
+                "先 strip，再过滤空行。"
               ],
-              "solution": "value = 2\nresult = value * 3"
+              "solution": "def read_nonempty_lines(path):\n    with open(path, encoding=\"utf-8\") as file:\n        return [line.strip() for line in file if line.strip()]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保留非空行",
+                "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
+                "failure": "应清理换行并跳过空行。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不存在文件报错",
+                "expression": "_raises_file_not_found(read_nonempty_lines)",
+                "failure": "不要把真实文件错误伪装成空列表。",
                 "kind": "behavior"
               }
             ]
@@ -8874,9 +8874,9 @@
             "id": "langchain-rag-lesson-27",
             "stageId": "langchain-rag-stage-7",
             "order": 28,
-            "title": "Embedding迁移练习 2：从概念到练习（第 28 节）",
+            "title": "Embedding迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 Embedding迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8934,26 +8934,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 Embedding迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
-              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
+              "prompt": "实现 pair_embeddings(texts, vectors)，返回包含 text 和 embedding 的记录；长度不一致时抛出 ValueError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def pair_embeddings(texts, vectors):\n    pass\n",
               "hints": [
-                "先保留 page_content 与 source",
-                "检查 query 与文档的向量维度",
-                "用无关 query 验证无命中边界"
+                "先验证两个输入长度相同。",
+                "zip 能保持文本与向量位置对应。",
+                "不要只返回向量而丢掉原文。"
               ],
-              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
+              "solution": "def pair_embeddings(texts, vectors):\n    if len(texts) != len(vectors):\n        raise ValueError(\"texts and vectors must have equal length\")\n    return [{\"text\": text, \"embedding\": vector} for text, vector in zip(texts, vectors)]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保持对应关系",
+                "expression": "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]",
+                "failure": "每个向量必须对应原文本。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "长度边界",
+                "expression": "_raises_value_error(lambda: pair_embeddings([\"a\"], []))",
+                "failure": "输入数量不一致时应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -9050,9 +9050,9 @@
             "id": "langchain-rag-lesson-29",
             "stageId": "langchain-rag-stage-2",
             "order": 30,
-            "title": "相似度检索迁移练习 2：从概念到练习（第 30 节）",
+            "title": "相似度检索迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 相似度检索迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "按可解释的相似度排序返回文档，并保留分数与来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -9110,26 +9110,26 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 相似度检索迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
-              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
+              "prompt": "实现 top_k(results, k)，按 score 从高到低返回最多 k 条；k <= 0 返回空列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def top_k(results, k):\n    pass\n",
               "hints": [
-                "先保留 page_content 与 source",
-                "检查 query 与文档的向量维度",
-                "用无关 query 验证无命中边界"
+                "先处理 k 的边界。",
+                "排序键是 score，方向为降序。",
+                "切片限制返回数量，不删除来源字段。"
               ],
-              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
+              "solution": "def top_k(results, k):\n    if k <= 0:\n        return []\n    return sorted(results, key=lambda item: item[\"score\"], reverse=True)[:k]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "排序与截断",
+                "expression": "top_k([{\"score\": 0.3, \"source\": \"a\"}, {\"score\": 0.9, \"source\": \"b\"}], 1) == [{\"score\": 0.9, \"source\": \"b\"}]",
+                "failure": "应返回分数最高的前 k 条。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "零数量",
+                "expression": "top_k([{\"score\": 1}], 0) == []",
+                "failure": "k 为零时不应返回结果。",
                 "kind": "behavior"
               }
             ]
@@ -10626,9 +10626,9 @@
             "id": "langchain-rag-lesson-47",
             "stageId": "langchain-rag-stage-6",
             "order": 48,
-            "title": "Embedding迁移练习 3：从概念到练习（第 48 节）",
+            "title": "Embedding迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 Embedding迁移练习 3 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10686,26 +10686,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 Embedding迁移练习 3：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
-              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
+              "prompt": "实现 pair_embeddings(texts, vectors)，返回包含 text 和 embedding 的记录；长度不一致时抛出 ValueError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def pair_embeddings(texts, vectors):\n    pass\n",
               "hints": [
-                "先保留 page_content 与 source",
-                "检查 query 与文档的向量维度",
-                "用无关 query 验证无命中边界"
+                "先验证两个输入长度相同。",
+                "zip 能保持文本与向量位置对应。",
+                "不要只返回向量而丢掉原文。"
               ],
-              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
+              "solution": "def pair_embeddings(texts, vectors):\n    if len(texts) != len(vectors):\n        raise ValueError(\"texts and vectors must have equal length\")\n    return [{\"text\": text, \"embedding\": vector} for text, vector in zip(texts, vectors)]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保持对应关系",
+                "expression": "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]",
+                "failure": "每个向量必须对应原文本。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "长度边界",
+                "expression": "_raises_value_error(lambda: pair_embeddings([\"a\"], []))",
+                "failure": "输入数量不一致时应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -11791,9 +11791,9 @@
             "id": "langgraph-lesson-11",
             "stageId": "langgraph-stage-5",
             "order": 12,
-            "title": "Interrupt：从概念到练习（第 12 节）",
+            "title": "Interrupt：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 Interrupt 描述 State 输入、节点更新和恢复边界。",
+            "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -11851,26 +11851,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 Interrupt 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
-              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
+              "prompt": "实现 approval_route(approved)，approved 为 True 返回 execute，否则返回 cancel；不要用默认分支掩盖未知值。",
+              "starterCode": "def approval_route(approved):\n    pass\n",
               "hints": [
-                "先写 State 字段",
-                "记录节点返回的更新",
-                "用另一个 thread 验证隔离"
+                "批准和拒绝是两个明确状态。",
+                "不要把 None 当成批准或拒绝。",
+                "未知输入应留下真实错误。"
               ],
-              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
+              "solution": "def approval_route(approved):\n    if approved is True:\n        return \"execute\"\n    if approved is False:\n        return \"cancel\"\n    raise ValueError(\"approval must be boolean\")\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "批准与拒绝",
+                "expression": "approval_route(True) == \"execute\" and approval_route(False) == \"cancel\"",
+                "failure": "批准与拒绝必须走不同分支。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知状态",
+                "expression": "_raises_value_error(lambda: approval_route(None))",
+                "failure": "未知确认值不能静默继续。",
                 "kind": "behavior"
               }
             ]
@@ -13111,9 +13111,9 @@
             "id": "langgraph-lesson-26",
             "stageId": "langgraph-stage-6",
             "order": 27,
-            "title": "Checkpoint迁移练习 2：从概念到练习（第 27 节）",
+            "title": "Checkpoint迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 Checkpoint迁移练习 2 描述 State 输入、节点更新和恢复边界。",
+            "summary": "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13171,26 +13171,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 Checkpoint迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
-              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
+              "prompt": "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def save_checkpoint(checkpoints, thread_id, state):\n    pass\n",
               "hints": [
-                "先写 State 字段",
-                "记录节点返回的更新",
-                "用另一个 thread 验证隔离"
+                "先复制外层字典。",
+                "thread_id 是隔离状态的键。",
+                "复制 state，避免调用者之后修改检查点。"
               ],
-              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
+              "solution": "def save_checkpoint(checkpoints, thread_id, state):\n    updated = dict(checkpoints)\n    updated[thread_id] = dict(state)\n    return updated\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "写入线程",
+                "expression": "save_checkpoint({\"a\": {\"step\": 1}}, \"b\", {\"step\": 2}) == {\"a\": {\"step\": 1}, \"b\": {\"step\": 2}}",
+                "failure": "应只新增或更新指定 thread。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不修改原值",
+                "expression": "((lambda original: (save_checkpoint(original, \"a\", {\"step\": 2}), original))({\"a\": {\"step\": 1}}))[1][\"a\"][\"step\"] == 1",
+                "failure": "保存检查点不应改写调用者字典。",
                 "kind": "behavior"
               }
             ]
@@ -13551,9 +13551,9 @@
             "id": "langgraph-lesson-31",
             "stageId": "langgraph-stage-4",
             "order": 32,
-            "title": "Interrupt迁移练习 2：从概念到练习（第 32 节）",
+            "title": "Interrupt迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 Interrupt迁移练习 2 描述 State 输入、节点更新和恢复边界。",
+            "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -13611,26 +13611,26 @@
               "langgraph-lesson-38"
             ],
             "exercise": {
-              "prompt": "为 Interrupt迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
-              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
+              "prompt": "实现 approval_route(approved)，approved 为 True 返回 execute，否则返回 cancel；不要用默认分支掩盖未知值。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def approval_route(approved):\n    pass\n",
               "hints": [
-                "先写 State 字段",
-                "记录节点返回的更新",
-                "用另一个 thread 验证隔离"
+                "批准和拒绝是两个明确状态。",
+                "不要把 None 当成批准或拒绝。",
+                "未知输入应留下真实错误。"
               ],
-              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
+              "solution": "def approval_route(approved):\n    if approved is True:\n        return \"execute\"\n    if approved is False:\n        return \"cancel\"\n    raise ValueError(\"approval must be boolean\")\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "批准与拒绝",
+                "expression": "approval_route(True) == \"execute\" and approval_route(False) == \"cancel\"",
+                "failure": "批准与拒绝必须走不同分支。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知状态",
+                "expression": "_raises_value_error(lambda: approval_route(None))",
+                "failure": "未知确认值不能静默继续。",
                 "kind": "behavior"
               }
             ]
@@ -15502,43 +15502,43 @@
     ],
     "python-lesson-30": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "连续存款",
+        "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
+        "failure": "连续存款应累加余额。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝非正数",
+        "expression": "_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-1))",
+        "failure": "零和负数存款应抛出 ValueError。",
         "kind": "behavior"
       }
     ],
     "python-lesson-31": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "延迟遍历",
+        "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
+        "failure": "应以生成器形式按需产生正数。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "空与负数",
+        "expression": "list(positive_numbers([])) == [] and list(positive_numbers([-3, -1])) == []",
+        "failure": "没有正数时应自然结束。",
         "kind": "behavior"
       }
     ],
     "python-lesson-32": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "位置参数",
+        "expression": "_decorator_probe(twice)",
+        "failure": "两次调用的参数和结果必须保持一致。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "关键字参数",
+        "expression": "_decorator_kwargs_probe(twice)",
+        "failure": "不能丢失关键字参数。",
         "kind": "behavior"
       }
     ],
@@ -15558,15 +15558,15 @@
     ],
     "python-lesson-34": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "保留非空行",
+        "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
+        "failure": "应清理换行并跳过空行。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "不存在文件报错",
+        "expression": "_raises_file_not_found(read_nonempty_lines)",
+        "failure": "不要把真实文件错误伪装成空列表。",
         "kind": "behavior"
       }
     ],
@@ -15788,43 +15788,43 @@
     ],
     "python-lesson-50": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "连续存款",
+        "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
+        "failure": "连续存款应累加余额。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝非正数",
+        "expression": "_raises_value_error(lambda: Wallet().deposit(0)) and _raises_value_error(lambda: Wallet().deposit(-1))",
+        "failure": "零和负数存款应抛出 ValueError。",
         "kind": "behavior"
       }
     ],
     "python-lesson-51": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "延迟遍历",
+        "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
+        "failure": "应以生成器形式按需产生正数。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "空与负数",
+        "expression": "list(positive_numbers([])) == [] and list(positive_numbers([-3, -1])) == []",
+        "failure": "没有正数时应自然结束。",
         "kind": "behavior"
       }
     ],
     "python-lesson-52": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "位置参数",
+        "expression": "_decorator_probe(twice)",
+        "failure": "两次调用的参数和结果必须保持一致。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "关键字参数",
+        "expression": "_decorator_kwargs_probe(twice)",
+        "failure": "不能丢失关键字参数。",
         "kind": "behavior"
       }
     ],
@@ -15844,15 +15844,15 @@
     ],
     "python-lesson-54": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "保留非空行",
+        "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
+        "failure": "应清理换行并跳过空行。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "不存在文件报错",
+        "expression": "_raises_file_not_found(read_nonempty_lines)",
+        "failure": "不要把真实文件错误伪装成空列表。",
         "kind": "behavior"
       }
     ],
@@ -16271,15 +16271,15 @@
     ],
     "langchain-rag-lesson-27": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "保持对应关系",
+        "expression": "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]",
+        "failure": "每个向量必须对应原文本。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "长度边界",
+        "expression": "_raises_value_error(lambda: pair_embeddings([\"a\"], []))",
+        "failure": "输入数量不一致时应明确失败。",
         "kind": "behavior"
       }
     ],
@@ -16299,15 +16299,15 @@
     ],
     "langchain-rag-lesson-29": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "排序与截断",
+        "expression": "top_k([{\"score\": 0.3, \"source\": \"a\"}, {\"score\": 0.9, \"source\": \"b\"}], 1) == [{\"score\": 0.9, \"source\": \"b\"}]",
+        "failure": "应返回分数最高的前 k 条。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "零数量",
+        "expression": "top_k([{\"score\": 1}], 0) == []",
+        "failure": "k 为零时不应返回结果。",
         "kind": "behavior"
       }
     ],
@@ -16551,15 +16551,15 @@
     ],
     "langchain-rag-lesson-47": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "保持对应关系",
+        "expression": "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]",
+        "failure": "每个向量必须对应原文本。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "长度边界",
+        "expression": "_raises_value_error(lambda: pair_embeddings([\"a\"], []))",
+        "failure": "输入数量不一致时应明确失败。",
         "kind": "behavior"
       }
     ],
@@ -16628,15 +16628,15 @@
     ],
     "langgraph-lesson-11": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "批准与拒绝",
+        "expression": "approval_route(True) == \"execute\" and approval_route(False) == \"cancel\"",
+        "failure": "批准与拒绝必须走不同分支。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "未知状态",
+        "expression": "_raises_value_error(lambda: approval_route(None))",
+        "failure": "未知确认值不能静默继续。",
         "kind": "behavior"
       }
     ],
@@ -16838,15 +16838,15 @@
     ],
     "langgraph-lesson-26": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "写入线程",
+        "expression": "save_checkpoint({\"a\": {\"step\": 1}}, \"b\", {\"step\": 2}) == {\"a\": {\"step\": 1}, \"b\": {\"step\": 2}}",
+        "failure": "应只新增或更新指定 thread。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "不修改原值",
+        "expression": "((lambda original: (save_checkpoint(original, \"a\", {\"step\": 2}), original))({\"a\": {\"step\": 1}}))[1][\"a\"][\"step\"] == 1",
+        "failure": "保存检查点不应改写调用者字典。",
         "kind": "behavior"
       }
     ],
@@ -16908,15 +16908,15 @@
     ],
     "langgraph-lesson-31": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "批准与拒绝",
+        "expression": "approval_route(True) == \"execute\" and approval_route(False) == \"cancel\"",
+        "failure": "批准与拒绝必须走不同分支。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "未知状态",
+        "expression": "_raises_value_error(lambda: approval_route(None))",
+        "failure": "未知确认值不能静默继续。",
         "kind": "behavior"
       }
     ],
