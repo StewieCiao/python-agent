@@ -247,6 +247,14 @@ test("完整课程地图达到三条路线的目标规模与项目数", async ()
   }
 });
 
+test("项目标记不抢占路线开头的基础课", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    assert.equal(track.lessons[0].project, false, `${track.id} 第一节应保持基础课`);
+    assert.ok(track.lessons.slice(1).some(({ project }) => project), `${track.id} 应包含项目课`);
+  }
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
