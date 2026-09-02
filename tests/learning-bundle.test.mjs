@@ -255,6 +255,16 @@ test("项目标记不抢占路线开头的基础课", async () => {
   }
 });
 
+test("行为导向扩展课不使用占位判题表达式", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const expanded = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter((lesson) => lesson.title.includes("写出可验证的实现")));
+  assert.ok(expanded.length >= 10);
+  for (const lesson of expanded) {
+    assert.ok(lesson.browserChecks.every(({ expression }) => !["behavioral result", "boundary result"].includes(expression)), lesson.id);
+    assert.ok(lesson.exercise.prompt.length >= 20, lesson.id);
+  }
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
