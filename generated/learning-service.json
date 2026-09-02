@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "abff618139124c28409a4c2229f1072fafd31c567595b8b2705a0abc55889092",
-  "familyHash": "c2e82cbbd701b3262578c84729b68a96f3215f4337a3a09c0db80e6a756fbb03",
+  "catalogHash": "80fe4fc71aba19d76e798352622fdd5e7876fb9cfe9745b55a0dda9104391ba0",
+  "familyHash": "883f6b6e158d7a273c87b716117719e29f3aac8d7398b11e818bbe93b77d8ea6",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2556,7 +2556,7 @@
         "currentLessonId": "memory-modernization",
         "stages": [
           {
-            "id": "langchain-rag-memory-modernization-stage",
+            "id": "langchain-rag-stage-memory-modernization",
             "order": 1,
             "title": "记忆：会话历史、短期状态与长期记忆",
             "description": "把第 37–38 节的 History 类放回正确位置，区分持久化消息、线程状态和跨线程记忆。",
@@ -2565,7 +2565,7 @@
             ]
           },
           {
-            "id": "langchain-rag-document-loaders-stage",
+            "id": "langchain-rag-stage-document-loaders",
             "order": 2,
             "title": "文档加载器与统一 Document",
             "description": "继续第 39–42 节，理解 Loader 的真正产物是带 page_content 和 metadata 的 Document。",
@@ -2574,7 +2574,7 @@
             ]
           },
           {
-            "id": "langchain-rag-indexing-vector-store-stage",
+            "id": "langchain-rag-stage-indexing-vector-store",
             "order": 3,
             "title": "切分、嵌入与向量存储",
             "description": "把第 41–43 节串成可解释的 indexing 流程，避免只记住某个向量库的方法名。",
@@ -2583,7 +2583,7 @@
             ]
           },
           {
-            "id": "langchain-rag-retrieval-chain-stage",
+            "id": "langchain-rag-stage-retrieval-chain",
             "order": 4,
             "title": "从 Retriever 到可核验的 RAG 回答",
             "description": "学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。",
@@ -2592,7 +2592,7 @@
             ]
           },
           {
-            "id": "langchain-rag-rag-project-stage",
+            "id": "langchain-rag-stage-rag-project",
             "order": 5,
             "title": "RAG 项目：上传、索引、检索与会话",
             "description": "对应第 46–54 节，把服装客服项目拆成边界清晰的离线索引和在线问答流程。",
@@ -2601,7 +2601,7 @@
             ]
           },
           {
-            "id": "langchain-rag-agent-v1-stage",
+            "id": "langchain-rag-stage-agent-v1",
             "order": 6,
             "title": "LangChain v1 Agent 与中间件",
             "description": "对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。",
@@ -2610,19 +2610,46 @@
             ]
           },
           {
-            "id": "langchain-rag-agent-rag-project-stage",
+            "id": "langchain-rag-stage-agent-rag-project",
             "order": 7,
             "title": "Agent + RAG 综合项目",
             "description": "对应第 60–67 节，把日志、配置、检索工具、中间件和 Agent 组合成一条可调试路径。",
             "lessonIds": [
               "agent-rag-project"
             ]
+          },
+          {
+            "id": "langchain-rag-stage-model-messages-prompts",
+            "order": 8,
+            "title": "模型、消息与 Prompt 模板",
+            "description": "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",
+            "lessonIds": [
+              "model-messages-prompts"
+            ]
+          },
+          {
+            "id": "langchain-rag-stage-structured-output",
+            "order": 9,
+            "title": "结构化输出与失败边界",
+            "description": "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
+            "lessonIds": [
+              "structured-output"
+            ]
+          },
+          {
+            "id": "langchain-rag-stage-runnable-pipeline",
+            "order": 10,
+            "title": "Runnable 组合的第一条链",
+            "description": "把模板、模型和解析器组成可观察的 Runnable 管道。",
+            "lessonIds": [
+              "runnable-pipeline"
+            ]
           }
         ],
         "lessons": [
           {
             "id": "memory-modernization",
-            "stageId": "langchain-rag-memory-modernization-stage",
+            "stageId": "langchain-rag-stage-memory-modernization",
             "order": 1,
             "title": "记忆：会话历史、短期状态与长期记忆",
             "kicker": "langchain-rag 学习",
@@ -2630,9 +2657,7 @@
             "minutes": 55,
             "prerequisites": [],
             "difficulty": "beginner",
-            "tags": [
-              "langchain-rag"
-            ],
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -2775,14 +2800,16 @@
               "starterCode": "memory_terms = {\n    \"json_history\": \"\",\n    \"checkpointer\": \"\",\n    \"store\": \"\",\n}",
               "solution": "memory_terms = {\n    \"json_history\": \"持久化消息历史\",\n    \"checkpointer\": \"线程内短期状态\",\n    \"store\": \"跨线程长期记忆\",\n}",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "document-loaders",
-            "stageId": "langchain-rag-document-loaders-stage",
+            "stageId": "langchain-rag-stage-document-loaders",
             "order": 2,
             "title": "文档加载器与统一 Document",
             "kicker": "langchain-rag 学习",
@@ -2790,9 +2817,7 @@
             "minutes": 70,
             "prerequisites": [],
             "difficulty": "beginner",
-            "tags": [
-              "langchain-rag"
-            ],
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -2875,24 +2900,24 @@
               "starterCode": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页",
               "solution": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\nfirst = docs[0]\nprint(len(first.page_content))\nprint(first.metadata.get(\"source\"))\nprint(first.metadata.get(\"page\"))",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "indexing-vector-store",
-            "stageId": "langchain-rag-indexing-vector-store-stage",
+            "stageId": "langchain-rag-stage-indexing-vector-store",
             "order": 3,
             "title": "切分、嵌入与向量存储",
             "kicker": "langchain-rag 学习",
             "summary": "把第 41–43 节串成可解释的 indexing 流程，避免只记住某个向量库的方法名。",
             "minutes": 65,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langchain-rag"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -2959,24 +2984,24 @@
               "starterCode": "# 建立 chunks 和 vector_store 后检索“退款”",
               "solution": "results = vector_store.similarity_search(\"退款\", k=2)\nfor doc in results:\n    print(doc.page_content)\n    print(doc.metadata[\"source\"])",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "retrieval-chain",
-            "stageId": "langchain-rag-retrieval-chain-stage",
+            "stageId": "langchain-rag-stage-retrieval-chain",
             "order": 4,
             "title": "从 Retriever 到可核验的 RAG 回答",
             "kicker": "langchain-rag 学习",
             "summary": "学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。",
             "minutes": 55,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langchain-rag"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3043,24 +3068,24 @@
               "starterCode": "def format_docs(docs):\n    pass",
               "solution": "def format_docs(docs):\n    if not docs:\n        return \"没有检索到资料\"\n    return \"\n\n\".join(\n        f\"来源: {doc.metadata.get('source', '未知')}\n{doc.page_content}\"\n        for doc in docs\n    )",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "rag-project",
-            "stageId": "langchain-rag-rag-project-stage",
+            "stageId": "langchain-rag-stage-rag-project",
             "order": 5,
             "title": "RAG 项目：上传、索引、检索与会话",
             "kicker": "langchain-rag 学习",
             "summary": "对应第 46–54 节，把服装客服项目拆成边界清晰的离线索引和在线问答流程。",
             "minutes": 120,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langchain-rag"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3135,24 +3160,24 @@
               "starterCode": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass",
               "solution": "def index_document(path):\n    docs = load(path)\n    chunks = split(docs)\n    return vector_store.add_documents(chunks)\n\ndef answer(question, thread_id):\n    docs = retriever.invoke(question)\n    return rag_chain.invoke({\"question\": question, \"context\": format_docs(docs)})",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "agent-v1",
-            "stageId": "langchain-rag-agent-v1-stage",
+            "stageId": "langchain-rag-stage-agent-v1",
             "order": 6,
             "title": "LangChain v1 Agent 与中间件",
             "kicker": "langchain-rag 学习",
             "summary": "对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。",
             "minutes": 75,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langchain-rag"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3276,24 +3301,24 @@
               "starterCode": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)",
               "solution": "from langchain.agents import create_agent\nagent = create_agent(model, tools=tools)",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "agent-rag-project",
-            "stageId": "langchain-rag-agent-rag-project-stage",
+            "stageId": "langchain-rag-stage-agent-rag-project",
             "order": 7,
             "title": "Agent + RAG 综合项目",
             "kicker": "langchain-rag 学习",
             "summary": "对应第 60–67 节，把日志、配置、检索工具、中间件和 Agent 组合成一条可调试路径。",
             "minutes": 150,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langchain-rag"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3376,10 +3401,308 @@
               "starterCode": "def search_knowledge(query: str):\n    pass",
               "solution": "def search_knowledge(query: str):\n    docs = retriever.invoke(query)\n    if not docs:\n        return {\"answer\": None, \"sources\": [], \"status\": \"no_results\"}\n    return {\"answer\": format_docs(docs), \"sources\": [d.metadata.get(\"source\") for d in docs], \"status\": \"ok\"}",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
+          },
+          {
+            "id": "model-messages-prompts",
+            "stageId": "langchain-rag-stage-model-messages-prompts",
+            "order": 8,
+            "title": "模型、消息与 Prompt 模板",
+            "kicker": "langchain-rag 学习",
+            "summary": "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",
+            "minutes": 35,
+            "prerequisites": [
+              "memory-modernization"
+            ],
+            "difficulty": "beginner",
+            "tags": [
+              "model-messages-prompts"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "消息是有角色的输入",
+                "body": "system 约束行为，human 描述当前任务，assistant 是历史结果。明确角色比把所有内容拼成一段字符串更容易调试。",
+                "bullets": [
+                  "先固定输入变量",
+                  "不要把用户文本当系统规则",
+                  "记录最终消息序列"
+                ],
+                "example": "from langchain_core.messages import SystemMessage, HumanMessage\nmessages = [SystemMessage(\"你是 Python 导师\"), HumanMessage(\"解释列表\")]"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "模板让变化显式",
+                "body": "Prompt 模板只负责生成消息。渲染后先检查变量，再交给模型，缺变量应立即失败。",
+                "bullets": [
+                  "变量命名稳定",
+                  "输出结构交给 parser",
+                  "不在模板中执行工具"
+                ],
+                "example": "from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])"
+              },
+              {
+                "kind": "常见误区",
+                "title": "运行前预测消息",
+                "body": "先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。",
+                "bullets": [
+                  "确认变量名一致",
+                  "检查消息顺序",
+                  "再调用 invoke"
+                ],
+                "example": "messages = prompt.invoke({\"topic\": \"RAG\"})\nprint(messages.messages)"
+              }
+            ],
+            "videos": [
+              {
+                "title": "提示词模板与消息",
+                "url": "https://www.bilibili.com/video/BV1yjz5BLEoY?p=12",
+                "provider": "黑马程序员",
+                "language": "中文",
+                "duration": "24:00",
+                "note": "主线课程第 12 节；站内讲义会标出与当前官方 API 的差异。"
+              },
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "约 1 小时",
+                "note": "补充消息、模板与输出解析。"
+              }
+            ],
+            "officialSources": [
+              {
+                "label": "LangChain agents",
+                "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [],
+            "project": false,
+            "projectLinks": [],
+            "exercise": {
+              "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
+              "starterCode": "topic = \"\"\nmessages = []",
+              "solution": "from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})",
+              "hints": [
+                "区分消息角色",
+                "声明模板变量",
+                "检查渲染结果"
+              ]
+            },
+            "browserChecks": [
+              {
+                "name": "行为检查",
+                "expression": "lesson behavior",
+                "failure": "行为不符合要求",
+                "kind": "behavior"
+              },
+              {
+                "name": "结构检查",
+                "expression": "lesson structure",
+                "failure": "缺少教学结构",
+                "kind": "structure"
+              }
+            ]
+          },
+          {
+            "id": "structured-output",
+            "stageId": "langchain-rag-stage-structured-output",
+            "order": 9,
+            "title": "结构化输出与失败边界",
+            "kicker": "langchain-rag 学习",
+            "summary": "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
+            "minutes": 40,
+            "prerequisites": [
+              "model-messages-prompts"
+            ],
+            "difficulty": "beginner",
+            "tags": [
+              "structured-output"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "结构不是字符串约定",
+                "body": "当下游需要字段时，用 Pydantic 或 JSON schema 验证，而不是猜测逗号和换行。缺字段就是失败。",
+                "bullets": [
+                  "字段类型写进 schema",
+                  "保留原始解析错误",
+                  "验证失败停止下游"
+                ],
+                "example": "from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "失败必须可追踪",
+                "body": "记录模板、请求和解析的阶段，保留异常类型；不要把错误改成空对象或默认回答。",
+                "bullets": [
+                  "边界状态显式",
+                  "不吞异常",
+                  "测试缺字段输入"
+                ],
+                "example": "answer = model.with_structured_output(Answer).invoke(messages)"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个新输入验证你的理解。",
+                "bullets": [
+                  "先预测",
+                  "再运行",
+                  "记录结果"
+                ],
+                "example": "print(result)"
+              }
+            ],
+            "videos": [
+              {
+                "title": "LangChain structured output",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "约 1 小时",
+                "note": "补充结构化输出与解析边界。"
+              }
+            ],
+            "officialSources": [
+              {
+                "label": "LangChain agents",
+                "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [],
+            "project": false,
+            "projectLinks": [],
+            "exercise": {
+              "prompt": "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。",
+              "starterCode": "result = {}\nvalid = False",
+              "solution": "from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\nvalid = Answer.model_validate(result)",
+              "hints": [
+                "先写出结构",
+                "保留真实错误",
+                "用边界输入验证"
+              ]
+            },
+            "browserChecks": [
+              {
+                "name": "行为检查",
+                "expression": "lesson behavior",
+                "failure": "行为不符合要求",
+                "kind": "behavior"
+              },
+              {
+                "name": "结构检查",
+                "expression": "lesson structure",
+                "failure": "缺少教学结构",
+                "kind": "structure"
+              }
+            ]
+          },
+          {
+            "id": "runnable-pipeline",
+            "stageId": "langchain-rag-stage-runnable-pipeline",
+            "order": 10,
+            "title": "Runnable 组合的第一条链",
+            "kicker": "langchain-rag 学习",
+            "summary": "把模板、模型和解析器组成可观察的 Runnable 管道。",
+            "minutes": 45,
+            "prerequisites": [
+              "structured-output"
+            ],
+            "difficulty": "intermediate",
+            "tags": [
+              "runnable-pipeline"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "每一步都有输入输出",
+                "body": "Runnable 组合允许每一步单独 invoke、记录和测试。使用 | 表达顺序，避免不可检查的巨型函数。",
+                "bullets": [
+                  "单测每段输入输出",
+                  "顺序由管道表达",
+                  "步骤失败立即停止"
+                ],
+                "example": "chain = prompt | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "可观察性先于魔法",
+                "body": "链失败时必须知道是模板变量、模型请求还是解析器失败；保留原始错误才能修正。",
+                "bullets": [
+                  "为步骤命名",
+                  "记录耗时与状态",
+                  "不返回空字符串冒充成功"
+                ],
+                "example": "named = chain.with_config({\"run_name\": \"lesson-answer\"})"
+              },
+              {
+                "kind": "常见误区",
+                "title": "验证边界",
+                "body": "用一个新输入验证你的理解。",
+                "bullets": [
+                  "先预测",
+                  "再运行",
+                  "记录结果"
+                ],
+                "example": "print(result)"
+              }
+            ],
+            "videos": [
+              {
+                "title": "LangChain Expression Language",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "约 1 小时",
+                "note": "补充 Runnable 和组合语义。"
+              }
+            ],
+            "officialSources": [
+              {
+                "label": "LangChain v1",
+                "url": "https://docs.langchain.com/oss/python/releases/langchain-v1",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [],
+            "project": false,
+            "projectLinks": [],
+            "exercise": {
+              "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
+              "starterCode": "template = None\nmodel = None\nparser = None",
+              "solution": "chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})",
+              "hints": [
+                "先写出结构",
+                "保留真实错误",
+                "用边界输入验证"
+              ]
+            },
+            "browserChecks": [
+              {
+                "name": "行为检查",
+                "expression": "lesson behavior",
+                "failure": "行为不符合要求",
+                "kind": "behavior"
+              },
+              {
+                "name": "结构检查",
+                "expression": "lesson structure",
+                "failure": "缺少教学结构",
+                "kind": "structure"
+              }
+            ]
           }
         ]
       },
@@ -3392,7 +3715,7 @@
         "currentLessonId": "graph-foundations",
         "stages": [
           {
-            "id": "langgraph-graph-foundations-stage",
+            "id": "langgraph-stage-graph-foundations",
             "order": 1,
             "title": "StateGraph、Node 与 Edge",
             "description": "先把图看成共享状态上的函数流程，再学习 Agent。",
@@ -3401,7 +3724,7 @@
             ]
           },
           {
-            "id": "langgraph-state-reducers-routing-stage",
+            "id": "langgraph-stage-state-reducers-routing",
             "order": 2,
             "title": "Reducer、条件边与循环",
             "description": "控制状态如何合并，并让下一步由明确路由结果决定。",
@@ -3410,7 +3733,7 @@
             ]
           },
           {
-            "id": "langgraph-persistence-short-memory-stage",
+            "id": "langgraph-stage-persistence-short-memory",
             "order": 3,
             "title": "Persistence 与线程短期记忆",
             "description": "用 checkpointer 保存图状态，让同一 thread 可恢复、检查和继续。",
@@ -3419,7 +3742,7 @@
             ]
           },
           {
-            "id": "langgraph-long-term-store-stage",
+            "id": "langgraph-stage-long-term-store",
             "order": 4,
             "title": "Store 与跨线程长期记忆",
             "description": "使用 namespace/key 保存用户资料、偏好或可检索记忆。",
@@ -3428,7 +3751,7 @@
             ]
           },
           {
-            "id": "langgraph-streaming-interrupts-stage",
+            "id": "langgraph-stage-streaming-interrupts",
             "order": 5,
             "title": "Streaming、Interrupt 与人工确认",
             "description": "让长任务及时反馈，并在高风险动作前安全暂停。",
@@ -3437,7 +3760,7 @@
             ]
           },
           {
-            "id": "langgraph-subgraphs-parallelism-stage",
+            "id": "langgraph-stage-subgraphs-parallelism",
             "order": 6,
             "title": "子图、并行与 Map-Reduce",
             "description": "把可独立的工作分开执行，再通过明确 reducer 汇总结果。",
@@ -3446,7 +3769,7 @@
             ]
           },
           {
-            "id": "langgraph-memory-research-project-stage",
+            "id": "langgraph-stage-memory-research-project",
             "order": 7,
             "title": "项目：带长期记忆的研究助手",
             "description": "组合检索、并行研究、人工确认、短期状态和长期偏好。",
@@ -3458,7 +3781,7 @@
         "lessons": [
           {
             "id": "graph-foundations",
-            "stageId": "langgraph-graph-foundations-stage",
+            "stageId": "langgraph-stage-graph-foundations",
             "order": 1,
             "title": "StateGraph、Node 与 Edge",
             "kicker": "langgraph 学习",
@@ -3466,9 +3789,7 @@
             "minutes": 50,
             "prerequisites": [],
             "difficulty": "beginner",
-            "tags": [
-              "langgraph"
-            ],
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3527,14 +3848,16 @@
               "starterCode": "builder = StateGraph(State)\n# 添加 outline 和 answer 节点",
               "solution": "builder = StateGraph(State)\nbuilder.add_node(\"outline\", make_outline)\nbuilder.add_node(\"answer\", write_answer)\nbuilder.add_edge(START, \"outline\")\nbuilder.add_edge(\"outline\", \"answer\")\nbuilder.add_edge(\"answer\", END)\ngraph = builder.compile()",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "state-reducers-routing",
-            "stageId": "langgraph-state-reducers-routing-stage",
+            "stageId": "langgraph-stage-state-reducers-routing",
             "order": 2,
             "title": "Reducer、条件边与循环",
             "kicker": "langgraph 学习",
@@ -3542,9 +3865,7 @@
             "minutes": 60,
             "prerequisites": [],
             "difficulty": "beginner",
-            "tags": [
-              "langgraph"
-            ],
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3595,24 +3916,24 @@
               "starterCode": "def route(state):\n    pass",
               "solution": "def route(state):\n    if state[\"score\"] >= 0.8:\n        return \"finish\"\n    if state[\"attempts\"] >= 2:\n        return \"finish\"\n    return \"revise\"",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "persistence-short-memory",
-            "stageId": "langgraph-persistence-short-memory-stage",
+            "stageId": "langgraph-stage-persistence-short-memory",
             "order": 3,
             "title": "Persistence 与线程短期记忆",
             "kicker": "langgraph 学习",
             "summary": "用 checkpointer 保存图状态，让同一 thread 可恢复、检查和继续。",
             "minutes": 60,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langgraph"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3669,24 +3990,24 @@
               "starterCode": "config_a = {\"configurable\": {\"thread_id\": \"\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"\"}}",
               "solution": "config_a = {\"configurable\": {\"thread_id\": \"user-a\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"user-b\"}}",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "long-term-store",
-            "stageId": "langgraph-long-term-store-stage",
+            "stageId": "langgraph-stage-long-term-store",
             "order": 4,
             "title": "Store 与跨线程长期记忆",
             "kicker": "langgraph 学习",
             "summary": "使用 namespace/key 保存用户资料、偏好或可检索记忆。",
             "minutes": 65,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langgraph"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3745,24 +4066,24 @@
               "starterCode": "profile_namespace = ()\nevents_namespace = ()",
               "solution": "profile_namespace = (\"users\", user_id, \"profile\")\nevents_namespace = (\"users\", user_id, \"learning_events\")",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "streaming-interrupts",
-            "stageId": "langgraph-streaming-interrupts-stage",
+            "stageId": "langgraph-stage-streaming-interrupts",
             "order": 5,
             "title": "Streaming、Interrupt 与人工确认",
             "kicker": "langgraph 学习",
             "summary": "让长任务及时反馈，并在高风险动作前安全暂停。",
             "minutes": 70,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langgraph"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3813,24 +4134,24 @@
               "starterCode": "def approve_email(state):\n    pass",
               "solution": "def approve_email(state):\n    approved = interrupt({\"action\": \"send_email\", \"draft\": state[\"draft\"]})\n    return {\"approved\": bool(approved)}",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "subgraphs-parallelism",
-            "stageId": "langgraph-subgraphs-parallelism-stage",
+            "stageId": "langgraph-stage-subgraphs-parallelism",
             "order": 6,
             "title": "子图、并行与 Map-Reduce",
             "kicker": "langgraph 学习",
             "summary": "把可独立的工作分开执行，再通过明确 reducer 汇总结果。",
             "minutes": 65,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langgraph"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3881,24 +4202,24 @@
               "starterCode": "def fan_out(state):\n    pass",
               "solution": "def fan_out(state):\n    return [Send(\"research_section\", {\"topic\": topic}) for topic in state[\"topics\"]]",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
           },
           {
             "id": "memory-research-project",
-            "stageId": "langgraph-memory-research-project-stage",
+            "stageId": "langgraph-stage-memory-research-project",
             "order": 7,
             "title": "项目：带长期记忆的研究助手",
             "kicker": "langgraph 学习",
             "summary": "组合检索、并行研究、人工确认、短期状态和长期偏好。",
             "minutes": 150,
             "prerequisites": [],
-            "difficulty": "intermediate",
-            "tags": [
-              "langgraph"
-            ],
+            "difficulty": "beginner",
+            "tags": [],
             "guide": [
               {
                 "kind": "概念入门",
@@ -3969,7 +4290,9 @@
               "starterCode": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\"",
               "solution": "thread_state = [\"topic\", \"plan\", \"findings\", \"sources\", \"draft\", \"approved\"]\nstore_memory = [\"language\", \"report_length\", \"preferred_sources\"]\nnodes = [\"plan\", \"research\", \"review_evidence\", \"write_report\"]\ninterrupt_before = \"write_report\"",
               "hints": [
-                "先运行题目中的示例，再对照官方来源逐步修改。"
+                "先运行示例",
+                "定位失败步骤",
+                "用边界输入复测"
               ]
             },
             "browserChecks": []
@@ -4898,6 +5221,48 @@
     "rag-project": [],
     "agent-v1": [],
     "agent-rag-project": [],
+    "model-messages-prompts": [
+      {
+        "name": "行为检查",
+        "expression": "lesson behavior",
+        "failure": "行为不符合要求",
+        "kind": "behavior"
+      },
+      {
+        "name": "结构检查",
+        "expression": "lesson structure",
+        "failure": "缺少教学结构",
+        "kind": "structure"
+      }
+    ],
+    "structured-output": [
+      {
+        "name": "行为检查",
+        "expression": "lesson behavior",
+        "failure": "行为不符合要求",
+        "kind": "behavior"
+      },
+      {
+        "name": "结构检查",
+        "expression": "lesson structure",
+        "failure": "缺少教学结构",
+        "kind": "structure"
+      }
+    ],
+    "runnable-pipeline": [
+      {
+        "name": "行为检查",
+        "expression": "lesson behavior",
+        "failure": "行为不符合要求",
+        "kind": "behavior"
+      },
+      {
+        "name": "结构检查",
+        "expression": "lesson structure",
+        "failure": "缺少教学结构",
+        "kind": "structure"
+      }
+    ],
     "graph-foundations": [],
     "state-reducers-routing": [],
     "persistence-short-memory": [],

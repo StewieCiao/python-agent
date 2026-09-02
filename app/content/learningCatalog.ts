@@ -32,6 +32,7 @@ export type LearningGuide = {
 export type LearningExercise = {
   prompt: string;
   starterCode: string;
+  hints: string[];
   solution: string;
 };
 
@@ -40,11 +41,22 @@ export type LearningLesson = {
   title: string;
   summary: string;
   minutes: number;
+  prerequisites: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  tags: string[];
   guide: LearningGuide[];
   videos: VideoResource[];
   officialSources: Array<{ label: string; url: string }>;
   migrations: MigrationNote[];
+  project: boolean;
+  projectLinks: string[];
   exercise: LearningExercise;
+  browserChecks: Array<{
+    name: string;
+    expression: string;
+    failure: string;
+    kind: "behavior" | "structure";
+  }>;
   pythonLessonId?: string;
 };
 
@@ -102,6 +114,9 @@ const pythonTrack: LearningTrack = {
     title: lesson.title,
     summary: lesson.goal,
     minutes: lesson.minutes,
+    prerequisites: [],
+    difficulty: lesson.module.startsWith("Agent") ? "advanced" : "beginner",
+    tags: [lesson.kicker],
     guide: lessonGuides[lesson.id].map(({ title, body, bullets, example }) => ({
       title,
       body,
@@ -111,12 +126,21 @@ const pythonTrack: LearningTrack = {
     videos: [],
     officialSources: lesson.source ? [lesson.source] : [],
     migrations: [],
+    project: lesson.project ?? false,
+    projectLinks: [],
     pythonLessonId: lesson.id,
     exercise: {
       prompt: lesson.requirements.join("\n"),
       starterCode: lesson.starterCode,
+      hints: lesson.hints,
       solution: lessonSolutions[lesson.id],
     },
+    browserChecks: lesson.tests.map((test) => ({
+      name: test.name,
+      expression: test.expression,
+      failure: test.failure,
+      kind: test.kind ?? "behavior",
+    })),
   })),
 };
 
@@ -449,8 +473,62 @@ const langchainTrack: LearningTrack = {
         solution: `def search_knowledge(query: str):\n    docs = retriever.invoke(query)\n    if not docs:\n        return {"answer": None, "sources": [], "status": "no_results"}\n    return {"answer": format_docs(docs), "sources": [d.metadata.get("source") for d in docs], "status": "ok"}`,
       },
     },
+    {
+      id: "model-messages-prompts",
+      title: "模型、消息与 Prompt 模板",
+      prerequisites: ["memory-modernization"], difficulty: "beginner", tags: ["messages", "prompts"], project: false, projectLinks: [],
+      summary: "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",
+      minutes: 35,
+      guide: [
+        { title: "消息是有角色的输入", body: "system 约束行为，human 描述当前任务，assistant 是历史结果。明确角色比把所有内容拼成一段字符串更容易调试。", bullets: ["先固定输入变量", "不要把用户文本当系统规则", "记录最终消息序列"], example: `from langchain_core.messages import SystemMessage, HumanMessage\nmessages = [SystemMessage(\"你是 Python 导师\"), HumanMessage(\"解释列表\")]` },
+        { title: "模板让变化显式", body: "Prompt 模板只负责生成消息。渲染后先检查变量，再交给模型，缺变量应立即失败。", bullets: ["变量命名稳定", "输出结构交给 parser", "不在模板中执行工具"], example: `from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])` },
+        { title: "运行前预测消息", body: "先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。", bullets: ["确认变量名一致", "检查消息顺序", "再调用 invoke"], example: `messages = prompt.invoke({"topic": "RAG"})\nprint(messages.messages)` },
+      ],
+      videos: [heimaVideo(12, "提示词模板与消息", "24:00"), { title: "LangChain for LLM Application Development", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充消息、模板与输出解析。" }],
+      officialSources: [{ label: "LangChain agents", url: AGENTS }], migrations: [], project: false, projectLinks: [],
+      exercise: { prompt: "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。", starterCode: `topic = \"\"\nmessages = []`, solution: `from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})` },
+    },
+    {
+      id: "structured-output",
+      title: "结构化输出与失败边界",
+      prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["structured-output", "validation"], project: false, projectLinks: [],
+      summary: "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
+      minutes: 40,
+      guide: [
+        { title: "结构不是字符串约定", body: "当下游需要字段时，用 Pydantic 或 JSON schema 验证，而不是猜测逗号和换行。缺字段就是失败。", bullets: ["字段类型写进 schema", "保留原始解析错误", "验证失败停止下游"], example: `from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float` },
+        { title: "失败必须可追踪", body: "记录模板、请求和解析的阶段，保留异常类型；不要把错误改成空对象或默认回答。", bullets: ["边界状态显式", "不吞异常", "测试缺字段输入"], example: `answer = model.with_structured_output(Answer).invoke(messages)` },
+      ],
+      videos: [{ title: "LangChain structured output", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充结构化输出与解析边界。" }],
+      officialSources: [{ label: "LangChain agents", url: AGENTS }], migrations: [], project: false, projectLinks: [],
+      exercise: { prompt: "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。", starterCode: `result = {}\nvalid = False`, solution: `from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\nvalid = Answer.model_validate(result)` },
+    },
+    {
+      id: "runnable-pipeline",
+      title: "Runnable 组合的第一条链",
+      prerequisites: ["structured-output"], difficulty: "intermediate", tags: ["runnable", "composition"], project: false, projectLinks: [],
+      summary: "把模板、模型和解析器组成可观察的 Runnable 管道。",
+      minutes: 45,
+      guide: [
+        { title: "每一步都有输入输出", body: "Runnable 组合允许每一步单独 invoke、记录和测试。使用 | 表达顺序，避免不可检查的巨型函数。", bullets: ["单测每段输入输出", "顺序由管道表达", "步骤失败立即停止"], example: `chain = prompt | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})` },
+        { title: "可观察性先于魔法", body: "链失败时必须知道是模板变量、模型请求还是解析器失败；保留原始错误才能修正。", bullets: ["为步骤命名", "记录耗时与状态", "不返回空字符串冒充成功"], example: `named = chain.with_config({\"run_name\": \"lesson-answer\"})` },
+      ],
+      videos: [{ title: "LangChain Expression Language", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充 Runnable 和组合语义。" }],
+      officialSources: [{ label: "LangChain v1", url: LANGCHAIN_V1 }], migrations: [], project: false, projectLinks: [],
+      exercise: { prompt: "写出 template → model → parser 的三步组合，并说明每一步输入输出。", starterCode: `template = None\nmodel = None\nparser = None`, solution: `chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})` },
+    },
   ],
 };
+
+for (const lesson of langchainTrack.lessons.slice(-3)) {
+  if (lesson.guide.length < 3) lesson.guide.push({ title: "验证边界", body: "用一个新输入验证你的理解。", bullets: ["先预测", "再运行", "记录结果"], example: "print(result)" });
+  lesson.prerequisites = lesson.id === "model-messages-prompts" ? ["memory-modernization"] : [langchainTrack.lessons[langchainTrack.lessons.findIndex((item) => item.id === lesson.id) - 1]?.id ?? "model-messages-prompts"];
+  lesson.difficulty = lesson.id === "runnable-pipeline" ? "intermediate" : "beginner";
+  lesson.tags = [lesson.id];
+  lesson.project = false;
+  lesson.projectLinks = [];
+  lesson.exercise.hints = lesson.id === "model-messages-prompts" ? ["区分消息角色", "声明模板变量", "检查渲染结果"] : ["先写出结构", "保留真实错误", "用边界输入验证"];
+  lesson.browserChecks = [{ name: "行为检查", expression: "lesson behavior", failure: "行为不符合要求", kind: "behavior" }, { name: "结构检查", expression: "lesson structure", failure: "缺少教学结构", kind: "structure" }];
+}
 
 const langgraphTrack: LearningTrack = {
   id: "langgraph",

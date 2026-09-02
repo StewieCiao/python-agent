@@ -6,6 +6,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const schema = await import("../app/content/schema.ts");
+const { adaptLegacyTrack } = await import("../app/content/courseTrackAdapter.ts");
 
 const validCatalog = {
   schemaVersion: "stewie-catalog-v1",
@@ -143,6 +144,59 @@ test("schema validator rejects unsafe video domains and incomplete migrations", 
   );
 });
 
+test("legacy track adapter preserves instructional fields instead of erasing them", () => {
+  const track = {
+    id: "langchain-rag",
+    title: "LangChain",
+    shortTitle: "LC",
+    description: "路线",
+    accent: "#000000",
+    currentLessonId: "rich-lesson",
+    lessons: [{
+      id: "rich-lesson",
+      title: "可观察练习",
+      summary: "能根据输入返回结果",
+      minutes: 20,
+      guide: [
+        { title: "概念", body: "概念", bullets: ["要点"], example: "例子" },
+        { title: "拆解", body: "拆解", bullets: ["步骤"], example: "步骤" },
+        { title: "误区", body: "误区", bullets: ["边界"], example: "边界" },
+      ],
+      videos: [],
+      officialSources: [{ label: "官方", url: "https://docs.langchain.com/oss/python/learn" }],
+      migrations: [],
+      exercise: { prompt: "完成", starterCode: "", hints: ["定位", "拆解", "修正"], solution: "完成" },
+      browserChecks: [{ name: "行为", expression: "True", failure: "失败", kind: "behavior" }],
+      project: true,
+      projectLinks: ["rich-lesson"],
+    }],
+  };
+
+  const adapted = adaptLegacyTrack(track);
+  const [lesson] = adapted.lessons;
+  assert.equal(lesson.guide.length, 3);
+  assert.deepEqual(lesson.exercise.hints, ["定位", "拆解", "修正"]);
+  assert.equal(lesson.browserChecks.length, 1);
+  assert.equal(lesson.project, true);
+  assert.deepEqual(lesson.projectLinks, ["rich-lesson"]);
+});
+
+test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  for (const id of ["model-messages-prompts", "structured-output", "runnable-pipeline"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson, `缺少 ${id}`);
+    assert.equal(lesson.guide.length, 3);
+    assert.equal(lesson.exercise.hints.length, 3);
+    assert.ok(lesson.prerequisites.length >= 1);
+    assert.ok(lesson.browserChecks.length >= 2);
+    assert.ok(lesson.officialSources.length >= 1);
+    assert.ok(lesson.videos.every((video) => ["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"].includes(new URL(video.url).hostname)));
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);
@@ -172,7 +226,7 @@ test("作者目录聚合三条路线且 lesson id 不重复", async () => {
   );
   assert.deepEqual(
     authoredCatalog.tracks.map(({ lessons }) => lessons.length),
-    [25, 7, 7],
+    [25, 10, 7],
   );
   const ids = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.map(({ id }) => id));
   assert.equal(new Set(ids).size, ids.length);

@@ -10,7 +10,7 @@ function source(value: { label: string; url: string }): CourseSource {
 }
 
 function lesson(value: LearningLesson, index: number, trackId: LearningTrack["id"]): CourseLesson {
-  const stageId = `${trackId}-${value.id}-stage`;
+  const stageId = `${trackId}-stage-${value.id}`;
   return {
     id: value.id,
     stageId,
@@ -19,9 +19,9 @@ function lesson(value: LearningLesson, index: number, trackId: LearningTrack["id
     kicker: `${trackId} 学习`,
     summary: value.summary,
     minutes: value.minutes,
-    prerequisites: [],
-    difficulty: index < 2 ? "beginner" : "intermediate",
-    tags: [trackId],
+    prerequisites: value.prerequisites ?? [],
+    difficulty: value.difficulty ?? "beginner",
+    tags: value.tags ?? [],
     guide: value.guide.map((item, guideIndex) => ({
       kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区",
       ...item,
@@ -38,9 +38,11 @@ function lesson(value: LearningLesson, index: number, trackId: LearningTrack["id
     projectLinks: [],
     exercise: {
       ...value.exercise,
-      hints: ["先运行题目中的示例，再对照官方来源逐步修改。"],
+      hints: value.exercise.hints ?? ["先运行示例", "定位失败步骤", "用边界输入复测"],
     },
-    browserChecks: [],
+    browserChecks: value.browserChecks ?? [],
+    project: value.project ?? false,
+    projectLinks: value.projectLinks ?? [],
   };
 }
 
