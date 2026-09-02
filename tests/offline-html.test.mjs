@@ -15,6 +15,7 @@ const dataMatch = offlineHtml.match(
 test("离线文件内嵌完整课程与参考答案", () => {
   assert.ok(dataMatch, "应包含内嵌课程 JSON");
   const course = JSON.parse(dataMatch[1]);
+  assert.deepEqual(course, { tracks: authoredCatalog.tracks });
   assert.deepEqual(
     course.tracks.map(({ id, currentLessonId, lessons }) => ({
       id,
