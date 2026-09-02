@@ -51,15 +51,22 @@ class ExerciseTest(unittest.TestCase):
             "starterCode": "def sum_even(numbers):\n    pass",
             "hints": ["先初始化 total"],
         }
-        accepted = validate_generated_exercise(family, candidate)
-        self.assertFalse(accepted["accepted"])
-        self.assertEqual(accepted["reason"], "需要真实 family 验证器")
-        self.assertNotIn("solution", accepted)
+        with self.assertRaisesRegex(ValueError, "题目字段"):
+            validate_generated_exercise(family, candidate)
 
         invalid = dict(candidate)
         invalid["prompt"] = ""
         with self.assertRaisesRegex(ValueError, "题目字段"):
             validate_generated_exercise(family, invalid)
+
+    def test_generated_variant_passes_known_parameter_validator(self):
+        selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner"}
+        candidate = generate_personalized_exercise(selection, 1, [])
+        checked = validate_generated_exercise(
+            {"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"]},
+            candidate,
+        )
+        self.assertEqual(checked, {"accepted": True, "exercise": candidate})
 
     def test_personalized_variant_is_deterministic_and_not_recent_duplicate(self):
         bundle = {"families": {

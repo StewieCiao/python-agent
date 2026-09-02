@@ -28,7 +28,7 @@ def select_family(bundle, lesson_id, mistake_codes):
 def validate_generated_exercise(family, candidate):
     if not isinstance(family, dict) or not isinstance(candidate, dict):
         raise ValueError("题目输入结构无效")
-    required = {"familyId", "validatorVersion", "prompt", "starterCode", "hints"}
+    required = {"familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters"}
     if set(candidate) != required:
         raise ValueError("题目字段无效")
     if candidate["familyId"] != family.get("id") or candidate["validatorVersion"] != family.get("validatorVersion"):
@@ -39,7 +39,14 @@ def validate_generated_exercise(family, candidate):
         raise ValueError("题目字段无效")
     if not isinstance(candidate["hints"], list) or not all(isinstance(hint, str) and hint.strip() for hint in candidate["hints"]):
         raise ValueError("题目字段无效")
-    return {"accepted": False, "reason": "需要真实 family 验证器"}
+    parameters = candidate["parameters"]
+    if not isinstance(parameters, dict) or set(parameters) != {"seed", "label", "values"} or not isinstance(parameters["seed"], int) or not isinstance(parameters["label"], str) or not isinstance(parameters["values"], str):
+        raise ValueError("题目参数无效")
+    variants = _VARIANTS.get(family["id"])
+    expected_values = {label: values for label, values in variants}
+    if parameters["label"] not in expected_values or parameters["values"] != expected_values[parameters["label"]]:
+        raise ValueError("题目参数不属于 family")
+    return {"accepted": True, "exercise": candidate}
 
 
 _VARIANTS = {
@@ -72,7 +79,7 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     variants = _VARIANTS.get(family_id)
     if not variants:
         raise ValueError("family 没有已审校的题目变体")
-    label, _ = variants[seed % len(variants)]
+    label, values = variants[seed % len(variants)]
     prompt = f"针对 {label} 完成题目要求，并保留 family 的教学约束。"
     if prompt in recent_prompts:
         raise ValueError("生成题目与最近练习重复")
@@ -82,4 +89,5 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
         "prompt": prompt,
         "starterCode": "# 在这里完成练习\n",
         "hints": ["先写最小可运行版本，再用题目给出的新输入验证。"],
+        "parameters": {"seed": seed, "label": label, "values": values},
     }
