@@ -9,6 +9,7 @@ import warnings
 from contextlib import closing
 
 from langchain_core._api.deprecation import LangChainPendingDeprecationWarning
+from catalog import load_learning_bundle
 from protocol import decode_request, encode_message, error_response, success_response
 from storage import Storage
 
@@ -21,7 +22,7 @@ REQUIRED_PACKAGES = {
 }
 
 
-def build_health_result():
+def build_health_result(learning_bundle):
     packages = {}
     for distribution, module in REQUIRED_PACKAGES.items():
         with warnings.catch_warnings():
@@ -57,14 +58,19 @@ def build_health_result():
             "transaction": transaction_ok,
             "fts5": fts5_ok,
         },
+        "catalog": {
+            "schemaVersion": learning_bundle["schemaVersion"],
+            "catalogHash": learning_bundle["catalogHash"],
+            "familyHash": learning_bundle["familyHash"],
+        },
     }
 
 
-def dispatch_request(request, storage):
+def dispatch_request(request, storage, learning_bundle):
     method = request["method"]
     params = request["params"]
     if method == "health":
-        return build_health_result()
+        return build_health_result(learning_bundle)
     if method == "profile.list":
         return storage.list_profiles()
     if method == "profile.get":
@@ -108,7 +114,7 @@ def dispatch_request(request, storage):
     raise ValueError("不支持的服务方法")
 
 
-def serve(input_stream, output_stream, storage):
+def serve(input_stream, output_stream, storage, learning_bundle):
     for frame in input_stream:
         request_id = None
         try:
@@ -125,7 +131,7 @@ def serve(input_stream, output_stream, storage):
         try:
             request = decode_request(frame)
             request_id = request["id"]
-            response = success_response(request_id, dispatch_request(request, storage))
+            response = success_response(request_id, dispatch_request(request, storage, learning_bundle))
         except Exception as error:
             response = error_response(request_id, error)
         output_stream.write(encode_message(response))
@@ -134,11 +140,13 @@ def serve(input_stream, output_stream, storage):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--catalog", required=True)
     parser.add_argument("--database", required=True)
     args = parser.parse_args()
+    learning_bundle = load_learning_bundle(args.catalog)
     storage = Storage(args.database)
     try:
-        serve(sys.stdin, sys.stdout, storage)
+        serve(sys.stdin, sys.stdout, storage, learning_bundle)
     finally:
         storage.close()
 

@@ -8,8 +8,8 @@
   "main": ".vite/build/main.js",
   "type": "commonjs",
   "scripts": {
-    "premake": "node ../scripts/prepare-python-runtime.mjs",
-    "prepackage": "node ../scripts/prepare-python-runtime.mjs",
+    "premake": "npm --prefix .. run build:learning && node ../scripts/prepare-python-runtime.mjs",
+    "prepackage": "npm --prefix .. run build:learning && node ../scripts/prepare-python-runtime.mjs",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",

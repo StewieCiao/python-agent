@@ -21,6 +21,11 @@ const HEALTH_RESULT = {
     pypdf: "6.16.2",
   },
   sqlite: { version: "3.50.4", transaction: true, fts5: true },
+  catalog: {
+    schemaVersion: "stewie-catalog-v1",
+    catalogHash: "f0c4890684ad7f0b960b4c476a0f0d12d3382ef74efc4641b99937c5c1b80af2",
+    familyHash: "d027066a7cc1caf17663ae84138d42f40a914de9b87f1bf071f4d1b3a71e6ef6",
+  },
 };
 const DATABASE_PATH = join("Library", "Application Support", "Stewie LearnOS", "stewie.db");
 
@@ -31,10 +36,12 @@ test("桌面只从 process.resourcesPath 下解析内置服务", async () => {
   assert.deepEqual(resolvePythonServicePaths(resources, "darwin"), {
     executable: join(resources, "python", "bin", "python3"),
     service: join(resources, "python", "service", "service.py"),
+    catalog: join(resources, "python", "service", "learning-service.json"),
   });
   assert.deepEqual(resolvePythonServicePaths(resources, "win32"), {
     executable: join(resources, "python", "python.exe"),
     service: join(resources, "python", "service", "service.py"),
+    catalog: join(resources, "python", "service", "learning-service.json"),
   });
 });
 
@@ -114,6 +121,8 @@ test("启动唯一服务后先完成真实健康握手", async () => {
   assert.match(spawnCalls[0].executable, /Resources\/python\/bin\/python3$/);
   assert.deepEqual(spawnCalls[0].args, [
     join("Applications", "Stewie LearnOS", "Resources", "python", "service", "service.py"),
+    "--catalog",
+    join("Applications", "Stewie LearnOS", "Resources", "python", "service", "learning-service.json"),
     "--database",
     DATABASE_PATH,
   ]);

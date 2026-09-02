@@ -6,15 +6,19 @@ import unittest
 from pathlib import Path
 
 RUNTIME_ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = RUNTIME_ROOT.parent / "generated" / "learning-service.json"
 sys.path.insert(0, str(RUNTIME_ROOT))
 
+from catalog import load_learning_bundle
 from service import build_health_result, dispatch_request
 from storage import Storage
+
+BUNDLE = load_learning_bundle(CATALOG_PATH)
 
 
 class ServiceTest(unittest.TestCase):
     def test_health_proves_runtime_packages_sqlite_transactions_and_fts5(self):
-        health = build_health_result()
+        health = build_health_result(load_learning_bundle(CATALOG_PATH))
 
         self.assertEqual(health["pythonVersion"], "3.13.15")
         self.assertEqual(
@@ -28,6 +32,7 @@ class ServiceTest(unittest.TestCase):
         )
         self.assertEqual(health["sqlite"]["transaction"], True)
         self.assertEqual(health["sqlite"]["fts5"], True)
+        self.assertEqual(health["catalog"]["schemaVersion"], "stewie-catalog-v1")
 
     def test_service_returns_one_real_response_per_frame_and_survives_protocol_error(self):
         frames = "\n".join(
@@ -42,6 +47,8 @@ class ServiceTest(unittest.TestCase):
                 [
                     sys.executable,
                     str(RUNTIME_ROOT / "service.py"),
+                    "--catalog",
+                    str(CATALOG_PATH),
                     "--database",
                     str(Path(directory) / "stewie.db"),
                 ],
@@ -77,6 +84,8 @@ class ServiceTest(unittest.TestCase):
                 [
                     sys.executable,
                     str(RUNTIME_ROOT / "service.py"),
+                    "--catalog",
+                    str(CATALOG_PATH),
                     "--database",
                     str(Path(directory) / "stewie.db"),
                 ],
@@ -127,6 +136,8 @@ class ServiceTest(unittest.TestCase):
                 [
                     sys.executable,
                     str(RUNTIME_ROOT / "service.py"),
+                    "--catalog",
+                    str(CATALOG_PATH),
                     "--database",
                     str(Path(directory) / "stewie.db"),
                 ],
@@ -146,12 +157,12 @@ class ServiceTest(unittest.TestCase):
             try:
                 self.assertEqual(
                     dispatch_request(
-                        {"method": "learning.save", "params": {"state": state}}, storage
+                        {"method": "learning.save", "params": {"state": state}}, storage, BUNDLE
                     ),
                     state,
                 )
                 self.assertEqual(
-                    dispatch_request({"method": "learning.get", "params": {}}, storage), state
+                    dispatch_request({"method": "learning.get", "params": {}}, storage, BUNDLE), state
                 )
                 message = {
                     "role": "user",
@@ -168,7 +179,7 @@ class ServiceTest(unittest.TestCase):
                                 "messages": [message],
                             },
                         },
-                        storage,
+                        storage, BUNDLE,
                     ),
                     [message],
                 )
@@ -178,7 +189,7 @@ class ServiceTest(unittest.TestCase):
                             "method": "chat.list",
                             "params": {"courseId": "python", "lessonId": "lesson-1"},
                         },
-                        storage,
+                        storage, BUNDLE,
                     ),
                     [message],
                 )
@@ -188,7 +199,7 @@ class ServiceTest(unittest.TestCase):
                             "method": "chat.clear",
                             "params": {"courseId": "python", "lessonId": "lesson-1"},
                         },
-                        storage,
+                        storage, BUNDLE,
                     ),
                     {"cleared": True},
                 )

@@ -28,8 +28,10 @@ const BUILD_ROOT = join(PROJECT_ROOT, "desktop", ".runtime");
 const RUNTIME_ROOT = join(BUILD_ROOT, "python");
 const CACHE_ROOT = join(BUILD_ROOT, "cache");
 const SOURCE_ROOT = join(PROJECT_ROOT, "python-runtime");
+const LEARNING_BUNDLE = join(PROJECT_ROOT, "generated", "learning-service.json");
 const LOCK_PATH = join(SOURCE_ROOT, "requirements.lock");
 const SERVICE_FILES = [
+  "catalog.py",
   "protocol.py",
   "service.py",
   "storage.py",
@@ -104,6 +106,7 @@ async function sourceFingerprint(asset) {
   for (const file of ["requirements.lock", ...SERVICE_FILES]) {
     sourceHashes[file] = await sha256File(join(SOURCE_ROOT, file));
   }
+  sourceHashes["generated/learning-service.json"] = await sha256File(LEARNING_BUNDLE);
   return {
     pythonVersion: PYTHON_RUNTIME.pythonVersion,
     releaseTag: PYTHON_RUNTIME.releaseTag,
@@ -162,6 +165,7 @@ export async function preparePythonRuntime() {
       await mkdir(dirname(target), { recursive: true });
       await cp(join(SOURCE_ROOT, file), target);
     }
+    await cp(LEARNING_BUNDLE, join(serviceRoot, "learning-service.json"));
     await run(stagedExecutable, [
       "-c",
       "import langchain, langgraph, pypdf; import langgraph.checkpoint.sqlite",

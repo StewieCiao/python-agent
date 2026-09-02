@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build:learning": "node --experimental-strip-types scripts/build-learning-bundle.mjs",
+    "prebuild:offline": "npm run build:learning",
     "build:offline": "node --experimental-strip-types scripts/build-offline-html.mjs",
     "desktop:dev": "npm run start --workspace @stewie/desktop",
     "desktop:make": "npm run make --workspace @stewie/desktop",
@@ -23,7 +24,7 @@
     "predev": "npm run prepare:pyodide",
     "dev": "node scripts/run-local.mjs dev",
     "dev:site": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
-    "prebuild": "npm run prepare:pyodide",
+    "prebuild": "npm run build:learning && npm run prepare:pyodide",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start": "node scripts/run-local.mjs start",
     "start:site": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",

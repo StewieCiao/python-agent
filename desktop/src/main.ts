@@ -41,8 +41,9 @@ import {
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
 import { migrateLegacyDesktopFiles } from "./legacyMigration.mjs";
-import { lessons } from "../../app/lib/curriculum.ts";
+import { lessons } from "../../app/content/publicCatalog.ts";
 import { parseLearningExport } from "../../app/lib/learningExport.ts";
+import { assertCatalogHashes } from "./catalogBundle.mts";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -184,6 +185,7 @@ void runStartupTask(app.whenReady().then(async () => {
         void runStartupTask(Promise.reject(error));
       },
     });
+    assertCatalogHashes(pythonService.health.catalog);
     modelProfiles = createModelProfileService({
       store: pythonService,
       safeStorage,

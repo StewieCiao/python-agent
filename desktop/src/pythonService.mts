@@ -21,6 +21,11 @@ export type PythonHealth = {
     transaction: boolean;
     fts5: boolean;
   };
+  catalog: {
+    schemaVersion: "stewie-catalog-v1";
+    catalogHash: string;
+    familyHash: string;
+  };
 };
 
 export type PythonServiceFrame =
@@ -52,7 +57,7 @@ function hasStringFields(value: Record<string, unknown>, keys: readonly string[]
 }
 
 function isHealth(value: unknown): value is PythonHealth {
-  if (!isRecord(value) || !hasExactKeys(value, ["pythonVersion", "packages", "sqlite"])) return false;
+  if (!isRecord(value) || !hasExactKeys(value, ["pythonVersion", "packages", "sqlite", "catalog"])) return false;
   if (typeof value.pythonVersion !== "string" || !isRecord(value.packages) || !isRecord(value.sqlite)) {
     return false;
   }
@@ -61,7 +66,12 @@ function isHealth(value: unknown): value is PythonHealth {
     hasExactKeys(value.sqlite, ["version", "transaction", "fts5"]) &&
     typeof value.sqlite.version === "string" &&
     typeof value.sqlite.transaction === "boolean" &&
-    typeof value.sqlite.fts5 === "boolean"
+    typeof value.sqlite.fts5 === "boolean" &&
+    isRecord(value.catalog) &&
+    hasExactKeys(value.catalog, ["schemaVersion", "catalogHash", "familyHash"]) &&
+    value.catalog.schemaVersion === "stewie-catalog-v1" &&
+    typeof value.catalog.catalogHash === "string" && /^[0-9a-f]{64}$/.test(value.catalog.catalogHash) &&
+    typeof value.catalog.familyHash === "string" && /^[0-9a-f]{64}$/.test(value.catalog.familyHash)
   );
 }
 
@@ -167,6 +177,7 @@ export function resolvePythonServicePaths(resourcesPath: string, platform: strin
   return {
     executable: join(runtimeRoot, pythonExecutableRelativePath(platform)),
     service: join(runtimeRoot, "service", "service.py"),
+    catalog: join(runtimeRoot, "service", "learning-service.json"),
   };
 }
 
@@ -436,7 +447,7 @@ export async function startPythonService({
   onFailure,
 }: StartPythonServiceOptions): Promise<PythonServiceClient> {
   const paths = resolvePythonServicePaths(resourcesPath, platform);
-  const child = spawnProcess(paths.executable, [paths.service, "--database", databasePath], {
+  const child = spawnProcess(paths.executable, [paths.service, "--catalog", paths.catalog, "--database", databasePath], {
     stdio: ["pipe", "pipe", "pipe"],
     windowsHide: true,
   });
