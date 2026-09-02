@@ -13,7 +13,7 @@
 
 ## 验证证据
 
-- `npm test`：136 项通过。
+- `npm test`：139 项通过。
 - 后续代表课批次将扩展条目中的占位内容逐阶段替换为作者内容；当前审查统计仍有 Python 8、LangChain/RAG 27、LangGraph 27 节待深写，不能视为最终课程完成。
 - `npm run lint -- --max-warnings=0`：通过。
 - `npm run build`：通过。
