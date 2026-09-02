@@ -24,6 +24,7 @@ METHOD_PARAMS = {
     "learning.importExport": {"document"},
     "mastery.record": {"event"},
     "mastery.get": {"now"},
+    "personalization.next": {"lessonId", "seed"},
 }
 
 
@@ -86,6 +87,8 @@ def decode_request(frame):
         raise ProtocolError("event 必须是对象")
     if request["method"] == "mastery.get" and (not isinstance(params["now"], str) or not params["now"]):
         raise ProtocolError("now 必须是非空字符串")
+    if request["method"] == "personalization.next" and (not isinstance(params["lessonId"], str) or not params["lessonId"] or not isinstance(params["seed"], int) or isinstance(params["seed"], bool)):
+        raise ProtocolError("personalization.next 参数无效")
     return request
 
 

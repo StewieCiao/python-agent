@@ -66,6 +66,7 @@ class ProtocolTest(unittest.TestCase):
         valid_requests = [
             {"id": "m1", "method": "mastery.get", "params": {"now": "2026-09-02T00:00:00+00:00"}},
             {"id": "m2", "method": "mastery.record", "params": {"event": {}}},
+            {"id": "p1", "method": "personalization.next", "params": {"lessonId": "loops", "seed": 1}},
             {"id": "l1", "method": "learning.get", "params": {}},
             {"id": "l2", "method": "learning.save", "params": {"state": {}}},
             {
@@ -88,6 +89,7 @@ class ProtocolTest(unittest.TestCase):
         invalid_requests = [
             {"id": "x", "method": "mastery.get", "params": {"now": ""}},
             {"id": "x", "method": "mastery.record", "params": {"event": []}},
+            {"id": "x", "method": "personalization.next", "params": {"lessonId": "loops", "seed": True}},
             {"id": "x", "method": "learning.get", "params": {"state": {}}},
             {"id": "x", "method": "learning.save", "params": {"state": []}},
             {"id": "x", "method": "learning.importLegacy", "params": {"state": {}, "sourceHash": ""}},

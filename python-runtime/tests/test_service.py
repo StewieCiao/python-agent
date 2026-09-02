@@ -221,6 +221,23 @@ class ServiceTest(unittest.TestCase):
             finally:
                 storage.close()
 
+    def test_personalization_uses_local_mistake_modes_and_verified_family(self):
+        event = {
+            "lessonId": "loops", "familyId": "python-loops-v1", "outcome": "fail",
+            "mistakeCodes": ["missing-loop"], "createdAt": "2026-09-02T10:00:00+00:00",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            storage = Storage(Path(directory) / "stewie.db")
+            try:
+                storage.record_mastery_attempt(event)
+                result = dispatch_request({"method": "personalization.next", "params": {"lessonId": "loops", "seed": 2}}, storage, BUNDLE)
+                self.assertEqual(result["recommendation"]["mistakeCodes"], ["missing-loop"])
+                self.assertEqual(result["exercise"]["familyId"], "python-loops-v1")
+                with self.assertRaisesRegex(ValueError, "未找到"):
+                    dispatch_request({"method": "personalization.next", "params": {"lessonId": "variables", "seed": 1}}, storage, BUNDLE)
+            finally:
+                storage.close()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,6 +5,7 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 
+from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
 from mastery import compute_mastery, select_review_queue
 
 
@@ -404,6 +405,24 @@ class Storage:
         ]
         mastery = compute_mastery(events, now)
         return {"mastery": mastery, "reviewQueue": select_review_queue(mastery, now)}
+
+    def next_personalized_exercise(self, learning_bundle, lesson_id, seed):
+        events = [
+            {"lessonId": row["lesson_id"], "familyId": row["family_id"], "outcome": row["outcome"], "mistakeCodes": json.loads(row["mistake_codes_json"]), "createdAt": row["created_at"]}
+            for row in self.connection.execute("SELECT lesson_id, family_id, outcome, mistake_codes_json, created_at FROM mastery_attempts WHERE lesson_id = ? ORDER BY id", (lesson_id,))
+        ]
+        mistake_codes = []
+        for event in events:
+            for code in event["mistakeCodes"]:
+                if code not in mistake_codes:
+                    mistake_codes.append(code)
+        selection = select_family(learning_bundle, lesson_id, mistake_codes)
+        exercise = generate_personalized_exercise(selection, seed, [])
+        family = learning_bundle["families"][selection["familyId"]]
+        checked = validate_generated_exercise(family, exercise)
+        if not checked["accepted"]:
+            raise ValueError("个性题未通过 family 验证")
+        return {"exercise": checked["exercise"], "recommendation": {"lessonId": lesson_id, "familyId": selection["familyId"], "mistakeCodes": mistake_codes, "difficulty": selection["difficulty"]}}
 
     def import_legacy_learning_state(self, state, source_hash):
         _validate_learning_state(state)
