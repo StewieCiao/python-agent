@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "022293fac4e7a3ab53e14b8abbb8f6f68bbbfe0f1804059ba561ea59c2925899",
+  "catalogHash": "62715708536cbeead86df80644ce8d409bc2abf9a90be2640d91a710250acf93",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -2664,14 +2664,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“作用域”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -2750,14 +2750,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“列表与切片”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -2836,14 +2836,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“字典聚合”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -2922,14 +2922,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“集合运算”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3008,14 +3008,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“异常边界”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3094,14 +3094,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“类与对象”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3180,14 +3180,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“生成器”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3266,14 +3266,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“装饰器”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3352,14 +3352,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“模块拆分”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3438,14 +3438,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文件读写”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3524,14 +3524,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“测试设计”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3610,14 +3610,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“数据清洗”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3696,14 +3696,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“命令行工具”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3782,14 +3782,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“并发基础”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3868,14 +3868,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -3954,14 +3954,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“变量与类型”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4040,14 +4040,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“字符串处理”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4126,14 +4126,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“条件分支”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4212,14 +4212,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“循环与迭代”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4298,14 +4298,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“函数参数”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4384,14 +4384,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“作用域”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4470,14 +4470,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“列表与切片”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4556,14 +4556,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“字典聚合”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4642,14 +4642,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“集合运算”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4728,14 +4728,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“异常边界”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4814,14 +4814,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“类与对象”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4900,14 +4900,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“生成器”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -4986,14 +4986,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“装饰器”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5072,14 +5072,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“模块拆分”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5158,14 +5158,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文件读写”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5244,14 +5244,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“测试设计”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5330,14 +5330,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“数据清洗”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5416,14 +5416,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“命令行工具”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5502,14 +5502,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“并发基础”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5588,14 +5588,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Agent 工具契约”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5674,14 +5674,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“变量与类型”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5760,14 +5760,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“字符串处理”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5846,14 +5846,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“条件分支”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -5932,14 +5932,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 Python 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“循环与迭代”练习并通过行为检查。",
+              "starterCode": "value = 2\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "value = 2\nresult = value * 3"
             },
             "browserChecks": [
               {
@@ -7197,14 +7197,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“混合检索”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7283,14 +7283,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“重排”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7369,14 +7369,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“引用生成”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7455,14 +7455,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“无答案边界”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7541,14 +7541,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“RAG 评估”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7627,14 +7627,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“追踪与观测”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7713,14 +7713,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“工具调用”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7799,14 +7799,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Agent 循环”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7885,14 +7885,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“多查询检索”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -7971,14 +7971,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“RAG 项目”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8057,14 +8057,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“消息角色”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8143,14 +8143,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Prompt 模板”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8229,14 +8229,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“结构化输出”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8315,14 +8315,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Runnable 组合”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8401,14 +8401,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“模型配置”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8487,14 +8487,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文档加载”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8573,14 +8573,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文本切分”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8659,14 +8659,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Embedding”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8745,14 +8745,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“向量存储”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8831,14 +8831,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“相似度检索”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -8917,14 +8917,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“混合检索”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9003,14 +9003,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“重排”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9089,14 +9089,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“引用生成”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9175,14 +9175,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“无答案边界”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9261,14 +9261,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“RAG 评估”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9347,14 +9347,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“追踪与观测”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9433,14 +9433,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“工具调用”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9519,14 +9519,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Agent 循环”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9605,14 +9605,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“多查询检索”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9691,14 +9691,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“RAG 项目”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9777,14 +9777,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“消息角色”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9863,14 +9863,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Prompt 模板”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -9949,14 +9949,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“结构化输出”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -10035,14 +10035,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Runnable 组合”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -10121,14 +10121,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“模型配置”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -10207,14 +10207,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文档加载”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -10293,14 +10293,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“文本切分”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -10379,14 +10379,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangChain / RAG 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Embedding”练习并通过行为检查。",
+              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
             },
             "browserChecks": [
               {
@@ -11099,14 +11099,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“thread_id”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11185,14 +11185,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“短期记忆”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11271,14 +11271,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Store”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11357,14 +11357,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“长期记忆”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11443,14 +11443,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Interrupt”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11529,14 +11529,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“恢复执行”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11615,14 +11615,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“流式事件”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11701,14 +11701,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“子图”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11787,14 +11787,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“并行分支”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11873,14 +11873,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Supervisor”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -11959,14 +11959,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12045,14 +12045,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“人工审核”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12131,14 +12131,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Graph 项目”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12217,14 +12217,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“StateGraph”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12303,14 +12303,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“节点与边”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12389,14 +12389,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“状态更新”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12475,14 +12475,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“条件路由”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12561,14 +12561,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“循环终止”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12647,14 +12647,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Reducer”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12733,14 +12733,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Checkpoint”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12819,14 +12819,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“thread_id”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12905,14 +12905,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“短期记忆”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -12991,14 +12991,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Store”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13077,14 +13077,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“长期记忆”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13163,14 +13163,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Interrupt”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13249,14 +13249,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“恢复执行”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13335,14 +13335,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“流式事件”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13421,14 +13421,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“子图”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13507,14 +13507,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“并行分支”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13593,14 +13593,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Supervisor”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13679,14 +13679,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13765,14 +13765,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“人工审核”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13851,14 +13851,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“Graph 项目”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -13937,14 +13937,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“StateGraph”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {
@@ -14023,14 +14023,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "完成 LangGraph 主题练习并通过行为检查。",
-              "starterCode": "result = None",
+              "prompt": "完成“节点与边”练习并通过行为检查。",
+              "starterCode": "state = {\"count\": 0}\nresult = None",
               "hints": [
                 "先描述数据流",
                 "实现最小步骤",
                 "用边界输入复测"
               ],
-              "solution": "result = input_value"
+              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
             },
             "browserChecks": [
               {

@@ -19,6 +19,11 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const id = `${track.id}-lesson-${String(index).padStart(2, "0")}`;
   const previous = track.lessons[index - 1]?.id;
   const topic = TOPICS[track.id][index % TOPICS[track.id].length];
+  const exercise = track.id === "python"
+    ? { starterCode: "value = 2\nresult = None", solution: "value = 2\nresult = value * 3" }
+    : track.id === "langchain-rag"
+      ? { starterCode: 'messages = [{"role": "user", "content": "hello"}]\nresult = None', solution: 'messages = [{"role": "user", "content": "hello"}]\nresult = messages' }
+      : { starterCode: 'state = {"count": 0}\nresult = None', solution: 'state = {"count": 0}\nstate["count"] += 1\nresult = state' };
   return {
     id, stageId, order: index + 1, title: `${topic}：从概念到练习（第 ${index + 1} 节）`,
     kicker: `${track.shortTitle} 学习`, summary: `理解 ${topic} 的输入、处理过程和边界，并完成一个可验证练习。`, minutes: 35,
@@ -28,7 +33,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
       { kind: "逐步拆解", title: "再拆成可观察步骤", body: "每一步都可以单独运行或检查，失败时保留真实原因。", bullets: ["先做最小例子", "逐步增加边界", "记录实际结果"], example: "step_one(); step_two()" },
       { kind: "常见误区", title: "最后验证边界", body: "用一个没有出现在示例里的输入确认实现不是写死样例。", bullets: ["改变输入", "检查失败", "再复盘"], example: "assert result == expected" },
     ], videos: [], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
-    projectLinks: [], exercise: { prompt: `完成 ${track.shortTitle} 主题练习并通过行为检查。`, starterCode: "result = None", hints: ["先描述数据流", "实现最小步骤", "用边界输入复测"], solution: "result = input_value", },
+    projectLinks: [], exercise: { prompt: `完成“${topic}”练习并通过行为检查。`, starterCode: exercise.starterCode, hints: ["先描述数据流", "实现最小步骤", "用边界输入复测"], solution: exercise.solution },
     browserChecks: [{ name: "典型输入", expression: "behavioral result", failure: "典型输入行为不符", kind: "behavior" }, { name: "边界输入", expression: "boundary result", failure: "边界输入行为不符", kind: "behavior" }],
   };
 }
