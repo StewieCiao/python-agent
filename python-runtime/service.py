@@ -111,6 +111,10 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.export_learning()
     if method == "learning.importExport":
         return storage.import_learning_export(params["document"])
+    if method == "mastery.record":
+        return storage.record_mastery_attempt(params["event"])
+    if method == "mastery.get":
+        return storage.get_mastery(params["now"])
     raise ValueError("不支持的服务方法")
 
 

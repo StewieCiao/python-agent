@@ -83,7 +83,7 @@ class StorageTest(unittest.TestCase):
         with sqlite3.connect(self.database_path) as connection:
             self.assertEqual(
                 connection.execute("SELECT version FROM schema_migrations").fetchall(),
-                [(1,), (2,)],
+            [(1,), (2,), (3,)],
             )
 
     def test_origin_change_clears_old_ciphertext_and_active_profile_is_unique(self):

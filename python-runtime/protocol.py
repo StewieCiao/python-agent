@@ -22,6 +22,8 @@ METHOD_PARAMS = {
     "legacy.recordFailure": {"sourceKind", "sourceHash", "errorMessage"},
     "learning.export": set(),
     "learning.importExport": {"document"},
+    "mastery.record": {"event"},
+    "mastery.get": {"now"},
 }
 
 
@@ -80,6 +82,10 @@ def decode_request(frame):
             raise ProtocolError("legacy.recordFailure 字段无效")
     if request["method"] == "learning.importExport" and not isinstance(params["document"], dict):
         raise ProtocolError("document 必须是对象")
+    if request["method"] == "mastery.record" and not isinstance(params["event"], dict):
+        raise ProtocolError("event 必须是对象")
+    if request["method"] == "mastery.get" and (not isinstance(params["now"], str) or not params["now"]):
+        raise ProtocolError("now 必须是非空字符串")
     return request
 
 

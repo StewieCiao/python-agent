@@ -206,6 +206,21 @@ class ServiceTest(unittest.TestCase):
             finally:
                 storage.close()
 
+    def test_service_persists_mastery_attempts_and_returns_review_queue(self):
+        event = {
+            "lessonId": "loops", "familyId": "python-loops-v1", "outcome": "fail",
+            "mistakeCodes": ["missing-loop"], "createdAt": "2026-09-02T10:00:00+00:00",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            storage = Storage(Path(directory) / "stewie.db")
+            try:
+                self.assertEqual(dispatch_request({"method": "mastery.record", "params": {"event": event}}, storage, BUNDLE), {"recorded": True})
+                result = dispatch_request({"method": "mastery.get", "params": {"now": "2026-09-02T11:00:00+00:00"}}, storage, BUNDLE)
+                self.assertEqual(result["reviewQueue"], ["loops"])
+                self.assertEqual(result["mastery"]["loops"]["mistakeCodes"], ["missing-loop"])
+            finally:
+                storage.close()
+
 
 if __name__ == "__main__":
     unittest.main()

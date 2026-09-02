@@ -5,6 +5,8 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 
+from mastery import compute_mastery, select_review_queue
+
 
 PROFILE_FIELDS = {
     "id",
@@ -377,6 +379,31 @@ class Storage:
         with self.connection:
             self._replace_learning_state(state)
         return self.get_learning_state()
+
+    def record_mastery_attempt(self, event):
+        if not isinstance(event, dict):
+            raise ValueError("掌握度事件无效")
+        compute_mastery([event], event.get("createdAt"))
+        with self.connection:
+            self.connection.execute(
+                "INSERT INTO mastery_attempts (lesson_id, family_id, outcome, mistake_codes_json, created_at) VALUES (?, ?, ?, ?, ?)",
+                (event["lessonId"], event["familyId"], event["outcome"], json.dumps(event["mistakeCodes"], ensure_ascii=False), event["createdAt"]),
+            )
+        return {"recorded": True}
+
+    def get_mastery(self, now):
+        events = [
+            {
+                "lessonId": row["lesson_id"],
+                "familyId": row["family_id"],
+                "outcome": row["outcome"],
+                "mistakeCodes": json.loads(row["mistake_codes_json"]),
+                "createdAt": row["created_at"],
+            }
+            for row in self.connection.execute("SELECT lesson_id, family_id, outcome, mistake_codes_json, created_at FROM mastery_attempts ORDER BY id")
+        ]
+        mastery = compute_mastery(events, now)
+        return {"mastery": mastery, "reviewQueue": select_review_queue(mastery, now)}
 
     def import_legacy_learning_state(self, state, source_hash):
         _validate_learning_state(state)
