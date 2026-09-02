@@ -81,7 +81,9 @@ export function CourseChat({ track, lesson, onClose }: {
           <textarea aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragText} onChange={(event) => setRagText(event.target.value)} />
           <input aria-label="RAG 资料来源" placeholder="来源名称或文件名" value={ragSource} onChange={(event) => setRagSource(event.target.value)} />
           <label>或导入本地文本文件<input type="file" accept=".txt,.md,.markdown,.csv" multiple onChange={(event) => {
-            void Promise.all(Array.from(event.target.files ?? []).map(async (file) => ({ id: `${file.name}-${file.lastModified}`, text: await file.text(), source: file.name })) ).then(setRagDocuments);
+            void Promise.all(Array.from(event.target.files ?? []).map(async (file) => ({ id: `${file.name}-${file.lastModified}`, text: await file.text(), source: file.name })) )
+              .then(setRagDocuments)
+              .catch((error) => setStatus(`读取本地资料失败：${error instanceof Error ? error.message : String(error)}`));
           }} /></label>
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
           <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
