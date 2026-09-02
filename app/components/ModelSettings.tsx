@@ -8,6 +8,8 @@ import {
   platformServiceLabel,
   saveModelProfile,
   testModelProfile,
+  exportLearningData,
+  importLearningData,
 } from "../lib/platformBridge";
 
 const EMPTY_PROFILE = {
@@ -76,6 +78,20 @@ export function ModelSettings() {
 
   async function refreshProfiles() {
     setSavedProfiles(await listModelProfiles());
+  }
+
+  async function exportData() {
+    await perform(async () => {
+      const result = await exportLearningData();
+      return result.status === "cancelled" ? "已取消导出。" : `学习数据已保存：${result.path}`;
+    });
+  }
+
+  async function importData() {
+    await perform(async () => {
+      const result = await importLearningData();
+      return result.status === "cancelled" ? "已取消导入。" : `学习数据已导入：${result.counts.messages} 条聊天消息。`;
+    });
   }
 
   return (
@@ -151,6 +167,12 @@ export function ModelSettings() {
               <span>{item.model} · {item.hasApiKey ? "已配置 Key" : "无 Key"}</span>
             </button>
           ))}
+          <h3>学习数据</h3>
+          <p>导出不包含 API Key、模型密文或系统路径。</p>
+          <div className="form-actions">
+            <button disabled={busy} onClick={() => void exportData()} type="button">导出学习数据</button>
+            <button disabled={busy} onClick={() => void importData()} type="button">导入学习数据</button>
+          </div>
         </aside>
       </div>
     </section>

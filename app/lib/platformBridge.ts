@@ -191,6 +191,18 @@ export async function modelStorageInfo(): Promise<{
   };
 }
 
+export async function exportLearningData(): Promise<{ status: "cancelled" } | { status: "saved"; path: string }> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "学习数据导出仅在桌面版可用。");
+  return unwrapDesktop(await desktop.exportLearningData());
+}
+
+export async function importLearningData(): Promise<{ status: "cancelled" } | { status: "imported"; counts: Record<string, number> }> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "学习数据导入仅在桌面版可用。");
+  return unwrapDesktop(await desktop.importLearningData());
+}
+
 export function platformServiceLabel(): string {
   if (typeof window !== "undefined" && window.stewie) return "内置桌面服务";
   return isDesktopBuild() ? "桌面安全桥接不可用" : LOCAL_SERVICE_URL;
