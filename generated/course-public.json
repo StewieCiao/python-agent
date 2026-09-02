@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f4da14d64a8e05a44da24629d4b2c6bfce05c72b6993438f855caf5730db436d",
+  "catalogHash": "a71095a4f073e46738a2a0a9724e14832b1657b4d6192d43d4daa4466498035c",
   "familyHash": "57edc554703ab9de57dfa8ea0717db5578d66c53857b01e1f9a778c28b8089f8",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -8765,7 +8765,7 @@
             "order": 28,
             "title": "Embedding：从概念到练习（第 28 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Embedding 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把 Embedding 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8823,14 +8823,14 @@
               "memory-modernization"
             ],
             "exercise": {
-              "prompt": "完成“Embedding”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先保留 page_content 与 source",
+                "检查 query 与文档的向量维度",
+                "用无关 query 验证无命中边界"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
             },
             "browserChecks": [
               {
@@ -8853,7 +8853,7 @@
             "order": 29,
             "title": "向量存储：从概念到练习（第 29 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 向量存储 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把 向量存储 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8911,14 +8911,14 @@
               "memory-modernization"
             ],
             "exercise": {
-              "prompt": "完成“向量存储”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "用两条不同主题的文档验证 向量存储：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先保留 page_content 与 source",
+                "检查 query 与文档的向量维度",
+                "用无关 query 验证无命中边界"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
             },
             "browserChecks": [
               {
@@ -8941,7 +8941,7 @@
             "order": 30,
             "title": "相似度检索：从概念到练习（第 30 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 相似度检索 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把 相似度检索 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -8999,14 +8999,14 @@
               "memory-modernization"
             ],
             "exercise": {
-              "prompt": "完成“相似度检索”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "用两条不同主题的文档验证 相似度检索：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先保留 page_content 与 source",
+                "检查 query 与文档的向量维度",
+                "用无关 query 验证无命中边界"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
             },
             "browserChecks": [
               {
@@ -10525,7 +10525,7 @@
             "order": 48,
             "title": "Embedding：从概念到练习（第 48 节）",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Embedding 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把 Embedding 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
             "minutes": 35,
             "prerequisites": [],
             "difficulty": "advanced",
@@ -10583,14 +10583,14 @@
               "memory-modernization"
             ],
             "exercise": {
-              "prompt": "完成“Embedding”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "用两条不同主题的文档验证 Embedding：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
+              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先保留 page_content 与 source",
+                "检查 query 与文档的向量维度",
+                "用无关 query 验证无命中边界"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
             },
             "browserChecks": [
               {
