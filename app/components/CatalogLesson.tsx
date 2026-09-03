@@ -12,6 +12,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
 }) {
   const [code, setCode] = useState(lesson.exercise.starterCode);
   const [showSolution, setShowSolution] = useState(false);
+  const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => track.lessons.find((item) => item.id === id)?.title ?? id);
 
   return (
     <div className="catalog-grid">
@@ -19,7 +20,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
         <div className="lesson-meta">
           <span>{track.shortTitle}</span>
           <span>约 {lesson.minutes} 分钟</span>
-          <span>自由学习 · 无前置锁定</span>
+          <span>{prerequisiteTitles.length > 0 ? `建议先学：${prerequisiteTitles.join("、")}` : "建议从本节开始"}</span>
         </div>
         <p className="lesson-kicker">CURRENT LEARNING MODULE</p>
         <h2>{lesson.title}</h2>
