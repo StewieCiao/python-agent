@@ -72,20 +72,27 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     variants = selection.get("variants")
     if not isinstance(variants, list) or not variants:
         raise ValueError("family 没有已审校的题目变体")
-    selected = variants[seed % len(variants)]
-    if not isinstance(selected, dict) or not isinstance(selected.get("label"), str) or not isinstance(selected.get("values"), str) or not _valid_checks(selected.get("checks")):
-        raise ValueError("family 变体结构无效")
-    label = selected["label"]
-    values = selected["values"]
     constraints = selection.get("constraints", [])
     if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
         raise ValueError("family 约束无效")
     starter_code = selection.get("starterCode")
     if not isinstance(starter_code, str) or not starter_code.strip():
         raise ValueError("个性题缺少课程 starter")
-    prompt = f"针对 {label} 完成题目要求。教学约束：{'；'.join(constraints)}。"
-    if prompt in recent_prompts:
+    selected = None
+    prompt = ""
+    for offset in range(len(variants)):
+        candidate = variants[(seed + offset) % len(variants)]
+        if not isinstance(candidate, dict) or not isinstance(candidate.get("label"), str) or not isinstance(candidate.get("values"), str) or not _valid_checks(candidate.get("checks")):
+            raise ValueError("family 变体结构无效")
+        candidate_prompt = f"针对 {candidate['label']} 完成题目要求。教学约束：{'；'.join(constraints)}。"
+        if candidate_prompt not in recent_prompts:
+            selected = candidate
+            prompt = candidate_prompt
+            break
+    if selected is None:
         raise ValueError("生成题目与最近练习重复")
+    label = selected["label"]
+    values = selected["values"]
     return {
         "familyId": family_id,
         "validatorVersion": selection.get("validatorVersion", "1"),

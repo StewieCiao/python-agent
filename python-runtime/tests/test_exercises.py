@@ -83,7 +83,7 @@ class ExerciseTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "题目测试"):
             validate_generated_exercise({"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"], "variants": variants()}, tampered)
 
-    def test_personalized_variant_is_deterministic_and_not_recent_duplicate(self):
+    def test_personalized_variant_is_deterministic_and_skips_recent_duplicates(self):
         bundle = {"families": {
             "python-loops-v1": {
             "id": "python-loops-v1", "lessonIds": ["loops"], "difficulty": "beginner", "variants": variants(),
@@ -98,8 +98,18 @@ class ExerciseTest(unittest.TestCase):
         self.assertEqual(first["familyId"], "python-loops-v1")
         self.assertIn("输入", first["prompt"])
         self.assertEqual(len(first["hints"]), 3)
+        next_variant = generate_personalized_exercise(selection, 4, [first["prompt"]])
+        self.assertNotEqual(next_variant["prompt"], first["prompt"])
+        self.assertEqual(next_variant["parameters"]["seed"], 4)
+
+    def test_personalized_variant_fails_when_all_variants_are_recent(self):
+        selection = {
+            "familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner",
+            "constraints": ["sum even values"], "starterCode": "def sum_even(values):\n    pass\n", "variants": variants(2),
+        }
+        recent = [generate_personalized_exercise(selection, seed, []) for seed in range(2)]
         with self.assertRaisesRegex(ValueError, "重复"):
-            generate_personalized_exercise(selection, 4, [first["prompt"]])
+            generate_personalized_exercise(selection, 0, [item["prompt"] for item in recent])
 
     def test_each_verified_family_has_six_transfer_variants(self):
         family_ids = [
