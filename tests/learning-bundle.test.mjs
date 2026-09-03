@@ -263,6 +263,25 @@ test("LangChain 三节草稿的官方来源直接对应所教语义", async () =
   }
 });
 
+test("LangChain/RAG 十节原始课程的 id 顺序保持稳定", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const expected = [
+    "memory-modernization",
+    "document-loaders",
+    "indexing-vector-store",
+    "retrieval-chain",
+    "rag-project",
+    "agent-v1",
+    "agent-rag-project",
+    "model-messages-prompts",
+    "structured-output",
+    "runnable-pipeline",
+  ];
+  assert.deepEqual(track.lessons.map(({ id }) => id), expected);
+});
+
 test("LangChain 草稿为旧 API 提供可核验迁移卡", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
