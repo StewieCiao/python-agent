@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "38beefbada16d6816749bbe9d58e039edb53913d64b136e9b4a20d62ac2784bb",
+  "catalogHash": "9d8724047c51284461bf5ff847e2f4670d9bdbcf98e4c32ea3167f637633f78a",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7395,7 +7395,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从旧 LLMChain 迁移到 Runnable 管道",
+                "status": "replaced",
+                "explanation": "LangChain v1 以 Runnable 组合表达模板和模型；把可观察的步骤写成管道，并使用 invoke 传入变量。",
+                "beforeCode": "chain = LLMChain(llm=model, prompt=prompt)\nchain.run(topic=\"RAG\")",
+                "afterCode": "chain = prompt | model\nchain.invoke({\"topic\": \"RAG\"})",
+                "officialSources": [
+                  {
+                    "label": "LangChain v1",
+                    "url": "https://docs.langchain.com/oss/python/releases/langchain-v1",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-13"
@@ -7493,7 +7514,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从手写解析器迁移到结构化输出",
+                "status": "replaced",
+                "explanation": "旧教程常用 StructuredOutputParser 拼接格式说明；新版优先让模型绑定明确 schema，并让验证失败保留原始异常。",
+                "beforeCode": "parser = StructuredOutputParser.from_response_schemas(schemas)\nresult = parser.parse(text)",
+                "afterCode": "result = model.with_structured_output(Answer).invoke(messages)",
+                "officialSources": [
+                  {
+                    "label": "LangChain agents",
+                    "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-13"
@@ -7591,7 +7633,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从旧 run 方法迁移到统一 invoke",
+                "status": "renamed",
+                "explanation": "Runnable 统一使用 invoke、ainvoke 或 batch 表达同步、异步和批量调用，避免在不同链类型之间记忆不同入口。",
+                "beforeCode": "chain.run({\"topic\": \"RAG\"})",
+                "afterCode": "chain.invoke({\"topic\": \"RAG\"})",
+                "officialSources": [
+                  {
+                    "label": "LangChain v1",
+                    "url": "https://docs.langchain.com/oss/python/releases/langchain-v1",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-13"

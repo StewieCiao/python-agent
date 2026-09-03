@@ -225,6 +225,18 @@ test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查"
   }
 });
 
+test("LangChain 草稿为旧 API 提供可核验迁移卡", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  for (const id of ["model-messages-prompts", "structured-output", "runnable-pipeline"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.ok(lesson.migrations.length >= 1, `${id} 缺少迁移卡`);
+    assert.ok(lesson.migrations.every((item) => item.beforeCode && item.afterCode && item.officialSources.length >= 1));
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);
