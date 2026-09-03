@@ -14,7 +14,7 @@
 
 ## 验证证据
 
-- `npm test`：157 项通过。
+- `npm test`：166 项通过。
 - 当前三条路线的扩展主题均已绑定具体练习规格，课程标题不再使用“从概念到练习”占位模板；后续仍需逐阶段补充更丰富的原创示例、迁移卡和项目验收材料。
 - 桌面 RAG 面板现可对用户提供的小型问答集逐条执行真实检索并显示 recall@k、MRR、引用覆盖、引用一致性代理和耗时；模型未返回 token usage 时明确标为不可用，不估算成本。
 - 个性化练习 family 现在从作者源携带六组变体和独立行为检查；Python 服务只校验签名快照中的检查，桌面 Worker 使用个性题检查而不是原关卡样例。
@@ -24,8 +24,9 @@
 - GitHub Pages 工作流包含官方 Pages 配置动作，推送 `main` 后自动发布 `dist-pages` 静态入口。
 - 零部署入口审查确认：Pages 只发布单一自包含 `index.html`，不会依赖仓库子路径之外的资源。
 - `git diff --check`：通过。
-- 项目自带 Python 3.13.15 运行环境准备完成；内置运行时 `python-runtime` 41 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、pypdf 6.16.2、SQLite FTS5）。
+- 项目自带 Python 3.13.15 运行环境准备完成；内置运行时 `python-runtime` 52 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、pypdf 6.16.2、SQLite FTS5）。打包复制清单包含 Tutor 图所需模块，桌面包可完成真实健康握手。
 - packaged renderer smoke 已验证 Python 执行与安全存储失败边界：失败时保留真实原因且不留下半成品配置；当前环境未提供可用系统钥匙串，因此未伪造成功分支。
+- Python 基础与项目课已补齐逐课官方来源映射，生成快照和离线 HTML 均由作者目录重新生成并通过来源完整性测试。
 
 ## 尚未完成的内容审校
 
