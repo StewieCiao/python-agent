@@ -10,6 +10,7 @@ const DLAI_AGENTS = "https://www.deeplearning.ai/short-courses/functions-tools-a
 const DLAI_MEMORY = "https://www.deeplearning.ai/short-courses/long-term-agentic-memory-with-langgraph/";
 const LANGCHAIN_V1 = "https://docs.langchain.com/oss/python/releases/langchain-v1";
 const LANGCHAIN_MESSAGES = "https://docs.langchain.com/oss/python/langchain/messages";
+const LANGCHAIN_MODELS = "https://docs.langchain.com/oss/python/langchain/models";
 const LANGCHAIN_STRUCTURED_OUTPUT = "https://docs.langchain.com/oss/python/langchain/structured-output";
 const LANGCHAIN_KNOWLEDGE_BASE = "https://docs.langchain.com/oss/python/langchain/knowledge-base";
 const LANGCHAIN_MIGRATION = "https://docs.langchain.com/oss/python/migrate/langchain-v1";
@@ -455,6 +456,32 @@ export const langchainTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],
       exercise: { prompt: "输入是一个 topic 字符串；输出是按顺序排列的 messages 列表。请先用纯 Python 字典表达 system 与 user 角色，并声明 prompt_variables，再把同一结构映射到 ChatPromptTemplate。", starterCode: `topic = \"RAG\"\nprompt_variables = []\nmessages = []`, solution: `topic = \"RAG\"\nprompt_variables = [\"topic\"]\nmessages = [\n    {\"role\": \"system\", \"content\": \"你是导师\"},\n    {\"role\": \"user\", \"content\": f\"解释 {topic}\"},\n]` },
+    },
+    {
+      id: "model-configuration",
+      title: "模型配置与可解释的失败边界",
+      prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["model", "timeout", "configuration"],
+      summary: "把模型名称、超时和请求参数作为显式配置，并区分配置错误与上游失败。",
+      minutes: 35,
+      guide: [
+        { title: "配置是请求契约的一部分", body: "模型调用不只是填一个模型名称：超时、温度和基础 URL 都会影响请求是否可复现。先把这些值放在一个配置对象中，调用函数只读取配置，不从环境或全局变量猜测。", bullets: ["模型名必须显式", "超时决定等待边界", "配置与消息内容分开"], example: `model_config = {\"model\": \"demo\", \"timeout\": 30, \"temperature\": 0}` },
+        { title: "先验证配置，再发请求", body: "配置缺失时应在本地立即失败；配置有效但上游拒绝或超时，则保留真实异常类型和原因。两类失败不能都改成空答案。", bullets: ["缺字段属于配置错误", "超时是运行失败", "不要静默替换模型"], example: `def validate_config(config):\n    return bool(config[\"model\"]) and config[\"timeout\"] > 0` },
+        { title: "模型配置的常见误区", body: "完成“模型配置与可解释的失败边界”时，先检查实际传入的配置和失败阶段；不要把默认模型、无限等待或空字符串回答当作成功。", bullets: ["记录请求参数", "区分本地校验与上游错误", "为 timeout 留出明确状态"], example: `request = {**model_config, \"messages\": messages}` },
+      ],
+      videos: [{ title: "LangChain for LLM Application Development", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充模型调用参数和失败处理；版本语义以官方文档为准。" }],
+      officialSources: [{ label: "LangChain models", url: LANGCHAIN_MODELS }],
+      migrations: [{
+        title: "隐式默认模型 → 显式 model/timeout 配置",
+        status: "replaced",
+        explanation: "把模型调用所需的关键边界集中写入配置，并在请求前验证；不再依赖旧链对象隐式填充参数。",
+        beforeCode: "chain.run(question)",
+        afterCode: "model.invoke(messages, config={\"timeout\": 30})",
+        officialSources: [{ label: "LangChain models", url: LANGCHAIN_MODELS }],
+        verifiedAt: VERIFIED_AT,
+        verifiedVersions: VERIFIED_VERSIONS,
+      }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 validate_model_config(config)：model 必须是非空字符串，timeout 必须是大于 0 的数字，temperature 必须在 0 到 1；返回包含 valid 和 error 字段的字典，失败时写明缺失边界。", starterCode: `def validate_model_config(config):\n    pass\n`, solution: `def validate_model_config(config):\n    if not isinstance(config.get(\"model\"), str) or not config[\"model\"].strip():\n        return {\"valid\": False, \"error\": \"model\"}\n    if not isinstance(config.get(\"timeout\"), (int, float)) or config[\"timeout\"] <= 0:\n        return {\"valid\": False, \"error\": \"timeout\"}\n    if not isinstance(config.get(\"temperature\"), (int, float)) or not 0 <= config[\"temperature\"] <= 1:\n        return {\"valid\": False, \"error\": \"temperature\"}\n    return {\"valid\": True, \"error\": None}\n` },
     },
     {
       id: "structured-output",

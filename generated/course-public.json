@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "d62570068d8e533920cab99d533f73580624f9741d004ef9e7f1a8fcea0bd325",
-  "familyHash": "79be8a12d6ebaed02cadf237bc17f4d60dec8b57318c7acb23c5583903518764",
+  "catalogHash": "a003718399579271c5113ca2dd976be20642941461101d21157a2a359a5bf1af",
+  "familyHash": "0aee3d7c437f77e981c2c8dcf69944d6eae14883e318bdebd67a3f3353385d8d",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -6301,9 +6301,9 @@
             "description": "Runnable 的核心概念与实践。",
             "lessonIds": [
               "model-messages-prompts",
+              "model-configuration",
               "structured-output",
               "runnable-pipeline",
-              "langchain-rag-lesson-10",
               "langchain-rag-lesson-11",
               "langchain-rag-lesson-12",
               "langchain-rag-lesson-13"
@@ -7565,9 +7565,136 @@
             ]
           },
           {
-            "id": "structured-output",
+            "id": "model-configuration",
             "stageId": "langchain-rag-stage-2",
             "order": 9,
+            "title": "模型配置与可解释的失败边界",
+            "kicker": "langchain-rag 学习",
+            "summary": "把模型名称、超时和请求参数作为显式配置，并区分配置错误与上游失败。",
+            "minutes": 35,
+            "prerequisites": [
+              "model-messages-prompts"
+            ],
+            "difficulty": "beginner",
+            "tags": [
+              "model",
+              "timeout",
+              "configuration"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "配置是请求契约的一部分",
+                "body": "模型调用不只是填一个模型名称：超时、温度和基础 URL 都会影响请求是否可复现。先把这些值放在一个配置对象中，调用函数只读取配置，不从环境或全局变量猜测。",
+                "bullets": [
+                  "模型名必须显式",
+                  "超时决定等待边界",
+                  "配置与消息内容分开"
+                ],
+                "example": "model_config = {\"model\": \"demo\", \"timeout\": 30, \"temperature\": 0}"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "先验证配置，再发请求",
+                "body": "配置缺失时应在本地立即失败；配置有效但上游拒绝或超时，则保留真实异常类型和原因。两类失败不能都改成空答案。",
+                "bullets": [
+                  "缺字段属于配置错误",
+                  "超时是运行失败",
+                  "不要静默替换模型"
+                ],
+                "example": "def validate_config(config):\n    return bool(config[\"model\"]) and config[\"timeout\"] > 0"
+              },
+              {
+                "kind": "常见误区",
+                "title": "模型配置的常见误区",
+                "body": "完成“模型配置与可解释的失败边界”时，先检查实际传入的配置和失败阶段；不要把默认模型、无限等待或空字符串回答当作成功。",
+                "bullets": [
+                  "记录请求参数",
+                  "区分本地校验与上游错误",
+                  "为 timeout 留出明确状态"
+                ],
+                "example": "request = {**model_config, \"messages\": messages}"
+              }
+            ],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "约 1 小时",
+                "note": "补充模型调用参数和失败处理；版本语义以官方文档为准。"
+              }
+            ],
+            "officialSources": [
+              {
+                "label": "LangChain models",
+                "url": "https://docs.langchain.com/oss/python/langchain/models",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [
+              {
+                "title": "隐式默认模型 → 显式 model/timeout 配置",
+                "status": "replaced",
+                "explanation": "把模型调用所需的关键边界集中写入配置，并在请求前验证；不再依赖旧链对象隐式填充参数。",
+                "beforeCode": "chain.run(question)",
+                "afterCode": "model.invoke(messages, config={\"timeout\": 30})",
+                "officialSources": [
+                  {
+                    "label": "LangChain models",
+                    "url": "https://docs.langchain.com/oss/python/langchain/models",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
+            "project": false,
+            "projectLinks": [
+              "langchain-rag-lesson-13"
+            ],
+            "exercise": {
+              "prompt": "实现 validate_model_config(config)：model 必须是非空字符串，timeout 必须是大于 0 的数字，temperature 必须在 0 到 1；返回包含 valid 和 error 字段的字典，失败时写明缺失边界。",
+              "starterCode": "def validate_model_config(config):\n    pass\n",
+              "hints": [
+                "先列出模型配置字段",
+                "分别验证类型和边界",
+                "用缺失 model 与无效 timeout 回归"
+              ],
+              "solution": "def validate_model_config(config):\n    if not isinstance(config.get(\"model\"), str) or not config[\"model\"].strip():\n        return {\"valid\": False, \"error\": \"model\"}\n    if not isinstance(config.get(\"timeout\"), (int, float)) or config[\"timeout\"] <= 0:\n        return {\"valid\": False, \"error\": \"timeout\"}\n    if not isinstance(config.get(\"temperature\"), (int, float)) or not 0 <= config[\"temperature\"] <= 1:\n        return {\"valid\": False, \"error\": \"temperature\"}\n    return {\"valid\": True, \"error\": None}\n"
+            },
+            "browserChecks": [
+              {
+                "name": "有效配置",
+                "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 0.2}) == {\"valid\": True, \"error\": None}",
+                "failure": "完整配置应通过本地校验。",
+                "kind": "behavior"
+              },
+              {
+                "name": "超时边界",
+                "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 0, \"temperature\": 0.2}) == {\"valid\": False, \"error\": \"timeout\"}",
+                "failure": "timeout 必须是大于 0 的数字。",
+                "kind": "behavior"
+              },
+              {
+                "name": "温度边界",
+                "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 1.1}) == {\"valid\": False, \"error\": \"temperature\"}",
+                "failure": "temperature 必须位于 0 到 1。",
+                "kind": "behavior"
+              }
+            ]
+          },
+          {
+            "id": "structured-output",
+            "stageId": "langchain-rag-stage-2",
+            "order": 10,
             "title": "结构化输出与失败边界",
             "kicker": "langchain-rag 学习",
             "summary": "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
@@ -7687,7 +7814,7 @@
           {
             "id": "runnable-pipeline",
             "stageId": "langchain-rag-stage-2",
-            "order": 10,
+            "order": 11,
             "title": "Runnable 组合的第一条链",
             "kicker": "langchain-rag 学习",
             "summary": "把模板、模型和解析器组成可观察的 Runnable 管道。",
@@ -7805,105 +7932,6 @@
             ]
           },
           {
-            "id": "langchain-rag-lesson-10",
-            "stageId": "langchain-rag-stage-2",
-            "order": 11,
-            "title": "混合检索：写出可验证的实现",
-            "kicker": "LangChain / RAG 学习",
-            "summary": "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
-            "minutes": 35,
-            "prerequisites": [
-              "runnable-pipeline"
-            ],
-            "difficulty": "advanced",
-            "tags": [
-              "langchain-rag",
-              "stage-langchain-rag-stage-2"
-            ],
-            "guide": [
-              {
-                "kind": "概念入门",
-                "title": "混合检索要解决什么问题",
-                "body": "把团队知识库中的真实任务先翻译成输入、处理和输出，再理解这个知识点：合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
-                "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
-                ],
-                "example": "实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。"
-              },
-              {
-                "kind": "逐步拆解",
-                "title": "把混合检索拆成步骤",
-                "body": "先实现团队知识库场景下题目要求的最小路径，再逐项验证：实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。",
-                "bullets": [
-                  "两个列表按关键词结果在前的顺序合并。",
-                  "source 是去重键。",
-                  "重复来源比较 score，只替换为更高值。"
-                ],
-                "example": "输入 → 处理 → 输出"
-              },
-              {
-                "kind": "常见误区",
-                "title": "混合检索的边界检查",
-                "body": "不要只复现团队知识库的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
-                "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
-                ],
-                "example": "assert actual == expected"
-              }
-            ],
-            "videos": [
-              {
-                "title": "LangChain for LLM Application Development",
-                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
-                "provider": "DeepLearning.AI",
-                "language": "英文",
-                "duration": "短课程",
-                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
-              }
-            ],
-            "officialSources": [
-              {
-                "label": "LangChain 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langchain/overview",
-                "kind": "official-doc",
-                "verifiedAt": "2026-09-02"
-              }
-            ],
-            "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-13"
-            ],
-            "exercise": {
-              "prompt": "实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。",
-              "starterCode": "def merge_results(keyword, semantic):\n    pass\n",
-              "hints": [
-                "两个列表按关键词结果在前的顺序合并。",
-                "source 是去重键。",
-                "重复来源比较 score，只替换为更高值。"
-              ],
-              "solution": "def merge_results(keyword, semantic):\n    merged = {}\n    for item in [*keyword, *semantic]:\n        source = item[\"source\"]\n        if source not in merged or item[\"score\"] > merged[source][\"score\"]:\n            merged[source] = item\n    return list(merged.values())\n"
-            },
-            "browserChecks": [
-              {
-                "name": "合并去重",
-                "expression": "merge_results([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]) == [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]",
-                "failure": "重复来源应保留更高分数。",
-                "kind": "behavior"
-              },
-              {
-                "name": "保持顺序",
-                "expression": "[item[\"source\"] for item in merge_results([{\"source\": \"b\", \"score\": 0.5}], [{\"source\": \"a\", \"score\": 0.9}])] == [\"b\", \"a\"]",
-                "failure": "首次出现顺序应保持稳定。",
-                "kind": "behavior"
-              }
-            ]
-          },
-          {
             "id": "langchain-rag-lesson-11",
             "stageId": "langchain-rag-stage-2",
             "order": 12,
@@ -7912,7 +7940,7 @@
             "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-10"
+              "runnable-pipeline"
             ],
             "difficulty": "advanced",
             "tags": [

@@ -9,6 +9,7 @@ export const langchainHints: Record<string, [string, string, string]> = {
   "agent-v1": ["先定义工具参数和返回结构。", "观察每次 tool call 与 observation。", "为循环和权限设置明确上限。"],
   "agent-rag-project": ["先独立验证检索工具。", "再连接 create_agent 和中间件。", "检查回答是否只引用真实来源。"],
   "model-messages-prompts": ["区分消息角色", "声明模板变量", "检查渲染结果"],
+  "model-configuration": ["先列出模型配置字段", "分别验证类型和边界", "用缺失 model 与无效 timeout 回归"],
   "structured-output": ["先写出结构", "保留真实错误", "用边界输入验证"],
   "runnable-pipeline": ["先写出结构", "保留真实错误", "用边界输入验证"],
 };
@@ -45,6 +46,11 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
   "model-messages-prompts": [
     { name: "消息角色", expression: "messages[0][\"role\"] == \"system\" and messages[-1][\"role\"] == \"user\"", failure: "应明确区分 system 与 user 消息。", kind: "structure" },
     { name: "模板变量", expression: "\"topic\" in prompt_variables", failure: "模板应声明题目要求的变量。", kind: "structure" },
+  ],
+  "model-configuration": [
+    { name: "有效配置", expression: "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 0.2}) == {\"valid\": True, \"error\": None}", failure: "完整配置应通过本地校验。", kind: "behavior" },
+    { name: "超时边界", expression: "validate_model_config({\"model\": \"demo\", \"timeout\": 0, \"temperature\": 0.2}) == {\"valid\": False, \"error\": \"timeout\"}", failure: "timeout 必须是大于 0 的数字。", kind: "behavior" },
+    { name: "温度边界", expression: "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 1.1}) == {\"valid\": False, \"error\": \"temperature\"}", failure: "temperature 必须位于 0 到 1。", kind: "behavior" },
   ],
   "structured-output": [
     { name: "字段完整", expression: "isinstance(result, dict) and \"summary\" in result and \"confidence\" in result", failure: "结构化结果必须包含 summary 与 confidence。", kind: "structure" },

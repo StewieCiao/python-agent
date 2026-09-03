@@ -263,7 +263,7 @@ test("LangChain 三节草稿的官方来源直接对应所教语义", async () =
   }
 });
 
-test("LangChain/RAG 十节原始课程的 id 顺序保持稳定", async () => {
+test("LangChain/RAG 原始课程的 id 顺序保持稳定", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
   assert.ok(track);
@@ -276,6 +276,7 @@ test("LangChain/RAG 十节原始课程的 id 顺序保持稳定", async () => {
     "agent-v1",
     "agent-rag-project",
     "model-messages-prompts",
+    "model-configuration",
     "structured-output",
     "runnable-pipeline",
   ];
@@ -507,6 +508,20 @@ test("LangChain 检索与 Agent 项目课保留旧写法迁移边界", async () 
     assert.ok(lesson.migrations.length >= 1, `${id} 缺少迁移卡`);
     assert.ok(lesson.migrations.every((item) => item.beforeCode && item.afterCode && item.officialSources.length >= 1));
   }
+});
+
+test("LangChain 模型配置课明确区分配置、请求与失败边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "model-configuration");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("timeout")));
+  assert.ok(lesson.migrations.length >= 1);
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("/models")));
 });
 
 test("框架作者路线保留可解释的先修链", async () => {
