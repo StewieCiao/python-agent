@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import {
   packagedExecutablePath,
@@ -26,4 +27,13 @@ test("四种发行目标共用 Forge 的可执行文件名与资源目录合同"
       assert.match(resources, /resources$/);
     }
   }
+});
+
+test("跨平台发行工作流上传四种可下载安装包", async () => {
+  const workflow = await readFile(new URL("../.github/workflows/desktop-release.yml", import.meta.url), "utf8");
+  for (const runner of ["macos-15", "macos-15-intel", "windows-11-arm", "windows-2025"]) {
+    assert.match(workflow, new RegExp(`runner: ${runner}`));
+  }
+  assert.match(workflow, /npm run desktop:make/);
+  assert.match(workflow, /actions\/upload-artifact@v4/);
 });

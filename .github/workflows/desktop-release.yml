@@ -1,0 +1,40 @@
+name: Build desktop installers
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  make:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: macOS arm64
+            runner: macos-15
+          - target: macOS x64
+            runner: macos-15-intel
+          - target: Windows arm64
+            runner: windows-11-arm
+          - target: Windows x64
+            runner: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+      - run: npm ci
+      - run: npm run desktop:make
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stewie-learnos-${{ matrix.target }}
+          path: desktop/out/make/**
+          if-no-files-found: error
