@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "6099c45faac71c54514e00b33bdc92f319695724aa72318e73259be58a07e51e",
-  "familyHash": "d191e937872fe5c5a21701816e3bee2d61d2c3f2aadc3728047e1440899542a4",
+  "catalogHash": "9290e8ab00d2311afa6144343df09c359c17153fbcef4a73e6ad140e667b9211",
+  "familyHash": "2604e2ae41476826616fb7c97f3547806b9088eec5f1b4538f36644e565381ef",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12037,9 +12037,9 @@
             "id": "langgraph-lesson-12",
             "stageId": "langgraph-stage-6",
             "order": 13,
-            "title": "恢复执行：从概念到练习（第 13 节）",
+            "title": "恢复执行：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 恢复执行 描述 State 输入、节点更新和恢复边界。",
+            "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-11"
@@ -12099,26 +12099,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 恢复执行 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
-              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
+              "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
+              "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
               "hints": [
-                "先写 State 字段",
-                "记录节点返回的更新",
-                "用另一个 thread 验证隔离"
+                "先按 thread_id 读取检查点。",
+                "复制状态后再合并恢复更新。",
+                "未知线程应保留 KeyError，不要从别的线程猜测。"
               ],
-              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
+              "solution": "def resume_state(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "恢复状态",
+                "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+                "failure": "恢复应基于指定 thread 的检查点。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "线程缺失",
+                "expression": "_raises_key_error(lambda: resume_state({}, \"missing\", {}))",
+                "failure": "缺失 thread 不应静默创建错误状态。",
                 "kind": "behavior"
               }
             ]
@@ -12127,9 +12127,9 @@
             "id": "langgraph-lesson-13",
             "stageId": "langgraph-stage-7",
             "order": 14,
-            "title": "流式事件：从概念到练习（第 14 节）",
+            "title": "流式事件：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 流式事件 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-12"
@@ -12189,26 +12189,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“流式事件”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。",
+              "starterCode": "def stream_events(nodes, state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "维护一个当前状态副本。",
+                "每个节点返回局部更新后再合并。",
+                "事件中复制状态，避免后续步骤改写历史。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def stream_events(nodes, state):\n    events = []\n    current = dict(state)\n    for name, node in nodes:\n        current = {**current, **node(current)}\n        events.append((name, dict(current)))\n    return events\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "事件顺序",
+                "expression": "stream_events([(\"a\", lambda state: {\"count\": state[\"count\"] + 1}), (\"b\", lambda state: {\"count\": state[\"count\"] + 1})], {\"count\": 0}) == [(\"a\", {\"count\": 1}), (\"b\", {\"count\": 2})]",
+                "failure": "应按节点顺序发出累计状态。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空图",
+                "expression": "stream_events([], {\"count\": 1}) == []",
+                "failure": "没有节点时应没有事件。",
                 "kind": "behavior"
               }
             ]
@@ -12217,9 +12217,9 @@
             "id": "langgraph-lesson-14",
             "stageId": "langgraph-stage-1",
             "order": 15,
-            "title": "子图：从概念到练习（第 15 节）",
+            "title": "子图：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 子图 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-13"
@@ -12279,26 +12279,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“子图”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 invoke_subgraph(subgraph, state)，复制 state 传给子图并返回其结果；不修改父状态。",
+              "starterCode": "def invoke_subgraph(subgraph, state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "子图只接收一份状态副本。",
+                "返回子图真实结果，不在父层猜测字段。",
+                "用调用前后比较确认父状态不变。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def invoke_subgraph(subgraph, state):\n    return subgraph(dict(state))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "传递边界",
+                "expression": "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}",
+                "failure": "子图应接收状态并返回结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "隔离父状态",
+                "expression": "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}",
+                "failure": "子图调用不应修改父状态。",
                 "kind": "behavior"
               }
             ]
@@ -13837,9 +13837,9 @@
             "id": "langgraph-lesson-32",
             "stageId": "langgraph-stage-5",
             "order": 33,
-            "title": "恢复执行迁移练习 2：从概念到练习（第 33 节）",
+            "title": "恢复执行迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "围绕 恢复执行迁移练习 2 描述 State 输入、节点更新和恢复边界。",
+            "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-31"
@@ -13899,26 +13899,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "为 恢复执行迁移练习 2 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。",
-              "starterCode": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = []",
+              "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
               "hints": [
-                "先写 State 字段",
-                "记录节点返回的更新",
-                "用另一个 thread 验证隔离"
+                "先按 thread_id 读取检查点。",
+                "复制状态后再合并恢复更新。",
+                "未知线程应保留 KeyError，不要从别的线程猜测。"
               ],
-              "solution": "state = {\"thread_id\": \"demo-1\", \"count\": 0}\nupdates = [{\"count\": 1}]\nstate.update(updates[0])"
+              "solution": "def resume_state(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "恢复状态",
+                "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+                "failure": "恢复应基于指定 thread 的检查点。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "线程缺失",
+                "expression": "_raises_key_error(lambda: resume_state({}, \"missing\", {}))",
+                "failure": "缺失 thread 不应静默创建错误状态。",
                 "kind": "behavior"
               }
             ]
@@ -13927,9 +13927,9 @@
             "id": "langgraph-lesson-33",
             "stageId": "langgraph-stage-6",
             "order": 34,
-            "title": "流式事件迁移练习 2：从概念到练习（第 34 节）",
+            "title": "流式事件迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 流式事件迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-32"
@@ -13989,26 +13989,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“流式事件迁移练习 2”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def stream_events(nodes, state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "维护一个当前状态副本。",
+                "每个节点返回局部更新后再合并。",
+                "事件中复制状态，避免后续步骤改写历史。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def stream_events(nodes, state):\n    events = []\n    current = dict(state)\n    for name, node in nodes:\n        current = {**current, **node(current)}\n        events.append((name, dict(current)))\n    return events\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "事件顺序",
+                "expression": "stream_events([(\"a\", lambda state: {\"count\": state[\"count\"] + 1}), (\"b\", lambda state: {\"count\": state[\"count\"] + 1})], {\"count\": 0}) == [(\"a\", {\"count\": 1}), (\"b\", {\"count\": 2})]",
+                "failure": "应按节点顺序发出累计状态。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空图",
+                "expression": "stream_events([], {\"count\": 1}) == []",
+                "failure": "没有节点时应没有事件。",
                 "kind": "behavior"
               }
             ]
@@ -14017,9 +14017,9 @@
             "id": "langgraph-lesson-34",
             "stageId": "langgraph-stage-7",
             "order": 35,
-            "title": "子图迁移练习 2：从概念到练习（第 35 节）",
+            "title": "子图迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 子图迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-33"
@@ -14079,26 +14079,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“子图迁移练习 2”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 invoke_subgraph(subgraph, state)，复制 state 传给子图并返回其结果；不修改父状态。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def invoke_subgraph(subgraph, state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "子图只接收一份状态副本。",
+                "返回子图真实结果，不在父层猜测字段。",
+                "用调用前后比较确认父状态不变。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def invoke_subgraph(subgraph, state):\n    return subgraph(dict(state))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "传递边界",
+                "expression": "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}",
+                "failure": "子图应接收状态并返回结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "隔离父状态",
+                "expression": "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}",
+                "failure": "子图调用不应修改父状态。",
                 "kind": "behavior"
               }
             ]
@@ -16860,43 +16860,43 @@
     ],
     "langgraph-lesson-12": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "恢复状态",
+        "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+        "failure": "恢复应基于指定 thread 的检查点。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "线程缺失",
+        "expression": "_raises_key_error(lambda: resume_state({}, \"missing\", {}))",
+        "failure": "缺失 thread 不应静默创建错误状态。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-13": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "事件顺序",
+        "expression": "stream_events([(\"a\", lambda state: {\"count\": state[\"count\"] + 1}), (\"b\", lambda state: {\"count\": state[\"count\"] + 1})], {\"count\": 0}) == [(\"a\", {\"count\": 1}), (\"b\", {\"count\": 2})]",
+        "failure": "应按节点顺序发出累计状态。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "空图",
+        "expression": "stream_events([], {\"count\": 1}) == []",
+        "failure": "没有节点时应没有事件。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-14": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "传递边界",
+        "expression": "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}",
+        "failure": "子图应接收状态并返回结果。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "隔离父状态",
+        "expression": "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}",
+        "failure": "子图调用不应修改父状态。",
         "kind": "behavior"
       }
     ],
@@ -17140,43 +17140,43 @@
     ],
     "langgraph-lesson-32": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "恢复状态",
+        "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+        "failure": "恢复应基于指定 thread 的检查点。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "线程缺失",
+        "expression": "_raises_key_error(lambda: resume_state({}, \"missing\", {}))",
+        "failure": "缺失 thread 不应静默创建错误状态。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-33": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "事件顺序",
+        "expression": "stream_events([(\"a\", lambda state: {\"count\": state[\"count\"] + 1}), (\"b\", lambda state: {\"count\": state[\"count\"] + 1})], {\"count\": 0}) == [(\"a\", {\"count\": 1}), (\"b\", {\"count\": 2})]",
+        "failure": "应按节点顺序发出累计状态。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "空图",
+        "expression": "stream_events([], {\"count\": 1}) == []",
+        "failure": "没有节点时应没有事件。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-34": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "传递边界",
+        "expression": "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}",
+        "failure": "子图应接收状态并返回结果。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "隔离父状态",
+        "expression": "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}",
+        "failure": "子图调用不应修改父状态。",
         "kind": "behavior"
       }
     ],

@@ -512,6 +512,39 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "零上限", expression: "run_agent([lambda: 1], 0) == []", failure: "非正上限应停止执行。", kind: "behavior" },
     ],
   },
+  "langgraph:恢复执行": {
+    summary: "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
+    prompt: "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
+    starterCode: "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
+    solution: "def resume_state(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n",
+    hints: ["先按 thread_id 读取检查点。", "复制状态后再合并恢复更新。", "未知线程应保留 KeyError，不要从别的线程猜测。"],
+    checks: [
+      { name: "恢复状态", expression: "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}", failure: "恢复应基于指定 thread 的检查点。", kind: "behavior" },
+      { name: "线程缺失", expression: "_raises_key_error(lambda: resume_state({}, \"missing\", {}))", failure: "缺失 thread 不应静默创建错误状态。", kind: "behavior" },
+    ],
+  },
+  "langgraph:流式事件": {
+    summary: "按节点顺序发出状态事件，让长流程的中间结果可观察。",
+    prompt: "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。",
+    starterCode: "def stream_events(nodes, state):\n    pass\n",
+    solution: "def stream_events(nodes, state):\n    events = []\n    current = dict(state)\n    for name, node in nodes:\n        current = {**current, **node(current)}\n        events.append((name, dict(current)))\n    return events\n",
+    hints: ["维护一个当前状态副本。", "每个节点返回局部更新后再合并。", "事件中复制状态，避免后续步骤改写历史。"],
+    checks: [
+      { name: "事件顺序", expression: `stream_events([("a", lambda state: {"count": state["count"] + 1}), ("b", lambda state: {"count": state["count"] + 1})], {"count": 0}) == [("a", {"count": 1}), ("b", {"count": 2})]`, failure: "应按节点顺序发出累计状态。", kind: "behavior" },
+      { name: "空图", expression: "stream_events([], {\"count\": 1}) == []", failure: "没有节点时应没有事件。", kind: "behavior" },
+    ],
+  },
+  "langgraph:子图": {
+    summary: "把子图当作独立状态转换组合到父图，明确输入输出边界。",
+    prompt: "实现 invoke_subgraph(subgraph, state)，复制 state 传给子图并返回其结果；不修改父状态。",
+    starterCode: "def invoke_subgraph(subgraph, state):\n    pass\n",
+    solution: "def invoke_subgraph(subgraph, state):\n    return subgraph(dict(state))\n",
+    hints: ["子图只接收一份状态副本。", "返回子图真实结果，不在父层猜测字段。", "用调用前后比较确认父状态不变。"],
+    checks: [
+      { name: "传递边界", expression: "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}", failure: "子图应接收状态并返回结果。", kind: "behavior" },
+      { name: "隔离父状态", expression: "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}", failure: "子图调用不应修改父状态。", kind: "behavior" },
+    ],
+  },
   "langgraph:Checkpoint": {
     summary: "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
     prompt: "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。",

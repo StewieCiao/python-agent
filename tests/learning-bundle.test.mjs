@@ -319,6 +319,18 @@ test("LangChain/RAG 进阶主题提供可诊断的行为练习", async () => {
   }
 });
 
+test("LangGraph 执行主题提供恢复与组合练习", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  for (const topic of ["恢复执行", "流式事件", "子图"]) {
+    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    assert.ok(lesson, `缺少 ${topic} 课程`);
+    assert.ok(lesson.exercise.prompt.length >= 30);
+    assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
