@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "b8515e7404594d59f56e80df0f294b11242b71c0687a5fb0d734295eb1d1cc08",
+  "catalogHash": "6c99200b2cd689170613c76810bb14301465e8c83dff5cc7b4f902c4e07ff135",
   "familyHash": "2fea2baf4bf2e7372c953bba879dde87b384e0df192a170fc8039b583ef24a5a",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -200,7 +200,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：介绍",
+                "url": "https://docs.python.org/3/tutorial/introduction.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -301,7 +308,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：数字与文本",
+                "url": "https://docs.python.org/3/tutorial/introduction.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -400,7 +414,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：字符串",
+                "url": "https://docs.python.org/3/tutorial/introduction.html#strings",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -488,7 +509,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：控制流工具",
+                "url": "https://docs.python.org/3/tutorial/controlflow.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -588,7 +616,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：for 语句",
+                "url": "https://docs.python.org/3/tutorial/controlflow.html#for-statements",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -689,7 +724,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：定义函数",
+                "url": "https://docs.python.org/3/tutorial/controlflow.html#defining-functions",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -791,7 +833,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：数据结构",
+                "url": "https://docs.python.org/3/tutorial/datastructures.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -893,7 +942,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：字典",
+                "url": "https://docs.python.org/3/tutorial/datastructures.html#dictionaries",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -995,7 +1051,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：错误和异常",
+                "url": "https://docs.python.org/3/tutorial/errors.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [
@@ -1107,7 +1170,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：类",
+                "url": "https://docs.python.org/3/tutorial/classes.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -1206,7 +1276,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：生成器",
+                "url": "https://docs.python.org/3/howto/functional.html#generators",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -1306,7 +1383,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 术语表：装饰器",
+                "url": "https://docs.python.org/3/glossary.html#term-decorator",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": false,
             "projectLinks": [],
@@ -1394,7 +1478,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：字符串方法",
+                "url": "https://docs.python.org/3/library/stdtypes.html#text-sequence-type-str",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": true,
             "projectLinks": [],
@@ -1494,7 +1585,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：读取与写入文件",
+                "url": "https://docs.python.org/3/tutorial/inputoutput.html#reading-and-writing-files",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": true,
             "projectLinks": [],
@@ -1593,7 +1691,14 @@
               }
             ],
             "videos": [],
-            "officialSources": [],
+            "officialSources": [
+              {
+                "label": "Python 教程：数据结构",
+                "url": "https://docs.python.org/3/tutorial/datastructures.html",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
             "migrations": [],
             "project": true,
             "projectLinks": [],

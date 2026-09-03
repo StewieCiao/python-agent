@@ -253,6 +253,15 @@ test("完整课程地图达到三条路线的目标规模与项目数", async ()
   }
 });
 
+test("每节课程都带有与主题对应的官方来源", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    for (const lesson of track.lessons) {
+      assert.ok(lesson.officialSources.length >= 1, `${track.id}/${lesson.id} 缺少官方来源`);
+    }
+  }
+});
+
 test("迁移卡核验版本与锁定运行时一致", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
