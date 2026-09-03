@@ -1,4 +1,4 @@
-import { buildChatMessages } from "./chatPrompt.mjs";
+import { buildChatMessages, buildTutorMessages, parseTutorReply } from "./chatPrompt.mjs";
 import type { RagEvaluationCase, RagEvaluationResult } from "../../desktop/src/ragEvaluation.mjs";
 import type { RagEvaluationRecord } from "../../desktop/src/pythonService.mjs";
 import {
@@ -163,6 +163,39 @@ export async function sendCourseChat(input: {
       message: input.message,
     }),
   })).reply;
+}
+
+export async function sendTutorChat(input: {
+  profileId: string;
+  courseId: string;
+  lessonId: string;
+  lessonContext: unknown;
+  history: ChatMessage[];
+  message: string;
+}): Promise<string> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "课程导师仅在桌面安全服务中可用。");
+  const citationSource = `${input.courseId}/${input.lessonId}`;
+  const messages = buildTutorMessages({ ...input, citationSource });
+  const raw = unwrapDesktop<{ reply: string }>(await desktop.chatWithModel({ profileId: input.profileId, messages })).reply;
+  const parsed = parseTutorReply(raw);
+  const validated = await validateTutorTurn({
+    course_id: input.courseId,
+    lesson_id: input.lessonId,
+    user_question: input.message,
+    mastery_snapshot: {},
+    retrieved_chunks: [{ id: citationSource, source: citationSource, text: JSON.stringify(input.lessonContext) }],
+    response: parsed,
+    citations: parsed.citations,
+    next_action: "",
+    thread_id: `lesson-${input.courseId}-${input.lessonId}`,
+  });
+  const answer = validated.response.answer;
+  unwrapDesktop(await desktop.appendChatMessages(input.courseId, input.lessonId, [
+    { role: "user", content: input.message, createdAt: new Date().toISOString() },
+    { role: "assistant", content: answer, createdAt: new Date().toISOString() },
+  ]));
+  return answer;
 }
 
 export async function answerWithRag(input: {

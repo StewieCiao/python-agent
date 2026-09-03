@@ -7,6 +7,7 @@ import {
   listModelProfiles,
   loadCourseHistory,
   sendCourseChat,
+  sendTutorChat,
   answerWithRag,
   evaluateRag,
   listRagEvaluations,
@@ -125,15 +126,9 @@ export function CourseChat({ track, lesson, onClose }: {
           const question = message.trim();
           if (!question || !profileId) return;
           void perform(async () => {
-            const reply = await sendCourseChat({
-              profileId,
-              mode,
-              courseId: track.id,
-              lessonId: lesson.id,
-              lessonContext: mode === "lesson" ? { courseId: track.id, lesson } : undefined,
-              history,
-              message: question,
-            });
+            const reply = mode === "lesson"
+              ? await sendTutorChat({ profileId, courseId: track.id, lessonId: lesson.id, lessonContext: { courseId: track.id, lesson }, history, message: question })
+              : await sendCourseChat({ profileId, mode, courseId: track.id, lessonId: lesson.id, history, message: question });
             setHistory((current) => [...current, { role: "user", content: question }, { role: "assistant", content: reply }]);
             setMessage("");
           });

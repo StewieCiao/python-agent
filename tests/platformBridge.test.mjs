@@ -7,6 +7,7 @@ import {
   loadCourseHistory,
   PlatformRequestError,
   sendCourseChat,
+  sendTutorChat,
 } from "../app/lib/platformBridge.ts";
 
 test("桌面构建缺少 preload bridge 时明确失败，不请求 legacy HTTP 服务", async () => {
@@ -105,6 +106,44 @@ test("RAG 回答必须经过 Tutor Graph 的真实引用校验", async () => {
     assert.equal(result.answer, "答案");
     assert.equal(calls[1][0], "validate");
     assert.deepEqual(calls[1][1].response.citations, [{ source: "notes.md" }]);
+  } finally {
+    delete globalThis.window;
+    delete globalThis.__STEWIE_DESKTOP__;
+  }
+});
+
+test("课程模式只展示经过 Graph 校验的结构化导师回答", async () => {
+  globalThis.__STEWIE_DESKTOP__ = true;
+  const calls = [];
+  globalThis.window = {
+    stewie: {
+      async chatWithModel(input) {
+        calls.push(["model", input]);
+        return { ok: true, value: { reply: JSON.stringify({ answer: "最小提示", citations: [{ source: "python/functions" }] }) } };
+      },
+      async validateTutorTurn(state) {
+        calls.push(["validate", state]);
+        return { ok: true, value: { ...state, response: { status: "ok", ...state.response }, turn_ready: true } };
+      },
+      async appendChatMessages(courseId, lessonId, messages) {
+        calls.push(["append", courseId, lessonId, messages]);
+        return { ok: true, value: messages };
+      },
+    },
+  };
+  try {
+    const answer = await sendTutorChat({
+      profileId: "primary",
+      courseId: "python",
+      lessonId: "functions",
+      lessonContext: { title: "函数" },
+      history: [],
+      message: "为什么 return？",
+    });
+    assert.equal(answer, "最小提示");
+    assert.equal(calls[0][0], "model");
+    assert.equal(calls[1][0], "validate");
+    assert.equal(calls[2][0], "append");
   } finally {
     delete globalThis.window;
     delete globalThis.__STEWIE_DESKTOP__;

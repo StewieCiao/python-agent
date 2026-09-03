@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildChatMessages } from "../app/lib/chatPrompt.mjs";
+import { buildChatMessages, buildTutorMessages, parseTutorReply } from "../app/lib/chatPrompt.mjs";
 
 test("课程导师把所有课程内容放入可往返 JSON，并保持用户问题为独立消息", () => {
   const lessonContext = {
@@ -53,4 +53,22 @@ test("聊天历史角色和当前问题不完整时明确拒绝", () => {
     () => buildChatMessages({ mode: "general", history: [], message: " " }),
     /问题不能为空/,
   );
+});
+
+test("Tutor 提示要求稳定 JSON，解析失败不会伪造回答", () => {
+  const messages = buildTutorMessages({
+    courseId: "python",
+    lessonId: "functions",
+    lessonContext: { title: "函数" },
+    history: [],
+    message: "为什么 return？",
+    citationSource: "python/functions",
+  });
+  assert.match(messages[0].content, /只返回一个 JSON 对象/);
+  assert.deepEqual(parseTutorReply('{"answer":"提示","citations":[{"source":"python/functions"}]}'), {
+    answer: "提示",
+    citations: [{ source: "python/functions" }],
+  });
+  assert.throws(() => parseTutorReply("不是 JSON"), /不是有效 JSON/);
+  assert.throws(() => parseTutorReply('{"answer":"猜测","citations":"无效"}'), /导师 JSON 缺少/);
 });

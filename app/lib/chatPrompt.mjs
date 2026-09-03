@@ -47,3 +47,43 @@ export function buildChatMessages({ mode, lessonContext, history, message }) {
   messages.push({ role: "user", content: message.trim() });
   return messages;
 }
+
+export function buildTutorMessages({ courseId, lessonId, lessonContext, history, message, citationSource }) {
+  if (typeof courseId !== "string" || !courseId || typeof lessonId !== "string" || !lessonId) invalid("导师上下文标识无效");
+  if (typeof citationSource !== "string" || !citationSource) invalid("导师引用来源无效");
+  if (!lessonContext || typeof lessonContext !== "object" || Array.isArray(lessonContext)) invalid("导师模式缺少课程上下文");
+  if (typeof message !== "string" || message.trim().length === 0) invalid("问题不能为空");
+  const tutorSystem = [
+    SYSTEM_PROMPT,
+    "本次必须只返回一个 JSON 对象，不要 Markdown 代码围栏或额外文字。",
+    `JSON 结构必须是 {\"answer\":\"给初学者的最小解释或提示\",\"citations\":[{\"source\":${JSON.stringify(citationSource)}}]}。`,
+    "先指出具体根因，再给可验证的下一步；默认不要直接给完整答案。引用只使用给定资料的 source。",
+  ].join("\n");
+  const context = {
+    courseId,
+    lessonId,
+    source: citationSource,
+    lesson: lessonContext,
+  };
+  const messages = [{ role: "system", content: tutorSystem }];
+  messages.push({
+    role: "user",
+    content: `STEWIE_TUTOR_CONTEXT_JSON\n${JSON.stringify(context)}`,
+  });
+  messages.push(...validHistory(history).slice(-20));
+  messages.push({ role: "user", content: message.trim() });
+  return messages;
+}
+
+export function parseTutorReply(raw) {
+  if (typeof raw !== "string" || !raw.trim()) invalid("导师返回为空");
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new ChatInputError(`导师返回不是有效 JSON：${error instanceof Error ? error.message : String(error)}`);
+  }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) || Object.keys(parsed).length !== 2 || typeof parsed.answer !== "string" || !parsed.answer.trim() || !Array.isArray(parsed.citations)) invalid("导师 JSON 缺少有效 answer 或 citations");
+  if (parsed.citations.some((citation) => !citation || typeof citation !== "object" || Array.isArray(citation) || Object.keys(citation).length !== 1 || typeof citation.source !== "string" || !citation.source)) invalid("导师引用结构无效");
+  return parsed;
+}
