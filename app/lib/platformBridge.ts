@@ -192,7 +192,7 @@ export async function modelStorageInfo(): Promise<{
       secretStorage: info.platform === "win32"
         ? "Windows DPAPI（Electron safeStorage）"
         : "macOS 钥匙串（Electron safeStorage）",
-      historyPath: null,
+      historyPath: info.storagePath,
     };
   }
   const health = await localServiceRequest<{

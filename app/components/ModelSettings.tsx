@@ -149,7 +149,7 @@ export function ModelSettings() {
           {storageInfo ? <dl>
             <div><dt>非敏感参数与密文</dt><dd>{storageInfo.nonSecretPath}</dd></div>
             <div><dt>API Key 加密</dt><dd>{storageInfo.secretStorage}</dd></div>
-            <div><dt>聊天历史</dt><dd>{storageInfo.historyPath ?? "当前桌面会话内存；下一阶段迁入同一数据库"}</dd></div>
+            <div><dt>聊天历史</dt><dd>{storageInfo.historyPath ?? "当前浏览器会话"}</dd></div>
           </dl> : <p>连接本地服务后显示准确路径。</p>}
           <h3>已保存配置</h3>
           {savedProfiles.length === 0 ? <p>尚无配置。</p> : savedProfiles.map((item) => (
