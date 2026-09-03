@@ -774,7 +774,7 @@ export function LearningApp() {
                     {personalized && <div className="personalized-result">
                       <span>{personalized.recommendation}</span>
                       <strong>{personalized.prompt}</strong>
-                      <small>本题使用独立的 family 测试，不复用原关卡样例。</small>
+                      <small>本题使用独立的 family 测试，不复用原关卡样例；再次生成会轮换到近期未使用的变体。</small>
                       <pre><code>{personalized.starterCode}</code></pre>
                       {personalized.hints.map((hint) => <p key={hint}>提示：{hint}</p>)}
                       <button type="button" onClick={() => {
