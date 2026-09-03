@@ -14,6 +14,7 @@ export const langchainHints: Record<string, [string, string, string]> = {
   "runnable-pipeline": ["先写出结构", "保留真实错误", "用边界输入验证"],
   "rag-evaluation": ["先定义期望来源", "分别计算召回和引用覆盖", "用空召回验证 no_results"],
   "hybrid-retrieval": ["统一候选结构", "按 source 去重并排序", "用低分候选验证 threshold"],
+  "citation-grounded-generation": ["先保留检索片段的 source", "无资料时停止生成", "用来源集合验证回答"],
 };
 
 export const langchainChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -71,5 +72,10 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "合并去重", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}], 0.5)[\"matches\"] == [{\"source\": \"a\", \"score\": 0.8}]", failure: "同一来源应保留最高分候选。", kind: "behavior" },
     { name: "阈值通过", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.8}], [], 0.5)[\"status\"] == \"ok\"", failure: "最高分达到阈值时状态应为 ok。", kind: "behavior" },
     { name: "低分无结果", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.2}], [], 0.5)[\"status\"] == \"no_results\"", failure: "最高分低于阈值时必须停止生成并返回 no_results。", kind: "behavior" },
+  ],
+  "citation-grounded-generation": [
+    { name: "有资料回答", expression: "grounded_answer(\"退款\", [{\"text\": \"30 天\", \"source\": \"policy.md\"}])[\"status\"] == \"ok\"", failure: "有检索资料时应返回 ok 状态。", kind: "behavior" },
+    { name: "来源来自输入", expression: "grounded_answer(\"退款\", [{\"text\": \"30 天\", \"source\": \"policy.md\"}])[\"sources\"] == [\"policy.md\"]", failure: "回答来源必须来自检索输入，不能凭空添加。", kind: "behavior" },
+    { name: "资料不足", expression: "grounded_answer(\"退款\", [])[\"answer\"] == \"资料不足\" and grounded_answer(\"退款\", [])[\"sources\"] == []", failure: "无检索资料时应明确返回资料不足且不伪造来源。", kind: "behavior" },
   ],
 };

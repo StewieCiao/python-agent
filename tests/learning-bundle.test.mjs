@@ -281,6 +281,7 @@ test("LangChain/RAG 原始课程的 id 顺序保持稳定", async () => {
     "runnable-pipeline",
     "rag-evaluation",
     "hybrid-retrieval",
+    "citation-grounded-generation",
   ];
   assert.deepEqual(track.lessons.map(({ id }) => id), expected);
 });
@@ -625,6 +626,20 @@ test("LangChain 混合检索课明确合并排序与阈值边界", async () => {
   assert.equal(lesson.exercise.hints.length, 3);
   assert.equal(lesson.browserChecks.length, 3);
   assert.ok(lesson.browserChecks.some(({ failure }) => failure.includes("阈值")));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
+});
+
+test("LangChain 引用约束生成课把来源和资料不足作为可验证契约", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "citation-grounded-generation");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.exercise.prompt.includes("资料不足"));
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("sources")));
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 

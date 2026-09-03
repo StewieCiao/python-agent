@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1401a9e4d4438cf6c4dee575a8609b5eafbb531ddeebaa3a33b68ff94ee62923",
-  "familyHash": "2716cc9b7e69ae540ce7cf3bdca685c89448e32848634ffd24a5c3f5f7f2cb80",
+  "catalogHash": "1c0826a3f5a42b5545b886751284f8a19bd459e1ad7814a8bcff22cf07755595",
+  "familyHash": "3a4cf81436768a74f4903a6d00dd1a64d627ec77cd03f064d5741186ea0ec36d",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -6312,7 +6312,7 @@
               "runnable-pipeline",
               "rag-evaluation",
               "hybrid-retrieval",
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ]
           },
           {
@@ -7543,7 +7543,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "输入是一个 topic 字符串；输出是按顺序排列的 messages 列表。请先用纯 Python 字典表达 system 与 user 角色，并声明 prompt_variables，再把同一结构映射到 ChatPromptTemplate。",
@@ -7664,7 +7664,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "实现 validate_model_config(config)：model 必须是非空字符串，timeout 必须是大于 0 的数字，temperature 必须在 0 到 1；返回包含 valid 和 error 字段的字典，失败时写明缺失边界。",
@@ -7790,7 +7790,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "输入是一个可能缺少字段的 result 字典；输出是 valid 布尔值。请验证 summary 和 confidence 是否存在且 confidence 在 0 到 1，缺少字段或越界时返回 False；不要把失败改成空对象，再映射到 Answer schema。",
@@ -7910,7 +7910,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "输入是 topic 字符串；输出是经过 template → model → parser 的 result。请记录三步 chain_steps，并在任一步失败时保留 pipeline_error，不返回空字符串冒充成功。",
@@ -8031,7 +8031,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "实现 evaluate_retrieval(expected_sources, retrieved_sources, answer_sources)：返回 recall、citation_coverage 和 status；期望来源为空或实际无命中时 status 为 no_results，不能把无资料当作满分。",
@@ -8158,7 +8158,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "exercise": {
               "prompt": "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。",
@@ -8192,54 +8192,55 @@
             ]
           },
           {
-            "id": "langchain-rag-lesson-13",
+            "id": "citation-grounded-generation",
             "stageId": "langchain-rag-stage-2",
             "order": 14,
             "title": "混合检索评估台",
-            "kicker": "LangChain / RAG 学习",
+            "kicker": "langchain-rag 学习",
             "summary": "为检索调优提供关键词、向量召回和命中率对比。",
-            "minutes": 35,
+            "minutes": 45,
             "prerequisites": [
               "hybrid-retrieval"
             ],
-            "difficulty": "advanced",
+            "difficulty": "intermediate",
             "tags": [
-              "langchain-rag",
-              "stage-langchain-rag-stage-2"
+              "citations",
+              "grounding",
+              "rag"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "无答案边界要解决什么问题",
-                "body": "把团队知识库中的真实任务先翻译成输入、处理和输出，再理解这个知识点：在相似度不足时停止生成，区分无资料和资料不足。",
+                "title": "回答必须能回到片段",
+                "body": "生成阶段接收的不是一段无来源 context，而是带 source 的检索片段。回答中的每条依据都要能映射回这些片段，用户才能复核。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "片段保留 source",
+                  "回答携带 sources",
+                  "来源不能凭空添加"
                 ],
-                "example": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。"
+                "example": "context = [{\"text\": \"退款期限为 30 天\", \"source\": \"policy.md\"}]"
               },
               {
                 "kind": "逐步拆解",
-                "title": "把无答案边界拆成步骤",
-                "body": "先实现团队知识库场景下题目要求的最小路径，再逐项验证：实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。",
+                "title": "先处理资料不足",
+                "body": "检索为空或没有达到阈值时，生成器应停止并返回资料不足；这是真实业务状态，不是让模型猜测的提示词。",
                 "bullets": [
-                  "阈值比较应包含等于边界。",
-                  "过滤后再判断是否为空。",
-                  "None 表示不能基于现有资料回答。"
+                  "空片段不调用生成",
+                  "状态与答案同时返回",
+                  "不要伪造引用"
                 ],
-                "example": "def choose_context(results, threshold):\n    pass\n"
+                "example": "def grounded_answer(question, documents):\n    if not documents:\n        return {\"answer\": \"资料不足\", \"sources\": [], \"status\": \"no_results\"}"
               },
               {
                 "kind": "常见误区",
-                "title": "无答案边界的边界检查",
-                "body": "不要只复现团队知识库的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "用来源集合检查回答",
+                "body": "完成“引用约束生成与资料不足”时，分别验证答案状态、引用集合和来源是否来自检索输入；不要只比较答案文字。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "检查来源子集",
+                  "保留 no_results",
+                  "报告实际引用"
                 ],
-                "example": "检查：阈值过滤、无答案"
+                "example": "result = {\"answer\": \"退款期限为 30 天\", \"sources\": [\"policy.md\"], \"status\": \"ok\"}"
               }
             ],
             "videos": [
@@ -8248,19 +8249,40 @@
                 "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
                 "provider": "DeepLearning.AI",
                 "language": "英文",
-                "duration": "短课程",
-                "note": "补充文档加载、切分、检索与引用。"
+                "duration": "1 小时 18 分",
+                "note": "补充检索结果到回答的完整链路；引用契约以站内练习为准。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangChain 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langchain/overview",
+                "label": "LangChain retrieval",
+                "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "无来源 context → 带引用的回答契约",
+                "status": "replaced",
+                "explanation": "生成前保留检索片段的 source，并在无命中时停止生成；不再让模型从空 context 猜测。",
+                "beforeCode": "answer = llm.invoke(context)",
+                "afterCode": "result = grounded_answer(question, documents)",
+                "officialSources": [
+                  {
+                    "label": "LangChain retrieval",
+                    "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": true,
             "projectLinks": [],
             "exercise": {
@@ -8297,7 +8319,7 @@
             "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-13"
+              "citation-grounded-generation"
             ],
             "difficulty": "advanced",
             "tags": [

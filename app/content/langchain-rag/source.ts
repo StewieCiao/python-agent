@@ -567,6 +567,23 @@ export const langchainTrack: LearningTrack = {
       project: false, projectLinks: [],
       exercise: { prompt: "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。", starterCode: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    pass\n`, solution: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    by_source = {}\n    for item in [*keyword_hits, *vector_hits]:\n        source = item[\"source\"]\n        if source not in by_source or item[\"score\"] > by_source[source][\"score\"]:\n            by_source[source] = item\n    matches = sorted(by_source.values(), key=lambda item: item[\"score\"], reverse=True)\n    status = \"ok\" if matches and matches[0][\"score\"] >= threshold else \"no_results\"\n    return {\"status\": status, \"matches\": matches}\n` },
     },
+    {
+      id: "citation-grounded-generation",
+      title: "引用约束生成与资料不足",
+      prerequisites: ["hybrid-retrieval"], difficulty: "intermediate", tags: ["citations", "grounding", "rag"],
+      summary: "把检索片段、引用来源和资料不足状态组成可追溯的回答契约。",
+      minutes: 45,
+      guide: [
+        { title: "回答必须能回到片段", body: "生成阶段接收的不是一段无来源 context，而是带 source 的检索片段。回答中的每条依据都要能映射回这些片段，用户才能复核。", bullets: ["片段保留 source", "回答携带 sources", "来源不能凭空添加"], example: `context = [{"text": "退款期限为 30 天", "source": "policy.md"}]` },
+        { title: "先处理资料不足", body: "检索为空或没有达到阈值时，生成器应停止并返回资料不足；这是真实业务状态，不是让模型猜测的提示词。", bullets: ["空片段不调用生成", "状态与答案同时返回", "不要伪造引用"], example: `def grounded_answer(question, documents):\n    if not documents:\n        return {"answer": "资料不足", "sources": [], "status": "no_results"}` },
+        { title: "用来源集合检查回答", body: "完成“引用约束生成与资料不足”时，分别验证答案状态、引用集合和来源是否来自检索输入；不要只比较答案文字。", bullets: ["检查来源子集", "保留 no_results", "报告实际引用"], example: `result = {"answer": "退款期限为 30 天", "sources": ["policy.md"], "status": "ok"}` },
+      ],
+      videos: [{ title: "LangChain: Chat with Your Data", url: DLAI_DATA, provider: "DeepLearning.AI", language: "英文", duration: "1 小时 18 分", note: "补充检索结果到回答的完整链路；引用契约以站内练习为准。" }],
+      officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }],
+      migrations: [{ title: "无来源 context → 带引用的回答契约", status: "replaced", explanation: "生成前保留检索片段的 source，并在无命中时停止生成；不再让模型从空 context 猜测。", beforeCode: "answer = llm.invoke(context)", afterCode: "result = grounded_answer(question, documents)", officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 grounded_answer(question, documents)：documents 是带 text/source 的字典列表；有资料时返回 status=ok、答案使用首个片段文本且 sources 只包含输入来源，无资料时返回 answer=资料不足、sources=[]、status=no_results。", starterCode: `def grounded_answer(question, documents):\n    pass\n`, solution: `def grounded_answer(question, documents):\n    if not documents:\n        return {"answer": "资料不足", "sources": [], "status": "no_results"}\n    return {"answer": documents[0]["text"], "sources": [doc["source"] for doc in documents], "status": "ok"}\n` },
+    },
   ],
 };
 
