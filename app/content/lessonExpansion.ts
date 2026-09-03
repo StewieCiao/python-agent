@@ -9,7 +9,7 @@ const SOURCES: Record<CourseTrack["id"], { label: string; url: string }> = {
 };
 
 const TOPICS: Record<CourseTrack["id"], string[]> = {
-  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "Agent 工具契约"],
+  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "SQLite 持久化与事务边界", "Agent 工具契约"],
   "langchain-rag": ["消息角色", "Prompt 模板", "结构化输出", "Runnable 组合", "模型配置", "文档加载", "文本切分", "Embedding", "向量存储", "相似度检索", "混合检索", "重排", "引用生成", "无答案边界", "RAG 评估", "追踪与观测", "工具调用", "Agent 循环", "多查询检索", "RAG 项目"],
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
@@ -289,6 +289,17 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "成功响应", expression: "classify_response(200, \"ok\", False) == {\"status\": \"ok\", \"body\": \"ok\"}", failure: "2xx 响应应保留正文并标记为 ok。", kind: "behavior" },
       { name: "HTTP 错误", expression: "classify_response(503, \"busy\", False) == {\"status\": \"http_error\", \"body\": \"busy\"}", failure: "非 2xx 响应应保留真实正文并标记错误。", kind: "behavior" },
       { name: "超时边界", expression: "classify_response(200, \"late\", True) == {\"status\": \"timeout\", \"body\": None}", failure: "超时必须优先于状态码并明确标记。", kind: "behavior" },
+    ],
+  },
+  "SQLite 持久化与事务边界": {
+    summary: "用事务保证本地数据要么完整提交、要么回滚，不留下半成品。",
+    prompt: "实现 apply_changes(state, changes, fail)，返回复制后的状态；fail 为真时抛出 RuntimeError，调用者应使用 rollback 保持原状态不变。",
+    starterCode: "def apply_changes(state, changes, fail):\n    pass\n",
+    solution: "def apply_changes(state, changes, fail):\n    updated = dict(state)\n    updated.update(changes)\n    if fail:\n        raise RuntimeError(\"transaction failed\")\n    return updated\n",
+    hints: ["先复制状态，模拟事务工作区。", "失败发生在提交前，保留 RuntimeError。", "不要在失败时返回部分更新的字典。"],
+    checks: [
+      { name: "提交更新", expression: "apply_changes({\"count\": 1}, {\"count\": 2}, False) == {\"count\": 2}", failure: "成功事务应返回完整更新后的状态。", kind: "behavior" },
+      { name: "失败回滚", expression: "_raises_runtime_error(lambda: apply_changes({\"count\": 1}, {\"count\": 2}, True))", failure: "失败事务必须保留真实异常，不能伪造成功。", kind: "behavior" },
     ],
   },
 };
