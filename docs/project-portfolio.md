@@ -21,6 +21,8 @@
 
 本地导入 Markdown/PDF，经过切分、向量检索、引用生成和无资料拒答，回答必须附来源片段。展示召回命中、引用覆盖率、延迟和失败样例。技术重点是 LangChain retrieval、结构化输出和可观测性。
 
+可直接复用 `projects/rag-quality-workbench/README.md` 的固定样本演示，比较不同切分与 `top_k` 设置下的 recall、MRR、引用覆盖和 `no_results` 边界。
+
 ### 2. 可恢复的研究工作流 Agent
 
 用 LangGraph 编排“规划 → 检索 → 摘要 → 事实核对 → 人工确认”，为每个用户使用独立 `thread_id`，用 checkpoint 支持中断后恢复，并把长期偏好放入 Store。展示状态转移图、恢复演示和错误边界。
@@ -42,7 +44,7 @@
 ## 站内项目课到作品的对应关系
 
 - Python：Prompt 文本分析器、Agent 调用成本汇总器、Agent 任务优先级引擎，以及智能旅行助手、自动化 DeepResearch、Mini Agent 框架。
-- LangChain/RAG：可引用文档问答系统、混合检索评估台、带工具调用的知识助手、RAG 质量观测面板。
+- LangChain/RAG：可引用文档问答系统、混合检索评估台、带工具调用的知识助手、RAG 质量观测面板；其中质量工作台的可复现演示见 `projects/rag-quality-workbench/README.md`。
 - LangGraph：可恢复研究工作流、人工审核 Agent 流程、多 Agent 协作调度器、带长期记忆的任务图。
 
 每个作品都从对应课程的行为检查开始，先提交最小可运行版本，再补 README、固定样例、边界失败和演示记录；项目名称、摘要和验收点由同一课程目录生成，避免简历描述与实际实现脱节。
