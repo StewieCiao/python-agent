@@ -437,6 +437,17 @@ test("课程阶段按学习顺序连续分配，不交错基础与进阶课", as
   }
 });
 
+test("扩展课程把真实场景带入讲解卡和练习要求", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    for (const lesson of track.lessons.filter(({ id, project }) => id.includes("-lesson-") && !project)) {
+      const match = lesson.exercise.prompt.match(/场景：([^。]+)/);
+      if (!match) continue;
+      assert.ok(lesson.guide.every(({ body }) => body.includes(match[1])), `${track.id}/${lesson.id} 讲解缺少场景上下文`);
+    }
+  }
+});
+
 test("迁移卡核验版本与锁定运行时一致", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
