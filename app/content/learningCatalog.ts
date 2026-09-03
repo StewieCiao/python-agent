@@ -70,8 +70,8 @@ export type LearningTrack = {
   lessons: LearningLesson[];
 };
 
-const VERIFIED_AT = "2026-08-26";
-const VERIFIED_VERSIONS = { langchain: "1.3.17", langgraph: "1.2.11" };
+const VERIFIED_AT = "2026-09-02";
+const VERIFIED_VERSIONS = { langchain: "1.2.12", langgraph: "1.1.2" };
 const HEIMA = "https://www.bilibili.com/video/BV1yjz5BLEoY";
 const LANGCHAIN_V1 = "https://docs.langchain.com/oss/python/releases/langchain-v1";
 const LANGCHAIN_MIGRATION = "https://docs.langchain.com/oss/python/migrate/langchain-v1";

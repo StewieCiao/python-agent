@@ -253,6 +253,18 @@ test("完整课程地图达到三条路线的目标规模与项目数", async ()
   }
 });
 
+test("迁移卡核验版本与锁定运行时一致", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    for (const lesson of track.lessons) {
+      for (const migration of lesson.migrations) {
+        assert.equal(migration.verifiedVersions.langchain, authoredCatalog.runtimeVersions.langchain, `${lesson.id} LangChain 版本漂移`);
+        assert.equal(migration.verifiedVersions.langgraph, authoredCatalog.runtimeVersions.langgraph, `${lesson.id} LangGraph 版本漂移`);
+      }
+    }
+  }
+});
+
 test("项目标记不抢占路线开头的基础课", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
