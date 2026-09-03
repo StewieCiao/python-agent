@@ -746,9 +746,10 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
 export function expandCourseTrack(track: CourseTrack, expansion: Expansion): CourseTrack {
   if (track.lessons.length >= expansion.targetLessons && track.stages.length === expansion.stageCount) return track;
   const stages: CourseStage[] = expansion.stageTitles.map((title, index) => ({ id: `${track.id}-stage-${index + 1}`, order: index + 1, title, description: `${title} 的核心概念与实践。`, lessonIds: [] }));
+  const stageForIndex = (index: number) => stages[Math.min(stages.length - 1, Math.floor(index * stages.length / expansion.targetLessons))];
   const lessons = [...track.lessons];
   while (lessons.length < expansion.targetLessons) {
-    const nextLesson = generatedLesson(track, lessons.length, stages[lessons.length % stages.length].id, false);
+    const nextLesson = generatedLesson(track, lessons.length, stageForIndex(lessons.length).id, false);
     const previousLesson = lessons[lessons.length - 1];
     if (previousLesson) nextLesson.prerequisites = [previousLesson.id];
     lessons.push(nextLesson);
@@ -759,7 +760,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   for (const lesson of lessons) {
     while (lesson.guide.length < 3) lesson.guide.push({ kind: "常见误区", title: "验证边界", body: "用一个没有出现在示例中的输入复查理解。", bullets: ["改变输入", "记录实际结果", "说明失败原因"], example: "assert result == expected" });
     while ((lesson.exercise.hints ?? []).length < 3) lesson.exercise.hints = [...(lesson.exercise.hints ?? []), "用边界输入复测"];
-    const stage = stages[(lesson.order - 1) % stages.length];
+    const stage = stageForIndex(lesson.order - 1);
     lesson.stageId = stage.id;
     lesson.order = lessons.indexOf(lesson) + 1;
     stage.lessonIds.push(lesson.id);
@@ -769,15 +770,13 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   for (const lesson of stageProjectCandidates) {
     if (projects >= expansion.projectCount) break;
     lesson.project = true;
-    if (lesson.id.includes("-lesson-")) {
-      const briefs = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_BRIEFS[track.id] : [];
-      const brief = briefs[generatedProjectIndex];
-      if (brief) {
-        lesson.title = brief.title;
-        lesson.summary = brief.summary;
-      }
-      generatedProjectIndex += 1;
+    const briefs = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_BRIEFS[track.id] : [];
+    const brief = briefs[generatedProjectIndex];
+    if (brief) {
+      lesson.title = brief.title;
+      lesson.summary = brief.summary;
     }
+    generatedProjectIndex += 1;
     projects += 1;
   }
   if (projects < expansion.projectCount) {
@@ -787,7 +786,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     }
   }
   for (const lesson of lessons) {
-    if (!lesson.project || !lesson.id.includes("-lesson-")) continue;
+    if (!lesson.project) continue;
     const brief = (track.id === "langchain-rag" || track.id === "langgraph")
       ? PROJECT_BRIEFS[track.id][lessons.filter(({ project }) => project).indexOf(lesson)]
       : undefined;

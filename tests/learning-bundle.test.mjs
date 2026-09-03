@@ -296,6 +296,20 @@ test("Python 基础路线保留真实的先修关系", async () => {
   assert.deepEqual(byId.get("agent-tool-registry").prerequisites, ["project-tasks"]);
 });
 
+test("课程阶段按学习顺序连续分配，不交错基础与进阶课", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    const stageIndex = new Map(track.stages.map((stage, index) => [stage.id, index]));
+    let last = 0;
+    for (const lesson of track.lessons) {
+      const current = stageIndex.get(lesson.stageId);
+      assert.ok(current !== undefined);
+      assert.ok(current >= last, `${track.id}/${lesson.id} 阶段顺序倒退`);
+      last = current;
+    }
+  }
+});
+
 test("迁移卡核验版本与锁定运行时一致", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
