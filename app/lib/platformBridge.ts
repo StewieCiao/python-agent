@@ -173,6 +173,12 @@ export async function answerWithRag(input: {
   return unwrapDesktop(await desktop.answerWithRag(input));
 }
 
+export async function selectRagDocuments(): Promise<Array<{ id: string; text: string; source: string }>> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "本地文件解析仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.selectRagDocuments());
+}
+
 export async function modelStorageInfo(): Promise<{
   nonSecretPath: string;
   secretStorage: string;

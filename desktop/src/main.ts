@@ -224,6 +224,15 @@ void runStartupTask(app.whenReady().then(async () => {
     reply: await activeModelClient().chat(input.profileId, input.messages),
   })));
   ipcMain.handle("models:rag", trustedIpc(async (input: { profileId: string; query: string; documents: Array<{ id: string; text: string; source: string }> }) => createRagService(activeModelClient()).answer(input.profileId, input.query, input.documents)));
+  ipcMain.handle("documents:select", trustedIpc(async () => {
+    const selection = await dialog.showOpenDialog({
+      title: "选择 RAG 本地资料",
+      properties: ["openFile", "multiSelections"],
+      filters: [{ name: "学习资料", extensions: ["txt", "md", "markdown", "csv", "pdf"] }],
+    });
+    if (selection.canceled || selection.filePaths.length === 0) return [];
+    return activePythonService().parseDocuments(selection.filePaths);
+  }));
   ipcMain.handle("learning:get", trustedIpc(() => activePythonService().getLearningState()));
   ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
   ipcMain.handle("mastery:record", trustedIpc((event: MasteryEvent) => activePythonService().recordMasteryAttempt(event)));

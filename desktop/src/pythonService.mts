@@ -58,6 +58,8 @@ export type PersonalizedExerciseResult = {
   recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
 };
 
+export type ParsedRagDocument = { id: string; text: string; source: string };
+
 export type LegacyConversation = { courseId: string; lessonId: string; messages: PythonChatMessage[] };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -117,6 +119,10 @@ function isMasteryResult(value: unknown): value is MasteryResult {
 function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExerciseResult {
   if (!isRecord(value) || !hasExactKeys(value, ["exercise", "recommendation"]) || !isRecord(value.exercise) || !isRecord(value.recommendation)) return false;
   return hasExactKeys(value.exercise, ["familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters"]) && typeof value.exercise.familyId === "string" && typeof value.exercise.validatorVersion === "string" && typeof value.exercise.prompt === "string" && typeof value.exercise.starterCode === "string" && Array.isArray(value.exercise.hints) && value.exercise.hints.every((hint) => typeof hint === "string") && isRecord(value.exercise.parameters) && hasExactKeys(value.recommendation, ["lessonId", "familyId", "mistakeCodes", "difficulty"]) && typeof value.recommendation.lessonId === "string" && typeof value.recommendation.familyId === "string" && Array.isArray(value.recommendation.mistakeCodes) && value.recommendation.mistakeCodes.every((code) => typeof code === "string") && typeof value.recommendation.difficulty === "string";
+}
+
+function isParsedRagDocuments(value: unknown): value is ParsedRagDocument[] {
+  return Array.isArray(value) && value.every((item) => isRecord(item) && hasExactKeys(item, ["id", "text", "source"]) && typeof item.id === "string" && typeof item.text === "string" && item.text.trim().length > 0 && typeof item.source === "string" && item.source.trim().length > 0);
 }
 
 function isPromptException(value: unknown): value is PromptException {
@@ -349,6 +355,10 @@ export class PythonServiceClient {
 
   getPersonalizedExercise(lessonId: string, seed: number): Promise<PersonalizedExerciseResult> {
     return this.#requestChecked("personalization.next", { lessonId, seed }, isPersonalizedExerciseResult, "个性题响应结构无效");
+  }
+
+  parseDocuments(paths: string[]): Promise<ParsedRagDocument[]> {
+    return this.#requestChecked("documents.parse", { paths }, isParsedRagDocuments, "本地资料解析响应结构无效");
   }
 
   importLegacyLearningState(

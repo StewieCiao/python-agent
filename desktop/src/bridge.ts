@@ -38,6 +38,7 @@ export type StewieDesktopBridge = {
   testModelProfile(profileId: string): Promise<DesktopIpcResult<{ reply: string }>>;
   chatWithModel(input: { profileId: string; messages: ModelMessage[] }): Promise<DesktopIpcResult<{ reply: string }>>;
   answerWithRag(input: { profileId: string; query: string; documents: RagDocument[] }): Promise<DesktopIpcResult<{ answer: string; sources: string[] }>>;
+  selectRagDocuments(): Promise<DesktopIpcResult<RagDocument[]>>;
   getLearningState(): Promise<DesktopIpcResult<PythonLearningState>>;
   saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;
   recordMasteryAttempt(event: MasteryEvent): Promise<DesktopIpcResult<{ recorded: true }>>;

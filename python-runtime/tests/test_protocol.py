@@ -86,6 +86,15 @@ class ProtocolTest(unittest.TestCase):
             with self.subTest(method=request["method"]):
                 self.assertEqual(decode_request(json.dumps(request)), request)
 
+        self.assertEqual(
+            decode_request('{"id":"d1","method":"documents.parse","params":{"paths":["/tmp/notes.md"]}}')["params"],
+            {"paths": ["/tmp/notes.md"]},
+        )
+        for paths in ([], [""], ["notes.md"] * 11):
+            with self.subTest(paths=paths):
+                with self.assertRaises(ProtocolError):
+                    decode_request(json.dumps({"id": "d1", "method": "documents.parse", "params": {"paths": paths}}))
+
         invalid_requests = [
             {"id": "x", "method": "mastery.get", "params": {"now": ""}},
             {"id": "x", "method": "mastery.record", "params": {"event": []}},

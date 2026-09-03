@@ -10,6 +10,7 @@ from contextlib import closing
 
 from langchain_core._api.deprecation import LangChainPendingDeprecationWarning
 from catalog import load_learning_bundle
+from documents import load_documents
 from protocol import decode_request, encode_message, error_response, success_response
 from storage import Storage
 
@@ -117,6 +118,8 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.get_mastery(params["now"])
     if method == "personalization.next":
         return storage.next_personalized_exercise(learning_bundle, params["lessonId"], params["seed"])
+    if method == "documents.parse":
+        return load_documents(params["paths"])
     raise ValueError("不支持的服务方法")
 
 
