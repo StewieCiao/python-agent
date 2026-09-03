@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   clearCourseHistory,
+  answerWithRag,
   listModelProfiles,
   loadCourseHistory,
   PlatformRequestError,
@@ -74,6 +75,36 @@ test("桌面聊天从 SQLite 读取、追加并清除，不回退到 legacy HTTP
       { role: "assistant", content: "回答" },
     ]);
     assert.equal(calls[3][0], "clear");
+  } finally {
+    delete globalThis.window;
+    delete globalThis.__STEWIE_DESKTOP__;
+  }
+});
+
+test("RAG 回答必须经过 Tutor Graph 的真实引用校验", async () => {
+  globalThis.__STEWIE_DESKTOP__ = true;
+  const calls = [];
+  globalThis.window = {
+    stewie: {
+      async answerWithRag(input) {
+        calls.push(["rag", input]);
+        return { ok: true, value: { answer: "答案", sources: ["notes.md"], matches: [{ source: "notes.md", score: 0.8 }] } };
+      },
+      async validateTutorTurn(state) {
+        calls.push(["validate", state]);
+        return { ok: true, value: { ...state, response: { ...state.response, status: "ok" }, turn_ready: true } };
+      },
+    },
+  };
+  try {
+    const result = await answerWithRag({
+      profileId: "primary",
+      query: "问题",
+      documents: [{ id: "d1", text: "资料", source: "notes.md" }],
+    });
+    assert.equal(result.answer, "答案");
+    assert.equal(calls[1][0], "validate");
+    assert.deepEqual(calls[1][1].response.citations, [{ source: "notes.md" }]);
   } finally {
     delete globalThis.window;
     delete globalThis.__STEWIE_DESKTOP__;

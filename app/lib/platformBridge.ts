@@ -172,7 +172,23 @@ export async function answerWithRag(input: {
 }): Promise<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> }> {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 检索仅在桌面安全服务中可用。");
-  return unwrapDesktop(await desktop.answerWithRag(input));
+  const result = unwrapDesktop<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> }>(await desktop.answerWithRag(input));
+  const retrievedChunks = input.documents.filter((document) => result.sources.includes(document.source));
+  await validateTutorTurn({
+    course_id: "rag",
+    lesson_id: "rag-query",
+    user_question: input.query,
+    mastery_snapshot: {},
+    retrieved_chunks: retrievedChunks,
+    response: {
+      answer: result.answer,
+      citations: result.sources.map((source) => ({ source })),
+    },
+    citations: [],
+    next_action: "",
+    thread_id: `rag-${crypto.randomUUID()}`,
+  });
+  return result;
 }
 
 export async function evaluateRag(input: {
