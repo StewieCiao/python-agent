@@ -288,9 +288,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
-        starterCode: `def approve_email(state):\n    pass`,
-        solution: `def approve_email(state):\n    approved = interrupt({"action": "send_email", "draft": state["draft"]})\n    return {"approved": bool(approved)}`,
+        prompt: "输入是包含 draft 和 decision 的 state；输出是 events 列表与最终 status。请在发送邮件前记录 requires_approval=True 的中断状态，decision 为 reject（拒绝）时返回 cancelled 且不执行发送，观察每个节点产生的真实事件。",
+        starterCode: `state = {"draft": "会议摘要", "decision": "reject"}\ninterrupt_state = {"requires_approval": False}\nevents = []\n\ndef approve_email(state):\n    pass\n\nstatus = ""`,
+        solution: `state = {"draft": "会议摘要", "decision": "reject"}\ninterrupt_state = {"requires_approval": True}\nevents = [{"node": "approve_email", "status": "waiting"}]\n\ndef approve_email(state):\n    if state["decision"] == "reject":\n        return "cancelled"\n    if state["decision"] != "approve":\n        raise ValueError("unknown decision")\n    return "approved"\n\nstatus = approve_email(state)\nevents.append({"node": "finish", "status": status})`,
       },
     },
     {

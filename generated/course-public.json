@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "6a45c83836ec62fa20d50ac10a3d02be59c01ad48587eb11bcff61b97e907d62",
-  "familyHash": "31a071e51aa111960f7e4543ba4e07e1120af05429874d255eb71dc6ff23b844",
+  "catalogHash": "7e9803fabdc57d0d0fcada7030c9dc91f83af0ec177cfb83a0ea1386f0bc73f0",
+  "familyHash": "fb21e0627d2f9aad7dfa523effa580e231606810a28b0cd2af8b820ca4353e04",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12215,25 +12215,25 @@
               "subgraphs-parallelism"
             ],
             "exercise": {
-              "prompt": "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
-              "starterCode": "def approve_email(state):\n    pass",
+              "prompt": "输入是包含 draft 和 decision 的 state；输出是 events 列表与最终 status。请在发送邮件前记录 requires_approval=True 的中断状态，decision 为 reject（拒绝）时返回 cancelled 且不执行发送，观察每个节点产生的真实事件。",
+              "starterCode": "state = {\"draft\": \"会议摘要\", \"decision\": \"reject\"}\ninterrupt_state = {\"requires_approval\": False}\nevents = []\n\ndef approve_email(state):\n    pass\n\nstatus = \"\"",
               "hints": [
                 "先选择要展示的真实 stream 事件。",
                 "在副作用之前调用 interrupt。",
                 "恢复时再次验证用户决定。"
               ],
-              "solution": "def approve_email(state):\n    approved = interrupt({\"action\": \"send_email\", \"draft\": state[\"draft\"]})\n    return {\"approved\": bool(approved)}"
+              "solution": "state = {\"draft\": \"会议摘要\", \"decision\": \"reject\"}\ninterrupt_state = {\"requires_approval\": True}\nevents = [{\"node\": \"approve_email\", \"status\": \"waiting\"}]\n\ndef approve_email(state):\n    if state[\"decision\"] == \"reject\":\n        return \"cancelled\"\n    if state[\"decision\"] != \"approve\":\n        raise ValueError(\"unknown decision\")\n    return \"approved\"\n\nstatus = approve_email(state)\nevents.append({\"node\": \"finish\", \"status\": status})"
             },
             "browserChecks": [
               {
                 "name": "事件顺序",
-                "expression": "events[0].node != events[-1].node",
+                "expression": "events[0][\"node\"] != events[-1][\"node\"]",
                 "failure": "流式事件应保留节点执行顺序。",
                 "kind": "behavior"
               },
               {
                 "name": "中断状态",
-                "expression": "interrupt_state.requires_approval is True",
+                "expression": "interrupt_state[\"requires_approval\"] is True",
                 "failure": "高风险步骤应留下待审核状态。",
                 "kind": "structure"
               }

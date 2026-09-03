@@ -28,8 +28,8 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "跨线程读取", expression: "store[(namespace, key)] == value", failure: "Store 应能按 namespace/key 读取值。", kind: "behavior" },
   ],
   "streaming-interrupts": [
-    { name: "事件顺序", expression: "events[0].node != events[-1].node", failure: "流式事件应保留节点执行顺序。", kind: "behavior" },
-    { name: "中断状态", expression: "interrupt_state.requires_approval is True", failure: "高风险步骤应留下待审核状态。", kind: "structure" },
+    { name: "事件顺序", expression: "events[0][\"node\"] != events[-1][\"node\"]", failure: "流式事件应保留节点执行顺序。", kind: "behavior" },
+    { name: "中断状态", expression: "interrupt_state[\"requires_approval\"] is True", failure: "高风险步骤应留下待审核状态。", kind: "structure" },
   ],
   "subgraphs-parallelism": [
     { name: "子图边界", expression: "subgraph_result is not None", failure: "子图必须返回可合并结果。", kind: "behavior" },
