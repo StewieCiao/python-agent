@@ -221,6 +221,7 @@ test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查"
     assert.ok(lesson.browserChecks.every(({ expression }) => !["lesson behavior", "lesson structure"].includes(expression)));
     assert.ok(lesson.officialSources.length >= 1);
     assert.ok(lesson.videos.every((video) => ["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"].includes(new URL(video.url).hostname)));
+    assert.ok(lesson.guide[2].body.includes(lesson.title), `${lesson.id} 的误区卡未关联课程标题`);
   }
 });
 

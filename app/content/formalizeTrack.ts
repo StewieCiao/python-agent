@@ -12,6 +12,19 @@ function source(value: { label: string; url: string }): CourseSource {
 }
 
 function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackId: LearningTrack["id"]): CourseLesson {
+  const guide = value.guide.map((item, guideIndex) => ({
+    kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区",
+    ...item,
+  })) as CourseLesson["guide"];
+  if (guide.length < 3) {
+    guide.push({
+      kind: "常见误区",
+      title: `${value.title}的边界检查`,
+      body: `完成“${value.title}”时，不要只复现示例；回到目标“${value.summary}”，用变化输入检查实际结果与失败边界。`,
+      bullets: ["改变一个输入", "记录实际结果", "对照练习规则"],
+      example: value.exercise.starterCode,
+    });
+  }
   return {
     id: value.id,
     ...(value.familyId ? { familyId: value.familyId } : {}),
@@ -24,10 +37,7 @@ function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackI
     prerequisites: value.prerequisites ?? [],
     difficulty: value.difficulty ?? "beginner",
     tags: value.tags ?? [],
-    guide: value.guide.map((item, guideIndex) => ({
-      kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区",
-      ...item,
-    })),
+    guide,
     videos: value.videos,
     officialSources: value.officialSources.map(source),
     migrations: value.migrations.map((item) => ({

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7fc7c1d2670d23ab11dcb987c18a2eeb58256596b5b442cc1951721c1ac16a8f",
+  "catalogHash": "fc033cd4410eb208c324efaa0a3cb46aada17afad3043ab795af29a5c58e679c",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6600,14 +6600,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "文档加载器与统一 Document的边界检查",
+                "body": "完成“文档加载器与统一 Document”时，不要只复现示例；回到目标“继续第 39–42 节，理解 Loader 的真正产物是带 page_content 和 metadata 的 Document。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页"
               }
             ],
             "videos": [
@@ -6726,14 +6726,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "切分、嵌入与向量存储的边界检查",
+                "body": "完成“切分、嵌入与向量存储”时，不要只复现示例；回到目标“把第 41–43 节串成可解释的 indexing 流程，避免只记住某个向量库的方法名。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "# 建立 chunks 和 vector_store 后检索“退款”"
               }
             ],
             "videos": [
@@ -6836,14 +6836,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "从 Retriever 到可核验的 RAG 回答的边界检查",
+                "body": "完成“从 Retriever 到可核验的 RAG 回答”时，不要只复现示例；回到目标“学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def format_docs(docs):\n    pass"
               }
             ],
             "videos": [
@@ -6946,14 +6946,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "RAG 项目：上传、索引、检索与会话的边界检查",
+                "body": "完成“RAG 项目：上传、索引、检索与会话”时，不要只复现示例；回到目标“对应第 46–54 节，把服装客服项目拆成边界清晰的离线索引和在线问答流程。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass"
               }
             ],
             "videos": [
@@ -7064,14 +7064,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "LangChain v1 Agent 与中间件的边界检查",
+                "body": "完成“LangChain v1 Agent 与中间件”时，不要只复现示例；回到目标“对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)"
               }
             ],
             "videos": [
@@ -7231,14 +7231,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "Agent + RAG 综合项目的边界检查",
+                "body": "完成“Agent + RAG 综合项目”时，不要只复现示例；回到目标“对应第 60–67 节，把日志、配置、检索工具、中间件和 Agent 组合成一条可调试路径。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def search_knowledge(query: str):\n    pass"
               }
             ],
             "videos": [
@@ -11487,14 +11487,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "StateGraph、Node 与 Edge的边界检查",
+                "body": "完成“StateGraph、Node 与 Edge”时，不要只复现示例；回到目标“先把图看成共享状态上的函数流程，再学习 Agent。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "builder = StateGraph(State)\n# 添加 outline 和 answer 节点"
               }
             ],
             "videos": [
@@ -11589,14 +11589,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "Reducer、条件边与循环的边界检查",
+                "body": "完成“Reducer、条件边与循环”时，不要只复现示例；回到目标“控制状态如何合并，并让下一步由明确路由结果决定。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def route(state):\n    pass"
               }
             ],
             "videos": [
@@ -11683,14 +11683,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "Persistence 与线程短期记忆的边界检查",
+                "body": "完成“Persistence 与线程短期记忆”时，不要只复现示例；回到目标“用 checkpointer 保存图状态，让同一 thread 可恢复、检查和继续。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "config_a = {\"configurable\": {\"thread_id\": \"\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"\"}}"
               }
             ],
             "videos": [
@@ -11783,14 +11783,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "Store 与跨线程长期记忆的边界检查",
+                "body": "完成“Store 与跨线程长期记忆”时，不要只复现示例；回到目标“使用 namespace/key 保存用户资料、偏好或可检索记忆。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "profile_namespace = ()\nevents_namespace = ()"
               }
             ],
             "videos": [
@@ -11885,14 +11885,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "Streaming、Interrupt 与人工确认的边界检查",
+                "body": "完成“Streaming、Interrupt 与人工确认”时，不要只复现示例；回到目标“让长任务及时反馈，并在高风险动作前安全暂停。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def approve_email(state):\n    pass"
               }
             ],
             "videos": [
@@ -11979,14 +11979,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "子图、并行与 Map-Reduce的边界检查",
+                "body": "完成“子图、并行与 Map-Reduce”时，不要只复现示例；回到目标“把可独立的工作分开执行，再通过明确 reducer 汇总结果。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "def fan_out(state):\n    pass"
               }
             ],
             "videos": [
@@ -12071,14 +12071,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个没有出现在示例中的输入复查理解。",
+                "title": "项目：带长期记忆的研究助手的边界检查",
+                "body": "完成“项目：带长期记忆的研究助手”时，不要只复现示例；回到目标“组合检索、并行研究、人工确认、短期状态和长期偏好。”，用变化输入检查实际结果与失败边界。",
                 "bullets": [
-                  "改变输入",
+                  "改变一个输入",
                   "记录实际结果",
-                  "说明失败原因"
+                  "对照练习规则"
                 ],
-                "example": "assert result == expected"
+                "example": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\""
               }
             ],
             "videos": [
