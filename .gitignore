@@ -40,6 +40,7 @@ next-env.d.ts
 __pycache__/
 *.py[cod]
 /dist/
+/dist-pages/
 /.wrangler/
 /outputs/
 /work/

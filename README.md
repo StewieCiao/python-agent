@@ -24,6 +24,8 @@ npm run dev
 
 课程或答案更新后，运行 `npm run build:offline` 可重新生成单文件版本。
 
+需要发布到 GitHub Pages 时运行 `npm run build:pages`，然后将生成的 `dist-pages/` 目录选作 Pages 发布目录。
+
 ## 课程与反馈
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。

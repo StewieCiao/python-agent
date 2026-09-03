@@ -12,6 +12,8 @@
     "build:learning": "node --experimental-strip-types scripts/build-learning-bundle.mjs",
     "prebuild:offline": "npm run build:learning",
     "build:offline": "node --experimental-strip-types scripts/build-offline-html.mjs",
+    "prebuild:pages": "npm run build:offline",
+    "build:pages": "node scripts/build-pages.mjs",
     "desktop:dev": "npm run start --workspace @stewie/desktop",
     "desktop:make": "npm run make --workspace @stewie/desktop",
     "desktop:package": "npm run package --workspace @stewie/desktop",
