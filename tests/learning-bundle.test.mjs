@@ -295,6 +295,18 @@ test("LangGraph 执行与项目课保留真实迁移边界", async () => {
   }
 });
 
+test("LangChain 检索与 Agent 项目课保留旧写法迁移边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  for (const id of ["document-loaders", "indexing-vector-store", "retrieval-chain", "rag-project", "agent-rag-project"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.ok(lesson.migrations.length >= 1, `${id} 缺少迁移卡`);
+    assert.ok(lesson.migrations.every((item) => item.beforeCode && item.afterCode && item.officialSources.length >= 1));
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);
