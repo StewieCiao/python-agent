@@ -8,7 +8,10 @@ import { packagedExecutablePath } from "./desktopPackagePaths.mjs";
 
 const READY_TIMEOUT_MS = 30_000;
 const RUN_TIMEOUT_MS = 12_000;
-const IO_TIMEOUT_MS = 5_000;
+// Windows packaged Electron may spend several seconds loading the bundled
+// renderer before its first Runtime.evaluate response; keep the overall
+// readiness deadline separate while allowing one real probe to finish.
+const IO_TIMEOUT_MS = 20_000;
 
 function withTimeout(promise, label, timeoutMs = IO_TIMEOUT_MS) {
   let timer;
