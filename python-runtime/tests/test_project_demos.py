@@ -35,6 +35,11 @@ class ProjectDemosTest(unittest.TestCase):
         self.assertEqual(result["answer"], "RAG 保留引用")
         self.assertEqual(result["sources"], ["notes.md"])
 
+    def test_rag_demo_rejects_empty_question(self):
+        rag = load("rag_demo_invalid", "projects/private-rag-study-assistant/demo.py")
+        with self.assertRaisesRegex(ValueError, "question must be non-empty"):
+            rag.answer("  ", [{"text": "Python", "source": "a.md"}])
+
     def test_research_graph_can_resume_same_thread_after_approval(self):
         graph = load("research_demo", "projects/recoverable-research-graph/demo.py")
         result = graph.run("LangGraph", "thread-a", True)
