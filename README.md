@@ -26,6 +26,8 @@ npm run dev
 
 需要发布到 GitHub Pages 时运行 `npm run build:pages`，然后将生成的 `dist-pages/` 目录选作 Pages 发布目录。
 
+仓库已包含 GitHub Actions 发布工作流：在仓库 Settings → Pages 中将发布方式设为 GitHub Actions，推送到 `main` 后会自动生成并发布静态站点。访问链接由 GitHub Pages 设置页提供。
+
 ## 课程与反馈
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
