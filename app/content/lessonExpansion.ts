@@ -24,6 +24,17 @@ type TopicSpec = {
 };
 
 const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
+  "变量与类型": {
+    summary: "用明确的值和类型转换表达数据契约，避免把字符串误当数字。",
+    prompt: "实现 parse_price(text)，把带空白的数字文本转换为 float；空文本或非数字输入返回 None。",
+    starterCode: "def parse_price(text):\n    pass\n",
+    solution: "def parse_price(text):\n    text = text.strip()\n    if not text:\n        return None\n    try:\n        return float(text)\n    except ValueError:\n        return None\n",
+    hints: ["先清理输入两端空白。", "空文本不应交给 float。", "只把转换失败当作无效价格。"],
+    checks: [
+      { name: "转换数字", expression: "parse_price(\" 12.5 \") == 12.5", failure: "数字文本应转换为 float。", kind: "behavior" },
+      { name: "拒绝无效值", expression: "parse_price(\"\") is None and parse_price(\"x\") is None", failure: "空文本和非数字应返回 None。", kind: "behavior" },
+    ],
+  },
   "字符串处理": {
     summary: "组合字符串方法完成清洗，同时保留输入语义和顺序。",
     prompt: "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。",
@@ -199,6 +210,39 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "输出契约", expression: "weather_tool(\" 成都 \") == {\"city\": \"成都\", \"condition\": \"unknown\"}", failure: "工具应返回稳定字段并清理城市名。", kind: "behavior" },
       { name: "输入失败", expression: "_raises_value_error(lambda: weather_tool(\"\"))", failure: "空城市名应明确失败，不能伪造结果。", kind: "behavior" },
+    ],
+  },
+  "模块拆分": {
+    summary: "把可复用逻辑放进模块，并通过公开函数边界传递数据。",
+    prompt: "实现 make_slug_module()，返回一个包含 slugify 函数的字典；slugify 应清洗空白并转小写。",
+    starterCode: "def make_slug_module():\n    pass\n",
+    solution: "def make_slug_module():\n    def slugify(text):\n        return \"-\".join(text.strip().lower().split())\n    return {\"slugify\": slugify}\n",
+    hints: ["先定义模块对外暴露的函数名。", "把实现放在局部作用域，返回公开接口。", "通过字典取出函数后再调用验证。"],
+    checks: [
+      { name: "公开接口", expression: "callable(make_slug_module()[\"slugify\"])", failure: "模块应暴露可调用的 slugify。", kind: "behavior" },
+      { name: "模块行为", expression: "make_slug_module()[\"slugify\"](\" Hello Python \") == \"hello-python\"", failure: "公开函数应清洗并规范化文本。", kind: "behavior" },
+    ],
+  },
+  "命令行工具": {
+    summary: "把命令行参数解析与业务函数分开，让入口可测试且错误明确。",
+    prompt: "实现 parse_args(argv)，读取 --name 后的值并返回字典；缺少值或参数名错误时抛出 ValueError。",
+    starterCode: "def parse_args(argv):\n    pass\n",
+    solution: "def parse_args(argv):\n    if len(argv) != 2 or argv[0] != \"--name\" or not argv[1]:\n        raise ValueError(\"expected --name VALUE\")\n    return {\"name\": argv[1]}\n",
+    hints: ["先验证参数数量和开关位置。", "空值也属于缺少参数。", "错误输入应抛出 ValueError 而不是伪造默认名。"],
+    checks: [
+      { name: "解析参数", expression: "parse_args([\"--name\", \"Stewie\"]) == {\"name\": \"Stewie\"}", failure: "应按约定读取 --name 的值。", kind: "behavior" },
+      { name: "参数错误", expression: "_raises_value_error(lambda: parse_args([\"--name\"])) and _raises_value_error(lambda: parse_args([\"--other\", \"x\"]))", failure: "缺少值或未知参数应明确失败。", kind: "behavior" },
+    ],
+  },
+  "并发基础": {
+    summary: "用可观察的任务结果理解并发，不共享未经保护的可变状态。",
+    prompt: "实现 run_tasks(tasks)，按输入顺序调用每个无参函数并返回结果列表；空任务列表返回空列表。",
+    starterCode: "def run_tasks(tasks):\n    pass\n",
+    solution: "def run_tasks(tasks):\n    return [task() for task in tasks]\n",
+    hints: ["先明确任务是可调用对象。", "结果顺序应与输入任务顺序一致。", "不要用共享全局列表保存结果。"],
+    checks: [
+      { name: "按序执行", expression: "run_tasks([lambda: \"a\", lambda: 2]) == [\"a\", 2]", failure: "应返回每个任务的真实结果并保持顺序。", kind: "behavior" },
+      { name: "空任务", expression: "run_tasks([]) == []", failure: "空任务列表应返回空结果。", kind: "behavior" },
     ],
   },
 };

@@ -270,6 +270,18 @@ test("行为导向扩展课不使用占位判题表达式", async () => {
   }
 });
 
+test("Python 进阶基础主题也有独立的可执行练习", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const python = authoredCatalog.tracks.find(({ id }) => id === "python");
+  assert.ok(python);
+  for (const topic of ["变量与类型", "模块拆分", "命令行工具", "并发基础"]) {
+    const lesson = python.lessons.find(({ title }) => title.startsWith(topic));
+    assert.ok(lesson, `缺少 ${topic} 课程`);
+    assert.match(lesson.title, /写出可验证的实现/);
+    assert.ok(lesson.browserChecks.every(({ kind }) => kind === "behavior"));
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
