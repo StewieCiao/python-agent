@@ -280,6 +280,7 @@ test("LangChain/RAG 原始课程的 id 顺序保持稳定", async () => {
     "structured-output",
     "runnable-pipeline",
     "rag-evaluation",
+    "hybrid-retrieval",
   ];
   assert.deepEqual(track.lessons.map(({ id }) => id), expected);
 });
@@ -612,6 +613,19 @@ test("Python 工程路线包含日志与可观测性课程", async () => {
   assert.equal(lesson.exercise.hints.length, 3);
   assert.ok(lesson.browserChecks.length >= 2);
   assert.ok(lesson.exercise.prompt.includes("api_key"));
+});
+
+test("LangChain 混合检索课明确合并排序与阈值边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "hybrid-retrieval");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.browserChecks.some(({ failure }) => failure.includes("阈值")));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
 test("框架作者路线保留可解释的先修链", async () => {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "33cc3285f5591e38f21b5c93868d3952db2cd0222b4f4f0d9f681b2db840ccdf",
-  "familyHash": "fc34dde50ffbbeab974763acfbe323af99703c0333051dfc29a1686a60925f25",
+  "catalogHash": "d702cb2ebacf6c087204861f28e54d7470d3e8405a28c6af6a25b5716cbb98fc",
+  "familyHash": "2716cc9b7e69ae540ce7cf3bdca685c89448e32848634ffd24a5c3f5f7f2cb80",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -6311,7 +6311,7 @@
               "structured-output",
               "runnable-pipeline",
               "rag-evaluation",
-              "langchain-rag-lesson-12",
+              "hybrid-retrieval",
               "langchain-rag-lesson-13"
             ]
           },
@@ -8065,100 +8065,128 @@
             ]
           },
           {
-            "id": "langchain-rag-lesson-12",
+            "id": "hybrid-retrieval",
             "stageId": "langchain-rag-stage-2",
             "order": 13,
-            "title": "引用生成：写出可验证的实现",
-            "kicker": "LangChain / RAG 学习",
-            "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
-            "minutes": 35,
+            "title": "混合检索与相似度阈值",
+            "kicker": "langchain-rag 学习",
+            "summary": "合并关键词与向量候选并按分数排序，低于阈值时明确返回无结果。",
+            "minutes": 40,
             "prerequisites": [
               "rag-evaluation"
             ],
-            "difficulty": "advanced",
+            "difficulty": "intermediate",
             "tags": [
-              "langchain-rag",
-              "stage-langchain-rag-stage-2"
+              "hybrid-search",
+              "threshold",
+              "retrieval"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "引用生成要解决什么问题",
-                "body": "把团队知识库中的真实任务先翻译成输入、处理和输出，再理解这个知识点：让回答中的引用只来自真实召回结果，并能回溯到来源。",
+                "title": "两种检索互补",
+                "body": "关键词检索擅长精确术语，向量检索擅长语义相近。混合检索不是简单拼接：要统一候选结构、去重并保留各自分数，才能解释最终排序。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "候选保留来源",
+                  "分数需要同一尺度",
+                  "合并后再排序"
                 ],
-                "example": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。"
+                "example": "candidates = [{\"source\": \"guide.md\", \"score\": 0.82}]"
               },
               {
                 "kind": "逐步拆解",
-                "title": "把引用生成拆成步骤",
-                "body": "先实现团队知识库场景下题目要求的最小路径，再逐项验证：实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。",
+                "title": "阈值决定是否交给生成",
+                "body": "top-k 只限制数量，不代表结果相关。若最高分低于阈值，应返回 no_results 并停止生成；阈值和排序规则要写进评估样本，避免凭感觉调参。",
                 "bullets": [
-                  "先明确无检索结果的用户可见状态。",
-                  "编号由结果顺序产生，不要写死来源。",
-                  "只读取结果中的 source 字段。"
+                  "先去重候选",
+                  "检查最高分",
+                  "低分不伪造答案"
                 ],
-                "example": "输入 → 处理 → 输出"
+                "example": "if not candidates or candidates[0][\"score\"] < threshold:\n    status = \"no_results\""
               },
               {
                 "kind": "常见误区",
-                "title": "引用生成的边界检查",
-                "body": "不要只复现团队知识库的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "混合检索的常见误区",
+                "body": "完成“混合检索与相似度阈值”时，不要把不同分数直接相加后当作事实，也不要在低于阈值时继续调用模型；保留候选和真实状态供评估。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "记录合并来源",
+                  "阈值边界可回归",
+                  "区分检索与生成失败"
                 ],
-                "example": "assert actual == expected"
+                "example": "result = {\"status\": status, \"matches\": candidates}"
               }
             ],
             "videos": [
               {
-                "title": "LangChain for LLM Application Development",
-                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
                 "provider": "DeepLearning.AI",
                 "language": "英文",
-                "duration": "短课程",
-                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+                "duration": "1 小时 18 分",
+                "note": "补充检索策略；阈值和评估以站内固定样本为准。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangChain 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langchain/overview",
+                "label": "LangChain retrieval",
+                "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "单一相似度检索 → 混合候选与阈值",
+                "status": "replaced",
+                "explanation": "统一候选结构、去重和阈值判断，让低相关结果停在检索阶段。",
+                "beforeCode": "docs = store.similarity_search(query, k=4)",
+                "afterCode": "matches = hybrid_search(query)\nif matches and matches[0][\"score\"] >= threshold:\n    answer(matches)",
+                "officialSources": [
+                  {
+                    "label": "LangChain retrieval",
+                    "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-13"
             ],
             "exercise": {
-              "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。",
-              "starterCode": "def format_citations(results):\n    pass\n",
+              "prompt": "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。",
+              "starterCode": "def merge_retrieval(keyword_hits, vector_hits, threshold):\n    pass\n",
               "hints": [
-                "先明确无检索结果的用户可见状态。",
-                "编号由结果顺序产生，不要写死来源。",
-                "只读取结果中的 source 字段。"
+                "统一候选结构",
+                "按 source 去重并排序",
+                "用低分候选验证 threshold"
               ],
-              "solution": "def format_citations(results):\n    if not results:\n        return \"没有找到相关资料\"\n    return \"\\n\".join(f\"[{index}] {item['source']}\" for index, item in enumerate(results, 1))\n"
+              "solution": "def merge_retrieval(keyword_hits, vector_hits, threshold):\n    by_source = {}\n    for item in [*keyword_hits, *vector_hits]:\n        source = item[\"source\"]\n        if source not in by_source or item[\"score\"] > by_source[source][\"score\"]:\n            by_source[source] = item\n    matches = sorted(by_source.values(), key=lambda item: item[\"score\"], reverse=True)\n    status = \"ok\" if matches and matches[0][\"score\"] >= threshold else \"no_results\"\n    return {\"status\": status, \"matches\": matches}\n"
             },
             "browserChecks": [
               {
-                "name": "来源可追溯",
-                "expression": "format_citations([{\"source\": \"guide.md\"}, {\"source\": \"faq.md\"}]) == \"[1] guide.md\\n[2] faq.md\"",
-                "failure": "每条引用应对应实际结果来源。",
+                "name": "合并去重",
+                "expression": "merge_retrieval([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}], 0.5)[\"matches\"] == [{\"source\": \"a\", \"score\": 0.8}]",
+                "failure": "同一来源应保留最高分候选。",
                 "kind": "behavior"
               },
               {
-                "name": "无结果边界",
-                "expression": "format_citations([]) == \"没有找到相关资料\"",
-                "failure": "无资料时应明确说明，而不是编造答案。",
+                "name": "阈值通过",
+                "expression": "merge_retrieval([{\"source\": \"a\", \"score\": 0.8}], [], 0.5)[\"status\"] == \"ok\"",
+                "failure": "最高分达到阈值时状态应为 ok。",
+                "kind": "behavior"
+              },
+              {
+                "name": "低分无结果",
+                "expression": "merge_retrieval([{\"source\": \"a\", \"score\": 0.2}], [], 0.5)[\"status\"] == \"no_results\"",
+                "failure": "最高分低于阈值时必须停止生成并返回 no_results。",
                 "kind": "behavior"
               }
             ]
@@ -8172,7 +8200,7 @@
             "summary": "为检索调优提供关键词、向量召回和命中率对比。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-12"
+              "hybrid-retrieval"
             ],
             "difficulty": "advanced",
             "tags": [

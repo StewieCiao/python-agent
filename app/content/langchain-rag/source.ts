@@ -550,6 +550,23 @@ export const langchainTrack: LearningTrack = {
       project: false, projectLinks: [],
       exercise: { prompt: "实现 evaluate_retrieval(expected_sources, retrieved_sources, answer_sources)：返回 recall、citation_coverage 和 status；期望来源为空或实际无命中时 status 为 no_results，不能把无资料当作满分。", starterCode: `def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    pass\n`, solution: `def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    if not expected_sources or not retrieved_sources:\n        return {\"recall\": 0, \"citation_coverage\": 0, \"status\": \"no_results\"}\n    expected = set(expected_sources)\n    retrieved = set(retrieved_sources)\n    cited = set(answer_sources)\n    return {\"recall\": len(expected & retrieved) / len(expected), \"citation_coverage\": len(expected & cited) / len(expected), \"status\": \"ok\"}\n` },
     },
+    {
+      id: "hybrid-retrieval",
+      title: "混合检索与相似度阈值",
+      prerequisites: ["rag-evaluation"], difficulty: "intermediate", tags: ["hybrid-search", "threshold", "retrieval"],
+      summary: "合并关键词与向量候选并按分数排序，低于阈值时明确返回无结果。",
+      minutes: 40,
+      guide: [
+        { title: "两种检索互补", body: "关键词检索擅长精确术语，向量检索擅长语义相近。混合检索不是简单拼接：要统一候选结构、去重并保留各自分数，才能解释最终排序。", bullets: ["候选保留来源", "分数需要同一尺度", "合并后再排序"], example: `candidates = [{\"source\": \"guide.md\", \"score\": 0.82}]` },
+        { title: "阈值决定是否交给生成", body: "top-k 只限制数量，不代表结果相关。若最高分低于阈值，应返回 no_results 并停止生成；阈值和排序规则要写进评估样本，避免凭感觉调参。", bullets: ["先去重候选", "检查最高分", "低分不伪造答案"], example: `if not candidates or candidates[0][\"score\"] < threshold:\n    status = \"no_results\"` },
+        { title: "混合检索的常见误区", body: "完成“混合检索与相似度阈值”时，不要把不同分数直接相加后当作事实，也不要在低于阈值时继续调用模型；保留候选和真实状态供评估。", bullets: ["记录合并来源", "阈值边界可回归", "区分检索与生成失败"], example: `result = {\"status\": status, \"matches\": candidates}` },
+      ],
+      videos: [{ title: "LangChain: Chat with Your Data", url: DLAI_DATA, provider: "DeepLearning.AI", language: "英文", duration: "1 小时 18 分", note: "补充检索策略；阈值和评估以站内固定样本为准。" }],
+      officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }],
+      migrations: [{ title: "单一相似度检索 → 混合候选与阈值", status: "replaced", explanation: "统一候选结构、去重和阈值判断，让低相关结果停在检索阶段。", beforeCode: "docs = store.similarity_search(query, k=4)", afterCode: "matches = hybrid_search(query)\nif matches and matches[0][\"score\"] >= threshold:\n    answer(matches)", officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。", starterCode: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    pass\n`, solution: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    by_source = {}\n    for item in [*keyword_hits, *vector_hits]:\n        source = item[\"source\"]\n        if source not in by_source or item[\"score\"] > by_source[source][\"score\"]:\n            by_source[source] = item\n    matches = sorted(by_source.values(), key=lambda item: item[\"score\"], reverse=True)\n    status = \"ok\" if matches and matches[0][\"score\"] >= threshold else \"no_results\"\n    return {\"status\": status, \"matches\": matches}\n` },
+    },
   ],
 };
 

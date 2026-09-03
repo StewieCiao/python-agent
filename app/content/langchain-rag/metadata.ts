@@ -13,6 +13,7 @@ export const langchainHints: Record<string, [string, string, string]> = {
   "structured-output": ["先写出结构", "保留真实错误", "用边界输入验证"],
   "runnable-pipeline": ["先写出结构", "保留真实错误", "用边界输入验证"],
   "rag-evaluation": ["先定义期望来源", "分别计算召回和引用覆盖", "用空召回验证 no_results"],
+  "hybrid-retrieval": ["统一候选结构", "按 source 去重并排序", "用低分候选验证 threshold"],
 };
 
 export const langchainChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -65,5 +66,10 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "召回指标", expression: "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [\"guide.md\"])[\"recall\"] == 1.0", failure: "期望来源被召回时 recall 应为 1。", kind: "behavior" },
     { name: "引用覆盖", expression: "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [])[\"citation_coverage\"] == 0.0", failure: "未引用来源时覆盖率应为 0。", kind: "behavior" },
     { name: "无资料状态", expression: "evaluate_retrieval([\"guide.md\"], [], [])[\"status\"] == \"no_results\"", failure: "无召回时必须明确记录 no_results。", kind: "behavior" },
+  ],
+  "hybrid-retrieval": [
+    { name: "合并去重", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}], 0.5)[\"matches\"] == [{\"source\": \"a\", \"score\": 0.8}]", failure: "同一来源应保留最高分候选。", kind: "behavior" },
+    { name: "阈值通过", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.8}], [], 0.5)[\"status\"] == \"ok\"", failure: "最高分达到阈值时状态应为 ok。", kind: "behavior" },
+    { name: "低分无结果", expression: "merge_retrieval([{\"source\": \"a\", \"score\": 0.2}], [], 0.5)[\"status\"] == \"no_results\"", failure: "最高分低于阈值时必须停止生成并返回 no_results。", kind: "behavior" },
   ],
 };
