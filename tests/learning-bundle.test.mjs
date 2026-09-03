@@ -348,6 +348,18 @@ test("扩展路线的剩余主题不使用概念占位练习", async () => {
   }
 });
 
+test("框架项目课使用清晰的作品主题而不是迁移练习标题", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const trackId of ["langchain-rag", "langgraph"]) {
+    const track = authoredCatalog.tracks.find(({ id }) => id === trackId);
+    assert.ok(track);
+    for (const lesson of track.lessons.filter(({ project }) => project)) {
+      assert.doesNotMatch(lesson.title, /迁移练习/);
+      assert.match(lesson.exercise.prompt, /用户场景/);
+    }
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {

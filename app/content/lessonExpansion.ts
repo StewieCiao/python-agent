@@ -14,6 +14,11 @@ const TOPICS: Record<CourseTrack["id"], string[]> = {
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
 
+const PROJECT_TITLES: Record<"langchain-rag" | "langgraph", string[]> = {
+  "langchain-rag": ["可引用文档问答系统", "混合检索评估台", "带工具调用的知识助手", "RAG 质量观测面板"],
+  langgraph: ["可恢复研究工作流", "人工审核 Agent 流程", "多 Agent 协作调度器", "带长期记忆的任务图"],
+};
+
 type TopicSpec = {
   summary: string;
   prompt: string;
@@ -741,9 +746,15 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     stage.lessonIds.push(lesson.id);
   }
   const stageProjectCandidates = stages.map((stage) => [...lessons].reverse().find((lesson) => lesson.stageId === stage.id && !lesson.project)).filter((lesson): lesson is CourseLesson => Boolean(lesson));
+  let generatedProjectIndex = 0;
   for (const lesson of stageProjectCandidates) {
     if (projects >= expansion.projectCount) break;
     lesson.project = true;
+    if (lesson.id.includes("-lesson-")) {
+      const titles = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_TITLES[track.id] : [];
+      lesson.title = titles[generatedProjectIndex] ?? `${track.shortTitle} 综合作品 ${generatedProjectIndex + 1}`;
+      generatedProjectIndex += 1;
+    }
     projects += 1;
   }
   if (projects < expansion.projectCount) {
@@ -754,7 +765,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   }
   for (const lesson of lessons) {
     if (!lesson.project || !lesson.id.includes("-lesson-")) continue;
-    lesson.exercise.prompt = `阶段项目：围绕“${lesson.title}”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。`;
+    lesson.exercise.prompt = `阶段项目：${lesson.title}\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。`;
     lesson.exercise.hints = ["先拆成一个能独立运行的最小里程碑。", "让每个中间结果可观察，并为失败保留真实原因。", "最后用未出现在示例中的输入和边界情况回归。"];
   }
   const projectIdsByStage = new Map<string, string>();

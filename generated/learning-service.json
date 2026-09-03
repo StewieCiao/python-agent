@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "efc2bf22e1c37b3bbe740e50d2b053f15989492d8a6dc18cfb832a9a8a53e1e1",
+  "catalogHash": "a81ae56dd93e579d29883c2c530b3f84a82518714d7074528dad68f04e4cde4b",
   "familyHash": "d57544b16f78532336dd8e9cdf0c48b5eca5e03afc56bb66f73411ae74303aaa",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -10332,7 +10332,7 @@
             "id": "langchain-rag-lesson-42",
             "stageId": "langchain-rag-stage-1",
             "order": 43,
-            "title": "结构化输出迁移练习 3：写出可验证的实现",
+            "title": "可引用文档问答系统",
             "kicker": "LangChain / RAG 学习",
             "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
             "minutes": 35,
@@ -10392,7 +10392,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“结构化输出迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：可引用文档问答系统\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def validate_answer(value):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -10420,7 +10420,7 @@
             "id": "langchain-rag-lesson-43",
             "stageId": "langchain-rag-stage-2",
             "order": 44,
-            "title": "Runnable 组合迁移练习 3：写出可验证的实现",
+            "title": "混合检索评估台",
             "kicker": "LangChain / RAG 学习",
             "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
             "minutes": 35,
@@ -10480,7 +10480,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“Runnable 组合迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：混合检索评估台\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def compose_steps(first, second, value):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -10508,7 +10508,7 @@
             "id": "langchain-rag-lesson-44",
             "stageId": "langchain-rag-stage-3",
             "order": 45,
-            "title": "模型配置迁移练习 3：写出可验证的实现",
+            "title": "带工具调用的知识助手",
             "kicker": "LangChain / RAG 学习",
             "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
             "minutes": 35,
@@ -10568,7 +10568,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“模型配置迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：带工具调用的知识助手\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def normalize_model_config(config):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -10596,7 +10596,7 @@
             "id": "langchain-rag-lesson-45",
             "stageId": "langchain-rag-stage-4",
             "order": 46,
-            "title": "文档加载迁移练习 3：写出可验证的实现",
+            "title": "RAG 质量观测面板",
             "kicker": "LangChain / RAG 学习",
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
             "minutes": 35,
@@ -10656,7 +10656,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“文档加载迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：RAG 质量观测面板\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -14107,7 +14107,7 @@
             "id": "langgraph-lesson-35",
             "stageId": "langgraph-stage-1",
             "order": 36,
-            "title": "并行分支迁移练习 2：写出可验证的实现",
+            "title": "可恢复研究工作流",
             "kicker": "LangGraph 学习",
             "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
             "minutes": 35,
@@ -14167,7 +14167,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“并行分支迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：可恢复研究工作流\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def merge_parallel(results):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -14195,7 +14195,7 @@
             "id": "langgraph-lesson-36",
             "stageId": "langgraph-stage-2",
             "order": 37,
-            "title": "Supervisor迁移练习 2：写出可验证的实现",
+            "title": "人工审核 Agent 流程",
             "kicker": "LangGraph 学习",
             "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
             "minutes": 35,
@@ -14255,7 +14255,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“Supervisor迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：人工审核 Agent 流程\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def choose_worker(task_type, workers):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -14283,7 +14283,7 @@
             "id": "langgraph-lesson-37",
             "stageId": "langgraph-stage-3",
             "order": 38,
-            "title": "多 Agent 协作迁移练习 2：写出可验证的实现",
+            "title": "多 Agent 协作调度器",
             "kicker": "LangGraph 学习",
             "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
             "minutes": 35,
@@ -14343,7 +14343,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“多 Agent 协作迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：多 Agent 协作调度器\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def handoff(agent, message):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
@@ -14371,7 +14371,7 @@
             "id": "langgraph-lesson-38",
             "stageId": "langgraph-stage-4",
             "order": 39,
-            "title": "人工审核迁移练习 2：写出可验证的实现",
+            "title": "带长期记忆的任务图",
             "kicker": "LangGraph 学习",
             "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
             "minutes": 35,
@@ -14431,7 +14431,7 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“人工审核迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "prompt": "阶段项目：带长期记忆的任务图\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
               "starterCode": "def review_gate(action, decision):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
