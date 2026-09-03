@@ -74,6 +74,9 @@ const VERIFIED_AT = "2026-09-02";
 const VERIFIED_VERSIONS = { langchain: "1.2.12", langgraph: "1.1.2" };
 const HEIMA = "https://www.bilibili.com/video/BV1yjz5BLEoY";
 const LANGCHAIN_V1 = "https://docs.langchain.com/oss/python/releases/langchain-v1";
+const LANGCHAIN_MESSAGES = "https://docs.langchain.com/oss/python/langchain/messages";
+const LANGCHAIN_STRUCTURED_OUTPUT = "https://docs.langchain.com/oss/python/langchain/structured-output";
+const LANGCHAIN_KNOWLEDGE_BASE = "https://docs.langchain.com/oss/python/langchain/knowledge-base";
 const LANGCHAIN_MIGRATION = "https://docs.langchain.com/oss/python/migrate/langchain-v1";
 const MEMORY_OVERVIEW = "https://docs.langchain.com/oss/python/concepts/memory";
 const SHORT_TERM_MEMORY = "https://docs.langchain.com/oss/python/langchain/short-term-memory";
@@ -566,7 +569,7 @@ const langchainTrack: LearningTrack = {
         { title: "运行前预测消息", body: "完成“模型、消息与 Prompt 模板”时，先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。", bullets: ["确认变量名一致", "检查消息顺序", "再调用 invoke"], example: `messages = prompt.invoke({"topic": "RAG"})\nprint(messages.messages)` },
       ],
       videos: [heimaVideo(12, "提示词模板与消息", "24:00"), { title: "LangChain for LLM Application Development", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充消息、模板与输出解析。" }],
-      officialSources: [{ label: "LangChain agents", url: AGENTS }],
+      officialSources: [{ label: "LangChain messages", url: LANGCHAIN_MESSAGES }],
       migrations: [{
         title: "从旧 LLMChain 迁移到 Runnable 管道",
         status: "replaced",
@@ -591,14 +594,14 @@ const langchainTrack: LearningTrack = {
         { title: "结构化输出的常见误区", body: "完成“结构化输出与失败边界”时，不要把解析失败改成空字典或把字符串强行当作合法结果；字段缺失应停在解析边界并保留真实错误。", bullets: ["区分解析与业务失败", "拒绝缺失字段", "保留异常类型"], example: `Answer.model_validate({"summary": "ok", "confidence": 0.8})` },
       ],
       videos: [{ title: "LangChain structured output", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充结构化输出与解析边界。" }],
-      officialSources: [{ label: "LangChain agents", url: AGENTS }],
+      officialSources: [{ label: "LangChain structured output", url: LANGCHAIN_STRUCTURED_OUTPUT }],
       migrations: [{
         title: "从手写解析器迁移到结构化输出",
         status: "replaced",
         explanation: "旧教程常用 StructuredOutputParser 拼接格式说明；新版优先让模型绑定明确 schema，并让验证失败保留原始异常。",
         beforeCode: "parser = StructuredOutputParser.from_response_schemas(schemas)\nresult = parser.parse(text)",
         afterCode: "result = model.with_structured_output(Answer).invoke(messages)",
-        officialSources: [{ label: "LangChain agents", url: AGENTS }],
+        officialSources: [{ label: "LangChain structured output", url: LANGCHAIN_STRUCTURED_OUTPUT }],
         verifiedAt: VERIFIED_AT,
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],
@@ -616,14 +619,14 @@ const langchainTrack: LearningTrack = {
         { title: "Runnable 管道的常见误区", body: "完成“Runnable 组合的第一条链”时，不要把多个步骤藏进一个不可观察的函数，也不要在任一步失败时返回空结果；分别检查 template、model、parser 的输入输出。", bullets: ["保持步骤边界", "失败停止并留痕", "验证组合顺序"], example: `chain = template | model | parser` },
       ],
       videos: [{ title: "LangChain Expression Language", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充 Runnable 和组合语义。" }],
-      officialSources: [{ label: "LangChain v1", url: LANGCHAIN_V1 }],
+      officialSources: [{ label: "LangChain knowledge base", url: LANGCHAIN_KNOWLEDGE_BASE }],
       migrations: [{
         title: "从旧 run 方法迁移到统一 invoke",
         status: "renamed",
         explanation: "Runnable 统一使用 invoke、ainvoke 或 batch 表达同步、异步和批量调用，避免在不同链类型之间记忆不同入口。",
         beforeCode: "chain.run({\"topic\": \"RAG\"})",
         afterCode: "chain.invoke({\"topic\": \"RAG\"})",
-        officialSources: [{ label: "LangChain v1", url: LANGCHAIN_V1 }],
+        officialSources: [{ label: "LangChain knowledge base", url: LANGCHAIN_KNOWLEDGE_BASE }],
         verifiedAt: VERIFIED_AT,
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],

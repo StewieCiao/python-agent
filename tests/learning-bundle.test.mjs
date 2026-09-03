@@ -247,6 +247,22 @@ test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查"
   }
 });
 
+test("LangChain 三节草稿的官方来源直接对应所教语义", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const expected = {
+    "model-messages-prompts": "https://docs.langchain.com/oss/python/langchain/messages",
+    "structured-output": "https://docs.langchain.com/oss/python/langchain/structured-output",
+    "runnable-pipeline": "https://docs.langchain.com/oss/python/langchain/knowledge-base",
+  };
+  for (const [id, url] of Object.entries(expected)) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.ok(lesson.officialSources.some((source) => source.url === url), `${id} 缺少直接语义来源`);
+  }
+});
+
 test("LangChain 草稿为旧 API 提供可核验迁移卡", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

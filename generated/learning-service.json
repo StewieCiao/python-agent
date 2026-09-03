@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "885c8d5a38dd916abed7d07c3196807ff82269ec3ddbba0900113d6a0849a8e0",
+  "catalogHash": "c5cbad531d343e203f0493bedd7b82018a5c32fdad87d7d222749a83db40069b",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7506,8 +7506,8 @@
             ],
             "officialSources": [
               {
-                "label": "LangChain agents",
-                "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                "label": "LangChain messages",
+                "url": "https://docs.langchain.com/oss/python/langchain/messages",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
@@ -7625,8 +7625,8 @@
             ],
             "officialSources": [
               {
-                "label": "LangChain agents",
-                "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                "label": "LangChain structured output",
+                "url": "https://docs.langchain.com/oss/python/langchain/structured-output",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
@@ -7640,8 +7640,8 @@
                 "afterCode": "result = model.with_structured_output(Answer).invoke(messages)",
                 "officialSources": [
                   {
-                    "label": "LangChain agents",
-                    "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                    "label": "LangChain structured output",
+                    "url": "https://docs.langchain.com/oss/python/langchain/structured-output",
                     "kind": "official-doc",
                     "verifiedAt": "2026-09-02"
                   }
@@ -7744,8 +7744,8 @@
             ],
             "officialSources": [
               {
-                "label": "LangChain v1",
-                "url": "https://docs.langchain.com/oss/python/releases/langchain-v1",
+                "label": "LangChain knowledge base",
+                "url": "https://docs.langchain.com/oss/python/langchain/knowledge-base",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
@@ -7759,8 +7759,8 @@
                 "afterCode": "chain.invoke({\"topic\": \"RAG\"})",
                 "officialSources": [
                   {
-                    "label": "LangChain v1",
-                    "url": "https://docs.langchain.com/oss/python/releases/langchain-v1",
+                    "label": "LangChain knowledge base",
+                    "url": "https://docs.langchain.com/oss/python/langchain/knowledge-base",
                     "kind": "official-doc",
                     "verifiedAt": "2026-09-02"
                   }
