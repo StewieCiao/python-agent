@@ -9,7 +9,7 @@ const SOURCES: Record<CourseTrack["id"], { label: string; url: string }> = {
 };
 
 const TOPICS: Record<CourseTrack["id"], string[]> = {
-  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "SQLite 持久化与事务边界", "Agent 工具契约"],
+  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "SQLite 持久化与事务边界", "本地配置与安全边界", "Agent 工具契约"],
   "langchain-rag": ["消息角色", "Prompt 模板", "结构化输出", "Runnable 组合", "模型配置", "文档加载", "文本切分", "Embedding", "向量存储", "相似度检索", "混合检索", "重排", "引用生成", "无答案边界", "RAG 评估", "追踪与观测", "工具调用", "Agent 循环", "多查询检索", "RAG 项目"],
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
@@ -300,6 +300,17 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "提交更新", expression: "apply_changes({\"count\": 1}, {\"count\": 2}, False) == {\"count\": 2}", failure: "成功事务应返回完整更新后的状态。", kind: "behavior" },
       { name: "失败回滚", expression: "_raises_runtime_error(lambda: apply_changes({\"count\": 1}, {\"count\": 2}, True))", failure: "失败事务必须保留真实异常，不能伪造成功。", kind: "behavior" },
+    ],
+  },
+  "本地配置与安全边界": {
+    summary: "区分普通配置和敏感凭据，设计不回显、不落明文的本地接口。",
+    prompt: "实现 redact_config(config)，复制配置并把 API Key（字段 api_key）替换为 '[stored securely]'；缺少 api_key 时保留 None，不修改原字典。",
+    starterCode: "def redact_config(config):\n    pass\n",
+    solution: "def redact_config(config):\n    redacted = dict(config)\n    if \"api_key\" in redacted:\n        redacted[\"api_key\"] = \"[stored securely]\"\n    return redacted\n",
+    hints: ["先复制配置，避免改写调用者数据。", "只处理明确的 api_key 字段。", "脱敏值不能包含原密钥，也不要伪造存储成功。"],
+    checks: [
+      { name: "脱敏密钥", expression: "redact_config({\"model\": \"demo\", \"api_key\": \"secret\"}) == {\"model\": \"demo\", \"api_key\": \"[stored securely]\"}", failure: "返回配置不得回显 API Key。", kind: "behavior" },
+      { name: "不改原值", expression: "((lambda config: (redact_config(config), config))({\"api_key\": \"secret\"}))[1] == {\"api_key\": \"secret\"}", failure: "脱敏不应修改调用者持有的原配置。", kind: "behavior" },
     ],
   },
 };
