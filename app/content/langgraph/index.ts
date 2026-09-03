@@ -1,10 +1,8 @@
-import { learningTracks } from "../learningCatalog.ts";
 import type { CourseTrack } from "../schema.ts";
 import { authorTrackFromLessons } from "../formalizeTrack.ts";
+import { langgraphTrack as sourceTrack } from "./source.ts";
 
-const legacyTrack = learningTracks.find(({ id }) => id === "langgraph");
-if (!legacyTrack) throw new Error("缺少 LangGraph 课程路线");
-const authored = authorTrackFromLessons(legacyTrack, [
+const authored = authorTrackFromLessons(sourceTrack, [
   { id: "langgraph-stage-1", title: "图基础", description: "认识状态图、节点和边。" },
   { id: "langgraph-stage-2", title: "状态与路由", description: "合并状态并决定下一步。" },
   { id: "langgraph-stage-3", title: "持久化", description: "保存线程状态并支持恢复。" },
@@ -15,12 +13,12 @@ const authored = authorTrackFromLessons(legacyTrack, [
 ]);
 
 export const langgraphTrack: CourseTrack = {
-  id: "langgraph",
-  title: legacyTrack.title,
-  shortTitle: legacyTrack.shortTitle,
-  description: legacyTrack.description,
-  accent: legacyTrack.accent,
-  currentLessonId: legacyTrack.currentLessonId,
+  id: sourceTrack.id,
+  title: sourceTrack.title,
+  shortTitle: sourceTrack.shortTitle,
+  description: sourceTrack.description,
+  accent: sourceTrack.accent,
+  currentLessonId: sourceTrack.currentLessonId,
   stages: authored.stages,
   lessons: authored.lessons,
 };
