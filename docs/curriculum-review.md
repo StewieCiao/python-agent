@@ -9,17 +9,18 @@
 - LangChain 草稿的官方文档已归入 `officialSources`，视频仅使用允许的视频域名。
 - 草稿具备三张讲解卡、三层提示、先修关系和行为/结构检查；适配器回归测试确认这些字段不会丢失。
 - 离线版重新生成并通过无外部资源检查；模型设置、聊天和 RAG runtime 不进入离线文件。
-- 开发页真实验收确认课程导师包含“用本地资料做一次 RAG 检索”面板，可导入多个文本文件并显示来源。
+- 开发页真实验收确认课程导师包含“用本地资料做一次 RAG 检索”面板；桌面端可通过安全文件选择器导入 TXT、Markdown、CSV 和 PDF，PDF 按页保留来源。
+- `npm run build:pages` 会从同一离线快照生成 `dist-pages/index.html`；GitHub Pages 工作流可直接发布该目录。
 
 ## 验证证据
 
-- `npm test`：148 项通过。
+- `npm test`：151 项通过。
 - 当前三条路线的扩展主题均已绑定具体练习规格，课程标题不再使用“从概念到练习”占位模板；后续仍需逐阶段补充更丰富的原创示例、迁移卡和项目验收材料。
 - 每节课程至少包含两项带名称、表达式和失败说明的反馈检查；旧草稿中的占位表达式已移除。
 - `npm run lint -- --max-warnings=0`：通过。
 - `npm run build`：通过。
 - `git diff --check`：通过。
-- 项目自带 Python 3.13.15 运行环境准备完成；`python-runtime` 37 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、SQLite FTS5）。
+- 项目自带 Python 3.13.15 运行环境准备完成；内置运行时 `python-runtime` 40 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、pypdf 6.16.2、SQLite FTS5）。
 - packaged renderer smoke 已验证 Python 执行与安全存储失败边界：失败时保留真实原因且不留下半成品配置；当前环境未提供可用系统钥匙串，因此未伪造成功分支。
 
 ## 尚未完成的内容审校
