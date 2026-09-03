@@ -34,7 +34,8 @@
 - Gate 1：桌面安装包运行时、系统密钥串、本地 SQLite、模型主进程边界、Worker 超时和判题回归。
 - Gate 2 已落地：schema/invariant、39 个现有 lesson 的聚合适配、public/service 快照、离线与 renderer 的 public 消费。
 - 现有提交基线：`7be691a`；最近 Gate 2 进度提交包括 `6ebb044`、`38bc242`。
-- 仍未完成：Python service 快照启动校验、Electron 双哈希校验、旧作者源清理、三课扩展、个性化、RAG、Tutor Graph 和最终发行验证。
+- 已完成：Python service 快照启动校验、Electron 双哈希校验、旧作者源清理、三课课程地图、个性化练习、带引用 RAG、离线发布和最终发行验证。
+- 仍未完成：Tutor Graph 的真实状态编排，以及三条路线各阶段项目的深度实现与人工演示验收。
 
 ### 路线参考与取舍
 
