@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "a003718399579271c5113ca2dd976be20642941461101d21157a2a359a5bf1af",
-  "familyHash": "0aee3d7c437f77e981c2c8dcf69944d6eae14883e318bdebd67a3f3353385d8d",
+  "catalogHash": "0db6f85921f1163af383abf90ebaca695a07e01e07322d90ec9f9153966739cf",
+  "familyHash": "a2eb2502d3bbf0d91804931a82c9bb99b68bdea56ad358e5333b480e4b034a81",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -11579,7 +11579,7 @@
             "description": "状态与路由 的核心概念与实践。",
             "lessonIds": [
               "memory-research-project",
-              "langgraph-lesson-07",
+              "checkpoint-configuration",
               "langgraph-lesson-08",
               "langgraph-lesson-09",
               "langgraph-lesson-10",
@@ -12520,100 +12520,128 @@
             ]
           },
           {
-            "id": "langgraph-lesson-07",
+            "id": "checkpoint-configuration",
             "stageId": "langgraph-stage-2",
             "order": 8,
-            "title": "thread_id：写出可验证的实现",
-            "kicker": "LangGraph 学习",
-            "summary": "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
+            "title": "Checkpoint 配置与恢复边界",
+            "kicker": "langgraph 学习",
+            "summary": "为图运行配置稳定的 thread_id，并在缺少检查点时保留明确失败。",
             "minutes": 35,
             "prerequisites": [
-              "memory-research-project"
+              "state-reducers-routing"
             ],
-            "difficulty": "intermediate",
+            "difficulty": "beginner",
             "tags": [
-              "langgraph",
-              "stage-langgraph-stage-2"
+              "checkpoint",
+              "thread",
+              "recovery"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "thread_id要解决什么问题",
-                "body": "把研究任务中的真实任务先翻译成输入、处理和输出，再理解这个知识点：用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
+                "title": "Checkpoint 保存的是运行状态",
+                "body": "checkpoint 记录图在某个步骤的 state，恢复时必须知道要读取哪条 thread。它不是随手保存的一份全局变量，thread_id 是恢复契约的一部分。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "状态属于某条 thread",
+                  "保存与恢复使用同一键",
+                  "检查点缺失应显式失败"
                 ],
-                "example": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。"
+                "example": "saved = {\"thread-a\": {\"step\": 2}}\nthread_id = \"thread-a\""
               },
               {
                 "kind": "逐步拆解",
-                "title": "把thread_id拆成步骤",
-                "body": "先实现研究任务场景下题目要求的最小路径，再逐项验证：实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。",
+                "title": "先确认线程，再应用更新",
+                "body": "恢复流程应先读取指定 thread 的检查点，复制状态后再合并更新；未知 thread 不能猜测最近记录，也不能返回空状态冒充恢复成功。",
                 "bullets": [
-                  "把 thread_id 当作唯一键。",
-                  "不要遍历后猜测最相近的会话。",
-                  "用两个线程和一个未知 id 验证隔离。"
+                  "先查键再复制",
+                  "更新不修改原检查点",
+                  "未知线程保留 KeyError"
                 ],
-                "example": "输入 → 处理 → 输出"
+                "example": "state = dict(saved[thread_id])\nstate.update({\"step\": 3})"
               },
               {
                 "kind": "常见误区",
-                "title": "thread_id的边界检查",
-                "body": "不要只复现研究任务的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "Checkpoint 配置的常见误区",
+                "body": "完成“Checkpoint 配置与恢复边界”时，检查 thread_id 是否稳定、恢复是否隔离，以及缺失检查点是否保留真实错误。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "不要共用全局 thread",
+                  "不要吞掉缺失错误",
+                  "为恢复结果写回归测试"
                 ],
-                "example": "assert actual == expected"
+                "example": "resume(saved, thread_id)"
               }
             ],
             "videos": [
               {
-                "title": "LangGraph Essentials",
+                "title": "LangGraph Essentials - Python",
                 "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
                 "provider": "LangChain Academy",
                 "language": "英文",
-                "duration": "课程",
-                "note": "补充持久化、中断、恢复与多 Agent。"
+                "duration": "1 小时",
+                "note": "重点学习 checkpointer、thread_id 和恢复执行。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangGraph 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+                "label": "LangGraph persistence",
+                "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "全局 history → thread_id checkpoint",
+                "status": "replaced",
+                "explanation": "把运行状态按 thread_id 保存和恢复，避免多个会话共享隐式全局历史。",
+                "beforeCode": "history.append(state)\nstate = history[-1]",
+                "afterCode": "graph = builder.compile(checkpointer=checkpointer)\nconfig = {\"configurable\": {\"thread_id\": \"thread-a\"}}",
+                "officialSources": [
+                  {
+                    "label": "LangGraph persistence",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langgraph-lesson-11"
             ],
             "exercise": {
-              "prompt": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。",
-              "starterCode": "def get_thread_state(store, thread_id):\n    pass\n",
+              "prompt": "实现 resume(checkpoints, thread_id, updates)：复制指定 thread 的检查点并应用 updates，返回新状态；未知 thread_id 必须抛出 KeyError，且不能修改原检查点。",
+              "starterCode": "def resume(checkpoints, thread_id, updates):\n    pass\n",
               "hints": [
-                "把 thread_id 当作唯一键。",
-                "不要遍历后猜测最相近的会话。",
-                "用两个线程和一个未知 id 验证隔离。"
+                "先确定 thread_id",
+                "复制检查点后再合并更新",
+                "用未知线程验证真实失败"
               ],
-              "solution": "def get_thread_state(store, thread_id):\n    return store.get(thread_id)\n"
+              "solution": "def resume(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n"
             },
             "browserChecks": [
               {
-                "name": "线程隔离",
-                "expression": "get_thread_state({\"a\": {\"count\": 1}, \"b\": {\"count\": 2}}, \"b\") == {\"count\": 2}",
-                "failure": "应只返回指定 thread_id 的状态。",
+                "name": "恢复状态",
+                "expression": "resume({\"thread-a\": {\"step\": 2}}, \"thread-a\", {\"step\": 3}) == {\"step\": 3}",
+                "failure": "应从指定 thread 的检查点恢复并应用更新。",
                 "kind": "behavior"
               },
               {
-                "name": "未知线程",
-                "expression": "get_thread_state({\"a\": {\"count\": 1}}, \"missing\") is None",
-                "failure": "未知 thread_id 应明确返回 None。",
+                "name": "原状态不变",
+                "expression": "saved == {\"thread-a\": {\"step\": 2}}",
+                "failure": "恢复不能修改原检查点。",
+                "kind": "behavior"
+              },
+              {
+                "name": "缺失线程",
+                "expression": "_raises_key_error(lambda: resume(saved, \"missing\", {}))",
+                "failure": "未知 thread_id 应保留 KeyError。",
                 "kind": "behavior"
               }
             ]
@@ -12627,7 +12655,7 @@
             "summary": "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-07"
+              "checkpoint-configuration"
             ],
             "difficulty": "advanced",
             "tags": [

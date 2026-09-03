@@ -407,6 +407,23 @@ export const langgraphTrack: LearningTrack = {
         solution: `thread_state = ["topic", "plan", "findings", "sources", "draft", "approved"]\nstore_memory = ["language", "report_length", "preferred_sources"]\nnodes = ["plan", "research", "review_evidence", "write_report"]\ninterrupt_before = "write_report"`,
       },
     },
+    {
+      id: "checkpoint-configuration",
+      title: "Checkpoint 配置与恢复边界",
+      summary: "为图运行配置稳定的 thread_id，并在缺少检查点时保留明确失败。",
+      prerequisites: ["state-reducers-routing"], difficulty: "beginner", tags: ["checkpoint", "thread", "recovery"],
+      minutes: 35,
+      guide: [
+        { title: "Checkpoint 保存的是运行状态", body: "checkpoint 记录图在某个步骤的 state，恢复时必须知道要读取哪条 thread。它不是随手保存的一份全局变量，thread_id 是恢复契约的一部分。", bullets: ["状态属于某条 thread", "保存与恢复使用同一键", "检查点缺失应显式失败"], example: `saved = {\"thread-a\": {\"step\": 2}}\nthread_id = \"thread-a\"` },
+        { title: "先确认线程，再应用更新", body: "恢复流程应先读取指定 thread 的检查点，复制状态后再合并更新；未知 thread 不能猜测最近记录，也不能返回空状态冒充恢复成功。", bullets: ["先查键再复制", "更新不修改原检查点", "未知线程保留 KeyError"], example: `state = dict(saved[thread_id])\nstate.update({\"step\": 3})` },
+        { title: "Checkpoint 配置的常见误区", body: "完成“Checkpoint 配置与恢复边界”时，检查 thread_id 是否稳定、恢复是否隔离，以及缺失检查点是否保留真实错误。", bullets: ["不要共用全局 thread", "不要吞掉缺失错误", "为恢复结果写回归测试"], example: `resume(saved, thread_id)` },
+      ],
+      videos: [{ title: "LangGraph Essentials - Python", url: ACADEMY_ESSENTIALS, provider: "LangChain Academy", language: "英文", duration: "1 小时", note: "重点学习 checkpointer、thread_id 和恢复执行。" }],
+      officialSources: [{ label: "LangGraph persistence", url: PERSISTENCE }],
+      migrations: [{ title: "全局 history → thread_id checkpoint", status: "replaced", explanation: "把运行状态按 thread_id 保存和恢复，避免多个会话共享隐式全局历史。", beforeCode: "history.append(state)\nstate = history[-1]", afterCode: "graph = builder.compile(checkpointer=checkpointer)\nconfig = {\"configurable\": {\"thread_id\": \"thread-a\"}}", officialSources: [{ label: "LangGraph persistence", url: PERSISTENCE }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 resume(checkpoints, thread_id, updates)：复制指定 thread 的检查点并应用 updates，返回新状态；未知 thread_id 必须抛出 KeyError，且不能修改原检查点。", starterCode: `def resume(checkpoints, thread_id, updates):\n    pass\n`, solution: `def resume(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n` },
+    },
   ],
 };
 

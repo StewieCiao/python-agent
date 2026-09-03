@@ -498,6 +498,20 @@ test("LangGraph 执行与项目课保留真实迁移边界", async () => {
   }
 });
 
+test("LangGraph checkpoint 配置课明确 thread、恢复与失败边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "checkpoint-configuration");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("missing")));
+  assert.ok(lesson.migrations.length >= 1);
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("persistence")));
+});
+
 test("LangChain 检索与 Agent 项目课保留旧写法迁移边界", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

@@ -3,6 +3,7 @@ import type { LearningLesson } from "../authoring/types.ts";
 export const langgraphHints: Record<string, [string, string, string]> = {
   "graph-foundations": ["先写 State 的字段。", "再声明节点和边的去向。", "最后编译并验证 END 边界。"],
   "state-reducers-routing": ["区分覆盖字段和追加字段。", "让路由只返回已声明分支名。", "给循环设置可观察的终止条件。"],
+  "checkpoint-configuration": ["先确定 thread_id", "复制检查点后再合并更新", "用未知线程验证真实失败"],
   "persistence-short-memory": ["先为图配置 checkpointer。", "每次调用提供稳定 thread_id。", "用不同线程验证状态不会串线。"],
   "long-term-store": ["先确定 namespace、key 和 value。", "把 user_id 与 thread_id 分开。", "分别验证覆盖更新和缺失记录。"],
   "streaming-interrupts": ["先选择要展示的真实 stream 事件。", "在副作用之前调用 interrupt。", "恢复时再次验证用户决定。"],
@@ -18,6 +19,11 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
   "state-reducers-routing": [
     { name: "路由有限", expression: "route_result in {\"revise\", \"finish\"}", failure: "路由结果必须属于已声明分支。", kind: "behavior" },
     { name: "循环上限", expression: "attempts <= 2", failure: "循环应有明确的尝试次数上限。", kind: "behavior" },
+  ],
+  "checkpoint-configuration": [
+    { name: "恢复状态", expression: "resume({\"thread-a\": {\"step\": 2}}, \"thread-a\", {\"step\": 3}) == {\"step\": 3}", failure: "应从指定 thread 的检查点恢复并应用更新。", kind: "behavior" },
+    { name: "原状态不变", expression: "saved == {\"thread-a\": {\"step\": 2}}", failure: "恢复不能修改原检查点。", kind: "behavior" },
+    { name: "缺失线程", expression: "_raises_key_error(lambda: resume(saved, \"missing\", {}))", failure: "未知 thread_id 应保留 KeyError。", kind: "behavior" },
   ],
   "persistence-short-memory": [
     { name: "线程键", expression: "config[\"configurable\"][\"thread_id\"]", failure: "持久化调用必须提供 thread_id。", kind: "structure" },
