@@ -14,6 +14,7 @@ function source(value: { label: string; url: string }): CourseSource {
 function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackId: LearningTrack["id"]): CourseLesson {
   return {
     id: value.id,
+    ...(value.familyId ? { familyId: value.familyId } : {}),
     stageId: stage.id,
     order: index + 1,
     title: value.title,

@@ -156,6 +156,7 @@ test("正式作者路线保留讲解、提示、判题和项目关系", () => {
     currentLessonId: "rich-lesson",
     lessons: [{
       id: "rich-lesson",
+      familyId: "rich-family",
       title: "可观察练习",
       summary: "能根据输入返回结果",
       minutes: 20,
@@ -181,6 +182,7 @@ test("正式作者路线保留讲解、提示、判题和项目关系", () => {
   assert.equal(lesson.browserChecks.length, 1);
   assert.equal(lesson.project, true);
   assert.deepEqual(lesson.projectLinks, ["rich-lesson"]);
+  assert.equal(lesson.familyId, "rich-family");
 });
 
 test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查", async () => {
