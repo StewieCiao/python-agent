@@ -30,6 +30,14 @@ npm run dev
 
 需要完整桌面能力时，在 GitHub Actions 中手动运行 `Build desktop installers`，或推送一个 `v*` 标签。工作流会为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包并上传为可下载的 Actions artifact；安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
 
+在 macOS 上也可以本地生成当前架构的安装包：
+
+```bash
+npm run desktop:make
+```
+
+产物位于 `desktop/out/make/`；当前机器会生成对应架构的 DMG，其他平台请使用 GitHub Actions 的发行工作流。
+
 ## 课程与反馈
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
