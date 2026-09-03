@@ -1,8 +1,8 @@
 import type { CourseTrack } from "../schema.ts";
-import { authorTrackFromLessons } from "../formalizeTrack.ts";
+import { buildAuthoredTrack } from "../authoring/buildTrack.ts";
 import { langgraphTrack as sourceTrack } from "./source.ts";
 
-const authored = authorTrackFromLessons(sourceTrack, [
+const authored = buildAuthoredTrack(sourceTrack, [
   { id: "langgraph-stage-1", title: "图基础", description: "认识状态图、节点和边。" },
   { id: "langgraph-stage-2", title: "状态与路由", description: "合并状态并决定下一步。" },
   { id: "langgraph-stage-3", title: "持久化", description: "保存线程状态并支持恢复。" },

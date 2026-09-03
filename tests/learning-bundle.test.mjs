@@ -6,7 +6,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const schema = await import("../app/content/schema.ts");
-const { authorTrackFromLessons } = await import("../app/content/formalizeTrack.ts");
+const { buildAuthoredTrack } = await import("../app/content/authoring/buildTrack.ts");
 
 const validCatalog = {
   schemaVersion: "stewie-catalog-v1",
@@ -197,7 +197,7 @@ test("正式作者路线保留讲解、提示、判题和项目关系", () => {
     }],
   };
 
-  const authored = authorTrackFromLessons(track, [{ id: "langchain-stage-1", title: "起步", description: "建立基础" }]);
+  const authored = buildAuthoredTrack(track, [{ id: "langchain-stage-1", title: "起步", description: "建立基础" }]);
   const [lesson] = authored.lessons;
   assert.equal(lesson.guide.length, 3);
   assert.deepEqual(lesson.exercise.hints, ["定位", "拆解", "修正"]);
@@ -208,7 +208,7 @@ test("正式作者路线保留讲解、提示、判题和项目关系", () => {
 });
 
 test("正式作者转换器不会静默补写缺失讲解卡", async () => {
-  const { authorTrackFromLessons } = await import("../app/content/formalizeTrack.ts");
+  const { buildAuthoredTrack } = await import("../app/content/authoring/buildTrack.ts");
   const track = {
     id: "langgraph",
     title: "LangGraph",
@@ -226,7 +226,7 @@ test("正式作者转换器不会静默补写缺失讲解卡", async () => {
       exercise: { prompt: "完成", starterCode: "", hints: ["定位", "拆解", "修正"], solution: "完成" },
     }],
   };
-  assert.throws(() => authorTrackFromLessons(track, [{ id: "stage", title: "阶段", description: "说明" }]), /必须正好包含三张讲解卡/);
+  assert.throws(() => buildAuthoredTrack(track, [{ id: "stage", title: "阶段", description: "说明" }]), /必须正好包含三张讲解卡/);
 });
 
 test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查", async () => {

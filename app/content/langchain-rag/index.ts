@@ -1,8 +1,8 @@
 import type { CourseTrack } from "../schema.ts";
-import { authorTrackFromLessons } from "../formalizeTrack.ts";
+import { buildAuthoredTrack } from "../authoring/buildTrack.ts";
 import { langchainTrack as sourceTrack } from "./source.ts";
 
-const authored = authorTrackFromLessons(sourceTrack, [
+const authored = buildAuthoredTrack(sourceTrack, [
   { id: "langchain-rag-stage-1", title: "模型与提示", description: "建立模型输入输出与结构化交互。" },
   { id: "langchain-rag-stage-2", title: "Runnable", description: "把调用组合为可观察的数据流。" },
   { id: "langchain-rag-stage-3", title: "文档处理", description: "加载、切分并保留文档来源。" },

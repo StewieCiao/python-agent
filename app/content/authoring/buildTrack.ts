@@ -1,21 +1,14 @@
-import type { LearningLesson, LearningTrack } from "./authoring/types.ts";
-import type { CourseLesson, CourseSource, CourseStage } from "./schema.ts";
+import type { LearningLesson, LearningTrack } from "./types.ts";
+import type { CourseLesson, CourseSource, CourseStage } from "../schema.ts";
 
-type StageSpec = { id: string; title: string; description: string };
+export type StageSpec = { id: string; title: string; description: string };
 
 function source(value: { label: string; url: string }): CourseSource {
-  return {
-    ...value,
-    kind: value.url.includes("github.com") ? "official-repo" : "official-doc",
-    verifiedAt: "2026-09-02",
-  };
+  return { ...value, kind: value.url.includes("github.com") ? "official-repo" : "official-doc", verifiedAt: "2026-09-02" };
 }
 
 function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackId: LearningTrack["id"]): CourseLesson {
-  const guide = value.guide.map((item, guideIndex) => ({
-    kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区",
-    ...item,
-  })) as CourseLesson["guide"];
+  const guide = value.guide.map((item, guideIndex) => ({ kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区", ...item })) as CourseLesson["guide"];
   if (guide.length !== 3) throw new Error(`${value.id} 必须正好包含三张讲解卡`);
   return {
     id: value.id,
@@ -32,28 +25,15 @@ function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackI
     guide,
     videos: value.videos,
     officialSources: value.officialSources.map(source),
-    migrations: value.migrations.map((item) => ({
-      ...item,
-      officialSources: item.officialSources.map(source),
-      verifiedAt: "2026-09-02",
-      verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
-    })),
+    migrations: value.migrations.map((item) => ({ ...item, officialSources: item.officialSources.map(source), verifiedAt: "2026-09-02", verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" } })),
     project: value.project ?? false,
     projectLinks: value.projectLinks ?? [],
-    exercise: {
-      prompt: value.exercise.prompt,
-      starterCode: value.exercise.starterCode,
-      hints: value.exercise.hints,
-      solution: value.exercise.solution,
-    },
+    exercise: { prompt: value.exercise.prompt, starterCode: value.exercise.starterCode, hints: value.exercise.hints, solution: value.exercise.solution },
     browserChecks: value.browserChecks ?? [],
   };
 }
 
-export function authorTrackFromLessons(
-  track: LearningTrack,
-  stageSpecs: readonly StageSpec[],
-): { stages: CourseStage[]; lessons: CourseLesson[] } {
+export function buildAuthoredTrack(track: LearningTrack, stageSpecs: readonly StageSpec[]): { stages: CourseStage[]; lessons: CourseLesson[] } {
   if (stageSpecs.length === 0) throw new Error(`课程路线缺少阶段：${track.id}`);
   const stages = stageSpecs.map((stage, index) => ({ ...stage, order: index + 1, lessonIds: [] as string[] }));
   const lessons = track.lessons.map((value, index) => {
