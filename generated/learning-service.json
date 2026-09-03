@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
   "catalogHash": "e26d4dc26b3b7a3df485702d810805dcfd4f9d8e5e69c3071622e5be6f1305eb",
-  "familyHash": "9afbeff9df66b137d8e73f4736a8547501f6b1c2d29ca76ecfbfa83eeb79838f",
+  "familyHash": "b73b7f7b1421a052fb06841c192effc0422c876c93b147e1c194e67447f9c556",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -14937,6 +14937,116 @@
       "constraints": [
         "two output lines",
         "second print contains multiplication"
+      ],
+      "variants": [
+        {
+          "label": "计算 9 * 6",
+          "values": "9 * 6",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"54\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计算 11 * 5",
+          "values": "11 * 5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"55\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计算 12 * 4",
+          "values": "12 * 4",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"48\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计算 13 * 7",
+          "values": "13 * 7",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"91\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计算 15 * 8",
+          "values": "15 * 8",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"120\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计算 17 * 3",
+          "values": "17 * 3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "len(_output_lines) == 2 and _output_lines[1].strip() == \"51\"",
+              "failure": "第二行应输出本变体乘法结果，并保留直接乘法表达式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-loops-v1": {
@@ -14953,6 +15063,116 @@
       "constraints": [
         "sum even values",
         "one loop in target function"
+      ],
+      "variants": [
+        {
+          "label": "输入 [14, 3, 8, 11]",
+          "values": "[14, 3, 8, 11]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([14, 3, 8, 11]) == 22",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [5, 12, 17, 20]",
+          "values": "[5, 12, 17, 20]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([5, 12, 17, 20]) == 32",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [-4, 7, 0, 9]",
+          "values": "[-4, 7, 0, 9]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([-4, 7, 0, 9]) == -4",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [2, 15, 18, -3]",
+          "values": "[2, 15, 18, -3]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([2, 15, 18, -3]) == 20",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [21, 6, 0, -8]",
+          "values": "[21, 6, 0, -8]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([21, 6, 0, -8]) == -2",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [13, 16, 19, 22]",
+          "values": "[13, 16, 19, 22]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "sum_even([13, 16, 19, 22]) == 38",
+              "failure": "应只累加本变体输入中的偶数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "sum_even([]) == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-lists-v1": {
@@ -14969,6 +15189,116 @@
       "constraints": [
         "return a transformed list",
         "preserve input order"
+      ],
+      "variants": [
+        {
+          "label": "输入 [41, 60, 99]",
+          "values": "[41, 60, 99]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([41, 60, 99]) == [65, 100]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [58, 76, 101]",
+          "values": "[58, 76, 101]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([58, 76, 101]) == [81, 100]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [0, 64, 97]",
+          "values": "[0, 64, 97]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([0, 64, 97]) == [69, 100]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [12, 55, 88]",
+          "values": "[12, 55, 88]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([12, 55, 88]) == [93]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [67, 3, 104]",
+          "values": "[67, 3, 104]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([67, 3, 104]) == [72, 100]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 [25, 72, 96]",
+          "values": "[25, 72, 96]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "improve_scores([25, 72, 96]) == [77, 100]",
+              "failure": "应筛选、加分并封顶本变体列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "improve_scores([]) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-dictionaries-v1": {
@@ -14985,6 +15315,116 @@
       "constraints": [
         "count every input key",
         "support unseen keys"
+      ],
+      "variants": [
+        {
+          "label": "输入 ['go', 'py', 'go', 'rs']",
+          "values": "['go', 'py', 'go', 'rs']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['go', 'py', 'go', 'rs']) == {\"go\": 2, \"py\": 1, \"rs\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 ['js', 'ts', 'js', 'go', 'ts']",
+          "values": "['js', 'ts', 'js', 'go', 'ts']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['js', 'ts', 'js', 'go', 'ts']) == {\"js\": 2, \"ts\": 2, \"go\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 ['rust', 'go', 'rust']",
+          "values": "['rust', 'go', 'rust']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['rust', 'go', 'rust']) == {\"rust\": 2, \"go\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 ['java', 'kotlin', 'java', 'zig']",
+          "values": "['java', 'kotlin', 'java', 'zig']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['java', 'kotlin', 'java', 'zig']) == {\"java\": 2, \"kotlin\": 1, \"zig\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 ['elixir', 'go', 'elixir']",
+          "values": "['elixir', 'go', 'elixir']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['elixir', 'go', 'elixir']) == {\"elixir\": 2, \"go\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "输入 ['swift', 'dart', 'swift', 'lua']",
+          "values": "['swift', 'dart', 'swift', 'lua']",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "word_counts(['swift', 'dart', 'swift', 'lua']) == {\"swift\": 2, \"dart\": 1, \"lua\": 1}",
+              "failure": "应按传入键动态统计，不能写死键名。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "word_counts([]) == {}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-exceptions-v1": {
@@ -15001,6 +15441,116 @@
       "constraints": [
         "catch ValueError only",
         "let TypeError escape"
+      ],
+      "variants": [
+        {
+          "label": "文本 '42'",
+          "values": "'42'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('42') == 42",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "文本 'oops'",
+          "values": "'oops'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('oops') == None",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "文本 '3.5'",
+          "values": "'3.5'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('3.5') == None",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "文本 '-7'",
+          "values": "'-7'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('-7') == -7",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "文本 '100'",
+          "values": "'100'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('100') == 100",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "文本 '1e2'",
+          "values": "'1e2'",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_age('1e2') == None",
+              "failure": "只能把无法转换的文本变为 None，有效整数应保留。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_age(' 27 ') == 27",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-decorators-v1": {
@@ -15017,6 +15567,116 @@
       "constraints": [
         "preserve positional and keyword arguments",
         "call wrapped function twice"
+      ],
+      "variants": [
+        {
+          "label": "调用 multiply(3, factor=4)",
+          "values": "3, factor=4",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "调用 multiply(5, factor=2)",
+          "values": "5, factor=2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "调用 multiply(7, factor=3)",
+          "values": "7, factor=3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "调用 multiply(2, factor=9)",
+          "values": "2, factor=9",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "调用 multiply(6, factor=5)",
+          "values": "6, factor=5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "调用 multiply(9, factor=2)",
+          "values": "9, factor=2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_decorator_contract(twice)",
+              "failure": "应原样转发本变体的位置和关键字参数，并调用两次。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_decorator_kwargs_probe(twice)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     },
     "python-expense-v1": {
@@ -15033,6 +15693,116 @@
       "constraints": [
         "aggregate arbitrary categories",
         "one loop in summarize"
+      ],
+      "variants": [
+        {
+          "label": "记录 food=12、travel=30",
+          "values": "food=12, travel=30",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"food\",\"amount\":12}, {\"category\":\"travel\",\"amount\":30}]) == {\"total\": 42, \"by_category\": {\"food\": 12, \"travel\": 30}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "记录 books=18、food=9",
+          "values": "books=18, food=9",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"books\",\"amount\":18}, {\"category\":\"food\",\"amount\":9}]) == {\"total\": 27, \"by_category\": {\"books\": 18, \"food\": 9}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "记录 travel=7、tools=25",
+          "values": "travel=7, tools=25",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"travel\",\"amount\":7}, {\"category\":\"tools\",\"amount\":25}]) == {\"total\": 32, \"by_category\": {\"travel\": 7, \"tools\": 25}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "记录 rent=40、music=6",
+          "values": "rent=40, music=6",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"rent\",\"amount\":40}, {\"category\":\"music\",\"amount\":6}]) == {\"total\": 46, \"by_category\": {\"rent\": 40, \"music\": 6}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "记录 taxi=11、books=13",
+          "values": "taxi=11, books=13",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"taxi\",\"amount\":11}, {\"category\":\"books\",\"amount\":13}]) == {\"total\": 24, \"by_category\": {\"taxi\": 11, \"books\": 13}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "记录 coffee=5、hardware=27",
+          "values": "coffee=5, hardware=27",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize([{\"category\":\"coffee\",\"amount\":5}, {\"category\":\"hardware\",\"amount\":27}]) == {\"total\": 32, \"by_category\": {\"coffee\": 5, \"hardware\": 27}}",
+              "failure": "应从本变体记录动态汇总总额和分类。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
       ]
     }
   },

@@ -5,6 +5,16 @@ def _family_records(bundle):
     return families.values()
 
 
+def _valid_checks(value):
+    return isinstance(value, list) and len(value) >= 2 and all(
+        isinstance(item, dict)
+        and set(item) == {"name", "expression", "failure", "kind"}
+        and all(isinstance(item[field], str) and item[field].strip() for field in ("name", "expression", "failure"))
+        and item["kind"] in {"behavior", "structure"}
+        for item in value
+    )
+
+
 def select_family(bundle, lesson_id, mistake_codes):
     if not isinstance(lesson_id, str) or not isinstance(mistake_codes, list):
         raise ValueError("family 选择输入无效")
@@ -21,6 +31,7 @@ def select_family(bundle, lesson_id, mistake_codes):
             "difficulty": family["difficulty"],
             "mistakeCodes": list(mistake_codes),
             "constraints": list(family["constraints"]),
+            "variants": list(family["variants"]),
         }
     raise ValueError("未找到课程对应的 family")
 
@@ -28,7 +39,7 @@ def select_family(bundle, lesson_id, mistake_codes):
 def validate_generated_exercise(family, candidate):
     if not isinstance(family, dict) or not isinstance(candidate, dict):
         raise ValueError("题目输入结构无效")
-    required = {"familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters"}
+    required = {"familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters", "tests"}
     if set(candidate) != required:
         raise ValueError("题目字段无效")
     if candidate["familyId"] != family.get("id") or candidate["validatorVersion"] != family.get("validatorVersion"):
@@ -42,53 +53,30 @@ def validate_generated_exercise(family, candidate):
     parameters = candidate["parameters"]
     if not isinstance(parameters, dict) or set(parameters) != {"seed", "label", "values"} or not isinstance(parameters["seed"], int) or not isinstance(parameters["label"], str) or not isinstance(parameters["values"], str):
         raise ValueError("题目参数无效")
-    variants = _VARIANTS.get(family["id"])
-    expected_values = {label: values for label, values in variants}
-    if parameters["label"] not in expected_values or parameters["values"] != expected_values[parameters["label"]]:
+    variants = family.get("variants")
+    if not isinstance(variants, list):
+        raise ValueError("family 变体无效")
+    selected = next((item for item in variants if isinstance(item, dict) and item.get("label") == parameters["label"] and item.get("values") == parameters["values"]), None)
+    if selected is None or not _valid_checks(selected.get("checks")):
         raise ValueError("题目参数不属于 family")
+    tests = candidate["tests"]
+    if not _valid_checks(tests) or tests != selected["checks"]:
+        raise ValueError("题目测试不属于 family")
     return {"accepted": True, "exercise": candidate}
-
-
-_VARIANTS = {
-    "python-loops-v1": [
-        ("输入 [14, 3, 8, 11]", "[14, 3, 8, 11]"),
-        ("输入 [5, 12, 17, 20]", "[5, 12, 17, 20]"),
-        ("输入 [-4, 7, 0, 9]", "[-4, 7, 0, 9]"),
-        ("输入 [2, 15, 18, -3]", "[2, 15, 18, -3]"),
-        ("输入 [21, 6, 0, -8]", "[21, 6, 0, -8]"),
-        ("输入 [13, 16, 19, 22]", "[13, 16, 19, 22]"),
-    ],
-    "python-lists-v1": [
-        ("输入 [41, 60, 99]", "[41, 60, 99]"),
-        ("输入 [58, 76, 101]", "[58, 76, 101]"),
-        ("输入 [0, 64, 97]", "[0, 64, 97]"),
-        ("输入 [12, 55, 88]", "[12, 55, 88]"),
-        ("输入 [67, 3, 104]", "[67, 3, 104]"),
-        ("输入 [25, 72, 96]", "[25, 72, 96]"),
-    ],
-    "python-dictionaries-v1": [
-        ("输入 ['go', 'py', 'go', 'rs']", "['go', 'py', 'go', 'rs']"),
-        ("输入 ['js', 'ts', 'js', 'go', 'ts']", "['js', 'ts', 'js', 'go', 'ts']"),
-        ("输入 ['rust', 'go', 'rust']", "['rust', 'go', 'rust']"),
-        ("输入 ['java', 'kotlin', 'java', 'zig']", "['java', 'kotlin', 'java', 'zig']"),
-        ("输入 ['elixir', 'go', 'elixir']", "['elixir', 'go', 'elixir']"),
-        ("输入 ['swift', 'dart', 'swift', 'lua']", "['swift', 'dart', 'swift', 'lua']"),
-    ],
-    "python-output-v1": [("计算 9 * 6", "9 * 6"), ("计算 11 * 5", "11 * 5"), ("计算 12 * 4", "12 * 4"), ("计算 13 * 7", "13 * 7"), ("计算 15 * 8", "15 * 8"), ("计算 17 * 3", "17 * 3")],
-    "python-exceptions-v1": [("文本 '42'", "'42'"), ("文本 'oops'", "'oops'"), ("文本 '3.5'", "'3.5'"), ("文本 '-7'", "'-7'"), ("文本 '100'", "'100'"), ("文本 '1e2'", "'1e2'")],
-    "python-decorators-v1": [("调用 multiply(3, factor=4)", "3, factor=4"), ("调用 multiply(5, factor=2)", "5, factor=2"), ("调用 multiply(7, factor=3)", "7, factor=3"), ("调用 multiply(2, factor=9)", "2, factor=9"), ("调用 multiply(6, factor=5)", "6, factor=5"), ("调用 multiply(9, factor=2)", "9, factor=2")],
-    "python-expense-v1": [("记录 food=12、travel=30", "food=12, travel=30"), ("记录 books=18、food=9", "books=18, food=9"), ("记录 travel=7、tools=25", "travel=7, tools=25"), ("记录 rent=40、music=6", "rent=40, music=6"), ("记录 taxi=11、books=13", "taxi=11, books=13"), ("记录 coffee=5、hardware=27", "coffee=5, hardware=27")],
-}
 
 
 def generate_personalized_exercise(selection, seed, recent_prompts):
     if not isinstance(selection, dict) or not isinstance(seed, int) or not isinstance(recent_prompts, list):
         raise ValueError("个性题选择输入无效")
     family_id = selection.get("familyId")
-    variants = _VARIANTS.get(family_id)
-    if not variants:
+    variants = selection.get("variants")
+    if not isinstance(variants, list) or not variants:
         raise ValueError("family 没有已审校的题目变体")
-    label, values = variants[seed % len(variants)]
+    selected = variants[seed % len(variants)]
+    if not isinstance(selected, dict) or not isinstance(selected.get("label"), str) or not isinstance(selected.get("values"), str) or not _valid_checks(selected.get("checks")):
+        raise ValueError("family 变体结构无效")
+    label = selected["label"]
+    values = selected["values"]
     constraints = selection.get("constraints", [])
     if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
         raise ValueError("family 约束无效")
@@ -109,4 +97,5 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
             "用题目给出的新输入和一个边界输入复测，确认没有写死示例。",
         ],
         "parameters": {"seed": seed, "label": label, "values": values},
+        "tests": selected["checks"],
     }

@@ -144,7 +144,7 @@ export function LearningApp() {
   const [revealedHints, setRevealedHints] = useState<Record<string, number>>({});
   const [notice, setNotice] = useState("");
   const [chatOpen, setChatOpen] = useState(false);
-  const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
+  const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; tests: LessonTest[]; recommendation: string } | null>(null);
   const [personalizedStatus, setPersonalizedStatus] = useState("");
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
   const [reviewQueueCount, setReviewQueueCount] = useState<number | null>(null);
@@ -183,6 +183,7 @@ export function LearningApp() {
         prompt: result.exercise.prompt,
         starterCode: result.exercise.starterCode,
         hints: result.exercise.hints,
+        tests: result.exercise.tests,
         recommendation: result.recommendation.mistakeCodes.length > 0
           ? `根据错题模式：${result.recommendation.mistakeCodes.join("、")}`
           : "根据当前练习 family 推荐",
@@ -415,9 +416,10 @@ export function LearningApp() {
     flushProgressSave();
     runLockRef.current = true;
     const token = crypto.randomUUID();
+    const activeExercise = personalized;
     const snapshot = createRunSnapshot({
       token,
-      lesson,
+      lesson: activeExercise ? { ...lesson, requirements: [activeExercise.prompt] } : lesson,
       code,
       attemptedHints: lesson.hints.slice(0, visibleHintCount),
     });
@@ -425,7 +427,7 @@ export function LearningApp() {
     setNotice("");
 
     try {
-      const execution = await runInWorker(token, snapshot.code, lesson.tests);
+      const execution = await runInWorker(token, snapshot.code, personalized?.tests ?? lesson.tests);
       if (!snapshotMatches(snapshot, currentLessonIdRef.current, codeRef.current)) {
         setNotice("运行完成，但当前关卡或代码已改变；旧结果未显示。");
         return;
@@ -723,7 +725,7 @@ export function LearningApp() {
                 <div className="task-card">
                   <div className="task-topline">
                     <strong>{lesson.project ? "项目任务" : "本关任务"}</strong>
-                    <span>{lesson.tests.length} 个自动测试</span>
+                      <span>{(personalized?.tests ?? lesson.tests).length} 个自动测试</span>
                   </div>
                   <ul>
                     {lesson.requirements.map((requirement) => (
@@ -742,6 +744,7 @@ export function LearningApp() {
                     {personalized && <div className="personalized-result">
                       <span>{personalized.recommendation}</span>
                       <strong>{personalized.prompt}</strong>
+                      <small>本题使用独立的 family 测试，不复用原关卡样例。</small>
                       <pre><code>{personalized.starterCode}</code></pre>
                       {personalized.hints.map((hint) => <p key={hint}>提示：{hint}</p>)}
                       <button type="button" onClick={() => {

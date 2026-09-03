@@ -263,7 +263,7 @@ export async function loadMastery(now = new Date().toISOString()): Promise<Maste
 }
 
 export async function loadPersonalizedExercise(lessonId: string, seed: number): Promise<{
-  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown> };
+  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown>; tests: Array<{ name: string; expression: string; failure: string; kind: "behavior" | "structure" }> };
   recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
 }> {
   const desktop = desktopBridge();

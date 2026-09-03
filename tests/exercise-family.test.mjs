@@ -19,3 +19,15 @@ test("family id 和 lesson 绑定不重复", () => {
   assert.equal(new Set(exerciseFamilies.map((family) => family.id)).size, exerciseFamilies.length);
   assert.equal(new Set(exerciseFamilies.flatMap((family) => family.lessonIds)).size, exerciseFamilies.length);
 });
+
+test("每个 family 的六个变体都携带至少两项可执行检查", () => {
+  for (const family of exerciseFamilies) {
+    assert.equal(family.variants.length, 6, family.id);
+    assert.equal(new Set(family.variants.map((item) => item.label)).size, 6, family.id);
+    for (const item of family.variants) {
+      assert.ok(item.values.length > 0);
+      assert.ok(item.checks.length >= 2);
+      assert.ok(item.checks.every((check) => check.expression && check.failure));
+    }
+  }
+});

@@ -1,13 +1,69 @@
-import type { ExerciseFamily } from "./schema.ts";
+import type { ExerciseFamily, ExerciseVariant, PersonalizedCheck } from "./schema.ts";
+
+function variant(label: string, values: string, checks: PersonalizedCheck[]): ExerciseVariant {
+  return { label, values, checks };
+}
+
+const loops = [
+  ["输入 [14, 3, 8, 11]", "[14, 3, 8, 11]", 22], ["输入 [5, 12, 17, 20]", "[5, 12, 17, 20]", 32], ["输入 [-4, 7, 0, 9]", "[-4, 7, 0, 9]", -4],
+  ["输入 [2, 15, 18, -3]", "[2, 15, 18, -3]", 20], ["输入 [21, 6, 0, -8]", "[21, 6, 0, -8]", -2], ["输入 [13, 16, 19, 22]", "[13, 16, 19, 22]", 38],
+] as const;
+const lists = [
+  ["输入 [41, 60, 99]", "[41, 60, 99]", "[65, 100]"], ["输入 [58, 76, 101]", "[58, 76, 101]", "[81, 100]"], ["输入 [0, 64, 97]", "[0, 64, 97]", "[69, 100]"],
+  ["输入 [12, 55, 88]", "[12, 55, 88]", "[93]"], ["输入 [67, 3, 104]", "[67, 3, 104]", "[72, 100]"], ["输入 [25, 72, 96]", "[25, 72, 96]", "[77, 100]"],
+] as const;
+const dictionaries = [
+  ["输入 ['go', 'py', 'go', 'rs']", "['go', 'py', 'go', 'rs']", '{"go": 2, "py": 1, "rs": 1}'], ["输入 ['js', 'ts', 'js', 'go', 'ts']", "['js', 'ts', 'js', 'go', 'ts']", '{"js": 2, "ts": 2, "go": 1}'], ["输入 ['rust', 'go', 'rust']", "['rust', 'go', 'rust']", '{"rust": 2, "go": 1}'],
+  ["输入 ['java', 'kotlin', 'java', 'zig']", "['java', 'kotlin', 'java', 'zig']", '{"java": 2, "kotlin": 1, "zig": 1}'], ["输入 ['elixir', 'go', 'elixir']", "['elixir', 'go', 'elixir']", '{"elixir": 2, "go": 1}'], ["输入 ['swift', 'dart', 'swift', 'lua']", "['swift', 'dart', 'swift', 'lua']", '{"swift": 2, "dart": 1, "lua": 1}'],
+] as const;
+const exceptions = [["文本 '42'", "'42'", "42"], ["文本 'oops'", "'oops'", "None"], ["文本 '3.5'", "'3.5'", "None"], ["文本 '-7'", "'-7'", "-7"], ["文本 '100'", "'100'", "100"], ["文本 '1e2'", "'1e2'", "None"]] as const;
+const expenses = [
+  ["记录 food=12、travel=30", "food=12, travel=30", '{"total": 42, "by_category": {"food": 12, "travel": 30}}'], ["记录 books=18、food=9", "books=18, food=9", '{"total": 27, "by_category": {"books": 18, "food": 9}}'], ["记录 travel=7、tools=25", "travel=7, tools=25", '{"total": 32, "by_category": {"travel": 7, "tools": 25}}'],
+  ["记录 rent=40、music=6", "rent=40, music=6", '{"total": 46, "by_category": {"rent": 40, "music": 6}}'], ["记录 taxi=11、books=13", "taxi=11, books=13", '{"total": 24, "by_category": {"taxi": 11, "books": 13}}'], ["记录 coffee=5、hardware=27", "coffee=5, hardware=27", '{"total": 32, "by_category": {"coffee": 5, "hardware": 27}}'],
+] as const;
+const output = [["计算 9 * 6", "9 * 6", 54], ["计算 11 * 5", "11 * 5", 55], ["计算 12 * 4", "12 * 4", 48], ["计算 13 * 7", "13 * 7", 91], ["计算 15 * 8", "15 * 8", 120], ["计算 17 * 3", "17 * 3", 51]] as const;
+
+const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
+  { name: "变体行为", expression: first, failure, kind: "behavior" },
+  { name: "边界行为", expression: second, failure: "还应处理空输入或未出现过的边界。", kind: "behavior" },
+];
 
 export const exerciseFamilies: ExerciseFamily[] = [
-  { id: "python-output-v1", lessonIds: ["first-output"], difficulty: "beginner", validatorVersion: "1", mistakeCodes: ["wrong-line", "missing-expression"], constraints: ["two output lines", "second print contains multiplication"] },
-  { id: "python-loops-v1", lessonIds: ["loops"], difficulty: "beginner", validatorVersion: "1", mistakeCodes: ["missing-loop", "wrong-boundary"], constraints: ["sum even values", "one loop in target function"] },
-  { id: "python-lists-v1", lessonIds: ["lists"], difficulty: "beginner", validatorVersion: "1", mistakeCodes: ["wrong-filter", "wrong-cap"], constraints: ["return a transformed list", "preserve input order"] },
-  { id: "python-dictionaries-v1", lessonIds: ["dictionaries"], difficulty: "beginner", validatorVersion: "1", mistakeCodes: ["hard-coded-key", "wrong-count"], constraints: ["count every input key", "support unseen keys"] },
-  { id: "python-exceptions-v1", lessonIds: ["exceptions"], difficulty: "intermediate", validatorVersion: "1", mistakeCodes: ["wrong-handler", "swallowed-type-error"], constraints: ["catch ValueError only", "let TypeError escape"] },
-  { id: "python-decorators-v1", lessonIds: ["decorators"], difficulty: "advanced", validatorVersion: "1", mistakeCodes: ["lost-kwargs", "wrong-call-count"], constraints: ["preserve positional and keyword arguments", "call wrapped function twice"] },
-  { id: "python-expense-v1", lessonIds: ["project-expense"], difficulty: "intermediate", validatorVersion: "1", mistakeCodes: ["hard-coded-category", "extra-traversal"], constraints: ["aggregate arbitrary categories", "one loop in summarize"] },
+  {
+    id: "python-output-v1", lessonIds: ["first-output"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["wrong-line", "missing-expression"], constraints: ["two output lines", "second print contains multiplication"],
+    variants: output.map(([label, expression, expected]) => variant(label, expression, twoBehaviorChecks(`len(_output_lines) == 2 and _output_lines[1].strip() == "${expected}"`, "_second_print_uses_multiplication(_source)", "第二行应输出本变体乘法结果，并保留直接乘法表达式。"))),
+  },
+  {
+    id: "python-loops-v1", lessonIds: ["loops"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["missing-loop", "wrong-boundary"], constraints: ["sum even values", "one loop in target function"],
+    variants: loops.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`sum_even(${values}) == ${expected}`, "sum_even([]) == 0", "应只累加本变体输入中的偶数。"))),
+  },
+  {
+    id: "python-lists-v1", lessonIds: ["lists"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["wrong-filter", "wrong-cap"], constraints: ["return a transformed list", "preserve input order"],
+    variants: lists.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`improve_scores(${values}) == ${expected}`, "improve_scores([]) == []", "应筛选、加分并封顶本变体列表。"))),
+  },
+  {
+    id: "python-dictionaries-v1", lessonIds: ["dictionaries"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["hard-coded-key", "wrong-count"], constraints: ["count every input key", "support unseen keys"],
+    variants: dictionaries.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`word_counts(${values}) == ${expected}`, "word_counts([]) == {}", "应按传入键动态统计，不能写死键名。"))),
+  },
+  {
+    id: "python-exceptions-v1", lessonIds: ["exceptions"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-handler", "swallowed-type-error"], constraints: ["catch ValueError only", "let TypeError escape"],
+    variants: exceptions.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`parse_age(${values}) == ${expected}`, "parse_age(' 27 ') == 27", "只能把无法转换的文本变为 None，有效整数应保留。"))),
+  },
+  {
+    id: "python-decorators-v1", lessonIds: ["decorators"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["lost-kwargs", "wrong-call-count"], constraints: ["preserve positional and keyword arguments", "call wrapped function twice"],
+    variants: ["3, factor=4", "5, factor=2", "7, factor=3", "2, factor=9", "6, factor=5", "9, factor=2"].map((call) => variant(`调用 multiply(${call})`, call, twoBehaviorChecks("_decorator_contract(twice)", "_decorator_kwargs_probe(twice)", "应原样转发本变体的位置和关键字参数，并调用两次。"))),
+  },
+  {
+    id: "python-expense-v1", lessonIds: ["project-expense"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["hard-coded-category", "extra-traversal"], constraints: ["aggregate arbitrary categories", "one loop in summarize"],
+    variants: expenses.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`summarize([${values.split(", ").map((item) => { const [category, amount] = item.split("="); return `{\"category\":\"${category}\",\"amount\":${amount}}`; }).join(", ")}]) == ${expected}`, 'summarize([]) == {"total": 0, "by_category": {}}', "应从本变体记录动态汇总总额和分类。"))),
+  },
 ];
 
 const familyIds = new Set<string>();
@@ -20,7 +76,7 @@ for (const family of exerciseFamilies) {
     if (lessonIds.has(lessonId)) throw new Error(`练习 family 重复绑定 ${lessonId}`);
     lessonIds.add(lessonId);
   }
-  if (family.constraints.length === 0 || family.mistakeCodes.length === 0) {
-    throw new Error(`练习 family 缺少约束或错误模式 ${family.id}`);
+  if (family.constraints.length === 0 || family.mistakeCodes.length === 0 || family.variants.length !== 6 || family.variants.some((item) => item.checks.length < 2)) {
+    throw new Error(`练习 family 缺少约束、变体或测试 ${family.id}`);
   }
 }

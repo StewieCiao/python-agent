@@ -54,7 +54,7 @@ export type MasteryResult = {
 };
 
 export type PersonalizedExerciseResult = {
-  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown> };
+  exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown>; tests: Array<{ name: string; expression: string; failure: string; kind: "behavior" | "structure" }> };
   recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
 };
 
@@ -132,7 +132,7 @@ function isMasteryResult(value: unknown): value is MasteryResult {
 
 function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExerciseResult {
   if (!isRecord(value) || !hasExactKeys(value, ["exercise", "recommendation"]) || !isRecord(value.exercise) || !isRecord(value.recommendation)) return false;
-  return hasExactKeys(value.exercise, ["familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters"]) && typeof value.exercise.familyId === "string" && typeof value.exercise.validatorVersion === "string" && typeof value.exercise.prompt === "string" && typeof value.exercise.starterCode === "string" && Array.isArray(value.exercise.hints) && value.exercise.hints.every((hint) => typeof hint === "string") && isRecord(value.exercise.parameters) && hasExactKeys(value.recommendation, ["lessonId", "familyId", "mistakeCodes", "difficulty"]) && typeof value.recommendation.lessonId === "string" && typeof value.recommendation.familyId === "string" && Array.isArray(value.recommendation.mistakeCodes) && value.recommendation.mistakeCodes.every((code) => typeof code === "string") && typeof value.recommendation.difficulty === "string";
+  return hasExactKeys(value.exercise, ["familyId", "validatorVersion", "prompt", "starterCode", "hints", "parameters", "tests"]) && typeof value.exercise.familyId === "string" && typeof value.exercise.validatorVersion === "string" && typeof value.exercise.prompt === "string" && typeof value.exercise.starterCode === "string" && Array.isArray(value.exercise.hints) && value.exercise.hints.every((hint) => typeof hint === "string") && isRecord(value.exercise.parameters) && Array.isArray(value.exercise.tests) && value.exercise.tests.length >= 2 && value.exercise.tests.every((item) => isRecord(item) && hasExactKeys(item, ["name", "expression", "failure", "kind"]) && typeof item.name === "string" && typeof item.expression === "string" && typeof item.failure === "string" && (item.kind === "behavior" || item.kind === "structure")) && hasExactKeys(value.recommendation, ["lessonId", "familyId", "mistakeCodes", "difficulty"]) && typeof value.recommendation.lessonId === "string" && typeof value.recommendation.familyId === "string" && Array.isArray(value.recommendation.mistakeCodes) && value.recommendation.mistakeCodes.every((code) => typeof code === "string") && typeof value.recommendation.difficulty === "string";
 }
 
 function isParsedRagDocuments(value: unknown): value is ParsedRagDocument[] {

@@ -7,12 +7,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
 
 
+def variants(count=6):
+    return [
+        {"label": f"输入 {index}", "values": str(index), "checks": [
+            {"name": "行为", "expression": f"value == {index}", "failure": "失败", "kind": "behavior"},
+            {"name": "边界", "expression": "True", "failure": "失败", "kind": "behavior"},
+        ]}
+        for index in range(count)
+    ]
+
+
 class ExerciseTest(unittest.TestCase):
     def test_select_family_uses_known_lesson_and_mistakes(self):
         bundle = {
             "families": {
                 "python-loops-v1": {
-                    "id": "python-loops-v1",
+                    "id": "python-loops-v1", "variants": variants(),
                     "lessonIds": ["loops"],
                     "difficulty": "beginner",
                     "validatorVersion": "1",
@@ -61,17 +71,22 @@ class ExerciseTest(unittest.TestCase):
 
     def test_generated_variant_passes_known_parameter_validator(self):
         selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner", "constraints": ["sum even values"], "starterCode": "def sum_even(values):\n    pass\n"}
+        selection["variants"] = variants()
         candidate = generate_personalized_exercise(selection, 1, [])
+        self.assertEqual(len(candidate["tests"]), 2)
         checked = validate_generated_exercise(
-            {"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"]},
+            {"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"], "variants": variants()},
             candidate,
         )
         self.assertEqual(checked, {"accepted": True, "exercise": candidate})
+        tampered = {**candidate, "tests": [{**candidate["tests"][0], "expression": "True"}, candidate["tests"][1]]}
+        with self.assertRaisesRegex(ValueError, "题目测试"):
+            validate_generated_exercise({"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"], "variants": variants()}, tampered)
 
     def test_personalized_variant_is_deterministic_and_not_recent_duplicate(self):
         bundle = {"families": {
             "python-loops-v1": {
-                "id": "python-loops-v1", "lessonIds": ["loops"], "difficulty": "beginner",
+            "id": "python-loops-v1", "lessonIds": ["loops"], "difficulty": "beginner", "variants": variants(),
                 "validatorVersion": "1", "mistakeCodes": ["missing-loop"], "constraints": ["sum even values"],
             }
         }}
@@ -95,7 +110,7 @@ class ExerciseTest(unittest.TestCase):
         for family_id in family_ids:
             prompts = {
                 generate_personalized_exercise(
-                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner", "constraints": ["verified family behavior"], "starterCode": "def exercise(value):\n    pass\n"},
+                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner", "constraints": ["verified family behavior"], "starterCode": "def exercise(value):\n    pass\n", "variants": variants()},
                     seed,
                     [],
                 )["prompt"]
