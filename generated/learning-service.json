@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f8170840aa4d37c1c6750d38e3ac5555800b7abf33a501228e64699bda580cfd",
+  "catalogHash": "71064801506cfa85dd61ab2a33ff5675821077464a726bc8b4d74fee2b69fdb4",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -12060,7 +12060,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从手写进度轮询迁移到 stream 与 interrupt",
+                "status": "replaced",
+                "explanation": "长流程用 graph.stream 产生真实节点事件；需要人工决定时用 interrupt 保存状态并暂停，而不是用定时器猜测进度。",
+                "beforeCode": "run_workflow()\nprint(\"处理中...\")",
+                "afterCode": "for event in graph.stream(input_state, config, stream_mode=\"updates\"):\n    print(event)\napproved = interrupt({\"action\": \"send_email\"})",
+                "officialSources": [
+                  {
+                    "label": "LangGraph interrupts",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "subgraphs-parallelism"
@@ -12154,7 +12175,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从串行函数链迁移到子图与并行分支",
+                "status": "replaced",
+                "explanation": "当职责可独立执行时，把流程编译为子图或通过 Send fan-out；共享字段必须声明 reducer，不能靠全局列表汇总。",
+                "beforeCode": "for topic in topics:\n    findings.append(research(topic))",
+                "afterCode": "return [Send(\"research_section\", {\"topic\": topic}) for topic in state[\"topics\"]]",
+                "officialSources": [
+                  {
+                    "label": "LangGraph Graph API",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": true,
             "projectLinks": [],
             "exercise": {
@@ -12266,7 +12308,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从脚本式研究助手迁移到可恢复项目图",
+                "status": "replaced",
+                "explanation": "把研究计划、证据、审批和报告写进明确的 StateGraph；thread state 交给 checkpointer，跨线程偏好交给 Store。",
+                "beforeCode": "plan = make_plan(topic)\nfindings = research(plan)\nreturn write_report(findings)",
+                "afterCode": "config = {\"configurable\": {\"thread_id\": research_id}}\ngraph.invoke({\"topic\": topic}, config)",
+                "officialSources": [
+                  {
+                    "label": "LangGraph persistence",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langgraph-lesson-11"

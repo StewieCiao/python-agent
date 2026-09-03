@@ -283,6 +283,18 @@ test("框架作者源的每节课程都直接提供三张讲解卡", async () =>
   }
 });
 
+test("LangGraph 执行与项目课保留真实迁移边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  for (const id of ["streaming-interrupts", "subgraphs-parallelism", "memory-research-project"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.ok(lesson.migrations.length >= 1, `${id} 缺少迁移卡`);
+    assert.ok(lesson.migrations.every((item) => item.beforeCode && item.afterCode && item.officialSources.length >= 1));
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);
