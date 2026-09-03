@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "a575fe32b9ad0e7bfe85fb45510fe0d829c2ea86ebc1b54cc0cb49b3e0f5db73",
-  "familyHash": "ceed505b0177ff8c6a14f3c4f0265e54b0111a009239cdaae6fb59cc697dd96c",
+  "catalogHash": "eea4c9377518473d9c75131a0e63650cbed88c21ba4c52f1d630561da5a5c8a7",
+  "familyHash": "011aea040469da07bda95aae334c17c3804ecfbff9f7e87349d91d89aa881ed5",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -11608,7 +11608,7 @@
             "lessonIds": [
               "memory-research-project",
               "checkpoint-configuration",
-              "langgraph-lesson-08",
+              "supervisor-routing",
               "langgraph-lesson-09",
               "langgraph-lesson-10",
               "langgraph-lesson-11"
@@ -12675,100 +12675,128 @@
             ]
           },
           {
-            "id": "langgraph-lesson-08",
+            "id": "supervisor-routing",
             "stageId": "langgraph-stage-2",
             "order": 9,
-            "title": "短期记忆：写出可验证的实现",
-            "kicker": "LangGraph 学习",
-            "summary": "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。",
-            "minutes": 35,
+            "title": "Supervisor 路由与角色交接",
+            "kicker": "langgraph 学习",
+            "summary": "让 Supervisor 根据任务类型选择已注册的 Agent，并保留可观察的交接结果。",
+            "minutes": 45,
             "prerequisites": [
-              "checkpoint-configuration"
+              "subgraphs-parallelism"
             ],
             "difficulty": "advanced",
             "tags": [
-              "langgraph",
-              "stage-langgraph-stage-2"
+              "supervisor",
+              "multi-agent",
+              "routing"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "短期记忆要解决什么问题",
-                "body": "把研究任务中的真实任务先翻译成输入、处理和输出，再理解这个知识点：把会话上下文放在当前 thread 状态中，并在边界处明确隔离。",
+                "title": "Supervisor 只负责选择下一步",
+                "body": "Supervisor 读取当前状态并返回下一个角色，具体工作交给对应 Agent。把决策和执行分开，才能观察每次交接，也能在未知角色时立即失败。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "路由结果来自有限集合",
+                  "Agent 负责自己的产物",
+                  "交接写入状态"
                 ],
-                "example": "实现 append_message(threads, thread_id, message)，返回新字典并只追加到指定线程。"
+                "example": "def choose_worker(state):\n    return \"researcher\" if state[\"needs_sources\"] else \"writer\""
               },
               {
                 "kind": "逐步拆解",
-                "title": "把短期记忆拆成步骤",
-                "body": "先实现研究任务场景下题目要求的最小路径，再逐项验证：实现 append_message(threads, thread_id, message)，返回新字典并只追加到指定线程。",
+                "title": "交接结果必须可追踪",
+                "body": "每次选择都应记录 role、输入和结果，下一节点只读取明确字段。不要让 Supervisor 直接猜答案或默默跳过未注册角色。",
                 "bullets": [
-                  "先复制每个线程的消息列表。",
-                  "setdefault 只为新线程创建列表。",
-                  "检查另一个 thread 的历史没有被污染。"
+                  "保留 role 与 result",
+                  "顺序由状态决定",
+                  "未知角色抛出 KeyError"
                 ],
-                "example": "输入 → 处理 → 输出"
+                "example": "workers = {\"researcher\": search, \"writer\": write}\nresult = workers[role](state[\"task\"])"
               },
               {
                 "kind": "常见误区",
-                "title": "短期记忆的边界检查",
-                "body": "不要只复现研究任务的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "Supervisor 路由的常见误区",
+                "body": "完成“Supervisor 路由与角色交接”时，不要把所有逻辑塞进一个节点，也不要为未知角色设置默认 Agent；先检查路由值和交接记录。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "角色集合显式",
+                  "失败保持真实",
+                  "每次交接可复盘"
                 ],
-                "example": "assert actual == expected"
+                "example": "handoff = {\"role\": role, \"result\": result}"
               }
             ],
             "videos": [
               {
-                "title": "Introduction to LangGraph",
-                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "title": "LangGraph Essentials - Python",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
                 "provider": "LangChain Academy",
                 "language": "英文",
-                "duration": "课程",
-                "note": "补充 StateGraph、节点、边和执行模型。"
+                "duration": "1 小时",
+                "note": "补充 supervisor、子图和多 Agent 协作。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangGraph 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+                "label": "LangGraph Graph API",
+                "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "隐式 Agent 调用 → 显式 Supervisor 路由",
+                "status": "replaced",
+                "explanation": "把角色选择、可用节点和交接结果写进图状态；未知角色保持失败。",
+                "beforeCode": "agent = agents[0]\nreturn agent(task)",
+                "afterCode": "role = choose_worker(state)\nresult = workers[role](state[\"task\"])\nreturn {\"role\": role, \"result\": result}",
+                "officialSources": [
+                  {
+                    "label": "LangGraph Graph API",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langgraph-lesson-11"
             ],
             "exercise": {
-              "prompt": "实现 append_message(threads, thread_id, message)，返回新字典并只追加到指定线程。",
-              "starterCode": "def append_message(threads, thread_id, message):\n    pass\n",
+              "prompt": "实现 handoff(state, workers)：从 state['role'] 选择 worker 执行 state['task']，返回 role、task 和 result；未知 role 必须抛出 KeyError。",
+              "starterCode": "def handoff(state, workers):\n    pass\n",
               "hints": [
-                "先复制每个线程的消息列表。",
-                "setdefault 只为新线程创建列表。",
-                "检查另一个 thread 的历史没有被污染。"
+                "先列出可用角色",
+                "把选择和执行分开",
+                "用 unknown 角色验证 KeyError"
               ],
-              "solution": "def append_message(threads, thread_id, message):\n    updated = {key: list(value) for key, value in threads.items()}\n    updated.setdefault(thread_id, []).append(message)\n    return updated\n"
+              "solution": "def handoff(state, workers):\n    role = state[\"role\"]\n    result = workers[role](state[\"task\"])\n    return {\"role\": role, \"task\": state[\"task\"], \"result\": result}\n"
             },
             "browserChecks": [
               {
-                "name": "追加线程消息",
-                "expression": "append_message({\"a\": [\"hi\"]}, \"a\", \"there\") == {\"a\": [\"hi\", \"there\"]}",
-                "failure": "消息应追加到指定 thread。",
+                "name": "角色交接",
+                "expression": "handoff({\"role\": \"researcher\", \"task\": \"rag\"}, {\"researcher\": lambda task: task.upper()}) == {\"role\": \"researcher\", \"task\": \"rag\", \"result\": \"RAG\"}",
+                "failure": "Supervisor 应把任务交给指定角色并保留结果。",
                 "kind": "behavior"
               },
               {
-                "name": "线程隔离",
-                "expression": "append_message({\"a\": [\"a\"], \"b\": [\"b\"]}, \"a\", \"x\")[\"b\"] == [\"b\"]",
-                "failure": "其他 thread 的历史必须保持不变。",
+                "name": "输入保留",
+                "expression": "handoff({\"role\": \"writer\", \"task\": \"draft\"}, {\"writer\": lambda task: task + \"!\"})[\"task\"] == \"draft\"",
+                "failure": "交接记录必须保留原始任务。",
+                "kind": "behavior"
+              },
+              {
+                "name": "未知角色",
+                "expression": "_raises_key_error(lambda: handoff({\"role\": \"unknown\", \"task\": \"x\"}, {}))",
+                "failure": "未注册角色不能静默选择默认 Agent。",
                 "kind": "behavior"
               }
             ]
@@ -12782,7 +12810,7 @@
             "summary": "用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-08"
+              "supervisor-routing"
             ],
             "difficulty": "advanced",
             "tags": [

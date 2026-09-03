@@ -424,6 +424,23 @@ export const langgraphTrack: LearningTrack = {
       project: false, projectLinks: [],
       exercise: { prompt: "实现 resume(checkpoints, thread_id, updates)：复制指定 thread 的检查点并应用 updates，返回新状态；未知 thread_id 必须抛出 KeyError，且不能修改原检查点。", starterCode: `def resume(checkpoints, thread_id, updates):\n    pass\n`, solution: `def resume(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n` },
     },
+    {
+      id: "supervisor-routing",
+      title: "Supervisor 路由与角色交接",
+      summary: "让 Supervisor 根据任务类型选择已注册的 Agent，并保留可观察的交接结果。",
+      prerequisites: ["subgraphs-parallelism"], difficulty: "advanced", tags: ["supervisor", "multi-agent", "routing"],
+      minutes: 45,
+      guide: [
+        { title: "Supervisor 只负责选择下一步", body: "Supervisor 读取当前状态并返回下一个角色，具体工作交给对应 Agent。把决策和执行分开，才能观察每次交接，也能在未知角色时立即失败。", bullets: ["路由结果来自有限集合", "Agent 负责自己的产物", "交接写入状态"], example: `def choose_worker(state):\n    return \"researcher\" if state[\"needs_sources\"] else \"writer\"` },
+        { title: "交接结果必须可追踪", body: "每次选择都应记录 role、输入和结果，下一节点只读取明确字段。不要让 Supervisor 直接猜答案或默默跳过未注册角色。", bullets: ["保留 role 与 result", "顺序由状态决定", "未知角色抛出 KeyError"], example: `workers = {\"researcher\": search, \"writer\": write}\nresult = workers[role](state[\"task\"])` },
+        { title: "Supervisor 路由的常见误区", body: "完成“Supervisor 路由与角色交接”时，不要把所有逻辑塞进一个节点，也不要为未知角色设置默认 Agent；先检查路由值和交接记录。", bullets: ["角色集合显式", "失败保持真实", "每次交接可复盘"], example: `handoff = {\"role\": role, \"result\": result}` },
+      ],
+      videos: [{ title: "LangGraph Essentials - Python", url: ACADEMY_ESSENTIALS, provider: "LangChain Academy", language: "英文", duration: "1 小时", note: "补充 supervisor、子图和多 Agent 协作。" }],
+      officialSources: [{ label: "LangGraph Graph API", url: GRAPH_API }],
+      migrations: [{ title: "隐式 Agent 调用 → 显式 Supervisor 路由", status: "replaced", explanation: "把角色选择、可用节点和交接结果写进图状态；未知角色保持失败。", beforeCode: "agent = agents[0]\nreturn agent(task)", afterCode: "role = choose_worker(state)\nresult = workers[role](state[\"task\"])\nreturn {\"role\": role, \"result\": result}", officialSources: [{ label: "LangGraph Graph API", url: GRAPH_API }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 handoff(state, workers)：从 state['role'] 选择 worker 执行 state['task']，返回 role、task 和 result；未知 role 必须抛出 KeyError。", starterCode: `def handoff(state, workers):\n    pass\n`, solution: `def handoff(state, workers):\n    role = state[\"role\"]\n    result = workers[role](state[\"task\"])\n    return {\"role\": role, \"task\": state[\"task\"], \"result\": result}\n` },
+    },
   ],
 };
 

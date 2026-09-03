@@ -553,6 +553,19 @@ test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
+test("LangGraph Supervisor 课明确角色路由与未知角色失败", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "supervisor-routing");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("unknown")));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("graph-api")));
+});
+
 test("框架作者路线保留可解释的先修链", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   for (const trackId of ["langchain-rag", "langgraph"]) {
