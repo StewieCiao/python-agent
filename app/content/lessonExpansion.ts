@@ -720,14 +720,16 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
       : { starterCode: 'state = {"count": 0}\nresult = None', solution: 'state = {"count": 0}\nstate["count"] += 1\nresult = state' };
   const ragDetail = track.id === "langchain-rag" && ["Embedding", "向量存储", "相似度检索"].includes(baseTopic);
   const graphDetail = track.id === "langgraph" && ["StateGraph", "Checkpoint", "Interrupt", "恢复执行"].includes(baseTopic);
+  const guideSummary = topicSpec?.summary ?? (ragDetail ? `把 ${topic} 放进 indexing → retrieval 数据流，比较召回结果并保留来源。` : graphDetail ? `围绕 ${topic} 描述 State 输入、节点更新和恢复边界。` : `理解 ${topic} 的输入、处理过程和边界，并完成一个可验证练习。`);
+  const guidePrompt = topicSpec?.prompt ?? (ragDetail ? `用两条不同主题的文档验证 ${topic}，记录输入、返回数量和来源 metadata。` : graphDetail ? `为 ${topic} 写一个最小状态流程，记录节点更新和恢复边界。` : `完成 ${topic} 的最小实现，并用边界输入验证结果。`);
   return {
     id, stageId, order: index + 1, title: topicSpec ? `${topic}：写出可验证的实现` : `${topic}：从概念到练习（第 ${index + 1} 节）`,
-    kicker: `${track.shortTitle} 学习`, summary: topicSpec?.summary ?? (ragDetail ? `把 ${topic} 放进 indexing → retrieval 数据流，比较召回结果并保留来源。` : graphDetail ? `围绕 ${topic} 描述 State 输入、节点更新和恢复边界。` : `理解 ${topic} 的输入、处理过程和边界，并完成一个可验证练习。`), minutes: 35,
+    kicker: `${track.shortTitle} 学习`, summary: guideSummary, minutes: 35,
     prerequisites: previous ? [previous] : [], difficulty: index < 3 ? "beginner" : index < 8 ? "intermediate" : "advanced",
     tags: [track.id, `stage-${stageId}`], guide: [
-      { kind: "概念入门", title: "先建立心智模型", body: "明确输入、处理步骤和输出，不把框架魔法当作黑盒。", bullets: ["写出输入", "标出状态", "说明输出"], example: "input -> process -> output" },
-      { kind: "逐步拆解", title: "再拆成可观察步骤", body: "每一步都可以单独运行或检查，失败时保留真实原因。", bullets: ["先做最小例子", "逐步增加边界", "记录实际结果"], example: "step_one(); step_two()" },
-      { kind: "常见误区", title: "最后验证边界", body: "用一个没有出现在示例里的输入确认实现不是写死样例。", bullets: ["改变输入", "检查失败", "再复盘"], example: "assert result == expected" },
+      { kind: "概念入门", title: `${baseTopic}要解决什么问题`, body: guideSummary, bullets: ["找出输入契约", "标出核心状态", "说清输出形状"], example: guidePrompt },
+      { kind: "逐步拆解", title: `把${baseTopic}拆成步骤`, body: `先实现题目要求的最小路径，再逐项验证：${guidePrompt}`, bullets: topicSpec?.hints ?? ["先写最小例子", "记录中间结果", "逐步增加边界"], example: "输入 → 处理 → 输出" },
+      { kind: "常见误区", title: `${baseTopic}的边界检查`, body: `不要只复现示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。`, bullets: ["换一组输入", "保留真实输出", "解释期望与实际"], example: "assert actual == expected" },
     ], videos: [], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
     projectLinks: [], exercise: { prompt: topicSpec ? `${topicSpec.prompt}${variant > 1 ? `\n迁移要求：改用第 ${variant} 组未在示例出现的输入，说明实现为何仍成立。` : ""}` : (ragDetail ? `用两条不同主题的文档验证 ${topic}：记录输入、返回数量、来源 metadata，并说明无命中时的行为。` : graphDetail ? `为 ${topic} 写一个最小状态流程：声明 state、记录节点更新，并说明 thread 隔离或恢复时的预期结果。` : `完成“${topic}”练习并通过行为检查。`), starterCode: topicSpec?.starterCode ?? (ragDetail ? 'documents = [{"text": "Python 函数", "source": "a.md"}, {"text": "图状态", "source": "b.md"}]\nresults = []' : graphDetail ? 'state = {"thread_id": "demo-1", "count": 0}\nupdates = []' : exercise.starterCode), hints: topicSpec?.hints ?? (ragDetail ? ["先保留 page_content 与 source", "检查 query 与文档的向量维度", "用无关 query 验证无命中边界"] : graphDetail ? ["先写 State 字段", "记录节点返回的更新", "用另一个 thread 验证隔离"] : ["先描述数据流", "实现最小步骤", "用边界输入复测"]), solution: topicSpec?.solution ?? (ragDetail ? 'documents = [{"text": "Python 函数", "source": "a.md"}, {"text": "图状态", "source": "b.md"}]\nresults = [{"text": documents[0]["text"], "source": documents[0]["source"]}]' : graphDetail ? 'state = {"thread_id": "demo-1", "count": 0}\nupdates = [{"count": 1}]\nstate.update(updates[0])' : exercise.solution) },
     browserChecks: topicSpec?.checks ?? [{ name: "典型输入", expression: "behavioral result", failure: "典型输入行为不符", kind: "behavior" }, { name: "边界输入", expression: "boundary result", failure: "边界输入行为不符", kind: "behavior" }],
