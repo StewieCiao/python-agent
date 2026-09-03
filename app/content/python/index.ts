@@ -67,7 +67,7 @@ export const pythonLessons: CourseLesson[] = lessons.map((lesson) => ({
   kicker: lesson.kicker,
   summary: lesson.goal,
   minutes: lesson.minutes,
-  prerequisites: [],
+  prerequisites: lesson.number === 1 ? [] : [lessons[lesson.number - 2].id],
   difficulty: lesson.module.startsWith("Agent") ? "advanced" : "beginner",
   tags: [lesson.kicker],
   guide: lessonGuides[lesson.id].map(({ kind, title, body, bullets, example }) => ({

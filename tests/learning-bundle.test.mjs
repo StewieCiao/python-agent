@@ -262,6 +262,16 @@ test("每节课程都带有与主题对应的官方来源", async () => {
   }
 });
 
+test("Python 基础路线保留真实的先修关系", async () => {
+  const { pythonLessons } = await import("../app/content/python/index.ts");
+  const byId = new Map(pythonLessons.map((lesson) => [lesson.id, lesson]));
+  assert.deepEqual(byId.get("variables").prerequisites, ["first-output"]);
+  assert.deepEqual(byId.get("branches").prerequisites, ["strings"]);
+  assert.deepEqual(byId.get("loops").prerequisites, ["branches"]);
+  assert.deepEqual(byId.get("functions").prerequisites, ["loops"]);
+  assert.deepEqual(byId.get("agent-tool-registry").prerequisites, ["project-tasks"]);
+});
+
 test("迁移卡核验版本与锁定运行时一致", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {

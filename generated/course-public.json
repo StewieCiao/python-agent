@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "6c99200b2cd689170613c76810bb14301465e8c83dff5cc7b4f902c4e07ff135",
+  "catalogHash": "e179e0b633925daa4fd51bc853562400c06db5fc3b8986a3f78a560be4b16775",
   "familyHash": "2fea2baf4bf2e7372c953bba879dde87b384e0df192a170fc8039b583ef24a5a",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -267,7 +267,9 @@
             "kicker": "变量与类型",
             "summary": "用变量保存字符串和数字，并组合出可读的输出。",
             "minutes": 10,
-            "prerequisites": [],
+            "prerequisites": [
+              "first-output"
+            ],
             "difficulty": "beginner",
             "tags": [
               "变量与类型"
@@ -373,7 +375,9 @@
             "kicker": "字符串方法",
             "summary": "把文本清理规则封装成可复用函数。",
             "minutes": 12,
-            "prerequisites": [],
+            "prerequisites": [
+              "variables"
+            ],
             "difficulty": "beginner",
             "tags": [
               "字符串方法"
@@ -468,7 +472,9 @@
             "kicker": "条件分支",
             "summary": "用互斥条件覆盖边界，避免重复或遗漏。",
             "minutes": 14,
-            "prerequisites": [],
+            "prerequisites": [
+              "strings"
+            ],
             "difficulty": "beginner",
             "tags": [
               "条件分支"
@@ -575,7 +581,9 @@
             "kicker": "循环与 range",
             "summary": "用循环表达重复规则，而不是复制粘贴代码。",
             "minutes": 14,
-            "prerequisites": [],
+            "prerequisites": [
+              "branches"
+            ],
             "difficulty": "beginner",
             "tags": [
               "循环与 range"
@@ -683,7 +691,9 @@
             "kicker": "函数与返回值",
             "summary": "把输入、规则和输出封装成可重复验证的函数。",
             "minutes": 16,
-            "prerequisites": [],
+            "prerequisites": [
+              "loops"
+            ],
             "difficulty": "beginner",
             "tags": [
               "函数与返回值"
@@ -792,7 +802,9 @@
             "kicker": "列表与推导式",
             "summary": "筛选并转换列表，写出可读的数据处理管道。",
             "minutes": 16,
-            "prerequisites": [],
+            "prerequisites": [
+              "functions"
+            ],
             "difficulty": "beginner",
             "tags": [
               "列表与推导式"
@@ -901,7 +913,9 @@
             "kicker": "字典与统计",
             "summary": "用字典完成频次统计，并安全处理第一次出现的值。",
             "minutes": 18,
-            "prerequisites": [],
+            "prerequisites": [
+              "lists"
+            ],
             "difficulty": "beginner",
             "tags": [
               "字典与统计"
@@ -1010,7 +1024,9 @@
             "kicker": "异常与边界",
             "summary": "识别可恢复边界，捕获具体异常并保留真实失败。",
             "minutes": 18,
-            "prerequisites": [],
+            "prerequisites": [
+              "dictionaries"
+            ],
             "difficulty": "beginner",
             "tags": [
               "异常与边界"
@@ -1129,7 +1145,9 @@
             "kicker": "类与对象",
             "summary": "用类维护相关状态，并通过方法保护状态变化规则。",
             "minutes": 22,
-            "prerequisites": [],
+            "prerequisites": [
+              "exceptions"
+            ],
             "difficulty": "beginner",
             "tags": [
               "类与对象"
@@ -1235,7 +1253,9 @@
             "kicker": "迭代器与生成器",
             "summary": "用 yield 描述数据流，避免一次性创建不必要的列表。",
             "minutes": 20,
-            "prerequisites": [],
+            "prerequisites": [
+              "classes"
+            ],
             "difficulty": "beginner",
             "tags": [
               "迭代器与生成器"
@@ -1342,7 +1362,9 @@
             "kicker": "装饰器与闭包",
             "summary": "理解函数是一等对象，并用装饰器复用横切逻辑。",
             "minutes": 24,
-            "prerequisites": [],
+            "prerequisites": [
+              "generators"
+            ],
             "difficulty": "beginner",
             "tags": [
               "装饰器与闭包"
@@ -1437,7 +1459,9 @@
             "kicker": "Agent 前置项目 · 上下文统计",
             "summary": "组合字符串、列表和字典，分析进入 Agent 上下文的文本规模与高频词。",
             "minutes": 35,
-            "prerequisites": [],
+            "prerequisites": [
+              "decorators"
+            ],
             "difficulty": "beginner",
             "tags": [
               "Agent 前置项目 · 上下文统计"
@@ -1544,7 +1568,9 @@
             "kicker": "Agent 前置项目 · 成本观测",
             "summary": "从模型与工具调用记录中计算总成本和分类成本，为 Agent 评估建立观测能力。",
             "minutes": 40,
-            "prerequisites": [],
+            "prerequisites": [
+              "project-text"
+            ],
             "difficulty": "beginner",
             "tags": [
               "Agent 前置项目 · 成本观测"
@@ -1650,7 +1676,9 @@
             "kicker": "Agent 前置项目 · 计划排序",
             "summary": "综合函数、排序、异常边界与数据契约，为 Planner 排出稳定的执行顺序。",
             "minutes": 50,
-            "prerequisites": [],
+            "prerequisites": [
+              "project-expense"
+            ],
             "difficulty": "beginner",
             "tags": [
               "Agent 前置项目 · 计划排序"
@@ -1767,7 +1795,9 @@
             "kicker": "Hello-Agents · Tool Registry",
             "summary": "用统一注册表管理工具，让 Agent 通过名字和参数字典安全调用 Python 函数。",
             "minutes": 26,
-            "prerequisites": [],
+            "prerequisites": [
+              "project-tasks"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Tool Registry"
@@ -1864,7 +1894,9 @@
             "kicker": "Hello-Agents · ReAct 输出解析",
             "summary": "把模型输出的 tool[input] 或 Finish[answer] 解析为稳定的结构化数据。",
             "minutes": 22,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-tool-registry"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · ReAct 输出解析"
@@ -1972,7 +2004,9 @@
             "kicker": "Hello-Agents · Thought → Action → Observation",
             "summary": "实现一个离线 ReAct 执行器，掌握动作解析、工具调用、观察记录与最大步数安全阀。",
             "minutes": 34,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-action-parser"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Thought → Action → Observation"
@@ -2078,7 +2112,9 @@
             "kicker": "Hello-Agents · Plan-and-Solve",
             "summary": "把复杂目标拆成有序步骤，并让后续步骤读取之前的结果上下文。",
             "minutes": 30,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-react-loop"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Plan-and-Solve"
@@ -2173,7 +2209,9 @@
             "kicker": "Hello-Agents · Reflection",
             "summary": "实现执行—评估—改进闭环，并在质量达标或达到轮次上限时准确停止。",
             "minutes": 28,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-plan-solve"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Reflection"
@@ -2279,7 +2317,9 @@
             "kicker": "Hello-Agents · Memory / Naive RAG",
             "summary": "用关键词重叠、重要度和稳定排序构建可解释的本地记忆检索器。",
             "minutes": 36,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-reflection"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Memory / Naive RAG"
@@ -2376,7 +2416,9 @@
             "kicker": "Hello-Agents · Multi-Agent Handoff",
             "summary": "根据能力选择协作者，并用稳定消息信封传递来源、目标和任务。",
             "minutes": 30,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-memory-retrieval"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents · Multi-Agent Handoff"
@@ -2473,7 +2515,9 @@
             "kicker": "Hello-Agents 案例 · 天气与景点协作",
             "summary": "复现 Hello-Agents 旅行助手的工具链：先查天气，再基于天气选择景点，并保留完整调用轨迹。",
             "minutes": 45,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-handoff"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents 案例 · 天气与景点协作"
@@ -2568,7 +2612,9 @@
             "kicker": "Hello-Agents 案例 · 规划、检索、报告",
             "summary": "把研究主题拆成子任务，逐项收集资料，并生成带去重来源的结构化研究报告。",
             "minutes": 52,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-travel-project"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents 案例 · 规划、检索、报告"
@@ -2663,7 +2709,9 @@
             "kicker": "Hello-Agents 第七章 · 从零造轮子",
             "summary": "把工具注册、ReAct 循环、步数限制和运行状态整合成一个可复用的 Agent 类。",
             "minutes": 65,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-deep-research-project"
+            ],
             "difficulty": "advanced",
             "tags": [
               "Hello-Agents 第七章 · 从零造轮子"
