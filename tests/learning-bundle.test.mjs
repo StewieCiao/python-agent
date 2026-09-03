@@ -320,6 +320,16 @@ test("LangChain 检索代表课明确召回输入、上限和无命中状态", a
   assert.match(lesson.exercise.solution, /context = /);
 });
 
+test("LangGraph 路由代表课明确状态输入、分支输出和循环上限", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph").lessons.find(({ id }) => id === "state-reducers-routing");
+  assert.match(lesson.exercise.prompt, /输入是.*score.*attempts/);
+  assert.match(lesson.exercise.prompt, /输出是.*route_result/);
+  assert.match(lesson.exercise.starterCode, /def route\(state\)/);
+  assert.match(lesson.exercise.solution, /route_result = route\(/);
+  assert.match(lesson.exercise.solution, /attempts.*2/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);

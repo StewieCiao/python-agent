@@ -125,9 +125,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "为草稿审查图增加 revise/finish 条件路由，并通过 attempts 限制最多修改两次。",
-        starterCode: `def route(state):\n    pass`,
-        solution: `def route(state):\n    if state["score"] >= 0.8:\n        return "finish"\n    if state["attempts"] >= 2:\n        return "finish"\n    return "revise"`,
+        prompt: "输入是包含 score 和 attempts 的 state 字典；输出是 route_result，必须是已声明的 revise 或 finish。请在 score 达标或 attempts 达到 2 时结束，否则返回 revise，观察条件边如何保证循环有上限。",
+        starterCode: `state = {"score": 0.6, "attempts": 1}\n\ndef route(state):\n    pass\n\nroute_result = ""`,
+        solution: `state = {"score": 0.6, "attempts": 1}\n\ndef route(state):\n    if state["score"] >= 0.8:\n        return "finish"\n    if state["attempts"] >= 2:\n        return "finish"\n    return "revise"\n\nroute_result = route(state)`,
       },
     },
     {
