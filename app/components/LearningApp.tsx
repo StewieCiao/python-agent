@@ -6,7 +6,7 @@ import { CourseChat } from "./CourseChat";
 import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
 import type { LessonTest } from "../content/python/curriculum";
-import type { LearningTrack } from "../content/learningCatalog";
+import type { CourseTrack } from "../content/schema";
 import { loadMastery, loadPersonalizedExercise, loadTutorPlan, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
 import type { TutorPlan } from "../lib/platformBridge";
 import {
@@ -129,7 +129,7 @@ function combinedOutput(result: ExecutionResult | null) {
 }
 
 export function LearningApp() {
-  const [activeTrackId, setActiveTrackId] = useState<LearningTrack["id"]>("langchain-rag");
+  const [activeTrackId, setActiveTrackId] = useState<CourseTrack["id"]>("langchain-rag");
   const [activeLearningLessonId, setActiveLearningLessonId] = useState("memory-modernization");
   const [currentLessonId, setCurrentLessonId] = useState(lessons[0].id);
   const [viewMode, setViewMode] = useState<ViewMode>("learn");
@@ -388,7 +388,7 @@ export function LearningApp() {
     setViewMode("learn");
   }
 
-  function selectTrack(track: LearningTrack) {
+  function selectTrack(track: CourseTrack) {
     if (runLockRef.current) return;
     setActiveTrackId(track.id);
     setActiveLearningLessonId(track.currentLessonId);

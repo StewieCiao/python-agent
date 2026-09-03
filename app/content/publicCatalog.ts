@@ -1,6 +1,5 @@
 import snapshot from "../../generated/course-public.json";
 import type { Lesson, LessonTest } from "./python/curriculum.ts";
-import type { LearningTrack } from "./learningCatalog.ts";
 import type { CourseTrack } from "./schema.ts";
 
 const publicSnapshot = snapshot as {
@@ -16,7 +15,7 @@ if (!/^[0-9a-f]{64}$/.test(publicSnapshot.catalogHash) || !/^[0-9a-f]{64}$/.test
 }
 
 export const publicCatalog = publicSnapshot;
-export const learningTracks = publicSnapshot.catalog.tracks as LearningTrack[];
+export const learningTracks = publicSnapshot.catalog.tracks as CourseTrack[];
 
 const pythonTrack = publicSnapshot.catalog.tracks.find(({ id }) => id === "python");
 if (!pythonTrack) throw new Error("公开课程快照缺少 Python 路线");

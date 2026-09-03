@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { LearningLesson, LearningTrack } from "../content/learningCatalog";
+import type { CourseLesson, CourseTrack } from "../content/schema";
 import {
   clearCourseHistory,
   listModelProfiles,
@@ -19,8 +19,8 @@ import {
 } from "../lib/localServiceClient";
 
 export function CourseChat({ track, lesson, onClose }: {
-  track: LearningTrack;
-  lesson: LearningLesson;
+  track: CourseTrack;
+  lesson: CourseLesson;
   onClose: () => void;
 }) {
   const [profiles, setProfiles] = useState<ModelProfile[]>([]);

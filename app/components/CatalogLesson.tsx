@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import type { LearningLesson, LearningTrack } from "../content/learningCatalog";
+import type { CourseLesson, CourseTrack } from "../content/schema";
 
 export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete }: {
-  track: LearningTrack;
-  lesson: LearningLesson;
+  track: CourseTrack;
+  lesson: CourseLesson;
   onOpenChat: () => void;
   completed: boolean;
   onComplete: () => void;
