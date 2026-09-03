@@ -238,9 +238,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "设计 profile 与 learning_events 两类 namespace，分别处理覆盖更新和追加记录。",
-        starterCode: `profile_namespace = ()\nevents_namespace = ()`,
-        solution: `profile_namespace = ("users", user_id, "profile")\nevents_namespace = ("users", user_id, "learning_events")`,
+        prompt: "输入是 user_id、namespace、key 和 value；输出是从 Store 读取的 profile。请用字典模拟跨 thread 的 Store：namespace 必须包含 user_id，按 (namespace, key) 写入并读取 value，不要把 thread_id 当作用户身份。",
+        starterCode: `user_id = "stewie"\nnamespace = (user_id, "profile")\nkey = "current"\nvalue = {"language": "zh-CN"}\nstore = {}\nprofile = None`,
+        solution: `user_id = "stewie"\nnamespace = (user_id, "profile")\nkey = "current"\nvalue = {"language": "zh-CN"}\nstore = {}\nstore[(namespace, key)] = value\nprofile = store[(namespace, key)]`,
       },
     },
     {

@@ -25,7 +25,7 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
   ],
   "long-term-store": [
     { name: "用户命名空间", expression: "namespace[0] == user_id", failure: "长期记忆应按 user_id 隔离。", kind: "structure" },
-    { name: "跨线程读取", expression: "store.get(namespace, key) == value", failure: "Store 应能按 namespace/key 读取值。", kind: "behavior" },
+    { name: "跨线程读取", expression: "store[(namespace, key)] == value", failure: "Store 应能按 namespace/key 读取值。", kind: "behavior" },
   ],
   "streaming-interrupts": [
     { name: "事件顺序", expression: "events[0].node != events[-1].node", failure: "流式事件应保留节点执行顺序。", kind: "behavior" },

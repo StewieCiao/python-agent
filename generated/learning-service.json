@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "0931ce21663319de0c6eb0e1e42e9c8878ece70f45092ce9b7dedba993591c14",
-  "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
+  "catalogHash": "6a45c83836ec62fa20d50ac10a3d02be59c01ad48587eb11bcff61b97e907d62",
+  "familyHash": "31a071e51aa111960f7e4543ba4e07e1120af05429874d255eb71dc6ff23b844",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12098,14 +12098,14 @@
               "subgraphs-parallelism"
             ],
             "exercise": {
-              "prompt": "设计 profile 与 learning_events 两类 namespace，分别处理覆盖更新和追加记录。",
-              "starterCode": "profile_namespace = ()\nevents_namespace = ()",
+              "prompt": "输入是 user_id、namespace、key 和 value；输出是从 Store 读取的 profile。请用字典模拟跨 thread 的 Store：namespace 必须包含 user_id，按 (namespace, key) 写入并读取 value，不要把 thread_id 当作用户身份。",
+              "starterCode": "user_id = \"stewie\"\nnamespace = (user_id, \"profile\")\nkey = \"current\"\nvalue = {\"language\": \"zh-CN\"}\nstore = {}\nprofile = None",
               "hints": [
                 "先确定 namespace、key 和 value。",
                 "把 user_id 与 thread_id 分开。",
                 "分别验证覆盖更新和缺失记录。"
               ],
-              "solution": "profile_namespace = (\"users\", user_id, \"profile\")\nevents_namespace = (\"users\", user_id, \"learning_events\")"
+              "solution": "user_id = \"stewie\"\nnamespace = (user_id, \"profile\")\nkey = \"current\"\nvalue = {\"language\": \"zh-CN\"}\nstore = {}\nstore[(namespace, key)] = value\nprofile = store[(namespace, key)]"
             },
             "browserChecks": [
               {
@@ -12116,7 +12116,7 @@
               },
               {
                 "name": "跨线程读取",
-                "expression": "store.get(namespace, key) == value",
+                "expression": "store[(namespace, key)] == value",
                 "failure": "Store 应能按 namespace/key 读取值。",
                 "kind": "behavior"
               }
@@ -18893,7 +18893,7 @@
       },
       {
         "name": "跨线程读取",
-        "expression": "store.get(namespace, key) == value",
+        "expression": "store[(namespace, key)] == value",
         "failure": "Store 应能按 namespace/key 读取值。",
         "kind": "behavior"
       }

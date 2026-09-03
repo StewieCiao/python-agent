@@ -356,6 +356,17 @@ test("LangGraph 持久化代表课明确 thread 恢复与隔离", async () => {
   assert.match(lesson.exercise.solution, /resumed_state/);
 });
 
+test("LangGraph Store 代表课使用可执行的 namespace/key 存取契约", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph").lessons.find(({ id }) => id === "long-term-store");
+  assert.match(lesson.exercise.prompt, /输入是.*user_id.*namespace.*key.*value/);
+  assert.match(lesson.exercise.prompt, /输出是.*profile/);
+  assert.match(lesson.exercise.starterCode, /store = \{\}/);
+  assert.match(lesson.exercise.solution, /store\[\(namespace, key\)\] = value/);
+  assert.match(lesson.exercise.solution, /profile = store\[\(namespace, key\)\]/);
+  assert.match(lesson.browserChecks[1].expression, /store\[\(namespace, key\)\]/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);
