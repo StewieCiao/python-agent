@@ -34,6 +34,8 @@ test("离线文件内嵌完整课程与参考答案", () => {
       assert.ok(lesson.exercise.prompt);
       assert.ok(lesson.exercise.starterCode);
       assert.ok(lesson.exercise.solution);
+      assert.ok(lesson.browserChecks.length >= 2);
+      assert.ok(lesson.browserChecks.every(({ expression }) => !["lesson behavior", "lesson structure"].includes(expression)));
     }
   }
 });
