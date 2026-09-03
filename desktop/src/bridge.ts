@@ -2,6 +2,7 @@ import type { PythonHealth } from "./pythonService.mjs";
 import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelConfig.ts";
 import type { ModelMessage } from "./modelClient.mjs";
 import type { RagDocument, RagMatch } from "./ragService.mjs";
+import type { RagEvaluationCase, RagEvaluationResult } from "./ragEvaluation.mjs";
 import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
@@ -38,6 +39,7 @@ export type StewieDesktopBridge = {
   testModelProfile(profileId: string): Promise<DesktopIpcResult<{ reply: string }>>;
   chatWithModel(input: { profileId: string; messages: ModelMessage[] }): Promise<DesktopIpcResult<{ reply: string }>>;
   answerWithRag(input: { profileId: string; query: string; documents: RagDocument[] }): Promise<DesktopIpcResult<{ answer: string; sources: string[]; matches: RagMatch[] }>>;
+  evaluateRag(input: { profileId: string; cases: RagEvaluationCase[]; documents: RagDocument[] }): Promise<DesktopIpcResult<RagEvaluationResult>>;
   selectRagDocuments(): Promise<DesktopIpcResult<RagDocument[]>>;
   getLearningState(): Promise<DesktopIpcResult<PythonLearningState>>;
   saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;

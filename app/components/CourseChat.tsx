@@ -8,6 +8,7 @@ import {
   loadCourseHistory,
   sendCourseChat,
   answerWithRag,
+  evaluateRag,
   selectRagDocuments,
 } from "../lib/platformBridge";
 import {
@@ -32,6 +33,8 @@ export function CourseChat({ track, lesson, onClose }: {
   const [ragDocuments, setRagDocuments] = useState<Array<{ id: string; text: string; source: string }>>([]);
   const [ragQuery, setRagQuery] = useState("");
   const [ragResult, setRagResult] = useState<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> } | null>(null);
+  const [ragEvaluationInput, setRagEvaluationInput] = useState('[{"query":"请概括资料的核心概念","expectedSources":["本地资料"]}]');
+  const [ragEvaluationResult, setRagEvaluationResult] = useState<Awaited<ReturnType<typeof evaluateRag>> | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -61,6 +64,10 @@ export function CourseChat({ track, lesson, onClose }: {
     }
   }
 
+  function currentRagDocuments() {
+    return ragDocuments.length > 0 ? ragDocuments : [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }];
+  }
+
   return (
     <div className="chat-backdrop" role="presentation" onMouseDown={(event) => {
       if (event.target === event.currentTarget) onClose();
@@ -84,11 +91,23 @@ export function CourseChat({ track, lesson, onClose }: {
           <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await selectRagDocuments()))}>选择本地资料（TXT / Markdown / CSV / PDF）</button>
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
           <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
-            const documents = ragDocuments.length > 0 ? ragDocuments : [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }];
-            const result = await answerWithRag({ profileId, query: ragQuery, documents });
+            const result = await answerWithRag({ profileId, query: ragQuery, documents: currentRagDocuments() });
             setRagResult(result);
           })} type="button">检索并回答</button>
           {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.matches.map(({ source, score }) => `${source}（相似度 ${score.toFixed(2)}）`).join("、") || "无"}</small></div>}
+          <details className="rag-evaluation">
+            <summary>评测这批资料</summary>
+            <p>输入 JSON 数组，每项包含 query 和 expectedSources；系统会逐条真实检索，不会把模型回答当成准确率真值。</p>
+            <textarea aria-label="RAG 评测问答集" value={ragEvaluationInput} onChange={(event) => setRagEvaluationInput(event.target.value)} />
+            <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0)} onClick={() => void perform(async () => {
+              const cases = JSON.parse(ragEvaluationInput) as Array<{ query: string; expectedSources: string[] }>;
+              setRagEvaluationResult(await evaluateRag({ profileId, cases, documents: currentRagDocuments() }));
+            })} type="button">运行评测</button>
+            {ragEvaluationResult && <div className="rag-evaluation-result">
+              <small>recall@k：{ragEvaluationResult.recallAtK.toFixed(2)} · MRR：{ragEvaluationResult.mrr.toFixed(2)} · 引用覆盖：{ragEvaluationResult.citationCoverage.toFixed(2)} · 引用一致性代理：{ragEvaluationResult.faithfulnessProxy.toFixed(2)} · 总耗时：{Math.round(ragEvaluationResult.latencyMs)} ms</small>
+              <small>{ragEvaluationResult.tokenUsage.reason}</small>
+            </div>}
+          </details>
         </details>}
 
         <div className="chat-messages">

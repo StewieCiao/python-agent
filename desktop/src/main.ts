@@ -46,6 +46,7 @@ import { lessons } from "../../app/content/publicCatalog.ts";
 import { parseLearningExport } from "../../app/lib/learningExport.ts";
 import { assertCatalogHashes } from "./catalogBundle.mts";
 import { createRagService } from "./ragService.mjs";
+import { evaluateRag } from "./ragEvaluation.mjs";
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -224,6 +225,10 @@ void runStartupTask(app.whenReady().then(async () => {
     reply: await activeModelClient().chat(input.profileId, input.messages),
   })));
   ipcMain.handle("models:rag", trustedIpc(async (input: { profileId: string; query: string; documents: Array<{ id: string; text: string; source: string }> }) => createRagService(activeModelClient()).answer(input.profileId, input.query, input.documents)));
+  ipcMain.handle("models:rag-evaluate", trustedIpc(async (input: { profileId: string; cases: Array<{ query: string; expectedSources: string[] }>; documents: Array<{ id: string; text: string; source: string }> }) => {
+    const rag = createRagService(activeModelClient());
+    return evaluateRag(rag, input.profileId, input.cases, input.documents);
+  }));
   ipcMain.handle("documents:select", trustedIpc(async () => {
     const selection = await dialog.showOpenDialog({
       title: "选择 RAG 本地资料",

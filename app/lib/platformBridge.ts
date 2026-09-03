@@ -1,4 +1,5 @@
 import { buildChatMessages } from "./chatPrompt.mjs";
+import type { RagEvaluationCase, RagEvaluationResult } from "../../desktop/src/ragEvaluation.mjs";
 import {
   LOCAL_SERVICE_URL,
   localServiceRequest,
@@ -171,6 +172,16 @@ export async function answerWithRag(input: {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 检索仅在桌面安全服务中可用。");
   return unwrapDesktop(await desktop.answerWithRag(input));
+}
+
+export async function evaluateRag(input: {
+  profileId: string;
+  cases: RagEvaluationCase[];
+  documents: Array<{ id: string; text: string; source: string }>;
+}): Promise<RagEvaluationResult> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 评测仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.evaluateRag(input));
 }
 
 export async function selectRagDocuments(): Promise<Array<{ id: string; text: string; source: string }>> {
