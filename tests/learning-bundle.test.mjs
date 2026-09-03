@@ -273,6 +273,18 @@ test("项目标记不抢占路线开头的基础课", async () => {
   }
 });
 
+test("框架项目练习包含各自用户故事且保留真实检查", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks.filter(({ id }) => id !== "python")) {
+    for (const lesson of track.lessons.filter(({ project }) => project)) {
+      assert.match(lesson.exercise.prompt, /用户故事：/);
+      assert.ok(lesson.exercise.prompt.length > 100, `${lesson.id} 项目契约过短`);
+      assert.ok(lesson.browserChecks.length >= 2, `${lesson.id} 缺少真实验收检查`);
+      assert.doesNotMatch(lesson.exercise.prompt, /为一个真实使用者交付可演示的最小版本。\n输入与输出/);
+    }
+  }
+});
+
 test("行为导向扩展课不使用占位判题表达式", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const expanded = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter((lesson) => lesson.title.includes("写出可验证的实现")));

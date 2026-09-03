@@ -775,7 +775,11 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   }
   for (const lesson of lessons) {
     if (!lesson.project || !lesson.id.includes("-lesson-")) continue;
-    lesson.exercise.prompt = `阶段项目：${lesson.title}\n用户场景：为一个真实使用者交付可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。`;
+    const brief = (track.id === "langchain-rag" || track.id === "langgraph")
+      ? PROJECT_BRIEFS[track.id][lessons.filter(({ project }) => project).indexOf(lesson)]
+      : undefined;
+    const projectStory = brief?.summary ?? "把已学能力组合成一个可演示的本地工具。";
+    lesson.exercise.prompt = `阶段项目：${lesson.title}\n用户场景：${projectStory}\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。`;
     lesson.exercise.hints = ["先拆成一个能独立运行的最小里程碑。", "让每个中间结果可观察，并为失败保留真实原因。", "最后用未出现在示例中的输入和边界情况回归。"];
   }
   const projectIdsByStage = new Map<string, string>();
