@@ -568,9 +568,26 @@ export const langchainTrack: LearningTrack = {
       exercise: { prompt: "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。", starterCode: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    pass\n`, solution: `def merge_retrieval(keyword_hits, vector_hits, threshold):\n    by_source = {}\n    for item in [*keyword_hits, *vector_hits]:\n        source = item[\"source\"]\n        if source not in by_source or item[\"score\"] > by_source[source][\"score\"]:\n            by_source[source] = item\n    matches = sorted(by_source.values(), key=lambda item: item[\"score\"], reverse=True)\n    status = \"ok\" if matches and matches[0][\"score\"] >= threshold else \"no_results\"\n    return {\"status\": status, \"matches\": matches}\n` },
     },
     {
+      id: "reranking",
+      title: "重排与 top_k 边界",
+      prerequisites: ["hybrid-retrieval"], difficulty: "intermediate", tags: ["reranking", "top-k", "retrieval"],
+      summary: "对混合检索候选进行第二阶段排序，并明确 top_k 与低质量候选的边界。",
+      minutes: 40,
+      guide: [
+        { title: "召回和重排是两步", body: "召回阶段追求覆盖，重排阶段使用更精细的相关性信号调整顺序。重排不应重新猜测文档内容，而应保留候选 source 和评分。", bullets: ["先保证候选覆盖", "再按统一分数排序", "source 随候选保留"], example: `ranked = sorted(candidates, key=lambda item: item["rerank_score"], reverse=True)` },
+        { title: "top_k 是输出边界", body: "top_k 限制交给生成阶段的候选数量，不等于相关性保证。先完成排序，再截取 top_k，并在候选不足时返回实际数量。", bullets: ["拒绝负数 top_k", "排序后再截取", "不补伪造候选"], example: `if top_k < 0:\n    raise ValueError("top_k must be non-negative")\nselected = ranked[:top_k]` },
+        { title: "重排结果要可解释", body: "完成“重排与 top_k 边界”时，输出每个候选的 source 与分数，便于比较重排前后顺序；不要只返回一串无法追溯的文本。", bullets: ["记录排序分数", "保留输入来源", "用边界数量回归"], example: `result = {"matches": selected, "count": len(selected)}` },
+      ],
+      videos: [{ title: "LangChain: Chat with Your Data", url: DLAI_DATA, provider: "DeepLearning.AI", language: "英文", duration: "1 小时 18 分", note: "补充检索、排序与问答链路；重排规则以站内练习为准。" }],
+      officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }],
+      migrations: [{ title: "直接把召回结果交给模型 → 先重排再截取", status: "replaced", explanation: "在生成前增加可观察的重排步骤，并明确 top_k 边界；不补充不存在的候选。", beforeCode: "answer = generate(retrieved)", afterCode: "selected = rerank(retrieved, top_k=3)\nanswer = generate(selected)", officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 rerank(candidates, top_k)：按 rerank_score 降序排序后返回最多 top_k 个候选；top_k 必须是非负整数，否则抛出 ValueError；不修改输入列表，也不补充候选。", starterCode: `def rerank(candidates, top_k):\n    pass\n`, solution: `def rerank(candidates, top_k):\n    if not isinstance(top_k, int) or top_k < 0:\n        raise ValueError("top_k must be non-negative")\n    ranked = sorted(candidates, key=lambda item: item["rerank_score"], reverse=True)\n    return ranked[:top_k]\n` },
+    },
+    {
       id: "citation-grounded-generation",
       title: "引用约束生成与资料不足",
-      prerequisites: ["hybrid-retrieval"], difficulty: "intermediate", tags: ["citations", "grounding", "rag"],
+      prerequisites: ["reranking"], difficulty: "intermediate", tags: ["citations", "grounding", "rag"],
       summary: "把检索片段、引用来源和资料不足状态组成可追溯的回答契约。",
       minutes: 45,
       guide: [

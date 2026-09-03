@@ -15,6 +15,7 @@ export const langchainHints: Record<string, [string, string, string]> = {
   "rag-evaluation": ["先定义期望来源", "分别计算召回和引用覆盖", "用空召回验证 no_results"],
   "hybrid-retrieval": ["统一候选结构", "按 source 去重并排序", "用低分候选验证 threshold"],
   "citation-grounded-generation": ["先保留检索片段的 source", "无资料时停止生成", "用来源集合验证回答"],
+  "reranking": ["区分召回与重排", "排序后再截取 top_k", "用空列表和边界数量回归"],
 };
 
 export const langchainChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -77,5 +78,10 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "有资料回答", expression: "grounded_answer(\"退款\", [{\"text\": \"30 天\", \"source\": \"policy.md\"}])[\"status\"] == \"ok\"", failure: "有检索资料时应返回 ok 状态。", kind: "behavior" },
     { name: "来源来自输入", expression: "grounded_answer(\"退款\", [{\"text\": \"30 天\", \"source\": \"policy.md\"}])[\"sources\"] == [\"policy.md\"]", failure: "回答来源必须来自检索输入，不能凭空添加。", kind: "behavior" },
     { name: "资料不足", expression: "grounded_answer(\"退款\", [])[\"answer\"] == \"资料不足\" and grounded_answer(\"退款\", [])[\"sources\"] == []", failure: "无检索资料时应明确返回资料不足且不伪造来源。", kind: "behavior" },
+  ],
+  "reranking": [
+    { name: "排序结果", expression: "[item[\"source\"] for item in rerank([{\"source\": \"a\", \"rerank_score\": 0.2}, {\"source\": \"b\", \"rerank_score\": 0.9}], 2)] == [\"b\", \"a\"]", failure: "候选应按 rerank_score 降序排列。", kind: "behavior" },
+    { name: "top_k 限制", expression: "len(rerank([{\"source\": \"a\", \"rerank_score\": 0.2}, {\"source\": \"b\", \"rerank_score\": 0.9}], 1)) == 1", failure: "输出数量不能超过 top_k。", kind: "behavior" },
+    { name: "非法边界", expression: "_raises_value_error(lambda: rerank([], -1))", failure: "top_k 为负数时应明确抛出 ValueError。", kind: "behavior" },
   ],
 };
