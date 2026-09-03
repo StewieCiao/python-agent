@@ -14,9 +14,19 @@ const TOPICS: Record<CourseTrack["id"], string[]> = {
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
 
-const PROJECT_TITLES: Record<"langchain-rag" | "langgraph", string[]> = {
-  "langchain-rag": ["可引用文档问答系统", "混合检索评估台", "带工具调用的知识助手", "RAG 质量观测面板"],
-  langgraph: ["可恢复研究工作流", "人工审核 Agent 流程", "多 Agent 协作调度器", "带长期记忆的任务图"],
+const PROJECT_BRIEFS: Record<"langchain-rag" | "langgraph", Array<{ title: string; summary: string }>> = {
+  "langchain-rag": [
+    { title: "可引用文档问答系统", summary: "为团队建立可追溯的文档问答入口，回答始终带真实来源。" },
+    { title: "混合检索评估台", summary: "为检索调优提供关键词、向量召回和命中率对比。" },
+    { title: "带工具调用的知识助手", summary: "为业务助手连接受约束的工具，并保留每次调用结果。" },
+    { title: "RAG 质量观测面板", summary: "为 RAG 流程记录召回、引用和无答案边界，定位质量回归。" },
+  ],
+  langgraph: [
+    { title: "可恢复研究工作流", summary: "为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。" },
+    { title: "人工审核 Agent 流程", summary: "为高风险动作加入人工审核节点，拒绝时留下明确状态。" },
+    { title: "多 Agent 协作调度器", summary: "为多角色 Agent 设计可观察的交接和 supervisor 路由。" },
+    { title: "带长期记忆的任务图", summary: "为用户偏好建立跨 thread 的 Store，并与短期状态分离。" },
+  ],
 };
 
 type TopicSpec = {
@@ -751,8 +761,12 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
     if (projects >= expansion.projectCount) break;
     lesson.project = true;
     if (lesson.id.includes("-lesson-")) {
-      const titles = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_TITLES[track.id] : [];
-      lesson.title = titles[generatedProjectIndex] ?? `${track.shortTitle} 综合作品 ${generatedProjectIndex + 1}`;
+      const briefs = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_BRIEFS[track.id] : [];
+      const brief = briefs[generatedProjectIndex];
+      if (brief) {
+        lesson.title = brief.title;
+        lesson.summary = brief.summary;
+      }
       generatedProjectIndex += 1;
     }
     projects += 1;

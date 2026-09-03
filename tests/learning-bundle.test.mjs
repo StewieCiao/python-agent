@@ -357,6 +357,7 @@ test("框架项目课使用清晰的作品主题而不是迁移练习标题", as
     for (const lesson of track.lessons.filter(({ project }) => project)) {
       assert.doesNotMatch(lesson.title, /迁移练习/);
       assert.match(lesson.exercise.prompt, /用户场景/);
+      assert.match(lesson.summary, /为/);
     }
   }
 });

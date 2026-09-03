@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "06523c787503a2b103c6265c45c0629ae6f5ccaadc4369b2f27a5f240f369267",
+  "catalogHash": "883c1dfa4800ddff1552857f72c1d0fca948bb7e9f9ba688fd3ab7fe38ae2837",
   "familyHash": "9afbeff9df66b137d8e73f4736a8547501f6b1c2d29ca76ecfbfa83eeb79838f",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -10436,7 +10436,7 @@
             "order": 43,
             "title": "可引用文档问答系统",
             "kicker": "LangChain / RAG 学习",
-            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
+            "summary": "为团队建立可追溯的文档问答入口，回答始终带真实来源。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-41"
@@ -10524,7 +10524,7 @@
             "order": 44,
             "title": "混合检索评估台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
+            "summary": "为检索调优提供关键词、向量召回和命中率对比。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-42"
@@ -10612,7 +10612,7 @@
             "order": 45,
             "title": "带工具调用的知识助手",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
+            "summary": "为业务助手连接受约束的工具，并保留每次调用结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-43"
@@ -10700,7 +10700,7 @@
             "order": 46,
             "title": "RAG 质量观测面板",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
+            "summary": "为 RAG 流程记录召回、引用和无答案边界，定位质量回归。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-44"
@@ -14302,7 +14302,7 @@
             "order": 36,
             "title": "可恢复研究工作流",
             "kicker": "LangGraph 学习",
-            "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
+            "summary": "为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-34"
@@ -14390,7 +14390,7 @@
             "order": 37,
             "title": "人工审核 Agent 流程",
             "kicker": "LangGraph 学习",
-            "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
+            "summary": "为高风险动作加入人工审核节点，拒绝时留下明确状态。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-35"
@@ -14478,7 +14478,7 @@
             "order": 38,
             "title": "多 Agent 协作调度器",
             "kicker": "LangGraph 学习",
-            "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
+            "summary": "为多角色 Agent 设计可观察的交接和 supervisor 路由。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-36"
@@ -14566,7 +14566,7 @@
             "order": 39,
             "title": "带长期记忆的任务图",
             "kicker": "LangGraph 学习",
-            "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
+            "summary": "为用户偏好建立跨 thread 的 Store，并与短期状态分离。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-37"
