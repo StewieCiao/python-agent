@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "fbf0c24f79fc40311d64c699b2bb8ee8f4aca1f06da090c7c051970f1647cc2c",
-  "familyHash": "fd7c9c93b0e6ec42ebef9676e4b668f873d0654e7a1eb2f3b93f8e8e355a07dd",
+  "catalogHash": "6099c45faac71c54514e00b33bdc92f319695724aa72318e73259be58a07e51e",
+  "familyHash": "d191e937872fe5c5a21701816e3bee2d61d2c3f2aadc3728047e1440899542a4",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7452,9 +7452,9 @@
             "id": "langchain-rag-lesson-10",
             "stageId": "langchain-rag-stage-4",
             "order": 11,
-            "title": "混合检索：从概念到练习（第 11 节）",
+            "title": "混合检索：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 混合检索 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
             "minutes": 35,
             "prerequisites": [
               "runnable-pipeline"
@@ -7514,26 +7514,26 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“混合检索”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。",
+              "starterCode": "def merge_results(keyword, semantic):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "两个列表按关键词结果在前的顺序合并。",
+                "source 是去重键。",
+                "重复来源比较 score，只替换为更高值。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def merge_results(keyword, semantic):\n    merged = {}\n    for item in [*keyword, *semantic]:\n        source = item[\"source\"]\n        if source not in merged or item[\"score\"] > merged[source][\"score\"]:\n            merged[source] = item\n    return list(merged.values())\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合并去重",
+                "expression": "merge_results([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]) == [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]",
+                "failure": "重复来源应保留更高分数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "保持顺序",
+                "expression": "[item[\"source\"] for item in merge_results([{\"source\": \"b\", \"score\": 0.5}], [{\"source\": \"a\", \"score\": 0.9}])] == [\"b\", \"a\"]",
+                "failure": "首次出现顺序应保持稳定。",
                 "kind": "behavior"
               }
             ]
@@ -7542,9 +7542,9 @@
             "id": "langchain-rag-lesson-11",
             "stageId": "langchain-rag-stage-5",
             "order": 12,
-            "title": "重排：从概念到练习（第 12 节）",
+            "title": "重排：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 重排 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-10"
@@ -7604,26 +7604,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“重排”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。",
+              "starterCode": "def rerank(results, scores):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "排序键来自独立的 scores 映射。",
+                "按 source 关联候选文档。",
+                "直接索引让缺少分数的来源保留 KeyError。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def rerank(results, scores):\n    return sorted(results, key=lambda item: scores[item[\"source\"]], reverse=True)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "重排候选",
+                "expression": "[item[\"source\"] for item in rerank([{\"source\": \"a\"}, {\"source\": \"b\"}], {\"a\": 0.2, \"b\": 0.9})] == [\"b\", \"a\"]",
+                "failure": "结果应按重排分数降序排列。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "分数缺失",
+                "expression": "_raises_key_error(lambda: rerank([{\"source\": \"a\"}], {}))",
+                "failure": "缺少重排分数应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -7812,9 +7812,9 @@
             "id": "langchain-rag-lesson-14",
             "stageId": "langchain-rag-stage-1",
             "order": 15,
-            "title": "RAG 评估：从概念到练习（第 15 节）",
+            "title": "RAG 评估：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 评估 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-13"
@@ -7874,26 +7874,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 评估”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 evaluate_retrieval(expected, actual)，返回 hit、missing、unexpected 三个集合的排序列表。",
+              "starterCode": "def evaluate_retrieval(expected, actual):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先把两组来源转换为集合。",
+                "交集是命中，差集分别表示缺失和误召回。",
+                "排序让评估输出确定且易读。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def evaluate_retrieval(expected, actual):\n    expected_set, actual_set = set(expected), set(actual)\n    return {\"hit\": sorted(expected_set & actual_set), \"missing\": sorted(expected_set - actual_set), \"unexpected\": sorted(actual_set - expected_set)}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "评估结果",
+                "expression": "evaluate_retrieval([\"a\", \"b\"], [\"b\", \"c\"]) == {\"hit\": [\"b\"], \"missing\": [\"a\"], \"unexpected\": [\"c\"]}",
+                "failure": "应区分命中、缺失和误召回。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "完全命中",
+                "expression": "evaluate_retrieval([\"a\"], [\"a\"]) == {\"hit\": [\"a\"], \"missing\": [], \"unexpected\": []}",
+                "failure": "完全命中时缺失和误召回应为空。",
                 "kind": "behavior"
               }
             ]
@@ -7902,9 +7902,9 @@
             "id": "langchain-rag-lesson-15",
             "stageId": "langchain-rag-stage-2",
             "order": 16,
-            "title": "追踪与观测：从概念到练习（第 16 节）",
+            "title": "追踪与观测：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 追踪与观测 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-14"
@@ -7964,26 +7964,26 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "完成“追踪与观测”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 record_event(events, name, payload)，返回新列表并追加事件字典；payload 必须是字典，否则抛出 TypeError。",
+              "starterCode": "def record_event(events, name, payload):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "观测事件至少包含 name 和 payload。",
+                "先验证 payload 形状。",
+                "追加后返回新列表，不覆盖旧事件。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def record_event(events, name, payload):\n    if not isinstance(payload, dict):\n        raise TypeError(\"payload must be a dict\")\n    return [*events, {\"name\": name, \"payload\": payload}]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "记录事件",
+                "expression": "record_event([], \"retrieve\", {\"count\": 2}) == [{\"name\": \"retrieve\", \"payload\": {\"count\": 2}}]",
+                "failure": "事件应保留名称和真实 payload。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝畸形",
+                "expression": "_raises_type_error(lambda: record_event([], \"retrieve\", []))",
+                "failure": "非字典 payload 应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -7992,9 +7992,9 @@
             "id": "langchain-rag-lesson-16",
             "stageId": "langchain-rag-stage-3",
             "order": 17,
-            "title": "工具调用：从概念到练习（第 17 节）",
+            "title": "工具调用：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 工具调用 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把工具参数和返回值约束为稳定结构，避免 Agent 误调用。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-15"
@@ -8054,26 +8054,26 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“工具调用”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 call_tool(tool, arguments)，arguments 必须是字典并原样传给 tool；类型错误直接抛出。",
+              "starterCode": "def call_tool(tool, arguments):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先检查工具参数容器。",
+                "用关键字展开保持字段名称。",
+                "不要在工具失败时返回默认结果。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def call_tool(tool, arguments):\n    if not isinstance(arguments, dict):\n        raise TypeError(\"arguments must be a dict\")\n    return tool(**arguments)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "传递参数",
+                "expression": "call_tool(lambda city: city.upper(), {\"city\": \"成都\"}) == \"成都\"",
+                "failure": "工具应收到真实关键字参数并返回结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "参数类型",
+                "expression": "_raises_type_error(lambda: call_tool(lambda: 1, []))",
+                "failure": "非字典参数应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -8082,9 +8082,9 @@
             "id": "langchain-rag-lesson-17",
             "stageId": "langchain-rag-stage-4",
             "order": 18,
-            "title": "Agent 循环：从概念到练习（第 18 节）",
+            "title": "Agent 循环：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Agent 循环 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "让 Agent 循环在完成或达到上限时停止，并保留每一步轨迹。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-16"
@@ -8144,26 +8144,26 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“Agent 循环”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 run_agent(steps, limit)，依次执行最多 limit 个无参步骤；limit <= 0 返回空列表。",
+              "starterCode": "def run_agent(steps, limit):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理步数上限边界。",
+                "切片限制最多执行的步骤数。",
+                "返回每一步的真实结果，不能伪造完成。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def run_agent(steps, limit):\n    if limit <= 0:\n        return []\n    return [step() for step in steps[:limit]]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "限制步数",
+                "expression": "run_agent([lambda: 1, lambda: 2, lambda: 3], 2) == [1, 2]",
+                "failure": "循环最多执行 limit 个步骤。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "零上限",
+                "expression": "run_agent([lambda: 1], 0) == []",
+                "failure": "非正上限应停止执行。",
                 "kind": "behavior"
               }
             ]
@@ -9252,9 +9252,9 @@
             "id": "langchain-rag-lesson-30",
             "stageId": "langchain-rag-stage-3",
             "order": 31,
-            "title": "混合检索迁移练习 2：从概念到练习（第 31 节）",
+            "title": "混合检索迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 混合检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-29"
@@ -9314,26 +9314,26 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“混合检索迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def merge_results(keyword, semantic):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "两个列表按关键词结果在前的顺序合并。",
+                "source 是去重键。",
+                "重复来源比较 score，只替换为更高值。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def merge_results(keyword, semantic):\n    merged = {}\n    for item in [*keyword, *semantic]:\n        source = item[\"source\"]\n        if source not in merged or item[\"score\"] > merged[source][\"score\"]:\n            merged[source] = item\n    return list(merged.values())\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合并去重",
+                "expression": "merge_results([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]) == [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]",
+                "failure": "重复来源应保留更高分数。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "保持顺序",
+                "expression": "[item[\"source\"] for item in merge_results([{\"source\": \"b\", \"score\": 0.5}], [{\"source\": \"a\", \"score\": 0.9}])] == [\"b\", \"a\"]",
+                "failure": "首次出现顺序应保持稳定。",
                 "kind": "behavior"
               }
             ]
@@ -9342,9 +9342,9 @@
             "id": "langchain-rag-lesson-31",
             "stageId": "langchain-rag-stage-4",
             "order": 32,
-            "title": "重排迁移练习 2：从概念到练习（第 32 节）",
+            "title": "重排迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 重排迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-30"
@@ -9404,26 +9404,26 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“重排迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def rerank(results, scores):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "排序键来自独立的 scores 映射。",
+                "按 source 关联候选文档。",
+                "直接索引让缺少分数的来源保留 KeyError。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def rerank(results, scores):\n    return sorted(results, key=lambda item: scores[item[\"source\"]], reverse=True)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "重排候选",
+                "expression": "[item[\"source\"] for item in rerank([{\"source\": \"a\"}, {\"source\": \"b\"}], {\"a\": 0.2, \"b\": 0.9})] == [\"b\", \"a\"]",
+                "failure": "结果应按重排分数降序排列。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "分数缺失",
+                "expression": "_raises_key_error(lambda: rerank([{\"source\": \"a\"}], {}))",
+                "failure": "缺少重排分数应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -9612,9 +9612,9 @@
             "id": "langchain-rag-lesson-34",
             "stageId": "langchain-rag-stage-7",
             "order": 35,
-            "title": "RAG 评估迁移练习 2：从概念到练习（第 35 节）",
+            "title": "RAG 评估迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 评估迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-33"
@@ -9674,26 +9674,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 评估迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 evaluate_retrieval(expected, actual)，返回 hit、missing、unexpected 三个集合的排序列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def evaluate_retrieval(expected, actual):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先把两组来源转换为集合。",
+                "交集是命中，差集分别表示缺失和误召回。",
+                "排序让评估输出确定且易读。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def evaluate_retrieval(expected, actual):\n    expected_set, actual_set = set(expected), set(actual)\n    return {\"hit\": sorted(expected_set & actual_set), \"missing\": sorted(expected_set - actual_set), \"unexpected\": sorted(actual_set - expected_set)}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "评估结果",
+                "expression": "evaluate_retrieval([\"a\", \"b\"], [\"b\", \"c\"]) == {\"hit\": [\"b\"], \"missing\": [\"a\"], \"unexpected\": [\"c\"]}",
+                "failure": "应区分命中、缺失和误召回。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "完全命中",
+                "expression": "evaluate_retrieval([\"a\"], [\"a\"]) == {\"hit\": [\"a\"], \"missing\": [], \"unexpected\": []}",
+                "failure": "完全命中时缺失和误召回应为空。",
                 "kind": "behavior"
               }
             ]
@@ -9702,9 +9702,9 @@
             "id": "langchain-rag-lesson-35",
             "stageId": "langchain-rag-stage-1",
             "order": 36,
-            "title": "追踪与观测迁移练习 2：从概念到练习（第 36 节）",
+            "title": "追踪与观测迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 追踪与观测迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-34"
@@ -9764,26 +9764,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“追踪与观测迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 record_event(events, name, payload)，返回新列表并追加事件字典；payload 必须是字典，否则抛出 TypeError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def record_event(events, name, payload):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "观测事件至少包含 name 和 payload。",
+                "先验证 payload 形状。",
+                "追加后返回新列表，不覆盖旧事件。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def record_event(events, name, payload):\n    if not isinstance(payload, dict):\n        raise TypeError(\"payload must be a dict\")\n    return [*events, {\"name\": name, \"payload\": payload}]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "记录事件",
+                "expression": "record_event([], \"retrieve\", {\"count\": 2}) == [{\"name\": \"retrieve\", \"payload\": {\"count\": 2}}]",
+                "failure": "事件应保留名称和真实 payload。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝畸形",
+                "expression": "_raises_type_error(lambda: record_event([], \"retrieve\", []))",
+                "failure": "非字典 payload 应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -9792,9 +9792,9 @@
             "id": "langchain-rag-lesson-36",
             "stageId": "langchain-rag-stage-2",
             "order": 37,
-            "title": "工具调用迁移练习 2：从概念到练习（第 37 节）",
+            "title": "工具调用迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 工具调用迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把工具参数和返回值约束为稳定结构，避免 Agent 误调用。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-35"
@@ -9854,26 +9854,26 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "完成“工具调用迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 call_tool(tool, arguments)，arguments 必须是字典并原样传给 tool；类型错误直接抛出。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def call_tool(tool, arguments):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先检查工具参数容器。",
+                "用关键字展开保持字段名称。",
+                "不要在工具失败时返回默认结果。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def call_tool(tool, arguments):\n    if not isinstance(arguments, dict):\n        raise TypeError(\"arguments must be a dict\")\n    return tool(**arguments)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "传递参数",
+                "expression": "call_tool(lambda city: city.upper(), {\"city\": \"成都\"}) == \"成都\"",
+                "failure": "工具应收到真实关键字参数并返回结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "参数类型",
+                "expression": "_raises_type_error(lambda: call_tool(lambda: 1, []))",
+                "failure": "非字典参数应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -9882,9 +9882,9 @@
             "id": "langchain-rag-lesson-37",
             "stageId": "langchain-rag-stage-3",
             "order": 38,
-            "title": "Agent 循环迁移练习 2：从概念到练习（第 38 节）",
+            "title": "Agent 循环迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Agent 循环迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "让 Agent 循环在完成或达到上限时停止，并保留每一步轨迹。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-36"
@@ -9944,26 +9944,26 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“Agent 循环迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 run_agent(steps, limit)，依次执行最多 limit 个无参步骤；limit <= 0 返回空列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def run_agent(steps, limit):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理步数上限边界。",
+                "切片限制最多执行的步骤数。",
+                "返回每一步的真实结果，不能伪造完成。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def run_agent(steps, limit):\n    if limit <= 0:\n        return []\n    return [step() for step in steps[:limit]]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "限制步数",
+                "expression": "run_agent([lambda: 1, lambda: 2, lambda: 3], 2) == [1, 2]",
+                "failure": "循环最多执行 limit 个步骤。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "零上限",
+                "expression": "run_agent([lambda: 1], 0) == []",
+                "failure": "非正上限应停止执行。",
                 "kind": "behavior"
               }
             ]

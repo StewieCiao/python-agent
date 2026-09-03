@@ -307,6 +307,18 @@ test("LangGraph 基础主题提供独立的可执行练习", async () => {
   }
 });
 
+test("LangChain/RAG 进阶主题提供可诊断的行为练习", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  for (const topic of ["混合检索", "重排", "RAG 评估", "追踪与观测", "工具调用", "Agent 循环"]) {
+    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    assert.ok(lesson, `缺少 ${topic} 课程`);
+    assert.ok(lesson.exercise.prompt.length >= 30);
+    assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {

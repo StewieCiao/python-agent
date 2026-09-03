@@ -446,6 +446,72 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "零数量", expression: "top_k([{\"score\": 1}], 0) == []", failure: "k 为零时不应返回结果。", kind: "behavior" },
     ],
   },
+  "langchain-rag:混合检索": {
+    summary: "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
+    prompt: "实现 merge_results(keyword, semantic)，按首次出现顺序合并 source，并为重复来源保留更高 score。",
+    starterCode: "def merge_results(keyword, semantic):\n    pass\n",
+    solution: "def merge_results(keyword, semantic):\n    merged = {}\n    for item in [*keyword, *semantic]:\n        source = item[\"source\"]\n        if source not in merged or item[\"score\"] > merged[source][\"score\"]:\n            merged[source] = item\n    return list(merged.values())\n",
+    hints: ["两个列表按关键词结果在前的顺序合并。", "source 是去重键。", "重复来源比较 score，只替换为更高值。"],
+    checks: [
+      { name: "合并去重", expression: "merge_results([{\"source\": \"a\", \"score\": 0.4}], [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]) == [{\"source\": \"a\", \"score\": 0.8}, {\"source\": \"b\", \"score\": 0.5}]", failure: "重复来源应保留更高分数。", kind: "behavior" },
+      { name: "保持顺序", expression: "[item[\"source\"] for item in merge_results([{\"source\": \"b\", \"score\": 0.5}], [{\"source\": \"a\", \"score\": 0.9}])] == [\"b\", \"a\"]", failure: "首次出现顺序应保持稳定。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:重排": {
+    summary: "对候选文档按最终相关性重新排序，并保留原始来源字段。",
+    prompt: "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。",
+    starterCode: "def rerank(results, scores):\n    pass\n",
+    solution: "def rerank(results, scores):\n    return sorted(results, key=lambda item: scores[item[\"source\"]], reverse=True)\n",
+    hints: ["排序键来自独立的 scores 映射。", "按 source 关联候选文档。", "直接索引让缺少分数的来源保留 KeyError。"],
+    checks: [
+      { name: "重排候选", expression: "[item[\"source\"] for item in rerank([{\"source\": \"a\"}, {\"source\": \"b\"}], {\"a\": 0.2, \"b\": 0.9})] == [\"b\", \"a\"]", failure: "结果应按重排分数降序排列。", kind: "behavior" },
+      { name: "分数缺失", expression: "_raises_key_error(lambda: rerank([{\"source\": \"a\"}], {}))", failure: "缺少重排分数应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:RAG 评估": {
+    summary: "把检索命中和答案正确性拆开测量，避免只看最终文本。",
+    prompt: "实现 evaluate_retrieval(expected, actual)，返回 hit、missing、unexpected 三个集合的排序列表。",
+    starterCode: "def evaluate_retrieval(expected, actual):\n    pass\n",
+    solution: "def evaluate_retrieval(expected, actual):\n    expected_set, actual_set = set(expected), set(actual)\n    return {\"hit\": sorted(expected_set & actual_set), \"missing\": sorted(expected_set - actual_set), \"unexpected\": sorted(actual_set - expected_set)}\n",
+    hints: ["先把两组来源转换为集合。", "交集是命中，差集分别表示缺失和误召回。", "排序让评估输出确定且易读。"],
+    checks: [
+      { name: "评估结果", expression: "evaluate_retrieval([\"a\", \"b\"], [\"b\", \"c\"]) == {\"hit\": [\"b\"], \"missing\": [\"a\"], \"unexpected\": [\"c\"]}", failure: "应区分命中、缺失和误召回。", kind: "behavior" },
+      { name: "完全命中", expression: "evaluate_retrieval([\"a\"], [\"a\"]) == {\"hit\": [\"a\"], \"missing\": [], \"unexpected\": []}", failure: "完全命中时缺失和误召回应为空。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:追踪与观测": {
+    summary: "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。",
+    prompt: "实现 record_event(events, name, payload)，返回新列表并追加事件字典；payload 必须是字典，否则抛出 TypeError。",
+    starterCode: "def record_event(events, name, payload):\n    pass\n",
+    solution: "def record_event(events, name, payload):\n    if not isinstance(payload, dict):\n        raise TypeError(\"payload must be a dict\")\n    return [*events, {\"name\": name, \"payload\": payload}]\n",
+    hints: ["观测事件至少包含 name 和 payload。", "先验证 payload 形状。", "追加后返回新列表，不覆盖旧事件。"],
+    checks: [
+      { name: "记录事件", expression: "record_event([], \"retrieve\", {\"count\": 2}) == [{\"name\": \"retrieve\", \"payload\": {\"count\": 2}}]", failure: "事件应保留名称和真实 payload。", kind: "behavior" },
+      { name: "拒绝畸形", expression: "_raises_type_error(lambda: record_event([], \"retrieve\", []))", failure: "非字典 payload 应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:工具调用": {
+    summary: "把工具参数和返回值约束为稳定结构，避免 Agent 误调用。",
+    prompt: "实现 call_tool(tool, arguments)，arguments 必须是字典并原样传给 tool；类型错误直接抛出。",
+    starterCode: "def call_tool(tool, arguments):\n    pass\n",
+    solution: "def call_tool(tool, arguments):\n    if not isinstance(arguments, dict):\n        raise TypeError(\"arguments must be a dict\")\n    return tool(**arguments)\n",
+    hints: ["先检查工具参数容器。", "用关键字展开保持字段名称。", "不要在工具失败时返回默认结果。"],
+    checks: [
+      { name: "传递参数", expression: "call_tool(lambda city: city.upper(), {\"city\": \"成都\"}) == \"成都\"", failure: "工具应收到真实关键字参数并返回结果。", kind: "behavior" },
+      { name: "参数类型", expression: "_raises_type_error(lambda: call_tool(lambda: 1, []))", failure: "非字典参数应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:Agent 循环": {
+    summary: "让 Agent 循环在完成或达到上限时停止，并保留每一步轨迹。",
+    prompt: "实现 run_agent(steps, limit)，依次执行最多 limit 个无参步骤；limit <= 0 返回空列表。",
+    starterCode: "def run_agent(steps, limit):\n    pass\n",
+    solution: "def run_agent(steps, limit):\n    if limit <= 0:\n        return []\n    return [step() for step in steps[:limit]]\n",
+    hints: ["先处理步数上限边界。", "切片限制最多执行的步骤数。", "返回每一步的真实结果，不能伪造完成。"],
+    checks: [
+      { name: "限制步数", expression: "run_agent([lambda: 1, lambda: 2, lambda: 3], 2) == [1, 2]", failure: "循环最多执行 limit 个步骤。", kind: "behavior" },
+      { name: "零上限", expression: "run_agent([lambda: 1], 0) == []", failure: "非正上限应停止执行。", kind: "behavior" },
+    ],
+  },
   "langgraph:Checkpoint": {
     summary: "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
     prompt: "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。",
