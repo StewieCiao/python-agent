@@ -10,6 +10,7 @@ export const langgraphHints: Record<string, [string, string, string]> = {
   "streaming-interrupts": ["先选择要展示的真实 stream 事件。", "在副作用之前调用 interrupt。", "恢复时再次验证用户决定。"],
   "subgraphs-parallelism": ["先画出父图与子图的状态边界。", "为并行写入字段定义 reducer。", "检查空分支和失败分支的汇总结果。"],
   "memory-research-project": ["先列出 thread state 与 Store memory。", "再安排检索、审核和写作节点。", "最后用恢复和引用测试验收项目。"],
+  "tool-node-boundaries": ["先校验 tool_args", "分别记录成功与错误状态", "用缺失参数和工具异常验证路由"],
 };
 
 export const langgraphChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -50,5 +51,10 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
   "memory-research-project": [
     { name: "线程恢复", expression: "resume(thread_id) == checkpoint_state", failure: "研究项目应能从同一 thread 检查点恢复。", kind: "behavior" },
     { name: "长期偏好", expression: "store.get((\"user\", user_id), \"profile\") is not None", failure: "项目应把跨线程偏好保存到 Store。", kind: "behavior" },
+  ],
+  "tool-node-boundaries": [
+    { name: "成功结果", expression: "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: value * 2)[\"tool_status\"] == \"ok\"", failure: "有效参数和工具成功时应返回 ok。", kind: "behavior" },
+    { name: "失败状态", expression: "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_status\"] == \"error\"", failure: "工具异常应保留 error 状态，不能伪装成功。", kind: "behavior" },
+    { name: "错误详情", expression: "run_tool({}, lambda: 1)[\"tool_error\"][\"type\"] == \"ValueError\"", failure: "缺少 tool_args 时应记录明确的错误类型。", kind: "behavior" },
   ],
 };

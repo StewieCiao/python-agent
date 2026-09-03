@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1c0826a3f5a42b5545b886751284f8a19bd459e1ad7814a8bcff22cf07755595",
-  "familyHash": "3a4cf81436768a74f4903a6d00dd1a64d627ec77cd03f064d5741186ea0ec36d",
+  "catalogHash": "642cc6d72bf0bcc6cb4ca0ff6d0475f36073bf81c03e0b6633a7262df83cece4",
+  "familyHash": "6eb2cd17d894c02523af952853e33fa13009b5ecad8cbca03253762e6a44c1ee",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -11665,7 +11665,7 @@
               "memory-research-project",
               "checkpoint-configuration",
               "supervisor-routing",
-              "langgraph-lesson-09",
+              "tool-node-boundaries",
               "langgraph-lesson-10",
               "langgraph-lesson-11"
             ]
@@ -12858,100 +12858,128 @@
             ]
           },
           {
-            "id": "langgraph-lesson-09",
+            "id": "tool-node-boundaries",
             "stageId": "langgraph-stage-2",
             "order": 10,
-            "title": "Store：写出可验证的实现",
-            "kicker": "LangGraph 学习",
-            "summary": "用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。",
-            "minutes": 35,
+            "title": "工具节点的输入校验与错误状态",
+            "kicker": "langgraph 学习",
+            "summary": "让工具节点把参数校验、真实执行结果和失败状态写回图状态。",
+            "minutes": 40,
             "prerequisites": [
               "supervisor-routing"
             ],
             "difficulty": "advanced",
             "tags": [
-              "langgraph",
-              "stage-langgraph-stage-2"
+              "tools",
+              "errors",
+              "state"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "Store要解决什么问题",
-                "body": "把研究任务中的真实任务先翻译成输入、处理和输出，再理解这个知识点：用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。",
+                "title": "工具节点连接两个边界",
+                "body": "节点从 state 读取结构化参数，调用工具后再返回局部更新。参数缺失属于调用前错误，工具本身失败属于执行错误，两者都应写入可观察字段。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "输入字段先校验",
+                  "结果写入局部 state",
+                  "错误不改成空结果"
                 ],
-                "example": "实现 put_store(store, namespace, key, value)，返回新字典并只更新 namespace/key；不修改原 store。"
+                "example": "def run_tool(state, tool):\n    arguments = state[\"tool_args\"]\n    result = tool(**arguments)\n    return {\"tool_result\": result, \"tool_error\": None}"
               },
               {
                 "kind": "逐步拆解",
-                "title": "把Store拆成步骤",
-                "body": "先实现研究任务场景下题目要求的最小路径，再逐项验证：实现 put_store(store, namespace, key, value)，返回新字典并只更新 namespace/key；不修改原 store。",
+                "title": "失败也要能恢复",
+                "body": "图的后续节点需要知道是成功、工具失败还是参数无效，才能决定重试、人工确认或结束。不要在节点内部吞掉异常并继续走成功边。",
                 "bullets": [
-                  "先复制已有 namespace。",
-                  "key 只在目标 namespace 下生效。",
-                  "用两个 namespace 检查数据隔离。"
+                  "保留错误类型和原因",
+                  "状态明确区分 ok/error",
+                  "路由读取真实状态"
                 ],
-                "example": "def put_store(store, namespace, key, value):\n    pass\n"
+                "example": "return {\"tool_result\": None, \"tool_error\": {\"type\": \"ValueError\", \"message\": str(error)}}"
               },
               {
                 "kind": "常见误区",
-                "title": "Store的边界检查",
-                "body": "不要只复现研究任务的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "工具节点的常见误区",
+                "body": "完成“工具节点的输入校验与错误状态”时，不要为缺失参数选择默认值，也不要把异常伪装成空字典；用成功、参数错误和工具失败三种输入检查状态。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "拒绝缺失参数",
+                  "记录真实失败",
+                  "路由不猜测"
                 ],
-                "example": "检查：写入命名空间、保留原存储"
+                "example": "state_update = {\"tool_status\": \"error\", \"tool_error\": error_info}"
               }
             ],
             "videos": [
               {
-                "title": "LangGraph Essentials",
+                "title": "LangGraph Essentials - Python",
                 "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
                 "provider": "LangChain Academy",
                 "language": "英文",
-                "duration": "课程",
-                "note": "补充持久化、中断、恢复与多 Agent。"
+                "duration": "1 小时",
+                "note": "补充节点、工具调用和错误路由；以官方 Graph API 为准。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangGraph 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+                "label": "LangGraph Graph API",
+                "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "节点内吞错 → 显式 tool_error 状态",
+                "status": "replaced",
+                "explanation": "工具节点保留参数错误和执行错误，交给后续边决定恢复或结束，不再返回空结果冒充成功。",
+                "beforeCode": "result = tool(args)",
+                "afterCode": "update = run_tool(state, tool)",
+                "officialSources": [
+                  {
+                    "label": "LangGraph Graph API",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langgraph-lesson-11"
             ],
             "exercise": {
-              "prompt": "实现 put_store(store, namespace, key, value)，返回新字典并只更新 namespace/key；不修改原 store。",
-              "starterCode": "def put_store(store, namespace, key, value):\n    pass\n",
+              "prompt": "实现 run_tool(state, tool)：state 必须包含 tool_args 字典；成功返回 tool_status=ok、tool_result 和 tool_error=None；缺少 tool_args 或工具抛异常时返回 tool_status=error、tool_result=None，并把异常类型和消息写入 tool_error。",
+              "starterCode": "def run_tool(state, tool):\n    pass\n",
               "hints": [
-                "先复制已有 namespace。",
-                "key 只在目标 namespace 下生效。",
-                "用两个 namespace 检查数据隔离。"
+                "先校验 tool_args",
+                "分别记录成功与错误状态",
+                "用缺失参数和工具异常验证路由"
               ],
-              "solution": "def put_store(store, namespace, key, value):\n    updated = {name: dict(values) for name, values in store.items()}\n    updated.setdefault(namespace, {})[key] = value\n    return updated\n"
+              "solution": "def run_tool(state, tool):\n    if \"tool_args\" not in state or not isinstance(state[\"tool_args\"], dict):\n        return {\"tool_status\": \"error\", \"tool_result\": None, \"tool_error\": {\"type\": \"ValueError\", \"message\": \"tool_args\"}}\n    try:\n        result = tool(**state[\"tool_args\"])\n    except Exception as error:\n        return {\"tool_status\": \"error\", \"tool_result\": None, \"tool_error\": {\"type\": type(error).__name__, \"message\": str(error)}}\n    return {\"tool_status\": \"ok\", \"tool_result\": result, \"tool_error\": None}\n"
             },
             "browserChecks": [
               {
-                "name": "写入命名空间",
-                "expression": "put_store({}, \"user-1\", \"theme\", \"dark\") == {\"user-1\": {\"theme\": \"dark\"}}",
-                "failure": "值应保存到指定 namespace 和 key。",
+                "name": "成功结果",
+                "expression": "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: value * 2)[\"tool_status\"] == \"ok\"",
+                "failure": "有效参数和工具成功时应返回 ok。",
                 "kind": "behavior"
               },
               {
-                "name": "保留原存储",
-                "expression": "((lambda store: (put_store(store, \"u\", \"k\", 1), store))({}))[1] == {}",
-                "failure": "写入 Store 不应修改原字典。",
+                "name": "失败状态",
+                "expression": "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_status\"] == \"error\"",
+                "failure": "工具异常应保留 error 状态，不能伪装成功。",
+                "kind": "behavior"
+              },
+              {
+                "name": "错误详情",
+                "expression": "run_tool({}, lambda: 1)[\"tool_error\"][\"type\"] == \"ValueError\"",
+                "failure": "缺少 tool_args 时应记录明确的错误类型。",
                 "kind": "behavior"
               }
             ]
@@ -12965,7 +12993,7 @@
             "summary": "按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-09"
+              "tool-node-boundaries"
             ],
             "difficulty": "advanced",
             "tags": [

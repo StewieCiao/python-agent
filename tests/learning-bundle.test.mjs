@@ -643,6 +643,19 @@ test("LangChain 引用约束生成课把来源和资料不足作为可验证契�
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
+test("LangGraph 工具节点课明确输入校验与错误状态", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "tool-node-boundaries");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.exercise.prompt.includes("tool_error"));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("graph")));
+});
+
 test("扩展课程讲解卡使用主题骨架而不是统一占位示例", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const generated = authoredCatalog.tracks.flatMap(({ lessons }) => lessons).find(({ id }) => id.includes("-lesson-") && !id.endsWith("-01"));

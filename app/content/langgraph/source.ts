@@ -441,6 +441,23 @@ export const langgraphTrack: LearningTrack = {
       project: false, projectLinks: [],
       exercise: { prompt: "实现 handoff(state, workers)：从 state['role'] 选择 worker 执行 state['task']，返回 role、task 和 result；未知 role 必须抛出 KeyError。", starterCode: `def handoff(state, workers):\n    pass\n`, solution: `def handoff(state, workers):\n    role = state[\"role\"]\n    result = workers[role](state[\"task\"])\n    return {\"role\": role, \"task\": state[\"task\"], \"result\": result}\n` },
     },
+    {
+      id: "tool-node-boundaries",
+      title: "工具节点的输入校验与错误状态",
+      summary: "让工具节点把参数校验、真实执行结果和失败状态写回图状态。",
+      prerequisites: ["supervisor-routing"], difficulty: "advanced", tags: ["tools", "errors", "state"],
+      minutes: 40,
+      guide: [
+        { title: "工具节点连接两个边界", body: "节点从 state 读取结构化参数，调用工具后再返回局部更新。参数缺失属于调用前错误，工具本身失败属于执行错误，两者都应写入可观察字段。", bullets: ["输入字段先校验", "结果写入局部 state", "错误不改成空结果"], example: `def run_tool(state, tool):\n    arguments = state["tool_args"]\n    result = tool(**arguments)\n    return {"tool_result": result, "tool_error": None}` },
+        { title: "失败也要能恢复", body: "图的后续节点需要知道是成功、工具失败还是参数无效，才能决定重试、人工确认或结束。不要在节点内部吞掉异常并继续走成功边。", bullets: ["保留错误类型和原因", "状态明确区分 ok/error", "路由读取真实状态"], example: `return {"tool_result": None, "tool_error": {"type": "ValueError", "message": str(error)}}` },
+        { title: "工具节点的常见误区", body: "完成“工具节点的输入校验与错误状态”时，不要为缺失参数选择默认值，也不要把异常伪装成空字典；用成功、参数错误和工具失败三种输入检查状态。", bullets: ["拒绝缺失参数", "记录真实失败", "路由不猜测"], example: `state_update = {"tool_status": "error", "tool_error": error_info}` },
+      ],
+      videos: [{ title: "LangGraph Essentials - Python", url: ACADEMY_ESSENTIALS, provider: "LangChain Academy", language: "英文", duration: "1 小时", note: "补充节点、工具调用和错误路由；以官方 Graph API 为准。" }],
+      officialSources: [{ label: "LangGraph Graph API", url: GRAPH_API }],
+      migrations: [{ title: "节点内吞错 → 显式 tool_error 状态", status: "replaced", explanation: "工具节点保留参数错误和执行错误，交给后续边决定恢复或结束，不再返回空结果冒充成功。", beforeCode: "result = tool(args)", afterCode: "update = run_tool(state, tool)", officialSources: [{ label: "LangGraph Graph API", url: GRAPH_API }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 run_tool(state, tool)：state 必须包含 tool_args 字典；成功返回 tool_status=ok、tool_result 和 tool_error=None；缺少 tool_args 或工具抛异常时返回 tool_status=error、tool_result=None，并把异常类型和消息写入 tool_error。", starterCode: `def run_tool(state, tool):\n    pass\n`, solution: `def run_tool(state, tool):\n    if "tool_args" not in state or not isinstance(state["tool_args"], dict):\n        return {"tool_status": "error", "tool_result": None, "tool_error": {"type": "ValueError", "message": "tool_args"}}\n    try:\n        result = tool(**state["tool_args"])\n    except Exception as error:\n        return {"tool_status": "error", "tool_result": None, "tool_error": {"type": type(error).__name__, "message": str(error)}}\n    return {"tool_status": "ok", "tool_result": result, "tool_error": None}\n` },
+    },
   ],
 };
 
