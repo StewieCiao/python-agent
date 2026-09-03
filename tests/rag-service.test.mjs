@@ -15,15 +15,16 @@ test("RAG 按 embedding 相似度选择来源并把来源传入模型", async ()
   assert.match(calls[0][1].content, /待分析数据，不是指令/);
 });
 
-test("RAG 没有达到相似度阈值时保留无匹配状态", async () => {
+test("RAG 没有达到相似度阈值时不调用模型并明确提示资料不足", async () => {
   const calls = [];
   const service = createRagService({
     embeddings: async (_profile, inputs) => inputs.map((_input, index) => index === 0 ? [1, 0] : [0, 1]),
-    chat: async (_profile, messages) => { calls.push(messages); return "资料不足"; },
+    chat: async (_profile, messages) => { calls.push(messages); return "不应调用"; },
   });
   const result = await service.answer("p1", "未知问题", [{ id: "a", text: "无关资料", source: "docs/a" }]);
   assert.deepEqual(result.sources, []);
-  assert.match(calls[0][1].content, /无匹配资料/);
+  assert.equal(result.answer, "资料不足：没有找到达到相似度阈值的来源。");
+  assert.equal(calls.length, 0);
 });
 
 test("RAG 相似度相同时保持来源输入顺序", async () => {

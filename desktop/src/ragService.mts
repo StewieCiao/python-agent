@@ -24,6 +24,7 @@ export function createRagService(client: Pick<ModelClient, "embeddings" | "chat"
       const ranked = documents.map((document, index) => ({ document, score: cosine(vectors[0], vectors[index + 1]) }))
         .filter(({ score }) => score >= MIN_SIMILARITY)
         .sort((left, right) => right.score - left.score).slice(0, 4);
+      if (ranked.length === 0) return { answer: "资料不足：没有找到达到相似度阈值的来源。", sources: [] };
       const context = ranked.map(({ document }) => `[${document.source}]\n${document.text}`).join("\n\n");
       const messages: ModelMessage[] = [
         { role: "system", content: "只根据给定资料回答；资料不足时明确说资料不足，并在回答末尾列出使用的来源。" },
