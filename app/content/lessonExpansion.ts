@@ -248,6 +248,61 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
 };
 
 const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
+  "langchain-rag:消息角色": {
+    summary: "区分 system、user、assistant 消息，让提示上下文保持可预测。",
+    prompt: "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。",
+    starterCode: "def split_messages(messages):\n    pass\n",
+    solution: "def split_messages(messages):\n    grouped = {\"system\": [], \"user\": [], \"assistant\": []}\n    for message in messages:\n        role = message[\"role\"]\n        if role not in grouped:\n            raise ValueError(\"unknown role\")\n        grouped[role].append(message[\"content\"])\n    return grouped\n",
+    hints: ["先定义三种允许的 role。", "按输入顺序把 content 放入对应列表。", "未知 role 应保留真实错误，不要放进默认桶。"],
+    checks: [
+      { name: "角色分组", expression: "split_messages([{\"role\": \"system\", \"content\": \"rules\"}, {\"role\": \"user\", \"content\": \"hi\"}]) == {\"system\": [\"rules\"], \"user\": [\"hi\"], \"assistant\": []}", failure: "消息应按真实 role 分组。", kind: "behavior" },
+      { name: "拒绝未知角色", expression: "_raises_value_error(lambda: split_messages([{\"role\": \"tool\", \"content\": \"x\"}]))", failure: "未知角色不能被静默归类。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:Prompt 模板": {
+    summary: "把变量插值与模板文本分开，缺少变量时尽早暴露错误。",
+    prompt: "实现 render_prompt(template, values)，替换模板中的 {name} 占位符；缺少变量时抛出 KeyError。",
+    starterCode: "def render_prompt(template, values):\n    pass\n",
+    solution: "def render_prompt(template, values):\n    return template.format(**values)\n",
+    hints: ["Python 的 format 支持命名占位符。", "用 values 作为关键字参数传入。", "不要用 replace 猜测缺失变量的默认文本。"],
+    checks: [
+      { name: "插入变量", expression: "render_prompt(\"你好，{name}\", {\"name\": \"Stewie\"}) == \"你好，Stewie\"", failure: "模板应使用传入变量渲染。", kind: "behavior" },
+      { name: "缺少变量", expression: "_raises_key_error(lambda: render_prompt(\"{name}/{topic}\", {\"name\": \"S\"}))", failure: "缺少模板变量应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:结构化输出": {
+    summary: "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
+    prompt: "实现 validate_answer(value)，仅接受包含 answer 字符串和 confidence 0–1 数字的字典，否则抛出 ValueError。",
+    starterCode: "def validate_answer(value):\n    pass\n",
+    solution: "def validate_answer(value):\n    if not isinstance(value, dict) or not isinstance(value.get(\"answer\"), str) or not isinstance(value.get(\"confidence\"), (int, float)) or not 0 <= value[\"confidence\"] <= 1:\n        raise ValueError(\"invalid answer schema\")\n    return value\n",
+    hints: ["先检查容器和 answer 类型。", "confidence 必须落在闭区间 0 到 1。", "校验通过后返回原字典，失败不要伪造字段。"],
+    checks: [
+      { name: "通过结构", expression: "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"", failure: "合法结构应原样通过。", kind: "behavior" },
+      { name: "拒绝越界", expression: "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))", failure: "字段类型或置信度越界应失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:Runnable 组合": {
+    summary: "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
+    prompt: "实现 compose_steps(first, second, value)，先调用 first 再把结果传给 second；返回 second 的结果并保留调用顺序。",
+    starterCode: "def compose_steps(first, second, value):\n    pass\n",
+    solution: "def compose_steps(first, second, value):\n    return second(first(value))\n",
+    hints: ["先计算 first(value)。", "把中间结果作为 second 的唯一输入。", "不要交换顺序或吞掉任一步异常。"],
+    checks: [
+      { name: "数据流", expression: "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8", failure: "结果应按 first → second 传递。", kind: "behavior" },
+      { name: "顺序可观察", expression: "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]", failure: "步骤调用顺序必须稳定。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:模型配置": {
+    summary: "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
+    prompt: "实现 normalize_model_config(config)，返回 temperature 与 timeout；缺省分别为 0 和 30，参数必须为非负数字，否则抛出 ValueError。",
+    starterCode: "def normalize_model_config(config):\n    pass\n",
+    solution: "def normalize_model_config(config):\n    temperature = config.get(\"temperature\", 0)\n    timeout = config.get(\"timeout\", 30)\n    if not isinstance(temperature, (int, float)) or not isinstance(timeout, (int, float)) or temperature < 0 or timeout < 0:\n        raise ValueError(\"invalid model config\")\n    return {\"temperature\": temperature, \"timeout\": timeout}\n",
+    hints: ["只读取题目约定的两个字段。", "默认值应集中在规范化函数。", "负数和非数字配置都应真实失败。"],
+    checks: [
+      { name: "默认配置", expression: "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}", failure: "缺省配置应使用明确默认值。", kind: "behavior" },
+      { name: "覆盖与边界", expression: "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))", failure: "合法覆盖应保留，负超时应拒绝。", kind: "behavior" },
+    ],
+  },
   "langchain-rag:文档加载": {
     summary: "把不同来源统一成带正文和来源 metadata 的文档记录。",
     prompt: "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。",
@@ -301,6 +356,17 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "保持对应关系", expression: "pair_embeddings([\"a\", \"b\"], [[1], [2]]) == [{\"text\": \"a\", \"embedding\": [1]}, {\"text\": \"b\", \"embedding\": [2]}]", failure: "每个向量必须对应原文本。", kind: "behavior" },
       { name: "长度边界", expression: "_raises_value_error(lambda: pair_embeddings([\"a\"], []))", failure: "输入数量不一致时应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:向量存储": {
+    summary: "把向量和文档元数据一起保存，检索时不丢失可引用来源。",
+    prompt: "实现 add_vector(store, vector, source)，返回新列表并保存 vector 与 source；不得修改传入 store。",
+    starterCode: "def add_vector(store, vector, source):\n    pass\n",
+    solution: "def add_vector(store, vector, source):\n    return [*store, {\"vector\": vector, \"source\": source}]\n",
+    hints: ["先复制已有记录。", "每条记录同时保存向量和来源。", "比较调用前后的 store，确认没有原地修改。"],
+    checks: [
+      { name: "保留来源", expression: "add_vector([], [0.1, 0.2], \"guide.md\") == [{\"vector\": [0.1, 0.2], \"source\": \"guide.md\"}]", failure: "向量记录必须保留来源。", kind: "behavior" },
+      { name: "不修改存储", expression: "((lambda store: (add_vector(store, [1], \"a\"), store))([]))[1] == []", failure: "添加向量不应改写调用者列表。", kind: "behavior" },
     ],
   },
   "langchain-rag:相似度检索": {

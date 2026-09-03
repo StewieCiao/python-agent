@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "d1ebded41049e07669256eace02d1946602c35c334bb03169d90091d8fec0360",
-  "familyHash": "cbc32499cec6bf3282e9783263dcfb2536099aec4e200aa2933b825383de09de",
+  "catalogHash": "febbb39f2d6b7b7ba17d6bb35113b2dafd09bebeb3084ddf8adea03d803258e2",
+  "familyHash": "dd7db1d2f9a03e7cf460bc476a4d1a6f724be396e9dba0eff7d8b3393c661636",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8352,9 +8352,9 @@
             "id": "langchain-rag-lesson-20",
             "stageId": "langchain-rag-stage-7",
             "order": 21,
-            "title": "消息角色迁移练习 2：从概念到练习（第 21 节）",
+            "title": "消息角色迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 消息角色迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "区分 system、user、assistant 消息，让提示上下文保持可预测。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-19"
@@ -8414,26 +8414,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“消息角色迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def split_messages(messages):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先定义三种允许的 role。",
+                "按输入顺序把 content 放入对应列表。",
+                "未知 role 应保留真实错误，不要放进默认桶。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def split_messages(messages):\n    grouped = {\"system\": [], \"user\": [], \"assistant\": []}\n    for message in messages:\n        role = message[\"role\"]\n        if role not in grouped:\n            raise ValueError(\"unknown role\")\n        grouped[role].append(message[\"content\"])\n    return grouped\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "角色分组",
+                "expression": "split_messages([{\"role\": \"system\", \"content\": \"rules\"}, {\"role\": \"user\", \"content\": \"hi\"}]) == {\"system\": [\"rules\"], \"user\": [\"hi\"], \"assistant\": []}",
+                "failure": "消息应按真实 role 分组。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝未知角色",
+                "expression": "_raises_value_error(lambda: split_messages([{\"role\": \"tool\", \"content\": \"x\"}]))",
+                "failure": "未知角色不能被静默归类。",
                 "kind": "behavior"
               }
             ]
@@ -8442,9 +8442,9 @@
             "id": "langchain-rag-lesson-21",
             "stageId": "langchain-rag-stage-1",
             "order": 22,
-            "title": "Prompt 模板迁移练习 2：从概念到练习（第 22 节）",
+            "title": "Prompt 模板迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Prompt 模板迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-20"
@@ -8504,26 +8504,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“Prompt 模板迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 render_prompt(template, values)，替换模板中的 {name} 占位符；缺少变量时抛出 KeyError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def render_prompt(template, values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "Python 的 format 支持命名占位符。",
+                "用 values 作为关键字参数传入。",
+                "不要用 replace 猜测缺失变量的默认文本。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def render_prompt(template, values):\n    return template.format(**values)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "插入变量",
+                "expression": "render_prompt(\"你好，{name}\", {\"name\": \"Stewie\"}) == \"你好，Stewie\"",
+                "failure": "模板应使用传入变量渲染。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "缺少变量",
+                "expression": "_raises_key_error(lambda: render_prompt(\"{name}/{topic}\", {\"name\": \"S\"}))",
+                "failure": "缺少模板变量应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -8532,9 +8532,9 @@
             "id": "langchain-rag-lesson-22",
             "stageId": "langchain-rag-stage-2",
             "order": 23,
-            "title": "结构化输出迁移练习 2：从概念到练习（第 23 节）",
+            "title": "结构化输出迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 结构化输出迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-21"
@@ -8594,26 +8594,26 @@
               "langchain-rag-lesson-43"
             ],
             "exercise": {
-              "prompt": "完成“结构化输出迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 validate_answer(value)，仅接受包含 answer 字符串和 confidence 0–1 数字的字典，否则抛出 ValueError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def validate_answer(value):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先检查容器和 answer 类型。",
+                "confidence 必须落在闭区间 0 到 1。",
+                "校验通过后返回原字典，失败不要伪造字段。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def validate_answer(value):\n    if not isinstance(value, dict) or not isinstance(value.get(\"answer\"), str) or not isinstance(value.get(\"confidence\"), (int, float)) or not 0 <= value[\"confidence\"] <= 1:\n        raise ValueError(\"invalid answer schema\")\n    return value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "通过结构",
+                "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
+                "failure": "合法结构应原样通过。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝越界",
+                "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
+                "failure": "字段类型或置信度越界应失败。",
                 "kind": "behavior"
               }
             ]
@@ -8622,9 +8622,9 @@
             "id": "langchain-rag-lesson-23",
             "stageId": "langchain-rag-stage-3",
             "order": 24,
-            "title": "Runnable 组合迁移练习 2：从概念到练习（第 24 节）",
+            "title": "Runnable 组合迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Runnable 组合迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-22"
@@ -8684,26 +8684,26 @@
               "langchain-rag-lesson-44"
             ],
             "exercise": {
-              "prompt": "完成“Runnable 组合迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 compose_steps(first, second, value)，先调用 first 再把结果传给 second；返回 second 的结果并保留调用顺序。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def compose_steps(first, second, value):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先计算 first(value)。",
+                "把中间结果作为 second 的唯一输入。",
+                "不要交换顺序或吞掉任一步异常。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def compose_steps(first, second, value):\n    return second(first(value))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "数据流",
+                "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
+                "failure": "结果应按 first → second 传递。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "顺序可观察",
+                "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
+                "failure": "步骤调用顺序必须稳定。",
                 "kind": "behavior"
               }
             ]
@@ -8712,9 +8712,9 @@
             "id": "langchain-rag-lesson-24",
             "stageId": "langchain-rag-stage-4",
             "order": 25,
-            "title": "模型配置迁移练习 2：从概念到练习（第 25 节）",
+            "title": "模型配置迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 模型配置迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-23"
@@ -8774,26 +8774,26 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“模型配置迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 normalize_model_config(config)，返回 temperature 与 timeout；缺省分别为 0 和 30，参数必须为非负数字，否则抛出 ValueError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def normalize_model_config(config):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "只读取题目约定的两个字段。",
+                "默认值应集中在规范化函数。",
+                "负数和非数字配置都应真实失败。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def normalize_model_config(config):\n    temperature = config.get(\"temperature\", 0)\n    timeout = config.get(\"timeout\", 30)\n    if not isinstance(temperature, (int, float)) or not isinstance(timeout, (int, float)) or temperature < 0 or timeout < 0:\n        raise ValueError(\"invalid model config\")\n    return {\"temperature\": temperature, \"timeout\": timeout}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "默认配置",
+                "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
+                "failure": "缺省配置应使用明确默认值。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "覆盖与边界",
+                "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
+                "failure": "合法覆盖应保留，负超时应拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -9072,9 +9072,9 @@
             "id": "langchain-rag-lesson-28",
             "stageId": "langchain-rag-stage-1",
             "order": 29,
-            "title": "向量存储迁移练习 2：从概念到练习（第 29 节）",
+            "title": "向量存储迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把 向量存储迁移练习 2 放进 indexing → retrieval 数据流，比较召回结果并保留来源。",
+            "summary": "把向量和文档元数据一起保存，检索时不丢失可引用来源。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-27"
@@ -9134,26 +9134,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "用两条不同主题的文档验证 向量存储迁移练习 2：记录输入、返回数量、来源 metadata，并说明无命中时的行为。",
-              "starterCode": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = []",
+              "prompt": "实现 add_vector(store, vector, source)，返回新列表并保存 vector 与 source；不得修改传入 store。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def add_vector(store, vector, source):\n    pass\n",
               "hints": [
-                "先保留 page_content 与 source",
-                "检查 query 与文档的向量维度",
-                "用无关 query 验证无命中边界"
+                "先复制已有记录。",
+                "每条记录同时保存向量和来源。",
+                "比较调用前后的 store，确认没有原地修改。"
               ],
-              "solution": "documents = [{\"text\": \"Python 函数\", \"source\": \"a.md\"}, {\"text\": \"图状态\", \"source\": \"b.md\"}]\nresults = [{\"text\": documents[0][\"text\"], \"source\": documents[0][\"source\"]}]"
+              "solution": "def add_vector(store, vector, source):\n    return [*store, {\"vector\": vector, \"source\": source}]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "保留来源",
+                "expression": "add_vector([], [0.1, 0.2], \"guide.md\") == [{\"vector\": [0.1, 0.2], \"source\": \"guide.md\"}]",
+                "failure": "向量记录必须保留来源。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "不修改存储",
+                "expression": "((lambda store: (add_vector(store, [1], \"a\"), store))([]))[1] == []",
+                "failure": "添加向量不应改写调用者列表。",
                 "kind": "behavior"
               }
             ]
@@ -10152,9 +10152,9 @@
             "id": "langchain-rag-lesson-40",
             "stageId": "langchain-rag-stage-6",
             "order": 41,
-            "title": "消息角色迁移练习 3：从概念到练习（第 41 节）",
+            "title": "消息角色迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 消息角色迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "区分 system、user、assistant 消息，让提示上下文保持可预测。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-39"
@@ -10214,26 +10214,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“消息角色迁移练习 3”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def split_messages(messages):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先定义三种允许的 role。",
+                "按输入顺序把 content 放入对应列表。",
+                "未知 role 应保留真实错误，不要放进默认桶。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def split_messages(messages):\n    grouped = {\"system\": [], \"user\": [], \"assistant\": []}\n    for message in messages:\n        role = message[\"role\"]\n        if role not in grouped:\n            raise ValueError(\"unknown role\")\n        grouped[role].append(message[\"content\"])\n    return grouped\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "角色分组",
+                "expression": "split_messages([{\"role\": \"system\", \"content\": \"rules\"}, {\"role\": \"user\", \"content\": \"hi\"}]) == {\"system\": [\"rules\"], \"user\": [\"hi\"], \"assistant\": []}",
+                "failure": "消息应按真实 role 分组。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝未知角色",
+                "expression": "_raises_value_error(lambda: split_messages([{\"role\": \"tool\", \"content\": \"x\"}]))",
+                "failure": "未知角色不能被静默归类。",
                 "kind": "behavior"
               }
             ]
@@ -10242,9 +10242,9 @@
             "id": "langchain-rag-lesson-41",
             "stageId": "langchain-rag-stage-7",
             "order": 42,
-            "title": "Prompt 模板迁移练习 3：从概念到练习（第 42 节）",
+            "title": "Prompt 模板迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Prompt 模板迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-40"
@@ -10304,26 +10304,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“Prompt 模板迁移练习 3”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 render_prompt(template, values)，替换模板中的 {name} 占位符；缺少变量时抛出 KeyError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def render_prompt(template, values):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "Python 的 format 支持命名占位符。",
+                "用 values 作为关键字参数传入。",
+                "不要用 replace 猜测缺失变量的默认文本。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def render_prompt(template, values):\n    return template.format(**values)\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "插入变量",
+                "expression": "render_prompt(\"你好，{name}\", {\"name\": \"Stewie\"}) == \"你好，Stewie\"",
+                "failure": "模板应使用传入变量渲染。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "缺少变量",
+                "expression": "_raises_key_error(lambda: render_prompt(\"{name}/{topic}\", {\"name\": \"S\"}))",
+                "failure": "缺少模板变量应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -10332,9 +10332,9 @@
             "id": "langchain-rag-lesson-42",
             "stageId": "langchain-rag-stage-1",
             "order": 43,
-            "title": "结构化输出迁移练习 3：从概念到练习（第 43 节）",
+            "title": "结构化输出迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 结构化输出迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-41"
@@ -10392,26 +10392,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“结构化输出迁移练习 3：从概念到练习（第 43 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "阶段项目：围绕“结构化输出迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def validate_answer(value):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def validate_answer(value):\n    if not isinstance(value, dict) or not isinstance(value.get(\"answer\"), str) or not isinstance(value.get(\"confidence\"), (int, float)) or not 0 <= value[\"confidence\"] <= 1:\n        raise ValueError(\"invalid answer schema\")\n    return value\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "通过结构",
+                "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
+                "failure": "合法结构应原样通过。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝越界",
+                "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
+                "failure": "字段类型或置信度越界应失败。",
                 "kind": "behavior"
               }
             ]
@@ -10420,9 +10420,9 @@
             "id": "langchain-rag-lesson-43",
             "stageId": "langchain-rag-stage-2",
             "order": 44,
-            "title": "Runnable 组合迁移练习 3：从概念到练习（第 44 节）",
+            "title": "Runnable 组合迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 Runnable 组合迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-42"
@@ -10480,26 +10480,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“Runnable 组合迁移练习 3：从概念到练习（第 44 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "阶段项目：围绕“Runnable 组合迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def compose_steps(first, second, value):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def compose_steps(first, second, value):\n    return second(first(value))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "数据流",
+                "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
+                "failure": "结果应按 first → second 传递。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "顺序可观察",
+                "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
+                "failure": "步骤调用顺序必须稳定。",
                 "kind": "behavior"
               }
             ]
@@ -10508,9 +10508,9 @@
             "id": "langchain-rag-lesson-44",
             "stageId": "langchain-rag-stage-3",
             "order": 45,
-            "title": "模型配置迁移练习 3：从概念到练习（第 45 节）",
+            "title": "模型配置迁移练习 3：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 模型配置迁移练习 3 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-43"
@@ -10568,26 +10568,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“模型配置迁移练习 3：从概念到练习（第 45 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "阶段项目：围绕“模型配置迁移练习 3：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def normalize_model_config(config):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def normalize_model_config(config):\n    temperature = config.get(\"temperature\", 0)\n    timeout = config.get(\"timeout\", 30)\n    if not isinstance(temperature, (int, float)) or not isinstance(timeout, (int, float)) or temperature < 0 or timeout < 0:\n        raise ValueError(\"invalid model config\")\n    return {\"temperature\": temperature, \"timeout\": timeout}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "默认配置",
+                "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
+                "failure": "缺省配置应使用明确默认值。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "覆盖与边界",
+                "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
+                "failure": "合法覆盖应保留，负超时应拒绝。",
                 "kind": "behavior"
               }
             ]
@@ -16391,71 +16391,71 @@
     ],
     "langchain-rag-lesson-20": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "角色分组",
+        "expression": "split_messages([{\"role\": \"system\", \"content\": \"rules\"}, {\"role\": \"user\", \"content\": \"hi\"}]) == {\"system\": [\"rules\"], \"user\": [\"hi\"], \"assistant\": []}",
+        "failure": "消息应按真实 role 分组。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝未知角色",
+        "expression": "_raises_value_error(lambda: split_messages([{\"role\": \"tool\", \"content\": \"x\"}]))",
+        "failure": "未知角色不能被静默归类。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-21": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "插入变量",
+        "expression": "render_prompt(\"你好，{name}\", {\"name\": \"Stewie\"}) == \"你好，Stewie\"",
+        "failure": "模板应使用传入变量渲染。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "缺少变量",
+        "expression": "_raises_key_error(lambda: render_prompt(\"{name}/{topic}\", {\"name\": \"S\"}))",
+        "failure": "缺少模板变量应明确失败。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-22": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "通过结构",
+        "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
+        "failure": "合法结构应原样通过。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝越界",
+        "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
+        "failure": "字段类型或置信度越界应失败。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-23": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "数据流",
+        "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
+        "failure": "结果应按 first → second 传递。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "顺序可观察",
+        "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
+        "failure": "步骤调用顺序必须稳定。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-24": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "默认配置",
+        "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
+        "failure": "缺省配置应使用明确默认值。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "覆盖与边界",
+        "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
+        "failure": "合法覆盖应保留，负超时应拒绝。",
         "kind": "behavior"
       }
     ],
@@ -16503,15 +16503,15 @@
     ],
     "langchain-rag-lesson-28": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "保留来源",
+        "expression": "add_vector([], [0.1, 0.2], \"guide.md\") == [{\"vector\": [0.1, 0.2], \"source\": \"guide.md\"}]",
+        "failure": "向量记录必须保留来源。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "不修改存储",
+        "expression": "((lambda store: (add_vector(store, [1], \"a\"), store))([]))[1] == []",
+        "failure": "添加向量不应改写调用者列表。",
         "kind": "behavior"
       }
     ],
@@ -16671,71 +16671,71 @@
     ],
     "langchain-rag-lesson-40": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "角色分组",
+        "expression": "split_messages([{\"role\": \"system\", \"content\": \"rules\"}, {\"role\": \"user\", \"content\": \"hi\"}]) == {\"system\": [\"rules\"], \"user\": [\"hi\"], \"assistant\": []}",
+        "failure": "消息应按真实 role 分组。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝未知角色",
+        "expression": "_raises_value_error(lambda: split_messages([{\"role\": \"tool\", \"content\": \"x\"}]))",
+        "failure": "未知角色不能被静默归类。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-41": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "插入变量",
+        "expression": "render_prompt(\"你好，{name}\", {\"name\": \"Stewie\"}) == \"你好，Stewie\"",
+        "failure": "模板应使用传入变量渲染。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "缺少变量",
+        "expression": "_raises_key_error(lambda: render_prompt(\"{name}/{topic}\", {\"name\": \"S\"}))",
+        "failure": "缺少模板变量应明确失败。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-42": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "通过结构",
+        "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
+        "failure": "合法结构应原样通过。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "拒绝越界",
+        "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
+        "failure": "字段类型或置信度越界应失败。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-43": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "数据流",
+        "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
+        "failure": "结果应按 first → second 传递。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "顺序可观察",
+        "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
+        "failure": "步骤调用顺序必须稳定。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-44": [
       {
-        "name": "典型输入",
-        "expression": "behavioral result",
-        "failure": "典型输入行为不符",
+        "name": "默认配置",
+        "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
+        "failure": "缺省配置应使用明确默认值。",
         "kind": "behavior"
       },
       {
-        "name": "边界输入",
-        "expression": "boundary result",
-        "failure": "边界输入行为不符",
+        "name": "覆盖与边界",
+        "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
+        "failure": "合法覆盖应保留，负超时应拒绝。",
         "kind": "behavior"
       }
     ],
