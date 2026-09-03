@@ -111,6 +111,16 @@ class ExerciseTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "重复"):
             generate_personalized_exercise(selection, 0, [item["prompt"] for item in recent])
 
+    def test_personalized_variant_rejects_duplicate_variant_identity(self):
+        selection = {
+            "familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner",
+            "constraints": ["sum even values"], "starterCode": "def sum_even(values):\n    pass\n", "variants": variants(2),
+        }
+        selection["variants"][1]["label"] = selection["variants"][0]["label"]
+        selection["variants"][1]["values"] = selection["variants"][0]["values"]
+        with self.assertRaisesRegex(ValueError, "变体身份重复"):
+            generate_personalized_exercise(selection, 0, [])
+
     def test_each_verified_family_has_six_transfer_variants(self):
         family_ids = [
             "python-output-v1", "python-loops-v1", "python-lists-v1",

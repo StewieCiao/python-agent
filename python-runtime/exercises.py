@@ -72,6 +72,14 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     variants = selection.get("variants")
     if not isinstance(variants, list) or not variants:
         raise ValueError("family 没有已审校的题目变体")
+    identities = set()
+    for variant in variants:
+        if not isinstance(variant, dict):
+            raise ValueError("family 变体结构无效")
+        identity = (variant.get("label"), variant.get("values"))
+        if identity in identities:
+            raise ValueError("family 变体身份重复")
+        identities.add(identity)
     constraints = selection.get("constraints", [])
     if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
         raise ValueError("family 约束无效")
