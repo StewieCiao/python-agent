@@ -256,6 +256,9 @@ export function validateAuthoredCatalog(value: unknown): AuthoredCatalog {
     const priorGlobalLessonIds = new Set(allLessonIds);
     const trackLessonIds = new Set<string>();
     const lessons = track.lessons.map((lesson, lessonIndex) => validateLesson(lesson, `${path}.lessons[${lessonIndex}]`, stageIds, allLessonIds));
+    for (const [lessonIndex, lesson] of lessons.entries()) {
+      if (lesson.order !== lessonIndex + 1) throw new Error(`${path}.lessons[${lessonIndex}].课程 order 必须连续`);
+    }
     const seenLessonIds = new Set<string>();
     for (const lesson of lessons) {
       for (const prerequisite of lesson.prerequisites) {
@@ -271,9 +274,8 @@ export function validateAuthoredCatalog(value: unknown): AuthoredCatalog {
       const stageId = stage.id as string;
       const stageLessonIds = stage.lessonIds as string[];
       if (stageLessonIds.some((id) => !trackLessonIds.has(id))) throw new Error(`${path}.stages.${stageId}.lessonIds 引用了未知课程`);
-      for (const lesson of lessons.filter((item) => item.stageId === stageId)) {
-        if (!stageLessonIds.includes(lesson.id)) throw new Error(`${path}.stages.${stageId} 未收录课程 ${lesson.id}`);
-      }
+      const expectedLessonIds = lessons.filter((item) => item.stageId === stageId).map((lesson) => lesson.id);
+      if (JSON.stringify(stageLessonIds) !== JSON.stringify(expectedLessonIds)) throw new Error(`${path}.stages.${stageId} 未收录课程或顺序不一致`);
     }
     if (!trackLessonIds.has(track.currentLessonId as string)) throw new Error(`${path}.currentLessonId 引用了未知课程`);
   }
