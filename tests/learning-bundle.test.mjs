@@ -566,6 +566,18 @@ test("LangGraph Supervisor 课明确角色路由与未知角色失败", async ()
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("graph-api")));
 });
 
+test("Python 工程路线包含 HTTP 请求失败边界课程", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "python");
+  assert.ok(track);
+  const lesson = track.lessons.find(({ title }) => title.includes("HTTP 请求与失败边界"));
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.ok(lesson.browserChecks.length >= 2);
+  assert.ok(lesson.exercise.prompt.includes("timeout"));
+});
+
 test("框架作者路线保留可解释的先修链", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   for (const trackId of ["langchain-rag", "langgraph"]) {
