@@ -431,6 +431,16 @@ test("自动生成项目课包含可交付验收契约", async () => {
   }
 });
 
+test("框架阶段项目提供真实领域契约而不是通用组合函数", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const projectTitles = new Set(["可引用文档问答系统", "混合检索评估台", "带工具调用的知识助手", "RAG 质量观测面板", "可恢复研究工作流", "人工审核 Agent 流程", "多 Agent 协作调度器", "带长期记忆的任务图"]);
+  const projects = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter(({ title }) => projectTitles.has(title)));
+  assert.equal(projects.length, 8);
+  assert.ok(projects.every((lesson) => lesson.exercise.prompt.includes("最小可运行里程碑")));
+  assert.ok(projects.some((lesson) => lesson.exercise.prompt.includes("引用")));
+  assert.ok(projects.some((lesson) => lesson.exercise.prompt.includes("thread")));
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
