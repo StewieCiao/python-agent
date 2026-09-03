@@ -173,10 +173,12 @@ export function LearningApp() {
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
 
   async function requestPersonalizedExercise() {
+    const requestedLessonId = lesson.id;
     setPersonalizedLoading(true);
     setPersonalizedStatus("");
     try {
-      const result = await loadPersonalizedExercise(lesson.id, Date.now());
+      const result = await loadPersonalizedExercise(requestedLessonId, Date.now());
+      if (currentLessonIdRef.current !== requestedLessonId) return;
       setPersonalized({
         prompt: result.exercise.prompt,
         starterCode: result.exercise.starterCode,
@@ -186,6 +188,7 @@ export function LearningApp() {
           : "根据当前练习 family 推荐",
       });
     } catch (error) {
+      if (currentLessonIdRef.current !== requestedLessonId) return;
       setPersonalized(null);
       setPersonalizedStatus(`暂时无法生成个性题：${errorMessage(error)}`);
     } finally {
@@ -368,6 +371,8 @@ export function LearningApp() {
     setCurrentLessonId(nextLesson.id);
     setCode(nextCode);
     setRunRecord(null);
+    setPersonalized(null);
+    setPersonalizedStatus("");
     setNotice("");
     setViewMode("learn");
   }
@@ -378,6 +383,8 @@ export function LearningApp() {
     setActiveLearningLessonId(track.currentLessonId);
     setViewMode("learn");
     setNotice("");
+    setPersonalized(null);
+    setPersonalizedStatus("");
   }
 
   function selectLearningLesson(lessonId: string) {
@@ -388,6 +395,8 @@ export function LearningApp() {
     }
     setActiveLearningLessonId(lessonId);
     setViewMode("learn");
+    setPersonalized(null);
+    setPersonalizedStatus("");
   }
 
   function updateCode(nextCode: string) {
