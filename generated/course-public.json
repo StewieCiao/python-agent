@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7d0b592e54831dbc23567d09df7911fe0d6e898a1bdfe1c78627205694085649",
+  "catalogHash": "ba7514656cf7814a6cb309463a3943c9ac916c2bd53ebed0144bec53d537ca05",
   "familyHash": "b73b7f7b1421a052fb06841c192effc0422c876c93b147e1c194e67447f9c556",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -304,9 +304,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "创建变量 name，值为“小派”\n创建变量 level，值为 1\n输出：小派正在挑战第 1 关",
               "starterCode": "name = \"\"\nlevel = 0\n\nprint()\n",
@@ -405,9 +403,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 normalize_title(text)\n返回去除两端空格并转为小写的新字符串\n不要在函数内 print",
               "starterCode": "def normalize_title(text):\n    # 返回清理后的新字符串\n    pass\n",
@@ -495,9 +491,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现函数 grade(score)\n90 分及以上返回 A；60–89 返回 B；低于 60 返回 C",
               "starterCode": "def grade(score):\n    # 在这里完成分支\n    pass\n",
@@ -1116,9 +1110,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 Wallet 类，初始 balance 为 0\ndeposit(amount) 增加余额并返回新余额\namount <= 0 时抛出 ValueError",
               "starterCode": "class Wallet:\n    def __init__(self):\n        pass\n\n    def deposit(self, amount):\n        pass\n",
@@ -1217,9 +1209,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 even_numbers(limit)\n依次 yield 0 到 limit 以内的偶数\n不创建中间列表",
               "starterCode": "def even_numbers(limit):\n    pass\n",
@@ -1319,9 +1309,7 @@
             "officialSources": [],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 twice 装饰器\n被装饰函数每次调用两遍\n返回第二次调用的结果\n支持任意参数",
               "starterCode": "def twice(func):\n    # 返回包装函数\n    pass\n\n@twice\ndef add(a, b):\n    return a + b\n",
@@ -1930,9 +1918,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 run_react(actions, tools, max_steps=5)\n工具动作通过 tools[name](payload) 执行，并把 action、input、observation 写入 history\n遇到 Finish 返回其中答案；未遇到则 answer 为 None\n返回 {'answer': ..., 'history': [...], 'steps': 实际读取动作数}\n未知工具保留真实 KeyError；最多处理 max_steps 个动作",
               "starterCode": "def parse_action(text):\n    text = text.strip()\n    if '[' not in text or not text.endswith(']'):\n        return None, None\n    name, payload = text[:-1].split('[', 1)\n    return (name, payload) if name else (None, None)\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    # 完成 Action → Observation 循环\n    pass\n",
@@ -2038,9 +2024,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 execute_plan(steps, executor)\n按输入顺序执行每个 {'id', 'task'} 步骤\nexecutor(task, context) 中的 context 是此前 id 到 result 的新字典\n返回 [{'id': id, 'result': result}, ...]；空计划返回 []",
               "starterCode": "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    # 逐步求解并更新 context\n    return results\n",
@@ -2135,9 +2119,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 reflection_loop(draft, evaluate, revise, max_rounds=3)\n每轮先调用 evaluate(draft)；True 时立即返回当前 draft\nFalse 时调用 revise(draft) 并计为一次改进，最多改进 max_rounds 次\nmax_rounds < 0 时抛出 ValueError；达到上限返回最后版本",
               "starterCode": "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    # 执行 → 评估 → 改进\n    pass\n",
@@ -2736,9 +2718,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 make_counter(start)，每次调用返回递增 1 的数字；不同计数器之间不能互相影响。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def make_counter(start):\n    pass\n",
@@ -2826,9 +2806,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 take_every_other(items)，返回从第一个元素开始每隔一个元素的新列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def take_every_other(items):\n    pass\n",
@@ -2916,9 +2894,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 count_categories(records)，统计每条记录的 category，返回新的字典；不能预先写死键。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def count_categories(records):\n    counts = {}\n    return counts\n",
@@ -3462,9 +3438,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 make_slug_module()，返回一个包含 slugify 函数的字典；slugify 应清洗空白并转小写。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def make_slug_module():\n    pass\n",
@@ -3552,9 +3526,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 read_nonempty_lines(path)，读取文件并返回去除换行的非空行列表；文件必须由 with 管理。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def read_nonempty_lines(path):\n    pass\n",
@@ -3642,9 +3614,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def is_valid_username(name):\n    pass\n",
@@ -4182,9 +4152,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def slugify(title):\n    pass\n",
@@ -4272,9 +4240,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 shipping_level(weight)：weight <= 0 返回 invalid；小于 1 返回 light；1–5 返回 standard；大于 5 返回 heavy。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def shipping_level(weight):\n    pass\n",
@@ -4362,9 +4328,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 longest_word(words)，返回最长单词；空列表返回 None，长度相同返回先出现的单词。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def longest_word(words):\n    pass\n",
@@ -4902,9 +4866,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 parse_positive_int(text)：文本不是整数时返回 None，整数小于等于 0 时也返回 None；不要吞掉 TypeError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def parse_positive_int(text):\n    pass\n",
@@ -4998,9 +4960,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 Wallet 类：初始余额为 0，deposit(amount) 只接受正数并增加余额，balance() 返回当前余额。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "class Wallet:\n    pass\n",
@@ -5088,9 +5048,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 positive_numbers(values)，按原顺序逐个 yield 大于 0 的数字，不返回预先构造的列表。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def positive_numbers(values):\n    pass\n",
@@ -5628,9 +5586,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 parse_args(argv)，读取 --name 后的值并返回字典；缺少值或参数名错误时抛出 ValueError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def parse_args(argv):\n    pass\n",
@@ -5718,9 +5674,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 run_tasks(tasks)，按输入顺序调用每个无参函数并返回结果列表；空任务列表返回空列表。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def run_tasks(tasks):\n    pass\n",
@@ -5808,9 +5762,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "project-text"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 weather_tool(city)，返回包含 city 和 condition 的字典；空城市名应抛出 ValueError，不返回伪造天气。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def weather_tool(city):\n    pass\n",
@@ -6927,9 +6879,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "画出并用函数名表达离线 indexing 与在线 retrieval 两条流程，说明每一步的失败状态。",
               "starterCode": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass",
@@ -7094,9 +7044,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
               "starterCode": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)",
@@ -7220,9 +7168,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "为 RAG 工具定义输入、输出、允许失败和日志字段，确保任何失败都不会返回伪答案。",
               "starterCode": "def search_knowledge(query: str):\n    pass",
@@ -7702,9 +7648,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。",
               "starterCode": "def rerank(results, scores):\n    pass\n",
@@ -7792,9 +7736,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。",
               "starterCode": "def format_citations(results):\n    pass\n",
@@ -7882,9 +7824,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。",
               "starterCode": "def choose_context(results, threshold):\n    pass\n",
@@ -8332,9 +8272,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 expand_queries(query, rewrites)，返回去重后的查询列表，原问题必须位于第一项。",
               "starterCode": "def expand_queries(query, rewrites):\n    pass\n",
@@ -8422,9 +8360,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。",
               "starterCode": "def answer_with_sources(contexts):\n    pass\n",
@@ -8512,9 +8448,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_messages(messages):\n    pass\n",
@@ -8962,9 +8896,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
@@ -9052,9 +8984,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_text(text, size):\n    pass\n",
@@ -9142,9 +9072,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 pair_embeddings(texts, vectors)，返回包含 text 和 embedding 的记录；长度不一致时抛出 ValueError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def pair_embeddings(texts, vectors):\n    pass\n",
@@ -9592,9 +9520,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def format_citations(results):\n    pass\n",
@@ -9682,9 +9608,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def choose_context(results, threshold):\n    pass\n",
@@ -9772,9 +9696,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 evaluate_retrieval(expected, actual)，返回 hit、missing、unexpected 三个集合的排序列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def evaluate_retrieval(expected, actual):\n    pass\n",
@@ -10222,9 +10144,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def answer_with_sources(contexts):\n    pass\n",
@@ -10312,9 +10232,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_messages(messages):\n    pass\n",
@@ -10402,9 +10320,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 render_prompt(template, values)，替换模板中的 {name} 占位符；缺少变量时抛出 KeyError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def render_prompt(template, values):\n    pass\n",
@@ -10844,9 +10760,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_text(text, size):\n    pass\n",
@@ -10934,9 +10848,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-42"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 pair_embeddings(texts, vectors)，返回包含 text 和 embedding 的记录；长度不一致时抛出 ValueError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def pair_embeddings(texts, vectors):\n    pass\n",
@@ -11540,9 +11452,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
               "starterCode": "def approve_email(state):\n    pass",
@@ -11634,9 +11544,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "把三个研究主题并行分发，使用 reducer 汇总 findings，再生成报告。",
               "starterCode": "def fan_out(state):\n    pass",
@@ -11748,9 +11656,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "列出研究助手的 thread state、Store memory、节点和人工中断点，保证两类状态不混用。",
               "starterCode": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\"",
@@ -12198,9 +12104,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 approval_route(approved)，approved 为 True 返回 execute，否则返回 cancel；不要用默认分支掩盖未知值。",
               "starterCode": "def approval_route(approved):\n    pass\n",
@@ -12288,9 +12192,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
               "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
@@ -12378,9 +12280,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。",
               "starterCode": "def stream_events(nodes, state):\n    pass\n",
@@ -12828,9 +12728,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 review_gate(action, decision)，decision 为 approve 返回 action，为 reject 返回 rejected，其他值抛出 ValueError。",
               "starterCode": "def review_gate(action, decision):\n    pass\n",
@@ -12918,9 +12816,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。",
               "starterCode": "def project_step(state):\n    pass\n",
@@ -13008,9 +12904,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 graph_shape(state, nodes)，返回包含 state_keys 与 node_count 的字典；不修改输入。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def graph_shape(state, nodes):\n    pass\n",
@@ -13458,9 +13352,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 merge_updates(state, update)，返回新状态；messages 列表追加，其余字段由 update 覆盖。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def merge_updates(state, update):\n    pass\n",
@@ -13548,9 +13440,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def save_checkpoint(checkpoints, thread_id, state):\n    pass\n",
@@ -13638,9 +13528,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def get_thread_state(store, thread_id):\n    pass\n",
@@ -14088,9 +13976,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
@@ -14178,9 +14064,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def stream_events(nodes, state):\n    pass\n",
@@ -14268,9 +14152,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 invoke_subgraph(subgraph, state)，复制 state 传给子图并返回其结果；不修改父状态。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def invoke_subgraph(subgraph, state):\n    pass\n",
@@ -14710,9 +14592,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def project_step(state):\n    pass\n",
@@ -14800,9 +14680,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 graph_shape(state, nodes)，返回包含 state_keys 与 node_count 的字典；不修改输入。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def graph_shape(state, nodes):\n    pass\n",
@@ -14890,9 +14768,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-35"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 next_edge(edges, current)，返回 edges 中 current 的目标；未知节点抛出 KeyError。\n迁移要求：改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def next_edge(edges, current):\n    pass\n",
