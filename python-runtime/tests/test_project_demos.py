@@ -25,6 +25,16 @@ class ProjectDemosTest(unittest.TestCase):
         rag = load("rag_demo", "projects/private-rag-study-assistant/demo.py")
         self.assertEqual(rag.answer("未知", [{"text": "Python", "source": "a.md"}]), {"answer": "资料不足", "sources": []})
 
+    def test_rag_demo_returns_matching_text_and_deduplicated_sources(self):
+        rag = load("rag_demo_sources", "projects/private-rag-study-assistant/demo.py")
+        documents = [
+            {"text": "RAG 保留引用", "source": "notes.md"},
+            {"text": "引用格式示例", "source": "notes.md"},
+        ]
+        result = rag.answer("引用", documents)
+        self.assertEqual(result["answer"], "RAG 保留引用")
+        self.assertEqual(result["sources"], ["notes.md"])
+
     def test_research_graph_can_resume_same_thread_after_approval(self):
         graph = load("research_demo", "projects/recoverable-research-graph/demo.py")
         result = graph.run("LangGraph", "thread-a", True)
