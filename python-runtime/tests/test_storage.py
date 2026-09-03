@@ -83,7 +83,7 @@ class StorageTest(unittest.TestCase):
         with sqlite3.connect(self.database_path) as connection:
             self.assertEqual(
                 connection.execute("SELECT version FROM schema_migrations").fetchall(),
-            [(1,), (2,), (3,), (4,)],
+            [(1,), (2,), (3,), (4,), (5,)],
             )
 
     def test_origin_change_clears_old_ciphertext_and_active_profile_is_unique(self):
@@ -201,6 +201,26 @@ class StorageTest(unittest.TestCase):
         )
         self.assertEqual(self.storage.list_chat_messages("python", "lesson-2"), [])
         self.assertEqual(self.storage.list_chat_messages("langchain", "lesson-1"), [])
+
+    def test_rag_evaluation_records_metrics_and_can_list_recent_runs(self):
+        record = {
+            "catalogHash": "a" * 64,
+            "documentHash": "b" * 64,
+            "embeddingModel": "embedding-1",
+            "recordedAt": "2026-09-03T10:00:00+00:00",
+            "caseCount": 2,
+            "recallAtK": 0.5,
+            "mrr": 0.75,
+            "citationCoverage": 1.0,
+            "faithfulnessProxy": 0.5,
+            "latencyMs": 123.4,
+        }
+        self.assertEqual(self.storage.record_rag_evaluation(record), {"recorded": True})
+        self.assertEqual(self.storage.list_rag_evaluations(), [{"id": 1, **record}])
+
+        invalid = {**record, "documentHash": "not-a-hash"}
+        with self.assertRaisesRegex(ValueError, "RAG 评测记录字段无效"):
+            self.storage.record_rag_evaluation(invalid)
 
     def test_clear_chat_history_does_not_touch_other_lessons(self):
         message = [{"role": "user", "content": "保留", "createdAt": "2026-09-02T10:00:00+00:00"}]

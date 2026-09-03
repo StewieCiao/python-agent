@@ -42,6 +42,7 @@ const SERVICE_FILES = [
   "migrations/002-learning-state.sql",
   "migrations/003-mastery-attempts.sql",
   "migrations/004-personalized-exercises.sql",
+  "migrations/005-rag-evaluations.sql",
 ];
 
 async function pathExists(path) {

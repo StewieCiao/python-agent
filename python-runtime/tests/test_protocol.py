@@ -90,6 +90,14 @@ class ProtocolTest(unittest.TestCase):
             decode_request('{"id":"d1","method":"documents.parse","params":{"paths":["/tmp/notes.md"]}}')["params"],
             {"paths": ["/tmp/notes.md"]},
         )
+        self.assertEqual(
+            decode_request(json.dumps({"id": "r1", "method": "rag.evaluation.list", "params": {}}))["method"],
+            "rag.evaluation.list",
+        )
+        self.assertEqual(
+            decode_request(json.dumps({"id": "r2", "method": "rag.evaluation.record", "params": {"record": {}}}))["params"],
+            {"record": {}},
+        )
         for paths in ([], [""], ["notes.md"] * 11):
             with self.subTest(paths=paths):
                 with self.assertRaises(ProtocolError):

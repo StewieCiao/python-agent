@@ -11,6 +11,7 @@ const bridge: StewieDesktopBridge = Object.freeze({
   chatWithModel: (input) => ipcRenderer.invoke("models:chat", input),
   answerWithRag: (input) => ipcRenderer.invoke("models:rag", input),
   evaluateRag: (input) => ipcRenderer.invoke("models:rag-evaluate", input),
+  listRagEvaluations: () => ipcRenderer.invoke("models:rag-evaluation-list"),
   selectRagDocuments: () => ipcRenderer.invoke("documents:select"),
   getLearningState: () => ipcRenderer.invoke("learning:get"),
   saveLearningState: (state) => ipcRenderer.invoke("learning:save", state),

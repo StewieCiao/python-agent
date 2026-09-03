@@ -9,6 +9,7 @@ import {
   sendCourseChat,
   answerWithRag,
   evaluateRag,
+  listRagEvaluations,
   selectRagDocuments,
 } from "../lib/platformBridge";
 import {
@@ -35,6 +36,7 @@ export function CourseChat({ track, lesson, onClose }: {
   const [ragResult, setRagResult] = useState<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> } | null>(null);
   const [ragEvaluationInput, setRagEvaluationInput] = useState('[{"query":"请概括资料的核心概念","expectedSources":["本地资料"]}]');
   const [ragEvaluationResult, setRagEvaluationResult] = useState<Awaited<ReturnType<typeof evaluateRag>> | null>(null);
+  const [ragEvaluationHistory, setRagEvaluationHistory] = useState<Awaited<ReturnType<typeof listRagEvaluations>>>([]);
 
   useEffect(() => {
     Promise.all([
@@ -107,6 +109,8 @@ export function CourseChat({ track, lesson, onClose }: {
               <small>recall@k：{ragEvaluationResult.recallAtK.toFixed(2)} · MRR：{ragEvaluationResult.mrr.toFixed(2)} · 引用覆盖：{ragEvaluationResult.citationCoverage.toFixed(2)} · 引用一致性代理：{ragEvaluationResult.faithfulnessProxy.toFixed(2)} · 总耗时：{Math.round(ragEvaluationResult.latencyMs)} ms</small>
               <small>{ragEvaluationResult.tokenUsage.reason}</small>
             </div>}
+            <button disabled={busy} onClick={() => void perform(async () => setRagEvaluationHistory(await listRagEvaluations()))} type="button">查看已保存评测</button>
+            {ragEvaluationHistory.length > 0 && <div className="rag-evaluation-result"><small>最近 {ragEvaluationHistory.length} 次评测：{ragEvaluationHistory.slice(0, 3).map((item) => `${item.recordedAt.slice(0, 16)} · recall ${item.recallAtK.toFixed(2)} · ${item.embeddingModel}`).join("；")}</small></div>}
           </details>
         </details>}
 

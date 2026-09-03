@@ -227,8 +227,25 @@ void runStartupTask(app.whenReady().then(async () => {
   ipcMain.handle("models:rag", trustedIpc(async (input: { profileId: string; query: string; documents: Array<{ id: string; text: string; source: string }> }) => createRagService(activeModelClient()).answer(input.profileId, input.query, input.documents)));
   ipcMain.handle("models:rag-evaluate", trustedIpc(async (input: { profileId: string; cases: Array<{ query: string; expectedSources: string[] }>; documents: Array<{ id: string; text: string; source: string }> }) => {
     const rag = createRagService(activeModelClient());
-    return evaluateRag(rag, input.profileId, input.cases, input.documents);
+    const result = await evaluateRag(rag, input.profileId, input.cases, input.documents);
+    const profile = (await activeProfiles().list()).find((item) => item.id === input.profileId);
+    if (!profile?.embeddingModel) throw new Error("评测完成但无法确定当前 Embedding 模型，结果未保存");
+    const documentHash = createHash("sha256").update(JSON.stringify(input.documents), "utf8").digest("hex");
+    await activePythonService().recordRagEvaluation({
+      catalogHash: activePythonService().health.catalog.catalogHash,
+      documentHash,
+      embeddingModel: profile.embeddingModel,
+      recordedAt: new Date().toISOString(),
+      caseCount: result.caseResults.length,
+      recallAtK: result.recallAtK,
+      mrr: result.mrr,
+      citationCoverage: result.citationCoverage,
+      faithfulnessProxy: result.faithfulnessProxy,
+      latencyMs: result.latencyMs,
+    });
+    return result;
   }));
+  ipcMain.handle("models:rag-evaluation-list", trustedIpc(() => activePythonService().listRagEvaluations()));
   ipcMain.handle("documents:select", trustedIpc(async () => {
     const selection = await dialog.showOpenDialog({
       title: "选择 RAG 本地资料",

@@ -1,5 +1,6 @@
 import { buildChatMessages } from "./chatPrompt.mjs";
 import type { RagEvaluationCase, RagEvaluationResult } from "../../desktop/src/ragEvaluation.mjs";
+import type { RagEvaluationRecord } from "../../desktop/src/pythonService.mjs";
 import {
   LOCAL_SERVICE_URL,
   localServiceRequest,
@@ -182,6 +183,12 @@ export async function evaluateRag(input: {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 评测仅在桌面安全服务中可用。");
   return unwrapDesktop(await desktop.evaluateRag(input));
+}
+
+export async function listRagEvaluations(): Promise<RagEvaluationRecord[]> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 评测历史仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.listRagEvaluations());
 }
 
 export async function selectRagDocuments(): Promise<Array<{ id: string; text: string; source: string }>> {

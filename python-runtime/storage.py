@@ -1,6 +1,7 @@
 import base64
 import binascii
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -157,6 +158,28 @@ def _validate_source(source_kind, source_hash):
         raise ValueError("迁移源类型无效")
     if not isinstance(source_hash, str) or not source_hash:
         raise ValueError("迁移源 hash 无效")
+
+
+def _validate_rag_evaluation(record):
+    fields = {
+        "catalogHash", "documentHash", "embeddingModel", "recordedAt", "caseCount",
+        "recallAtK", "mrr", "citationCoverage", "faithfulnessProxy", "latencyMs",
+    }
+    if not isinstance(record, dict) or set(record) != fields:
+        raise ValueError("RAG 评测记录字段无效")
+    for field in ("catalogHash", "documentHash"):
+        if not isinstance(record[field], str) or not re.fullmatch(r"[0-9a-f]{64}", record[field]):
+            raise ValueError("RAG 评测记录字段无效")
+    if not isinstance(record["embeddingModel"], str) or not record["embeddingModel"]:
+        raise ValueError("RAG 评测记录字段无效")
+    _validate_timestamp(record["recordedAt"])
+    if not isinstance(record["caseCount"], int) or isinstance(record["caseCount"], bool) or record["caseCount"] < 1:
+        raise ValueError("RAG 评测记录字段无效")
+    for field in ("recallAtK", "mrr", "citationCoverage", "faithfulnessProxy"):
+        if not isinstance(record[field], (int, float)) or isinstance(record[field], bool) or not 0 <= record[field] <= 1:
+            raise ValueError("RAG 评测记录字段无效")
+    if not isinstance(record["latencyMs"], (int, float)) or isinstance(record["latencyMs"], bool) or record["latencyMs"] < 0:
+        raise ValueError("RAG 评测记录字段无效")
 
 
 class Storage:
@@ -405,6 +428,50 @@ class Storage:
         ]
         mastery = compute_mastery(events, now)
         return {"mastery": mastery, "reviewQueue": select_review_queue(mastery, now)}
+
+    def record_rag_evaluation(self, record):
+        _validate_rag_evaluation(record)
+        with self.connection:
+            self.connection.execute(
+                """
+                INSERT INTO rag_evaluations (
+                    catalog_hash, document_hash, embedding_model, recorded_at, case_count,
+                    recall_at_k, mrr, citation_coverage, faithfulness_proxy, latency_ms
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    record["catalogHash"], record["documentHash"], record["embeddingModel"],
+                    record["recordedAt"], record["caseCount"], record["recallAtK"],
+                    record["mrr"], record["citationCoverage"], record["faithfulnessProxy"],
+                    record["latencyMs"],
+                ),
+            )
+        return {"recorded": True}
+
+    def list_rag_evaluations(self):
+        rows = self.connection.execute(
+            """
+            SELECT id, catalog_hash, document_hash, embedding_model, recorded_at, case_count,
+                   recall_at_k, mrr, citation_coverage, faithfulness_proxy, latency_ms
+            FROM rag_evaluations ORDER BY id DESC LIMIT 20
+            """
+        ).fetchall()
+        return [
+            {
+                "id": row["id"],
+                "catalogHash": row["catalog_hash"],
+                "documentHash": row["document_hash"],
+                "embeddingModel": row["embedding_model"],
+                "recordedAt": row["recorded_at"],
+                "caseCount": row["case_count"],
+                "recallAtK": row["recall_at_k"],
+                "mrr": row["mrr"],
+                "citationCoverage": row["citation_coverage"],
+                "faithfulnessProxy": row["faithfulness_proxy"],
+                "latencyMs": row["latency_ms"],
+            }
+            for row in rows
+        ]
 
     def next_personalized_exercise(self, learning_bundle, lesson_id, seed):
         events = [

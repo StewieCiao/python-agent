@@ -120,6 +120,10 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.next_personalized_exercise(learning_bundle, params["lessonId"], params["seed"])
     if method == "documents.parse":
         return load_documents(params["paths"])
+    if method == "rag.evaluation.record":
+        return storage.record_rag_evaluation(params["record"])
+    if method == "rag.evaluation.list":
+        return storage.list_rag_evaluations()
     raise ValueError("不支持的服务方法")
 
 

@@ -60,6 +60,20 @@ export type PersonalizedExerciseResult = {
 
 export type ParsedRagDocument = { id: string; text: string; source: string };
 
+export type RagEvaluationRecord = {
+  id: number;
+  catalogHash: string;
+  documentHash: string;
+  embeddingModel: string;
+  recordedAt: string;
+  caseCount: number;
+  recallAtK: number;
+  mrr: number;
+  citationCoverage: number;
+  faithfulnessProxy: number;
+  latencyMs: number;
+};
+
 export type LegacyConversation = { courseId: string; lessonId: string; messages: PythonChatMessage[] };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -123,6 +137,15 @@ function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExer
 
 function isParsedRagDocuments(value: unknown): value is ParsedRagDocument[] {
   return Array.isArray(value) && value.every((item) => isRecord(item) && hasExactKeys(item, ["id", "text", "source"]) && typeof item.id === "string" && typeof item.text === "string" && item.text.trim().length > 0 && typeof item.source === "string" && item.source.trim().length > 0);
+}
+
+function isRagEvaluationRecord(value: unknown): value is RagEvaluationRecord {
+  if (!isRecord(value) || !hasExactKeys(value, ["id", "catalogHash", "documentHash", "embeddingModel", "recordedAt", "caseCount", "recallAtK", "mrr", "citationCoverage", "faithfulnessProxy", "latencyMs"])) return false;
+  return typeof value.id === "number" && Number.isInteger(value.id) && value.id > 0 && typeof value.catalogHash === "string" && /^[0-9a-f]{64}$/.test(value.catalogHash) && typeof value.documentHash === "string" && /^[0-9a-f]{64}$/.test(value.documentHash) && typeof value.embeddingModel === "string" && typeof value.recordedAt === "string" && typeof value.caseCount === "number" && Number.isInteger(value.caseCount) && value.caseCount > 0 && ["recallAtK", "mrr", "citationCoverage", "faithfulnessProxy"].every((key) => typeof value[key] === "number" && Number.isFinite(value[key]) && value[key] >= 0 && value[key] <= 1) && typeof value.latencyMs === "number" && Number.isFinite(value.latencyMs) && value.latencyMs >= 0;
+}
+
+function isRagEvaluationRecords(value: unknown): value is RagEvaluationRecord[] {
+  return Array.isArray(value) && value.every(isRagEvaluationRecord);
 }
 
 function isPromptException(value: unknown): value is PromptException {
@@ -359,6 +382,14 @@ export class PythonServiceClient {
 
   parseDocuments(paths: string[]): Promise<ParsedRagDocument[]> {
     return this.#requestChecked("documents.parse", { paths }, isParsedRagDocuments, "本地资料解析响应结构无效");
+  }
+
+  recordRagEvaluation(record: Omit<RagEvaluationRecord, "id">): Promise<{ recorded: true }> {
+    return this.#requestChecked("rag.evaluation.record", { record }, isRecordedResult, "RAG 评测保存响应结构无效");
+  }
+
+  listRagEvaluations(): Promise<RagEvaluationRecord[]> {
+    return this.#requestChecked("rag.evaluation.list", {}, isRagEvaluationRecords, "RAG 评测历史响应结构无效");
   }
 
   importLegacyLearningState(
