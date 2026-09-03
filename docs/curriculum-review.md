@@ -14,7 +14,7 @@
 
 ## 验证证据
 
-- `npm test`：197 项通过。
+- `npm test`：198 项通过。
 - 当前三条路线的扩展主题均已绑定具体练习规格，课程标题不再使用“从概念到练习”占位模板；后续仍需逐阶段补充更丰富的原创示例、迁移卡和项目验收材料。
 - 桌面 RAG 面板现可对用户提供的小型问答集逐条执行真实检索并显示 recall@k、MRR、引用覆盖、引用一致性代理和耗时；模型未返回 token usage 时明确标为不可用，不估算成本。
 - 个性化练习 family 现在从作者源携带六组变体和独立行为检查；Python 服务只校验签名快照中的检查，桌面 Worker 使用个性题检查而不是原关卡样例。
@@ -38,4 +38,4 @@
 
 ## 尚未完成的内容审校
 
-Phase 2–8 仍需逐阶段扩充每课的原创示例、迁移卡和项目 README，并在桌面端逐路线抽查执行、复习和个性化题目闭环。当前已完成代表课深化：LangGraph 的 `graph-foundations`、`state-reducers-routing`、`checkpoint-configuration`、`persistence-short-memory`、`long-term-store`、`streaming-interrupts`、`subgraphs-parallelism`，以及 LangChain 的 `model-messages-prompts`、`model-configuration`、`structured-output`、`retrieval-chain`。这些课程分别锁定输入/输出契约、真实中间状态、checkpoint 恢复、配置/超时边界和可运行最小骨架；回归测试覆盖对应教学契约。RAG 评测结果已写入 SQLite，可按课程哈希、资料哈希和 Embedding 模型查看最近记录；当前地图已保证结构、可浏览性和基础行为验证，项目级教学质量仍需继续验收。
+Phase 2–8 仍需逐阶段扩充每课的原创示例、迁移卡和项目 README，并在桌面端逐路线抽查执行、复习和个性化题目闭环。当前已完成代表课深化：LangGraph 的 `graph-foundations`、`state-reducers-routing`、`checkpoint-configuration`、`persistence-short-memory`、`long-term-store`、`streaming-interrupts`、`subgraphs-parallelism`，以及 LangChain 的 `model-messages-prompts`、`model-configuration`、`structured-output`、`retrieval-chain`、`rag-evaluation`。这些课程分别锁定输入/输出契约、真实中间状态、checkpoint 恢复、配置/超时边界、召回/引用指标和可运行最小骨架；回归测试覆盖对应教学契约。RAG 评测结果已写入 SQLite，可按课程哈希、资料哈希和 Embedding 模型查看最近记录；当前地图已保证结构、可浏览性和基础行为验证，项目级教学质量仍需继续验收。
