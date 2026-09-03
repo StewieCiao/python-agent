@@ -1113,6 +1113,26 @@ const langgraphTrack: LearningTrack = {
   ],
 };
 
+const FRAMEWORK_HINTS: Record<string, [string, string, string]> = {
+  "memory-modernization": ["先区分消息历史、thread 状态和 Store。", "为每类记忆写出生命周期和作用域。", "用两个 thread 与一个 user 偏好验证隔离。"],
+  "document-loaders": ["先确认 loader 返回 Document。", "检查 page_content 与 metadata。", "用不同文件类型复查来源和页码。"],
+  "indexing-vector-store": ["先切分并保留每个 chunk 的来源。", "再计算 embedding 并写入向量库。", "用题目之外的问题检查召回结果。"],
+  "retrieval-chain": ["先单独运行 retriever。", "把 context 和 question 分开传入。", "空召回时保留资料不足状态。"],
+  "rag-project": ["先画出离线索引和在线问答两条流程。", "为每一步记录真实输入输出。", "分别测试重复索引、无命中和模型失败。"],
+  "agent-v1": ["先定义工具参数和返回结构。", "观察每次 tool call 与 observation。", "为循环和权限设置明确上限。"],
+  "agent-rag-project": ["先独立验证检索工具。", "再连接 create_agent 和中间件。", "检查回答是否只引用真实来源。"],
+  "model-messages-prompts": ["先区分 system、human 与 assistant 消息。", "让 topic 变量在模板中显式声明。", "渲染后检查消息顺序和缺失变量。"],
+  "structured-output": ["先写出必需字段和类型。", "让 schema 验证缺失字段。", "解析失败时保留真实异常。"],
+  "runnable-pipeline": ["先分别确认 template、model、parser。", "按输入输出顺序组合 Runnable。", "任一步失败都不要返回空结果。"],
+  "graph-foundations": ["先写 State 的字段。", "再声明节点和边的去向。", "最后编译并验证 END 边界。"],
+  "state-reducers-routing": ["区分覆盖字段和追加字段。", "让路由只返回已声明分支名。", "给循环设置可观察的终止条件。"],
+  "persistence-short-memory": ["先为图配置 checkpointer。", "每次调用提供稳定 thread_id。", "用不同线程验证状态不会串线。"],
+  "long-term-store": ["先确定 namespace、key 和 value。", "把 user_id 与 thread_id 分开。", "分别验证覆盖更新和缺失记录。"],
+  "streaming-interrupts": ["先选择要展示的真实 stream 事件。", "在副作用之前调用 interrupt。", "恢复时再次验证用户决定。"],
+  "subgraphs-parallelism": ["先画出父图与子图的状态边界。", "为并行写入字段定义 reducer。", "检查空分支和失败分支的汇总结果。"],
+  "memory-research-project": ["先列出 thread state 与 Store memory。", "再安排检索、审核和写作节点。", "最后用恢复和引用测试验收项目。"],
+};
+
 for (const track of [langchainTrack, langgraphTrack]) {
   for (const [index, lesson] of track.lessons.entries()) {
     if (index > 0 && (!lesson.prerequisites || lesson.prerequisites.length === 0)) {
@@ -1120,6 +1140,9 @@ for (const track of [langchainTrack, langgraphTrack]) {
     }
   }
   for (const lesson of track.lessons) {
+    const hints = FRAMEWORK_HINTS[lesson.id];
+    if (!hints) throw new Error(`${track.id}/${lesson.id} 缺少作者提示`);
+    lesson.exercise.hints = [...hints];
     const checks = authoredFeedbackChecks[lesson.id];
     if (checks) lesson.browserChecks = checks;
   }

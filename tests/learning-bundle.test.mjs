@@ -341,6 +341,16 @@ test("框架作者路线保留可解释的先修链", async () => {
   }
 });
 
+test("框架作者源的每节课程都直接提供三层提示", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  for (const track of learningTracks.filter(({ id }) => id !== "python")) {
+    for (const lesson of track.lessons) {
+      assert.equal(lesson.exercise.hints?.length, 3, `${track.id}/${lesson.id} 仍依赖通用提示默认值`);
+      assert.equal(new Set(lesson.exercise.hints).size, 3, `${track.id}/${lesson.id} 提示重复`);
+    }
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);

@@ -43,7 +43,7 @@ function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackI
     exercise: {
       prompt: value.exercise.prompt,
       starterCode: value.exercise.starterCode,
-      hints: value.exercise.hints ?? ["先运行最小示例", "定位输入、处理中间值和输出", "用变化输入与边界复测"],
+      hints: value.exercise.hints,
       solution: value.exercise.solution,
     },
     browserChecks: value.browserChecks ?? [],

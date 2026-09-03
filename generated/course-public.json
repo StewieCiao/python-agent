@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1b771155d661814ac6bf8dea4f005d01f9d101f2c06dc7ae3738ca3eb74ede40",
+  "catalogHash": "10ed5e625de9897c01c9041381419ce839db1d09c64a2aeab635777f47e2f2cc",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6543,9 +6543,9 @@
               "prompt": "分别写出 thread_id 短期记忆和 user_id 长期记忆的适用场景，并把课程中的 JSON 历史准确重命名。",
               "starterCode": "memory_terms = {\n    \"json_history\": \"\",\n    \"checkpointer\": \"\",\n    \"store\": \"\",\n}",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先区分消息历史、thread 状态和 Store。",
+                "为每类记忆写出生命周期和作用域。",
+                "用两个 thread 与一个 user 偏好验证隔离。"
               ],
               "solution": "memory_terms = {\n    \"json_history\": \"持久化消息历史\",\n    \"checkpointer\": \"线程内短期状态\",\n    \"store\": \"跨线程长期记忆\",\n}"
             },
@@ -6692,9 +6692,9 @@
               "prompt": "加载 PDF 后打印第一页正文长度、source 与 page 元数据，确认数据可追踪。",
               "starterCode": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先确认 loader 返回 Document。",
+                "检查 page_content 与 metadata。",
+                "用不同文件类型复查来源和页码。"
               ],
               "solution": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\nfirst = docs[0]\nprint(len(first.page_content))\nprint(first.metadata.get(\"source\"))\nprint(first.metadata.get(\"page\"))"
             },
@@ -6825,9 +6825,9 @@
               "prompt": "对三段带 source 元数据的文本切分并检索，输出命中文本和来源。",
               "starterCode": "# 建立 chunks 和 vector_store 后检索“退款”",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先切分并保留每个 chunk 的来源。",
+                "再计算 embedding 并写入向量库。",
+                "用题目之外的问题检查召回结果。"
               ],
               "solution": "results = vector_store.similarity_search(\"退款\", k=2)\nfor doc in results:\n    print(doc.page_content)\n    print(doc.metadata[\"source\"])"
             },
@@ -6958,9 +6958,9 @@
               "prompt": "实现 format_docs，输出正文与 source；资料为空时返回明确的“没有检索到资料”。",
               "starterCode": "def format_docs(docs):\n    pass",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先单独运行 retriever。",
+                "把 context 和 question 分开传入。",
+                "空召回时保留资料不足状态。"
               ],
               "solution": "def format_docs(docs):\n    if not docs:\n        return \"没有检索到资料\"\n    return \"\n\n\".join(\n        f\"来源: {doc.metadata.get('source', '未知')}\n{doc.page_content}\"\n        for doc in docs\n    )"
             },
@@ -7099,9 +7099,9 @@
               "prompt": "画出并用函数名表达离线 indexing 与在线 retrieval 两条流程，说明每一步的失败状态。",
               "starterCode": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先画出离线索引和在线问答两条流程。",
+                "为每一步记录真实输入输出。",
+                "分别测试重复索引、无命中和模型失败。"
               ],
               "solution": "def index_document(path):\n    docs = load(path)\n    chunks = split(docs)\n    return vector_store.add_documents(chunks)\n\ndef answer(question, thread_id):\n    docs = retriever.invoke(question)\n    return rag_chain.invoke({\"question\": question, \"context\": format_docs(docs)})"
             },
@@ -7268,9 +7268,9 @@
               "prompt": "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
               "starterCode": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先定义工具参数和返回结构。",
+                "观察每次 tool call 与 observation。",
+                "为循环和权限设置明确上限。"
               ],
               "solution": "from langchain.agents import create_agent\nagent = create_agent(model, tools=tools)"
             },
@@ -7542,9 +7542,9 @@
               "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
               "starterCode": "topic = \"\"\nmessages = []",
               "hints": [
-                "区分消息角色",
-                "声明模板变量",
-                "检查渲染结果"
+                "先区分 system、human 与 assistant 消息。",
+                "让 topic 变量在模板中显式声明。",
+                "渲染后检查消息顺序和缺失变量。"
               ],
               "solution": "from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})"
             },
@@ -7661,9 +7661,9 @@
               "prompt": "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。",
               "starterCode": "result = {}\nvalid = False",
               "hints": [
-                "先写出结构",
-                "保留真实错误",
-                "用边界输入验证"
+                "先写出必需字段和类型。",
+                "让 schema 验证缺失字段。",
+                "解析失败时保留真实异常。"
               ],
               "solution": "from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\nvalid = Answer.model_validate(result)"
             },
@@ -7780,9 +7780,9 @@
               "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
               "starterCode": "template = None\nmodel = None\nparser = None",
               "hints": [
-                "先写出结构",
-                "保留真实错误",
-                "用边界输入验证"
+                "先分别确认 template、model、parser。",
+                "按输入输出顺序组合 Runnable。",
+                "任一步失败都不要返回空结果。"
               ],
               "solution": "chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})"
             },
@@ -11733,9 +11733,9 @@
               "prompt": "创建一个接收 topic、生成 outline、再生成 answer 的两节点图。",
               "starterCode": "builder = StateGraph(State)\n# 添加 outline 和 answer 节点",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先写 State 的字段。",
+                "再声明节点和边的去向。",
+                "最后编译并验证 END 边界。"
               ],
               "solution": "builder = StateGraph(State)\nbuilder.add_node(\"outline\", make_outline)\nbuilder.add_node(\"answer\", write_answer)\nbuilder.add_edge(START, \"outline\")\nbuilder.add_edge(\"outline\", \"answer\")\nbuilder.add_edge(\"answer\", END)\ngraph = builder.compile()"
             },
@@ -11850,9 +11850,9 @@
               "prompt": "为草稿审查图增加 revise/finish 条件路由，并通过 attempts 限制最多修改两次。",
               "starterCode": "def route(state):\n    pass",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "区分覆盖字段和追加字段。",
+                "让路由只返回已声明分支名。",
+                "给循环设置可观察的终止条件。"
               ],
               "solution": "def route(state):\n    if state[\"score\"] >= 0.8:\n        return \"finish\"\n    if state[\"attempts\"] >= 2:\n        return \"finish\"\n    return \"revise\""
             },
@@ -11973,9 +11973,9 @@
               "prompt": "用两个 thread_id 调用同一图，验证同线程连续、不同线程隔离。",
               "starterCode": "config_a = {\"configurable\": {\"thread_id\": \"\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"\"}}",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先为图配置 checkpointer。",
+                "每次调用提供稳定 thread_id。",
+                "用不同线程验证状态不会串线。"
               ],
               "solution": "config_a = {\"configurable\": {\"thread_id\": \"user-a\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"user-b\"}}"
             },
@@ -12098,9 +12098,9 @@
               "prompt": "设计 profile 与 learning_events 两类 namespace，分别处理覆盖更新和追加记录。",
               "starterCode": "profile_namespace = ()\nevents_namespace = ()",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先确定 namespace、key 和 value。",
+                "把 user_id 与 thread_id 分开。",
+                "分别验证覆盖更新和缺失记录。"
               ],
               "solution": "profile_namespace = (\"users\", user_id, \"profile\")\nevents_namespace = (\"users\", user_id, \"learning_events\")"
             },
@@ -12215,9 +12215,9 @@
               "prompt": "在发送邮件节点前加入 interrupt，用户拒绝时返回 cancelled，不调用发送工具。",
               "starterCode": "def approve_email(state):\n    pass",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先选择要展示的真实 stream 事件。",
+                "在副作用之前调用 interrupt。",
+                "恢复时再次验证用户决定。"
               ],
               "solution": "def approve_email(state):\n    approved = interrupt({\"action\": \"send_email\", \"draft\": state[\"draft\"]})\n    return {\"approved\": bool(approved)}"
             },
@@ -12467,9 +12467,9 @@
               "prompt": "列出研究助手的 thread state、Store memory、节点和人工中断点，保证两类状态不混用。",
               "starterCode": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\"",
               "hints": [
-                "先运行最小示例",
-                "定位输入、处理中间值和输出",
-                "用变化输入与边界复测"
+                "先列出 thread state 与 Store memory。",
+                "再安排检索、审核和写作节点。",
+                "最后用恢复和引用测试验收项目。"
               ],
               "solution": "thread_state = [\"topic\", \"plan\", \"findings\", \"sources\", \"draft\", \"approved\"]\nstore_memory = [\"language\", \"report_length\", \"preferred_sources\"]\nnodes = [\"plan\", \"research\", \"review_evidence\", \"write_report\"]\ninterrupt_before = \"write_report\""
             },
