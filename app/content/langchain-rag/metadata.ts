@@ -35,7 +35,7 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "无资料边界", expression: "no_match.answer == \"资料不足\" and no_match.sources == []", failure: "无命中时应停止生成并明确资料不足。", kind: "behavior" },
   ],
   "agent-v1": [
-    { name: "工具输入", expression: "tool_call.name and isinstance(tool_call.arguments, dict)", failure: "工具调用应包含名称和字典参数。", kind: "structure" },
+    { name: "工具输入", expression: "tool_call[\"name\"] and isinstance(tool_call[\"arguments\"], dict)", failure: "工具调用应包含名称和字典参数。", kind: "structure" },
     { name: "真实错误", expression: "tool_error is not None or tool_result is not None", failure: "工具失败或成功都必须保留真实结果。", kind: "behavior" },
   ],
   "agent-rag-project": [

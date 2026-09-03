@@ -377,9 +377,9 @@ export const langchainTrack: LearningTrack = {
         },
       ],
       exercise: {
-        prompt: "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
-        starterCode: `from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)`,
-        solution: `from langchain.agents import create_agent\nagent = create_agent(model, tools=tools)`,
+        prompt: "输入是一个包含工具名称与 arguments 的 tool_call；输出是 tool_result 或真实 tool_error。请先用字典验证工具调用契约，再把旧 create_react_agent 映射到 LangChain v1 的 create_agent，不能伪造成功结果。",
+        starterCode: `tool_call = {}\ntool_result = None\ntool_error = None`,
+        solution: `tool_call = {"name": "search_docs", "arguments": {"query": "memory"}}\ntool_result = {"documents": ["short-term memory"]}\ntool_error = None`,
       },
     },
     {

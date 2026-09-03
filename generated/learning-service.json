@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "071591c3b1300b3de79a9b043a7a9e27134872b5d6c6f06d7570641a59fe3419",
-  "familyHash": "fb21e0627d2f9aad7dfa523effa580e231606810a28b0cd2af8b820ca4353e04",
+  "catalogHash": "d62570068d8e533920cab99d533f73580624f9741d004ef9e7f1a8fcea0bd325",
+  "familyHash": "79be8a12d6ebaed02cadf237bc17f4d60dec8b57318c7acb23c5583903518764",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7265,19 +7265,19 @@
               "agent-rag-project"
             ],
             "exercise": {
-              "prompt": "把旧 create_react_agent 示例迁移到 create_agent，并保留同一工具列表。",
-              "starterCode": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)",
+              "prompt": "输入是一个包含工具名称与 arguments 的 tool_call；输出是 tool_result 或真实 tool_error。请先用字典验证工具调用契约，再把旧 create_react_agent 映射到 LangChain v1 的 create_agent，不能伪造成功结果。",
+              "starterCode": "tool_call = {}\ntool_result = None\ntool_error = None",
               "hints": [
                 "先定义工具参数和返回结构。",
                 "观察每次 tool call 与 observation。",
                 "为循环和权限设置明确上限。"
               ],
-              "solution": "from langchain.agents import create_agent\nagent = create_agent(model, tools=tools)"
+              "solution": "tool_call = {\"name\": \"search_docs\", \"arguments\": {\"query\": \"memory\"}}\ntool_result = {\"documents\": [\"short-term memory\"]}\ntool_error = None"
             },
             "browserChecks": [
               {
                 "name": "工具输入",
-                "expression": "tool_call.name and isinstance(tool_call.arguments, dict)",
+                "expression": "tool_call[\"name\"] and isinstance(tool_call[\"arguments\"], dict)",
                 "failure": "工具调用应包含名称和字典参数。",
                 "kind": "structure"
               },
@@ -18243,7 +18243,7 @@
     "agent-v1": [
       {
         "name": "工具输入",
-        "expression": "tool_call.name and isinstance(tool_call.arguments, dict)",
+        "expression": "tool_call[\"name\"] and isinstance(tool_call[\"arguments\"], dict)",
         "failure": "工具调用应包含名称和字典参数。",
         "kind": "structure"
       },
