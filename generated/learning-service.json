@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "0db6f85921f1163af383abf90ebaca695a07e01e07322d90ec9f9153966739cf",
-  "familyHash": "a2eb2502d3bbf0d91804931a82c9bb99b68bdea56ad358e5333b480e4b034a81",
+  "catalogHash": "a575fe32b9ad0e7bfe85fb45510fe0d829c2ea86ebc1b54cc0cb49b3e0f5db73",
+  "familyHash": "ceed505b0177ff8c6a14f3c4f0265e54b0111a009239cdaae6fb59cc697dd96c",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -6304,7 +6304,7 @@
               "model-configuration",
               "structured-output",
               "runnable-pipeline",
-              "langchain-rag-lesson-11",
+              "rag-evaluation",
               "langchain-rag-lesson-12",
               "langchain-rag-lesson-13"
             ]
@@ -7932,54 +7932,55 @@
             ]
           },
           {
-            "id": "langchain-rag-lesson-11",
+            "id": "rag-evaluation",
             "stageId": "langchain-rag-stage-2",
             "order": 12,
-            "title": "重排：写出可验证的实现",
-            "kicker": "LangChain / RAG 学习",
-            "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。",
-            "minutes": 35,
+            "title": "RAG 评估：召回、引用与资料不足",
+            "kicker": "langchain-rag 学习",
+            "summary": "用固定问答样本测量召回和引用覆盖，并把无资料作为真实结果记录。",
+            "minutes": 45,
             "prerequisites": [
-              "runnable-pipeline"
+              "retrieval-chain"
             ],
-            "difficulty": "advanced",
+            "difficulty": "intermediate",
             "tags": [
-              "langchain-rag",
-              "stage-langchain-rag-stage-2"
+              "rag",
+              "evaluation",
+              "citations"
             ],
             "guide": [
               {
                 "kind": "概念入门",
-                "title": "重排要解决什么问题",
-                "body": "把团队知识库中的真实任务先翻译成输入、处理和输出，再理解这个知识点：对候选文档按最终相关性重新排序，并保留原始来源字段。",
+                "title": "评估先定义可观察指标",
+                "body": "RAG 的好坏不能只凭回答读起来顺不顺。先为每个问题标记期望来源，再比较实际召回是否包含它；recall、首个命中位置和引用覆盖分别回答不同问题。",
                 "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
+                  "期望来源来自样本",
+                  "指标必须可重复计算",
+                  "回答质量和检索质量分开"
                 ],
-                "example": "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。"
+                "example": "case = {\"expectedSources\": [\"guide.md\"], \"retrieved\": [\"guide.md\"]}"
               },
               {
                 "kind": "逐步拆解",
-                "title": "把重排拆成步骤",
-                "body": "先实现团队知识库场景下题目要求的最小路径，再逐项验证：实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。",
+                "title": "无资料也是评估结果",
+                "body": "当检索没有达到阈值时，系统应返回 no_results 并停止生成，而不是把空 context 交给模型猜测。评估记录这个状态，才能区分资料缺失与模型失败。",
                 "bullets": [
-                  "排序键来自独立的 scores 映射。",
-                  "按 source 关联候选文档。",
-                  "直接索引让缺少分数的来源保留 KeyError。"
+                  "记录真实状态",
+                  "不估算缺失指标",
+                  "固定样本便于回归"
                 ],
-                "example": "输入 → 处理 → 输出"
+                "example": "result = {\"status\": \"no_results\", \"sources\": []}"
               },
               {
                 "kind": "常见误区",
-                "title": "重排的边界检查",
-                "body": "不要只复现团队知识库的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "title": "RAG 评估的常见误区",
+                "body": "完成“RAG 评估：召回、引用与资料不足”时，不要用答案字符串相似度替代来源检查，也不要把无命中强行算成成功。",
                 "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
+                  "检查来源集合",
+                  "保留 no_results",
+                  "报告实际与期望"
                 ],
-                "example": "assert actual == expected"
+                "example": "metrics = {\"recall\": 1.0, \"citation_coverage\": 1.0}"
               }
             ],
             "videos": [
@@ -7988,44 +7989,71 @@
                 "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
                 "provider": "DeepLearning.AI",
                 "language": "英文",
-                "duration": "短课程",
-                "note": "补充文档加载、切分、检索与引用。"
+                "duration": "1 小时 18 分",
+                "note": "补充检索问答链；评估指标以站内固定样本为准。"
               }
             ],
             "officialSources": [
               {
-                "label": "LangChain 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langchain/overview",
+                "label": "LangChain retrieval",
+                "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
                 "kind": "official-doc",
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "主观示例 → 固定样本评估",
+                "status": "replaced",
+                "explanation": "把检索和引用拆成可重复指标，并记录 no_results，而不是凭单条回答判断质量。",
+                "beforeCode": "print(answer)",
+                "afterCode": "metrics = evaluate(samples, retriever)",
+                "officialSources": [
+                  {
+                    "label": "LangChain retrieval",
+                    "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-13"
             ],
             "exercise": {
-              "prompt": "实现 rerank(results, scores)，按 scores 中 source 的分数降序返回结果；缺少分数的来源抛出 KeyError。",
-              "starterCode": "def rerank(results, scores):\n    pass\n",
+              "prompt": "实现 evaluate_retrieval(expected_sources, retrieved_sources, answer_sources)：返回 recall、citation_coverage 和 status；期望来源为空或实际无命中时 status 为 no_results，不能把无资料当作满分。",
+              "starterCode": "def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    pass\n",
               "hints": [
-                "排序键来自独立的 scores 映射。",
-                "按 source 关联候选文档。",
-                "直接索引让缺少分数的来源保留 KeyError。"
+                "先定义期望来源",
+                "分别计算召回和引用覆盖",
+                "用空召回验证 no_results"
               ],
-              "solution": "def rerank(results, scores):\n    return sorted(results, key=lambda item: scores[item[\"source\"]], reverse=True)\n"
+              "solution": "def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    if not expected_sources or not retrieved_sources:\n        return {\"recall\": 0, \"citation_coverage\": 0, \"status\": \"no_results\"}\n    expected = set(expected_sources)\n    retrieved = set(retrieved_sources)\n    cited = set(answer_sources)\n    return {\"recall\": len(expected & retrieved) / len(expected), \"citation_coverage\": len(expected & cited) / len(expected), \"status\": \"ok\"}\n"
             },
             "browserChecks": [
               {
-                "name": "重排候选",
-                "expression": "[item[\"source\"] for item in rerank([{\"source\": \"a\"}, {\"source\": \"b\"}], {\"a\": 0.2, \"b\": 0.9})] == [\"b\", \"a\"]",
-                "failure": "结果应按重排分数降序排列。",
+                "name": "召回指标",
+                "expression": "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [\"guide.md\"])[\"recall\"] == 1.0",
+                "failure": "期望来源被召回时 recall 应为 1。",
                 "kind": "behavior"
               },
               {
-                "name": "分数缺失",
-                "expression": "_raises_key_error(lambda: rerank([{\"source\": \"a\"}], {}))",
-                "failure": "缺少重排分数应明确失败。",
+                "name": "引用覆盖",
+                "expression": "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [])[\"citation_coverage\"] == 0.0",
+                "failure": "未引用来源时覆盖率应为 0。",
+                "kind": "behavior"
+              },
+              {
+                "name": "无资料状态",
+                "expression": "evaluate_retrieval([\"guide.md\"], [], [])[\"status\"] == \"no_results\"",
+                "failure": "无召回时必须明确记录 no_results。",
                 "kind": "behavior"
               }
             ]
@@ -8039,7 +8067,7 @@
             "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-11"
+              "rag-evaluation"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -18386,17 +18414,23 @@
         "kind": "behavior"
       }
     ],
-    "langchain-rag-lesson-11": [
+    "rag-evaluation": [
       {
-        "name": "重排候选",
-        "expression": "[item[\"source\"] for item in rerank([{\"source\": \"a\"}, {\"source\": \"b\"}], {\"a\": 0.2, \"b\": 0.9})] == [\"b\", \"a\"]",
-        "failure": "结果应按重排分数降序排列。",
+        "name": "召回指标",
+        "expression": "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [\"guide.md\"])[\"recall\"] == 1.0",
+        "failure": "期望来源被召回时 recall 应为 1。",
         "kind": "behavior"
       },
       {
-        "name": "分数缺失",
-        "expression": "_raises_key_error(lambda: rerank([{\"source\": \"a\"}], {}))",
-        "failure": "缺少重排分数应明确失败。",
+        "name": "引用覆盖",
+        "expression": "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [])[\"citation_coverage\"] == 0.0",
+        "failure": "未引用来源时覆盖率应为 0。",
+        "kind": "behavior"
+      },
+      {
+        "name": "无资料状态",
+        "expression": "evaluate_retrieval([\"guide.md\"], [], [])[\"status\"] == \"no_results\"",
+        "failure": "无召回时必须明确记录 no_results。",
         "kind": "behavior"
       }
     ],

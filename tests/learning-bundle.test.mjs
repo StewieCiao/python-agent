@@ -279,6 +279,7 @@ test("LangChain/RAG 原始课程的 id 顺序保持稳定", async () => {
     "model-configuration",
     "structured-output",
     "runnable-pipeline",
+    "rag-evaluation",
   ];
   assert.deepEqual(track.lessons.map(({ id }) => id), expected);
 });
@@ -536,6 +537,20 @@ test("LangChain 模型配置课明确区分配置、请求与失败边界", asyn
   assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("timeout")));
   assert.ok(lesson.migrations.length >= 1);
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("/models")));
+});
+
+test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langchain-rag");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "rag-evaluation");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("recall")));
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("no_results")));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
 test("框架作者路线保留可解释的先修链", async () => {

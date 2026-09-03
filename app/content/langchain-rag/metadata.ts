@@ -12,6 +12,7 @@ export const langchainHints: Record<string, [string, string, string]> = {
   "model-configuration": ["先列出模型配置字段", "分别验证类型和边界", "用缺失 model 与无效 timeout 回归"],
   "structured-output": ["先写出结构", "保留真实错误", "用边界输入验证"],
   "runnable-pipeline": ["先写出结构", "保留真实错误", "用边界输入验证"],
+  "rag-evaluation": ["先定义期望来源", "分别计算召回和引用覆盖", "用空召回验证 no_results"],
 };
 
 export const langchainChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -59,5 +60,10 @@ export const langchainChecks: Record<string, NonNullable<LearningLesson["browser
   "runnable-pipeline": [
     { name: "管道顺序", expression: "chain_steps == [\"template\", \"model\", \"parser\"]", failure: "Runnable 应按 template → model → parser 顺序组合。", kind: "structure" },
     { name: "保留错误", expression: "pipeline_error is not None or result is not None", failure: "管道应保留真实错误或真实结果。", kind: "behavior" },
+  ],
+  "rag-evaluation": [
+    { name: "召回指标", expression: "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [\"guide.md\"])[\"recall\"] == 1.0", failure: "期望来源被召回时 recall 应为 1。", kind: "behavior" },
+    { name: "引用覆盖", expression: "evaluate_retrieval([\"guide.md\"], [\"guide.md\"], [])[\"citation_coverage\"] == 0.0", failure: "未引用来源时覆盖率应为 0。", kind: "behavior" },
+    { name: "无资料状态", expression: "evaluate_retrieval([\"guide.md\"], [], [])[\"status\"] == \"no_results\"", failure: "无召回时必须明确记录 no_results。", kind: "behavior" },
   ],
 };

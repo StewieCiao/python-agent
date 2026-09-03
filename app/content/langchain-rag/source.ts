@@ -533,6 +533,23 @@ export const langchainTrack: LearningTrack = {
       }], project: false, projectLinks: [],
       exercise: { prompt: "输入是 topic 字符串；输出是经过 template → model → parser 的 result。请记录三步 chain_steps，并在任一步失败时保留 pipeline_error，不返回空字符串冒充成功。", starterCode: `topic = \"RAG\"\nchain_steps = []\nresult = None\npipeline_error = None`, solution: `topic = \"RAG\"\nchain_steps = [\"template\", \"model\", \"parser\"]\npipeline_error = None\nresult = {\"answer\": f\"关于 {topic} 的说明\"}` },
     },
+    {
+      id: "rag-evaluation",
+      title: "RAG 评估：召回、引用与资料不足",
+      prerequisites: ["retrieval-chain"], difficulty: "intermediate", tags: ["rag", "evaluation", "citations"],
+      summary: "用固定问答样本测量召回和引用覆盖，并把无资料作为真实结果记录。",
+      minutes: 45,
+      guide: [
+        { title: "评估先定义可观察指标", body: "RAG 的好坏不能只凭回答读起来顺不顺。先为每个问题标记期望来源，再比较实际召回是否包含它；recall、首个命中位置和引用覆盖分别回答不同问题。", bullets: ["期望来源来自样本", "指标必须可重复计算", "回答质量和检索质量分开"], example: `case = {\"expectedSources\": [\"guide.md\"], \"retrieved\": [\"guide.md\"]}` },
+        { title: "无资料也是评估结果", body: "当检索没有达到阈值时，系统应返回 no_results 并停止生成，而不是把空 context 交给模型猜测。评估记录这个状态，才能区分资料缺失与模型失败。", bullets: ["记录真实状态", "不估算缺失指标", "固定样本便于回归"], example: `result = {\"status\": \"no_results\", \"sources\": []}` },
+        { title: "RAG 评估的常见误区", body: "完成“RAG 评估：召回、引用与资料不足”时，不要用答案字符串相似度替代来源检查，也不要把无命中强行算成成功。", bullets: ["检查来源集合", "保留 no_results", "报告实际与期望"], example: `metrics = {\"recall\": 1.0, \"citation_coverage\": 1.0}` },
+      ],
+      videos: [{ title: "LangChain: Chat with Your Data", url: DLAI_DATA, provider: "DeepLearning.AI", language: "英文", duration: "1 小时 18 分", note: "补充检索问答链；评估指标以站内固定样本为准。" }],
+      officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }],
+      migrations: [{ title: "主观示例 → 固定样本评估", status: "replaced", explanation: "把检索和引用拆成可重复指标，并记录 no_results，而不是凭单条回答判断质量。", beforeCode: "print(answer)", afterCode: "metrics = evaluate(samples, retriever)", officialSources: [{ label: "LangChain retrieval", url: RETRIEVAL }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 evaluate_retrieval(expected_sources, retrieved_sources, answer_sources)：返回 recall、citation_coverage 和 status；期望来源为空或实际无命中时 status 为 no_results，不能把无资料当作满分。", starterCode: `def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    pass\n`, solution: `def evaluate_retrieval(expected_sources, retrieved_sources, answer_sources):\n    if not expected_sources or not retrieved_sources:\n        return {\"recall\": 0, \"citation_coverage\": 0, \"status\": \"no_results\"}\n    expected = set(expected_sources)\n    retrieved = set(retrieved_sources)\n    cited = set(answer_sources)\n    return {\"recall\": len(expected & retrieved) / len(expected), \"citation_coverage\": len(expected & cited) / len(expected), \"status\": \"ok\"}\n` },
+    },
   ],
 };
 
