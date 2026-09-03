@@ -16,15 +16,7 @@ function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackI
     kind: guideIndex === 0 ? "概念入门" : guideIndex === 1 ? "逐步拆解" : "常见误区",
     ...item,
   })) as CourseLesson["guide"];
-  if (guide.length < 3) {
-    guide.push({
-      kind: "常见误区",
-      title: `${value.title}的边界检查`,
-      body: `完成“${value.title}”时，不要只复现示例；回到目标“${value.summary}”，用变化输入检查实际结果与失败边界。`,
-      bullets: ["改变一个输入", "记录实际结果", "对照练习规则"],
-      example: value.exercise.starterCode,
-    });
-  }
+  if (guide.length !== 3) throw new Error(`${value.id} 必须正好包含三张讲解卡`);
   return {
     id: value.id,
     ...(value.familyId ? { familyId: value.familyId } : {}),

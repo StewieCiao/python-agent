@@ -207,6 +207,28 @@ test("正式作者路线保留讲解、提示、判题和项目关系", () => {
   assert.equal(lesson.familyId, "rich-family");
 });
 
+test("正式作者转换器不会静默补写缺失讲解卡", async () => {
+  const { authorTrackFromLessons } = await import("../app/content/formalizeTrack.ts");
+  const track = {
+    id: "langgraph",
+    title: "LangGraph",
+    shortTitle: "Graph",
+    description: "路线",
+    accent: "#000000",
+    currentLessonId: "lesson",
+    lessons: [{
+      id: "lesson",
+      title: "缺卡课程",
+      summary: "测试",
+      minutes: 10,
+      guide: [{ title: "概念", body: "说明", bullets: ["要点"], example: "x" }],
+      videos: [], officialSources: [{ label: "官方", url: "https://docs.langchain.com/oss/python/learn" }], migrations: [],
+      exercise: { prompt: "完成", starterCode: "", hints: ["定位", "拆解", "修正"], solution: "完成" },
+    }],
+  };
+  assert.throws(() => authorTrackFromLessons(track, [{ id: "stage", title: "阶段", description: "说明" }]), /必须正好包含三张讲解卡/);
+});
+
 test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
