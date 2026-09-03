@@ -333,6 +333,17 @@ test("LangGraph 路由代表课明确状态输入、分支输出和循环上限"
   assert.match(lesson.guide[1].example, /revise/);
 });
 
+test("LangChain 结构化输出代表课明确字段校验和失败状态", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag").lessons.find(({ id }) => id === "structured-output");
+  assert.match(lesson.exercise.prompt, /输入是.*result/);
+  assert.match(lesson.exercise.prompt, /输出是.*valid/);
+  assert.match(lesson.exercise.prompt, /缺少字段/);
+  assert.match(lesson.exercise.starterCode, /def validate_answer\(payload\)/);
+  assert.match(lesson.exercise.solution, /valid = validate_answer\(result\)/);
+  assert.match(lesson.exercise.solution, /confidence/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);

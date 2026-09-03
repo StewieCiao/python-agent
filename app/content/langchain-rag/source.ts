@@ -479,7 +479,7 @@ export const langchainTrack: LearningTrack = {
         verifiedAt: VERIFIED_AT,
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],
-      exercise: { prompt: "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。", starterCode: `result = {}\nvalid = False`, solution: `from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\nvalid = Answer.model_validate(result)` },
+      exercise: { prompt: "输入是一个可能缺少字段的 result 字典；输出是 valid 布尔值。请验证 summary 和 confidence 是否存在且 confidence 在 0 到 1，缺少字段或越界时返回 False；不要把失败改成空对象，再映射到 Answer schema。", starterCode: `result = {"summary": "可核验", "confidence": 0.8}\n\ndef validate_answer(payload):\n    pass\n\nvalid = False`, solution: `result = {"summary": "可核验", "confidence": 0.8}\n\ndef validate_answer(payload):\n    required = {"summary", "confidence"}\n    return required.issubset(payload) and isinstance(payload["summary"], str) and 0 <= payload["confidence"] <= 1\n\nvalid = validate_answer(result)` },
     },
     {
       id: "runnable-pipeline",
