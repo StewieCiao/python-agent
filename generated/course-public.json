@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "945c67ea46e29a427108fb6233dec2e12342c3b8e2a202775b1b870101f00ef0",
+  "catalogHash": "354b442f9777f66ad95c3a6616f8c265692ed11a43fd4e5ddf77843a327b6301",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -12032,14 +12032,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "Streaming、Interrupt 与人工确认的边界检查",
-                "body": "完成“Streaming、Interrupt 与人工确认”时，不要只复现示例；回到目标“让长任务及时反馈，并在高风险动作前安全暂停。”，用变化输入检查实际结果与失败边界。",
+                "title": "Streaming、Interrupt 与人工确认的常见误区",
+                "body": "完成“Streaming、Interrupt 与人工确认”时，不要用假进度掩盖节点停滞，也不要在 interrupt 之前执行不可撤销副作用；恢复值仍需经过业务验证。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "事件必须来自真实执行",
+                  "副作用放在确认之后",
+                  "拒绝路径明确结束"
                 ],
-                "example": "def approve_email(state):\n    pass"
+                "example": "approved = interrupt({\"action\": \"send_email\"})"
               }
             ],
             "videos": [
@@ -12126,14 +12126,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "子图、并行与 Map-Reduce的边界检查",
-                "body": "完成“子图、并行与 Map-Reduce”时，不要只复现示例；回到目标“把可独立的工作分开执行，再通过明确 reducer 汇总结果。”，用变化输入检查实际结果与失败边界。",
+                "title": "子图、并行与 Map-Reduce 的常见误区",
+                "body": "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "父子状态边界清楚",
+                  "共享字段显式合并",
+                  "失败结果可观察"
                 ],
-                "example": "def fan_out(state):\n    pass"
+                "example": "parent.add_node(\"research\", research_graph)"
               }
             ],
             "videos": [
@@ -12218,14 +12218,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "项目：带长期记忆的研究助手的边界检查",
-                "body": "完成“项目：带长期记忆的研究助手”时，不要只复现示例；回到目标“组合检索、并行研究、人工确认、短期状态和长期偏好。”，用变化输入检查实际结果与失败边界。",
+                "title": "带长期记忆的研究助手的常见误区",
+                "body": "完成“项目：带长期记忆的研究助手”时，不要把用户偏好写入当前 thread，也不要在没有真实来源时生成看似完整的报告；先区分状态范围，再验证证据和审批结果。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "短期状态按 thread 隔离",
+                  "长期偏好按 user 隔离",
+                  "报告只引用真实证据"
                 ],
-                "example": "thread_state = []\nstore_memory = []\nnodes = []\ninterrupt_before = \"\""
+                "example": "config = {\"configurable\": {\"thread_id\": research_id}}"
               }
             ],
             "videos": [

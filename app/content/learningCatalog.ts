@@ -877,6 +877,12 @@ const langgraphTrack: LearningTrack = {
           bullets: ["暂停前 checkpoint 已存在", "展示具体动作与参数", "拒绝和批准都要有明确分支"],
           example: `approved = interrupt({"action": "send_email", "recipient": recipient})\nif not approved:\n    return {"status": "cancelled"}`,
         },
+        {
+          title: "Streaming、Interrupt 与人工确认的常见误区",
+          body: "完成“Streaming、Interrupt 与人工确认”时，不要用假进度掩盖节点停滞，也不要在 interrupt 之前执行不可撤销副作用；恢复值仍需经过业务验证。",
+          bullets: ["事件必须来自真实执行", "副作用放在确认之后", "拒绝路径明确结束"],
+          example: `approved = interrupt({"action": "send_email"})`,
+        },
       ],
       videos: [{
         title: "Introduction to LangGraph · UX and Human-in-the-Loop",
@@ -912,6 +918,12 @@ const langgraphTrack: LearningTrack = {
           bullets: ["并行任务互不依赖", "共享字段定义 reducer", "汇总节点处理空结果与失败列表"],
           example: `def fan_out(state):\n    return [Send("research_section", {"topic": topic}) for topic in state["topics"]]`,
         },
+        {
+          title: "子图、并行与 Map-Reduce 的常见误区",
+          body: "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则。",
+          bullets: ["父子状态边界清楚", "共享字段显式合并", "失败结果可观察"],
+          example: `parent.add_node("research", research_graph)`,
+        },
       ],
       videos: [{
         title: "Introduction to LangGraph · Building Your Assistant",
@@ -946,6 +958,12 @@ const langgraphTrack: LearningTrack = {
           body: "每个研究节点返回发现与来源，汇总节点先检查空结果、重复来源和失败章节，再生成草稿。人工确认可以修改计划或拒绝继续，最终报告只能引用真实收集到的来源。",
           bullets: ["检索结果和模型总结分开保存", "失败章节进入明确列表", "长期偏好不覆盖当前用户指令"],
           example: `preferences = store.get(("users", user_id), "report_preferences")\nconfig = {"configurable": {"thread_id": research_id}}\ngraph.invoke({"topic": topic, "preferences": preferences.value}, config)`,
+        },
+        {
+          title: "带长期记忆的研究助手的常见误区",
+          body: "完成“项目：带长期记忆的研究助手”时，不要把用户偏好写入当前 thread，也不要在没有真实来源时生成看似完整的报告；先区分状态范围，再验证证据和审批结果。",
+          bullets: ["短期状态按 thread 隔离", "长期偏好按 user 隔离", "报告只引用真实证据"],
+          example: `config = {"configurable": {"thread_id": research_id}}`,
         },
       ],
       videos: [

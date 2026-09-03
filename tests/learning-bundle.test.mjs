@@ -261,6 +261,18 @@ test("LangGraph 核心作者课直接提供三张关联讲解卡", async () => {
   }
 });
 
+test("LangGraph 其余核心作者课也直接提供三张讲解卡", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  for (const id of ["streaming-interrupts", "subgraphs-parallelism", "memory-research-project"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.equal(lesson.guide.length, 3);
+    assert.ok(lesson.guide[2].body.includes(lesson.title), `${id} 的误区卡未关联课程标题`);
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);
