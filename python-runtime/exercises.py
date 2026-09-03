@@ -83,6 +83,9 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     constraints = selection.get("constraints", [])
     if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
         raise ValueError("family 约束无效")
+    mistake_codes = selection.get("mistakeCodes", [])
+    if not isinstance(mistake_codes, list) or not all(isinstance(code, str) and code.strip() for code in mistake_codes):
+        raise ValueError("错误模式无效")
     starter_code = selection.get("starterCode")
     if not isinstance(starter_code, str) or not starter_code.strip():
         raise ValueError("个性题缺少课程 starter")
@@ -92,7 +95,8 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
         candidate = variants[(seed + offset) % len(variants)]
         if not isinstance(candidate, dict) or not isinstance(candidate.get("label"), str) or not isinstance(candidate.get("values"), str) or not _valid_checks(candidate.get("checks")):
             raise ValueError("family 变体结构无效")
-        candidate_prompt = f"针对 {candidate['label']} 完成题目要求。教学约束：{'；'.join(constraints)}。"
+        focus = f"重点复习错误模式：{'、'.join(mistake_codes)}。" if mistake_codes else "本次没有记录错误模式。"
+        candidate_prompt = f"针对 {candidate['label']} 完成题目要求。{focus}教学约束：{'；'.join(constraints)}。"
         if candidate_prompt not in recent_prompts:
             selected = candidate
             prompt = candidate_prompt

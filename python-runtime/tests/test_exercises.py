@@ -97,6 +97,7 @@ class ExerciseTest(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertEqual(first["familyId"], "python-loops-v1")
         self.assertIn("输入", first["prompt"])
+        self.assertIn("missing-loop", first["prompt"])
         self.assertEqual(len(first["hints"]), 3)
         next_variant = generate_personalized_exercise(selection, 4, [first["prompt"]])
         self.assertNotEqual(next_variant["prompt"], first["prompt"])
