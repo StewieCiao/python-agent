@@ -6,12 +6,9 @@ import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { packagedExecutablePath } from "./desktopPackagePaths.mjs";
 
-const READY_TIMEOUT_MS = 30_000;
+const READY_TIMEOUT_MS = 60_000;
 const RUN_TIMEOUT_MS = 12_000;
-// Windows packaged Electron may spend several seconds loading the bundled
-// renderer before its first Runtime.evaluate response; keep the overall
-// readiness deadline separate while allowing one real probe to finish.
-const IO_TIMEOUT_MS = 20_000;
+const IO_TIMEOUT_MS = 5_000;
 
 function withTimeout(promise, label, timeoutMs = IO_TIMEOUT_MS) {
   let timer;
@@ -70,11 +67,17 @@ async function startModelServer() {
 async function waitFor(probe, label, timeoutMs) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    const value = await withTimeout(
-      Promise.resolve().then(probe),
-      `${label}的状态检查未返回`,
-      Math.min(IO_TIMEOUT_MS, deadline - Date.now()),
-    );
+    let value;
+    try {
+      value = await withTimeout(
+        Promise.resolve().then(probe),
+        `${label}的状态检查未返回`,
+        Math.min(IO_TIMEOUT_MS, deadline - Date.now()),
+      );
+    } catch (error) {
+      if (!(error instanceof Error) || !error.message.includes("的状态检查未返回")) throw error;
+      continue;
+    }
     if (value) return value;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
