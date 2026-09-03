@@ -504,7 +504,7 @@ export const langchainTrack: LearningTrack = {
         verifiedAt: VERIFIED_AT,
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],
-      exercise: { prompt: "写出 template → model → parser 的三步组合，并说明每一步输入输出。", starterCode: `template = None\nmodel = None\nparser = None`, solution: `chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})` },
+      exercise: { prompt: "输入是 topic 字符串；输出是经过 template → model → parser 的 result。请记录三步 chain_steps，并在任一步失败时保留 pipeline_error，不返回空字符串冒充成功。", starterCode: `topic = \"RAG\"\nchain_steps = []\nresult = None\npipeline_error = None`, solution: `topic = \"RAG\"\nchain_steps = [\"template\", \"model\", \"parser\"]\npipeline_error = None\nresult = {\"answer\": f\"关于 {topic} 的说明\"}` },
     },
   ],
 };

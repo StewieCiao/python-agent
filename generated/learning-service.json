@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "3414aa4b76a5dd5df17e5fa896f779756fb452da4b9a0636cfee4668479b6026",
+  "catalogHash": "071591c3b1300b3de79a9b043a7a9e27134872b5d6c6f06d7570641a59fe3419",
   "familyHash": "fb21e0627d2f9aad7dfa523effa580e231606810a28b0cd2af8b820ca4353e04",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7780,14 +7780,14 @@
               "langchain-rag-lesson-13"
             ],
             "exercise": {
-              "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
-              "starterCode": "template = None\nmodel = None\nparser = None",
+              "prompt": "输入是 topic 字符串；输出是经过 template → model → parser 的 result。请记录三步 chain_steps，并在任一步失败时保留 pipeline_error，不返回空字符串冒充成功。",
+              "starterCode": "topic = \"RAG\"\nchain_steps = []\nresult = None\npipeline_error = None",
               "hints": [
                 "先写出结构",
                 "保留真实错误",
                 "用边界输入验证"
               ],
-              "solution": "chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})"
+              "solution": "topic = \"RAG\"\nchain_steps = [\"template\", \"model\", \"parser\"]\npipeline_error = None\nresult = {\"answer\": f\"关于 {topic} 的说明\"}"
             },
             "browserChecks": [
               {
