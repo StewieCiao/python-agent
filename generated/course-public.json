@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "19df9791e7b6476614b3225174eecb0966276191f677250bf5294e033c37efc8",
+  "catalogHash": "d4a2c86db1e9e1fe6be8f7474c4d09df5b03848c141e4647e6aadf6379bd613a",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6955,14 +6955,14 @@
               "agent-rag-project"
             ],
             "exercise": {
-              "prompt": "实现 format_docs，输出正文与 source；资料为空时返回明确的“没有检索到资料”。",
-              "starterCode": "def format_docs(docs):\n    pass",
+              "prompt": "输入是 question 字符串、documents 列表和 top_k；输出是 retrieved 候选列表与可传给 prompt 的 context。请先完成一个可观察的关键词检索：结果不超过 top_k，无命中时 retrieved 为空且 context 明确为“没有检索到资料”，再映射到 Retriever + Runnable。",
+              "starterCode": "question = \"退款\"\ndocuments = [\n    {\"text\": \"退款期限为七天\", \"source\": \"policy.md\"},\n    {\"text\": \"客服联系邮箱见首页\", \"source\": \"contact.md\"},\n]\ntop_k = 1\n\ndef retrieve(question, documents, top_k):\n    pass\n\nretrieved = []\ncontext = \"\"",
               "hints": [
                 "先单独运行 retriever。",
                 "把 context 和 question 分开传入。",
                 "空召回时保留资料不足状态。"
               ],
-              "solution": "def format_docs(docs):\n    if not docs:\n        return \"没有检索到资料\"\n    return \"\n\n\".join(\n        f\"来源: {doc.metadata.get('source', '未知')}\n{doc.page_content}\"\n        for doc in docs\n    )"
+              "solution": "question = \"退款\"\ndocuments = [\n    {\"text\": \"退款期限为七天\", \"source\": \"policy.md\"},\n    {\"text\": \"客服联系邮箱见首页\", \"source\": \"contact.md\"},\n]\ntop_k = 1\n\ndef retrieve(question, documents, top_k):\n    matches = [document for document in documents if question in document[\"text\"]]\n    return matches[:top_k]\n\nretrieved = retrieve(question, documents, top_k)\ncontext = \"没有检索到资料\" if not retrieved else \"\\n\".join(\n    f\"来源: {document['source']}\\n{document['text']}\" for document in retrieved\n)"
             },
             "browserChecks": [
               {

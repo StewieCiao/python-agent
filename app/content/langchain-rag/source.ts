@@ -264,9 +264,9 @@ export const langchainTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "实现 format_docs，输出正文与 source；资料为空时返回明确的“没有检索到资料”。",
-        starterCode: `def format_docs(docs):\n    pass`,
-        solution: `def format_docs(docs):\n    if not docs:\n        return "没有检索到资料"\n    return "\n\n".join(\n        f"来源: {doc.metadata.get('source', '未知')}\n{doc.page_content}"\n        for doc in docs\n    )`,
+        prompt: "输入是 question 字符串、documents 列表和 top_k；输出是 retrieved 候选列表与可传给 prompt 的 context。请先完成一个可观察的关键词检索：结果不超过 top_k，无命中时 retrieved 为空且 context 明确为“没有检索到资料”，再映射到 Retriever + Runnable。",
+        starterCode: `question = "退款"\ndocuments = [\n    {"text": "退款期限为七天", "source": "policy.md"},\n    {"text": "客服联系邮箱见首页", "source": "contact.md"},\n]\ntop_k = 1\n\ndef retrieve(question, documents, top_k):\n    pass\n\nretrieved = []\ncontext = ""`,
+        solution: `question = "退款"\ndocuments = [\n    {"text": "退款期限为七天", "source": "policy.md"},\n    {"text": "客服联系邮箱见首页", "source": "contact.md"},\n]\ntop_k = 1\n\ndef retrieve(question, documents, top_k):\n    matches = [document for document in documents if question in document["text"]]\n    return matches[:top_k]\n\nretrieved = retrieve(question, documents, top_k)\ncontext = "没有检索到资料" if not retrieved else "\\n".join(\n    f"来源: {document['source']}\\n{document['text']}" for document in retrieved\n)`,
       },
     },
     {
