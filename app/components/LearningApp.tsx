@@ -148,6 +148,7 @@ export function LearningApp() {
   const [personalizedStatus, setPersonalizedStatus] = useState("");
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
   const [reviewQueueCount, setReviewQueueCount] = useState<number | null>(null);
+  const [reviewQueue, setReviewQueue] = useState<string[]>([]);
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
@@ -221,7 +222,10 @@ export function LearningApp() {
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.stewie) return;
-    void loadMastery().then((mastery) => setReviewQueueCount(mastery.reviewQueue.length)).catch((error) => {
+    void loadMastery().then((mastery) => {
+      setReviewQueueCount(mastery.reviewQueue.length);
+      setReviewQueue(mastery.reviewQueue);
+    }).catch((error) => {
       setStorageError(`复习队列无法读取：${errorMessage(error)}`);
     });
   }, [progress.mistakes.length]);
@@ -981,6 +985,21 @@ export function LearningApp() {
               <h2>错题不是存档，是下一次练习。</h2>
               <p>每次未通过都会保留当时的代码、真实异常与测试结果。载入旧代码，修正后重新运行。</p>
             </div>
+            {reviewQueue.length > 0 && (
+              <section className="review-recommendation" aria-label="推荐复习">
+                <div>
+                  <span>REVIEW NEXT</span>
+                  <strong>先复习这些能力</strong>
+                </div>
+                <div className="review-recommendation-list">
+                  {reviewQueue.slice(0, 5).map((lessonId) => {
+                    const item = lessons.find((candidate) => candidate.id === lessonId);
+                    if (!item) return null;
+                    return <button key={lessonId} disabled={isRunning} onClick={() => openLesson(lessons.findIndex((candidate) => candidate.id === lessonId), item.starterCode)} type="button">{item.title} →</button>;
+                  })}
+                </div>
+              </section>
+            )}
             {latestMistakes.length === 0 ? (
               <div className="empty-library">
                 <strong>错题本还是空的</strong>
