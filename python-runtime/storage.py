@@ -417,6 +417,18 @@ class Storage:
                 if code not in mistake_codes:
                     mistake_codes.append(code)
         selection = select_family(learning_bundle, lesson_id, mistake_codes)
+        lesson = next(
+            (
+                item
+                for track in learning_bundle["catalog"]["tracks"]
+                for item in track["lessons"]
+                if item["id"] == lesson_id
+            ),
+            None,
+        )
+        if not isinstance(lesson, dict) or not isinstance(lesson.get("exercise"), dict):
+            raise ValueError("个性题对应课程缺少 starter")
+        selection["starterCode"] = lesson["exercise"].get("starterCode")
         recent_prompts = [
             row["prompt"]
             for row in self.connection.execute(

@@ -92,6 +92,9 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
     constraints = selection.get("constraints", [])
     if not isinstance(constraints, list) or not all(isinstance(item, str) and item.strip() for item in constraints):
         raise ValueError("family 约束无效")
+    starter_code = selection.get("starterCode")
+    if not isinstance(starter_code, str) or not starter_code.strip():
+        raise ValueError("个性题缺少课程 starter")
     prompt = f"针对 {label} 完成题目要求。教学约束：{'；'.join(constraints)}。"
     if prompt in recent_prompts:
         raise ValueError("生成题目与最近练习重复")
@@ -99,7 +102,7 @@ def generate_personalized_exercise(selection, seed, recent_prompts):
         "familyId": family_id,
         "validatorVersion": selection.get("validatorVersion", "1"),
         "prompt": prompt,
-        "starterCode": "# 在这里完成练习\n",
+        "starterCode": starter_code,
         "hints": [
             "先定位本题 family 正在练习的核心能力。",
             "把输入、处理中间值和返回结果分别写出来，再实现最小版本。",

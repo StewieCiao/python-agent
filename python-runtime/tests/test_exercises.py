@@ -60,7 +60,7 @@ class ExerciseTest(unittest.TestCase):
             validate_generated_exercise(family, invalid)
 
     def test_generated_variant_passes_known_parameter_validator(self):
-        selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner", "constraints": ["sum even values"]}
+        selection = {"familyId": "python-loops-v1", "validatorVersion": "1", "difficulty": "beginner", "constraints": ["sum even values"], "starterCode": "def sum_even(values):\n    pass\n"}
         candidate = generate_personalized_exercise(selection, 1, [])
         checked = validate_generated_exercise(
             {"id": "python-loops-v1", "validatorVersion": "1", "constraints": ["sum even values"]},
@@ -76,6 +76,7 @@ class ExerciseTest(unittest.TestCase):
             }
         }}
         selection = select_family(bundle, "loops", ["missing-loop"])
+        selection["starterCode"] = "def sum_even(values):\n    pass\n"
         first = generate_personalized_exercise(selection, 4, [])
         second = generate_personalized_exercise(selection, 4, [])
         self.assertEqual(first, second)
@@ -94,7 +95,7 @@ class ExerciseTest(unittest.TestCase):
         for family_id in family_ids:
             prompts = {
                 generate_personalized_exercise(
-                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner", "constraints": ["verified family behavior"]},
+                    {"familyId": family_id, "validatorVersion": "1", "difficulty": "beginner", "constraints": ["verified family behavior"], "starterCode": "def exercise(value):\n    pass\n"},
                     seed,
                     [],
                 )["prompt"]
