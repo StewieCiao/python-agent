@@ -28,6 +28,8 @@ npm run dev
 
 仓库已包含 GitHub Actions 发布工作流：在仓库 Settings → Pages 中将发布方式设为 GitHub Actions，推送到 `main` 后会自动生成并发布静态站点。访问链接由 GitHub Pages 设置页提供。
 
+需要完整桌面能力时，在 GitHub Actions 中手动运行 `Build desktop installers`，或推送一个 `v*` 标签。工作流会为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包并上传为可下载的 Actions artifact；安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
+
 ## 课程与反馈
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
