@@ -3,12 +3,14 @@ import binascii
 import json
 import re
 import sqlite3
+import warnings
 from datetime import datetime, timezone
 from pathlib import Path
 
 from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
 from mastery import compute_mastery, select_review_queue
 from tutor import build_tutor_plan
+from tutor_graph import create_tutor_graph
 
 
 PROFILE_FIELDS = {
@@ -190,6 +192,14 @@ class Storage:
         self.connection = sqlite3.connect(self.database_path)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA foreign_keys = ON")
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message="The default value of `allowed_objects` will change in a future version.*",
+                category=Warning,
+            )
+            from langgraph.checkpoint.sqlite import SqliteSaver
+        self.tutor_graph = create_tutor_graph(SqliteSaver(self.connection))
         self.migrations_path = Path(migrations_path or Path(__file__).with_name("migrations"))
         self._apply_migrations()
 
@@ -434,6 +444,12 @@ class Storage:
 
     def get_tutor_plan(self, learning_bundle, now):
         return build_tutor_plan(learning_bundle, compute_mastery(self._mastery_events(), now), now)
+
+    def validate_tutor_turn(self, state):
+        if not isinstance(state, dict):
+            raise ValueError("导师状态必须是对象")
+        thread_id = state.get("thread_id")
+        return self.tutor_graph.invoke(state, {"configurable": {"thread_id": thread_id}})
 
     def record_rag_evaluation(self, record):
         _validate_rag_evaluation(record)

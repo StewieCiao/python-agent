@@ -25,6 +25,7 @@ METHOD_PARAMS = {
     "mastery.record": {"event"},
     "mastery.get": {"now"},
     "tutor.plan": {"now"},
+    "tutor.validate": {"state"},
     "personalization.next": {"lessonId", "seed"},
     "documents.parse": {"paths"},
     "rag.evaluation.list": set(),
@@ -93,6 +94,8 @@ def decode_request(frame):
         raise ProtocolError("now 必须是非空字符串")
     if request["method"] == "tutor.plan" and (not isinstance(params["now"], str) or not params["now"]):
         raise ProtocolError("now 必须是非空字符串")
+    if request["method"] == "tutor.validate" and not isinstance(params["state"], dict):
+        raise ProtocolError("state 必须是对象")
     if request["method"] == "personalization.next" and (not isinstance(params["lessonId"], str) or not params["lessonId"] or not isinstance(params["seed"], int) or isinstance(params["seed"], bool)):
         raise ProtocolError("personalization.next 参数无效")
     if request["method"] == "documents.parse" and (not isinstance(params["paths"], list) or not params["paths"] or len(params["paths"]) > 10 or not all(isinstance(path, str) and path for path in params["paths"])):
