@@ -1,6 +1,8 @@
 import type { LearningLesson, LearningTrack } from "./learningCatalog.ts";
 import type { CourseLesson, CourseSource, CourseStage } from "./schema.ts";
 
+type StageSpec = { id: string; title: string; description: string };
+
 function source(value: { label: string; url: string }): CourseSource {
   return {
     ...value,
@@ -9,11 +11,10 @@ function source(value: { label: string; url: string }): CourseSource {
   };
 }
 
-function lesson(value: LearningLesson, index: number, trackId: LearningTrack["id"]): CourseLesson {
-  const stageId = `${trackId}-stage-${value.id}`;
+function toLesson(value: LearningLesson, index: number, stage: StageSpec, trackId: LearningTrack["id"]): CourseLesson {
   return {
     id: value.id,
-    stageId,
+    stageId: stage.id,
     order: index + 1,
     title: value.title,
     kicker: `${trackId} 学习`,
@@ -34,28 +35,29 @@ function lesson(value: LearningLesson, index: number, trackId: LearningTrack["id
       verifiedAt: "2026-09-02",
       verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
     })),
-    project: false,
-    projectLinks: [],
-    exercise: {
-      ...value.exercise,
-      hints: value.exercise.hints ?? ["先运行示例", "定位失败步骤", "用边界输入复测"],
-    },
-    browserChecks: value.browserChecks ?? [],
     project: value.project ?? false,
     projectLinks: value.projectLinks ?? [],
+    exercise: {
+      prompt: value.exercise.prompt,
+      starterCode: value.exercise.starterCode,
+      hints: value.exercise.hints ?? ["先运行最小示例", "定位输入、处理中间值和输出", "用变化输入与边界复测"],
+      solution: value.exercise.solution,
+    },
+    browserChecks: value.browserChecks ?? [],
   };
 }
 
-export function adaptLegacyTrack(track: LearningTrack): { stages: CourseStage[]; lessons: CourseLesson[] } {
-  const lessons = track.lessons.map((value, index) => lesson(value, index, track.id));
-  return {
-    lessons,
-    stages: lessons.map((item, index) => ({
-      id: item.stageId,
-      order: index + 1,
-      title: item.title,
-      description: item.summary,
-      lessonIds: [item.id],
-    })),
-  };
+export function authorTrackFromLessons(
+  track: LearningTrack,
+  stageSpecs: readonly StageSpec[],
+): { stages: CourseStage[]; lessons: CourseLesson[] } {
+  if (stageSpecs.length === 0) throw new Error(`课程路线缺少阶段：${track.id}`);
+  const stages = stageSpecs.map((stage, index) => ({ ...stage, order: index + 1, lessonIds: [] as string[] }));
+  const lessons = track.lessons.map((value, index) => {
+    const stage = stages[index % stages.length];
+    const lesson = toLesson(value, index, stage, track.id);
+    stage.lessonIds.push(lesson.id);
+    return lesson;
+  });
+  return { stages, lessons };
 }

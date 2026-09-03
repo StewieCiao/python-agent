@@ -6,7 +6,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const schema = await import("../app/content/schema.ts");
-const { adaptLegacyTrack } = await import("../app/content/courseTrackAdapter.ts");
+const { authorTrackFromLessons } = await import("../app/content/formalizeTrack.ts");
 
 const validCatalog = {
   schemaVersion: "stewie-catalog-v1",
@@ -146,7 +146,7 @@ test("schema validator rejects unsafe video domains and incomplete migrations", 
   );
 });
 
-test("legacy track adapter preserves instructional fields instead of erasing them", () => {
+test("正式作者路线保留讲解、提示、判题和项目关系", () => {
   const track = {
     id: "langchain-rag",
     title: "LangChain",
@@ -174,8 +174,8 @@ test("legacy track adapter preserves instructional fields instead of erasing the
     }],
   };
 
-  const adapted = adaptLegacyTrack(track);
-  const [lesson] = adapted.lessons;
+  const authored = authorTrackFromLessons(track, [{ id: "langchain-stage-1", title: "起步", description: "建立基础" }]);
+  const [lesson] = authored.lessons;
   assert.equal(lesson.guide.length, 3);
   assert.deepEqual(lesson.exercise.hints, ["定位", "拆解", "修正"]);
   assert.equal(lesson.browserChecks.length, 1);
