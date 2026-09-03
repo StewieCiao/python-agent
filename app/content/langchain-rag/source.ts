@@ -454,7 +454,7 @@ export const langchainTrack: LearningTrack = {
         verifiedAt: VERIFIED_AT,
         verifiedVersions: VERIFIED_VERSIONS,
       }], project: false, projectLinks: [],
-      exercise: { prompt: "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。", starterCode: `topic = \"\"\nmessages = []`, solution: `from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})` },
+      exercise: { prompt: "输入是一个 topic 字符串；输出是按顺序排列的 messages 列表。请先用纯 Python 字典表达 system 与 user 角色，并声明 prompt_variables，再把同一结构映射到 ChatPromptTemplate。", starterCode: `topic = \"RAG\"\nprompt_variables = []\nmessages = []`, solution: `topic = \"RAG\"\nprompt_variables = [\"topic\"]\nmessages = [\n    {\"role\": \"system\", \"content\": \"你是导师\"},\n    {\"role\": \"user\", \"content\": f\"解释 {topic}\"},\n]` },
     },
     {
       id: "structured-output",
@@ -519,4 +519,3 @@ for (const [index, lesson] of langchainTrack.lessons.entries()) {
   const checks = langchainChecks[lesson.id];
   if (checks) lesson.browserChecks = checks;
 }
-

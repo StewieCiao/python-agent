@@ -299,6 +299,16 @@ test("LangGraph 基础代表课明确输入输出和可运行最小骨架", asyn
   assert.match(lesson.exercise.solution, /graph_edges = \["START", "draft", "END"\]/);
 });
 
+test("LangChain 消息代表课先验证可观察的数据契约", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag").lessons.find(({ id }) => id === "model-messages-prompts");
+  assert.match(lesson.exercise.prompt, /输入是.*topic/);
+  assert.match(lesson.exercise.prompt, /输出是.*messages/);
+  assert.match(lesson.exercise.starterCode, /prompt_variables/);
+  assert.match(lesson.exercise.solution, /messages = \[/);
+  assert.match(lesson.exercise.solution, /prompt_variables = \["topic"\]/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);

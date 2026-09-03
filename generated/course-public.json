@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "2d534ff06685cd74178b731b579b4c6e4d97a529a260ac655333382dacc2b98a",
+  "catalogHash": "19df9791e7b6476614b3225174eecb0966276191f677250bf5294e033c37efc8",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7540,14 +7540,14 @@
               "langchain-rag-lesson-13"
             ],
             "exercise": {
-              "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
-              "starterCode": "topic = \"\"\nmessages = []",
+              "prompt": "输入是一个 topic 字符串；输出是按顺序排列的 messages 列表。请先用纯 Python 字典表达 system 与 user 角色，并声明 prompt_variables，再把同一结构映射到 ChatPromptTemplate。",
+              "starterCode": "topic = \"RAG\"\nprompt_variables = []\nmessages = []",
               "hints": [
                 "区分消息角色",
                 "声明模板变量",
                 "检查渲染结果"
               ],
-              "solution": "from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})"
+              "solution": "topic = \"RAG\"\nprompt_variables = [\"topic\"]\nmessages = [\n    {\"role\": \"system\", \"content\": \"你是导师\"},\n    {\"role\": \"user\", \"content\": f\"解释 {topic}\"},\n]"
             },
             "browserChecks": [
               {
