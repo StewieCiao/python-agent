@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "867dcc6afacf2921e40425f50f3130e4daab500688d1e2b4103df5517ec71314",
-  "familyHash": "b73b7f7b1421a052fb06841c192effc0422c876c93b147e1c194e67447f9c556",
+  "catalogHash": "b8515e7404594d59f56e80df0f294b11242b71c0687a5fb0d734295eb1d1cc08",
+  "familyHash": "2fea2baf4bf2e7372c953bba879dde87b384e0df192a170fc8039b583ef24a5a",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -10707,26 +10707,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：可引用文档问答系统\n用户场景：为团队建立可追溯的文档问答入口，回答始终带真实来源。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def validate_answer(value):\n    pass\n",
+              "prompt": "阶段项目：可引用文档问答系统\n用户场景：为团队建立可追溯的文档问答入口，回答始终带真实来源。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 answer_with_sources(matches, answer)，仅当 matches 非空时返回 answer 与去重后的 sources；无命中返回 answer='资料不足' 且 sources=[]。",
+              "starterCode": "def answer_with_sources(matches, answer):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "先处理无命中边界。",
+                "按输入顺序去重来源。",
+                "回答和来源必须来自真实输入。"
               ],
-              "solution": "def validate_answer(value):\n    if not isinstance(value, dict) or not isinstance(value.get(\"answer\"), str) or not isinstance(value.get(\"confidence\"), (int, float)) or not 0 <= value[\"confidence\"] <= 1:\n        raise ValueError(\"invalid answer schema\")\n    return value\n"
+              "solution": "def answer_with_sources(matches, answer):\n    if not matches:\n        return {\"answer\": \"资料不足\", \"sources\": []}\n    sources = []\n    for match in matches:\n        if match[\"source\"] not in sources:\n            sources.append(match[\"source\"])\n    return {\"answer\": answer, \"sources\": sources}\n"
             },
             "browserChecks": [
               {
-                "name": "通过结构",
-                "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
-                "failure": "合法结构应原样通过。",
+                "name": "引用来源",
+                "expression": "answer_with_sources([{\"source\": \"a.md\"}, {\"source\": \"a.md\"}], \"ok\") == {\"answer\": \"ok\", \"sources\": [\"a.md\"]}",
+                "failure": "命中结果应保留去重后的真实来源。",
                 "kind": "behavior"
               },
               {
-                "name": "拒绝越界",
-                "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
-                "failure": "字段类型或置信度越界应失败。",
+                "name": "无资料",
+                "expression": "answer_with_sources([], \"猜测\") == {\"answer\": \"资料不足\", \"sources\": []}",
+                "failure": "无命中时必须明确资料不足。",
                 "kind": "behavior"
               }
             ]
@@ -10804,26 +10804,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：混合检索评估台\n用户场景：为检索调优提供关键词、向量召回和命中率对比。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def compose_steps(first, second, value):\n    pass\n",
+              "prompt": "阶段项目：混合检索评估台\n用户场景：为检索调优提供关键词、向量召回和命中率对比。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 score_retrieval(expected, retrieved)，返回 recall 与 first_hit；expected 为空时抛出 ValueError，first_hit 为首个命中位置或 None。",
+              "starterCode": "def score_retrieval(expected, retrieved):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "先拒绝空的期望集合。",
+                "recall 分母是去重后的期望来源数。",
+                "首个命中保留列表索引。"
               ],
-              "solution": "def compose_steps(first, second, value):\n    return second(first(value))\n"
+              "solution": "def score_retrieval(expected, retrieved):\n    if not expected:\n        raise ValueError(\"expected cannot be empty\")\n    hits = [item for item in retrieved if item in expected]\n    first_hit = next((index for index, item in enumerate(retrieved) if item in expected), None)\n    return {\"recall\": len(set(hits)) / len(set(expected)), \"first_hit\": first_hit}\n"
             },
             "browserChecks": [
               {
-                "name": "数据流",
-                "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
-                "failure": "结果应按 first → second 传递。",
+                "name": "召回率",
+                "expression": "score_retrieval([\"a\", \"b\"], [\"x\", \"b\"])[\"recall\"] == 0.5",
+                "failure": "recall 应反映实际命中比例。",
                 "kind": "behavior"
               },
               {
-                "name": "顺序可观察",
-                "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
-                "failure": "步骤调用顺序必须稳定。",
+                "name": "首命中",
+                "expression": "score_retrieval([\"a\"], [\"x\", \"a\"])[\"first_hit\"] == 1",
+                "failure": "应记录首个真实命中位置。",
                 "kind": "behavior"
               }
             ]
@@ -10901,26 +10901,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：带工具调用的知识助手\n用户场景：为业务助手连接受约束的工具，并保留每次调用结果。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def normalize_model_config(config):\n    pass\n",
+              "prompt": "阶段项目：带工具调用的知识助手\n用户场景：为业务助手连接受约束的工具，并保留每次调用结果。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 call_tool(tools, name, payload)，只调用已注册工具并返回 name、input、observation；未知工具抛出 KeyError。",
+              "starterCode": "def call_tool(tools, name, payload):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "用字典键选择工具。",
+                "把原始 payload 和真实返回值都记录下来。",
+                "不要为未知工具伪造结果。"
               ],
-              "solution": "def normalize_model_config(config):\n    temperature = config.get(\"temperature\", 0)\n    timeout = config.get(\"timeout\", 30)\n    if not isinstance(temperature, (int, float)) or not isinstance(timeout, (int, float)) or temperature < 0 or timeout < 0:\n        raise ValueError(\"invalid model config\")\n    return {\"temperature\": temperature, \"timeout\": timeout}\n"
+              "solution": "def call_tool(tools, name, payload):\n    observation = tools[name](payload)\n    return {\"name\": name, \"input\": payload, \"observation\": observation}\n"
             },
             "browserChecks": [
               {
-                "name": "默认配置",
-                "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
-                "failure": "缺省配置应使用明确默认值。",
+                "name": "工具结果",
+                "expression": "call_tool({\"search\": lambda value: value.upper()}, \"search\", \"rag\") == {\"name\": \"search\", \"input\": \"rag\", \"observation\": \"RAG\"}",
+                "failure": "工具调用记录必须包含真实输入和输出。",
                 "kind": "behavior"
               },
               {
-                "name": "覆盖与边界",
-                "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
-                "failure": "合法覆盖应保留，负超时应拒绝。",
+                "name": "未知工具",
+                "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"x\"))",
+                "failure": "未知工具应保留 KeyError。",
                 "kind": "behavior"
               }
             ]
@@ -10998,26 +10998,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：RAG 质量观测面板\n用户场景：为 RAG 流程记录召回、引用和无答案边界，定位质量回归。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def normalize_documents(records):\n    return []\n",
+              "prompt": "阶段项目：RAG 质量观测面板\n用户场景：为 RAG 流程记录召回、引用和无答案边界，定位质量回归。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 summarize_rag_runs(runs)，返回 runs 数量、平均 latency_ms 和资料不足次数；缺失字段抛出 KeyError。",
+              "starterCode": "def summarize_rag_runs(runs):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "先定义空运行列表的统计结果。",
+                "平均耗时使用每条真实记录。",
+                "资料不足只按明确答案计数。"
               ],
-              "solution": "def normalize_documents(records):\n    documents = []\n    for record in records:\n        text = record[\"text\"].strip()\n        if text:\n            documents.append({\"text\": text, \"metadata\": {\"source\": record[\"source\"]}})\n    return documents\n"
+              "solution": "def summarize_rag_runs(runs):\n    if not runs:\n        return {\"count\": 0, \"average_latency_ms\": 0, \"insufficient\": 0}\n    return {\"count\": len(runs), \"average_latency_ms\": sum(run[\"latency_ms\"] for run in runs) / len(runs), \"insufficient\": sum(run[\"answer\"] == \"资料不足\" for run in runs)}\n"
             },
             "browserChecks": [
               {
-                "name": "保留来源",
-                "expression": "normalize_documents([{\"text\": \"  hello  \", \"source\": \"a.md\"}]) == [{\"text\": \"hello\", \"metadata\": {\"source\": \"a.md\"}}]",
-                "failure": "正文应清洗，来源应保留在 metadata。",
+                "name": "统计结果",
+                "expression": "summarize_rag_runs([{\"latency_ms\": 10, \"answer\": \"ok\"}, {\"latency_ms\": 20, \"answer\": \"资料不足\"}]) == {\"count\": 2, \"average_latency_ms\": 15.0, \"insufficient\": 1}",
+                "failure": "面板应根据真实运行记录计算统计。",
                 "kind": "behavior"
               },
               {
-                "name": "跳过空正文",
-                "expression": "normalize_documents([{\"text\": \" \", \"source\": \"empty.md\"}]) == []",
-                "failure": "空正文不能进入索引。",
+                "name": "空输入",
+                "expression": "summarize_rag_runs([]) == {\"count\": 0, \"average_latency_ms\": 0, \"insufficient\": 0}",
+                "failure": "没有运行记录时应返回明确的零统计。",
                 "kind": "behavior"
               }
             ]
@@ -14845,26 +14845,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：可恢复研究工作流\n用户场景：为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def merge_parallel(results):\n    pass\n",
+              "prompt": "阶段项目：可恢复研究工作流\n用户场景：为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
+              "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "只读取指定 thread 的检查点。",
+                "复制状态后再合并更新。",
+                "未知线程保留 KeyError。"
               ],
-              "solution": "def merge_parallel(results):\n    merged = {}\n    for result in results:\n        merged.update(result)\n    return merged\n"
+              "solution": "def resume_state(checkpoints, thread_id, updates):\n    state = dict(checkpoints[thread_id])\n    state.update(updates)\n    return state\n"
             },
             "browserChecks": [
               {
-                "name": "合并分支",
-                "expression": "merge_parallel([{\"a\": 1}, {\"b\": 2}]) == {\"a\": 1, \"b\": 2}",
-                "failure": "独立分支结果应合并到一个状态。",
+                "name": "恢复状态",
+                "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+                "failure": "恢复应基于同一 thread 的状态。",
                 "kind": "behavior"
               },
               {
-                "name": "冲突顺序",
-                "expression": "merge_parallel([{\"a\": 1}, {\"a\": 2}]) == {\"a\": 2} and merge_parallel([]) == {}",
-                "failure": "冲突键应按声明顺序覆盖，空输入应为空。",
+                "name": "线程隔离",
+                "expression": "resume_state({\"a\": {\"value\": 1}, \"b\": {\"value\": 2}}, \"b\", {}) == {\"value\": 2}",
+                "failure": "不能读取其他 thread 的状态。",
                 "kind": "behavior"
               }
             ]
@@ -14942,26 +14942,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：人工审核 Agent 流程\n用户场景：为高风险动作加入人工审核节点，拒绝时留下明确状态。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def choose_worker(task_type, workers):\n    pass\n",
+              "prompt": "阶段项目：人工审核 Agent 流程\n用户场景：为高风险动作加入人工审核节点，拒绝时留下明确状态。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 review_gate(action, decision)，approve 返回 action，reject 返回 status='cancelled' 的字典，其他决定抛出 ValueError。",
+              "starterCode": "def review_gate(action, decision):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "批准和拒绝都是显式状态。",
+                "保留待审核动作。",
+                "未知决定不能默认批准。"
               ],
-              "solution": "def choose_worker(task_type, workers):\n    return workers[task_type]\n"
+              "solution": "def review_gate(action, decision):\n    if decision == \"approve\":\n        return {\"status\": \"approved\", \"action\": action}\n    if decision == \"reject\":\n        return {\"status\": \"cancelled\", \"action\": action}\n    raise ValueError(\"unknown decision\")\n"
             },
             "browserChecks": [
               {
-                "name": "选择 worker",
-                "expression": "choose_worker(\"search\", {\"search\": \"S\"}) == \"S\"",
-                "failure": "应返回任务类型对应的 worker。",
+                "name": "批准",
+                "expression": "review_gate(\"send\", \"approve\") == {\"status\": \"approved\", \"action\": \"send\"}",
+                "failure": "批准应返回可观察状态。",
                 "kind": "behavior"
               },
               {
-                "name": "未知任务",
-                "expression": "_raises_key_error(lambda: choose_worker(\"write\", {\"search\": \"S\"}))",
-                "failure": "未注册任务不能静默路由。",
+                "name": "拒绝",
+                "expression": "review_gate(\"send\", \"reject\")[\"status\"] == \"cancelled\"",
+                "failure": "拒绝必须停止动作并留下状态。",
                 "kind": "behavior"
               }
             ]
@@ -15039,26 +15039,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：多 Agent 协作调度器\n用户场景：为多角色 Agent 设计可观察的交接和 supervisor 路由。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def handoff(agent, message):\n    pass\n",
+              "prompt": "阶段项目：多 Agent 协作调度器\n用户场景：为多角色 Agent 设计可观察的交接和 supervisor 路由。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 dispatch(tasks, workers)，按 tasks 顺序把每个 task 交给 workers[task['role']]，返回包含 role、result 的列表；未知角色抛出 KeyError。",
+              "starterCode": "def dispatch(tasks, workers):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "路由键来自每个任务的 role。",
+                "保留任务顺序和真实 worker 返回值。",
+                "未知角色保留 KeyError。"
               ],
-              "solution": "def handoff(agent, message):\n    if not isinstance(message, str):\n        raise TypeError(\"message must be a string\")\n    return {\"recipient\": agent, \"content\": message}\n"
+              "solution": "def dispatch(tasks, workers):\n    results = []\n    for task in tasks:\n        result = workers[task[\"role\"]](task[\"input\"])\n        results.append({\"role\": task[\"role\"], \"result\": result})\n    return results\n"
             },
             "browserChecks": [
               {
-                "name": "交接协议",
-                "expression": "handoff(\"researcher\", \"完成检索\") == {\"recipient\": \"researcher\", \"content\": \"完成检索\"}",
-                "failure": "交接输出应符合稳定协议。",
+                "name": "顺序调度",
+                "expression": "dispatch([{\"role\": \"search\", \"input\": \"x\"}], {\"search\": lambda value: value + \"!\"}) == [{\"role\": \"search\", \"result\": \"x!\"}]",
+                "failure": "调度器应调用对应 worker 并保留结果。",
                 "kind": "behavior"
               },
               {
-                "name": "拒绝非文本",
-                "expression": "_raises_type_error(lambda: handoff(\"researcher\", {\"x\": 1}))",
-                "failure": "消息内容必须是字符串。",
+                "name": "未知角色",
+                "expression": "_raises_key_error(lambda: dispatch([{\"role\": \"write\", \"input\": \"x\"}], {}))",
+                "failure": "未知角色不能静默跳过。",
                 "kind": "behavior"
               }
             ]
@@ -15136,26 +15136,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：带长期记忆的任务图\n用户场景：为用户偏好建立跨 thread 的 Store，并与短期状态分离。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "def review_gate(action, decision):\n    pass\n",
+              "prompt": "阶段项目：带长期记忆的任务图\n用户场景：为用户偏好建立跨 thread 的 Store，并与短期状态分离。\n用户故事：交付一个能被真实使用者复现和演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。\n最小可运行里程碑：实现 read_memory(store, user_id, key)，只从 (user_id,) 命名空间读取 key；不存在返回 None，不得读取其他用户。",
+              "starterCode": "def read_memory(store, user_id, key):\n    pass\n",
               "hints": [
-                "先拆成一个能独立运行的最小里程碑。",
-                "让每个中间结果可观察，并为失败保留真实原因。",
-                "最后用未出现在示例中的输入和边界情况回归。"
+                "命名空间第一项必须是当前 user_id。",
+                "先取得命名空间中的字典。",
+                "不存在时保留 None。"
               ],
-              "solution": "def review_gate(action, decision):\n    if decision == \"approve\":\n        return action\n    if decision == \"reject\":\n        return \"rejected\"\n    raise ValueError(\"unknown decision\")\n"
+              "solution": "def read_memory(store, user_id, key):\n    return store.get((user_id,), {}).get(key)\n"
             },
             "browserChecks": [
               {
-                "name": "审核决定",
-                "expression": "review_gate(\"send\", \"approve\") == \"send\" and review_gate(\"send\", \"reject\") == \"rejected\"",
-                "failure": "批准与拒绝应产生不同结果。",
+                "name": "用户隔离",
+                "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"u1\", \"theme\") == \"dark\"",
+                "failure": "应读取当前用户的长期记忆。",
                 "kind": "behavior"
               },
               {
-                "name": "未知决定",
-                "expression": "_raises_value_error(lambda: review_gate(\"send\", \"later\"))",
-                "failure": "未知审核状态应明确失败。",
+                "name": "未知用户",
+                "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"u2\", \"theme\") is None",
+                "failure": "不能跨用户读取记忆。",
                 "kind": "behavior"
               }
             ]
@@ -18297,57 +18297,57 @@
     ],
     "langchain-rag-lesson-42": [
       {
-        "name": "通过结构",
-        "expression": "validate_answer({\"answer\": \"ok\", \"confidence\": 0.8})[\"answer\"] == \"ok\"",
-        "failure": "合法结构应原样通过。",
+        "name": "引用来源",
+        "expression": "answer_with_sources([{\"source\": \"a.md\"}, {\"source\": \"a.md\"}], \"ok\") == {\"answer\": \"ok\", \"sources\": [\"a.md\"]}",
+        "failure": "命中结果应保留去重后的真实来源。",
         "kind": "behavior"
       },
       {
-        "name": "拒绝越界",
-        "expression": "_raises_value_error(lambda: validate_answer({\"answer\": \"ok\", \"confidence\": 2})) and _raises_value_error(lambda: validate_answer({\"answer\": 1, \"confidence\": 0.5}))",
-        "failure": "字段类型或置信度越界应失败。",
+        "name": "无资料",
+        "expression": "answer_with_sources([], \"猜测\") == {\"answer\": \"资料不足\", \"sources\": []}",
+        "failure": "无命中时必须明确资料不足。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-43": [
       {
-        "name": "数据流",
-        "expression": "compose_steps(lambda x: x + 1, lambda x: x * 2, 3) == 8",
-        "failure": "结果应按 first → second 传递。",
+        "name": "召回率",
+        "expression": "score_retrieval([\"a\", \"b\"], [\"x\", \"b\"])[\"recall\"] == 0.5",
+        "failure": "recall 应反映实际命中比例。",
         "kind": "behavior"
       },
       {
-        "name": "顺序可观察",
-        "expression": "((lambda seen: (compose_steps(lambda x: seen.append(\"first\") or x, lambda x: seen.append(\"second\") or x, 1), seen))([]))[1] == [\"first\", \"second\"]",
-        "failure": "步骤调用顺序必须稳定。",
+        "name": "首命中",
+        "expression": "score_retrieval([\"a\"], [\"x\", \"a\"])[\"first_hit\"] == 1",
+        "failure": "应记录首个真实命中位置。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-44": [
       {
-        "name": "默认配置",
-        "expression": "normalize_model_config({}) == {\"temperature\": 0, \"timeout\": 30}",
-        "failure": "缺省配置应使用明确默认值。",
+        "name": "工具结果",
+        "expression": "call_tool({\"search\": lambda value: value.upper()}, \"search\", \"rag\") == {\"name\": \"search\", \"input\": \"rag\", \"observation\": \"RAG\"}",
+        "failure": "工具调用记录必须包含真实输入和输出。",
         "kind": "behavior"
       },
       {
-        "name": "覆盖与边界",
-        "expression": "normalize_model_config({\"temperature\": 0.2, \"timeout\": 10})[\"timeout\"] == 10 and _raises_value_error(lambda: normalize_model_config({\"timeout\": -1}))",
-        "failure": "合法覆盖应保留，负超时应拒绝。",
+        "name": "未知工具",
+        "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"x\"))",
+        "failure": "未知工具应保留 KeyError。",
         "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-45": [
       {
-        "name": "保留来源",
-        "expression": "normalize_documents([{\"text\": \"  hello  \", \"source\": \"a.md\"}]) == [{\"text\": \"hello\", \"metadata\": {\"source\": \"a.md\"}}]",
-        "failure": "正文应清洗，来源应保留在 metadata。",
+        "name": "统计结果",
+        "expression": "summarize_rag_runs([{\"latency_ms\": 10, \"answer\": \"ok\"}, {\"latency_ms\": 20, \"answer\": \"资料不足\"}]) == {\"count\": 2, \"average_latency_ms\": 15.0, \"insufficient\": 1}",
+        "failure": "面板应根据真实运行记录计算统计。",
         "kind": "behavior"
       },
       {
-        "name": "跳过空正文",
-        "expression": "normalize_documents([{\"text\": \" \", \"source\": \"empty.md\"}]) == []",
-        "failure": "空正文不能进入索引。",
+        "name": "空输入",
+        "expression": "summarize_rag_runs([]) == {\"count\": 0, \"average_latency_ms\": 0, \"insufficient\": 0}",
+        "failure": "没有运行记录时应返回明确的零统计。",
         "kind": "behavior"
       }
     ],
@@ -18871,57 +18871,57 @@
     ],
     "langgraph-lesson-35": [
       {
-        "name": "合并分支",
-        "expression": "merge_parallel([{\"a\": 1}, {\"b\": 2}]) == {\"a\": 1, \"b\": 2}",
-        "failure": "独立分支结果应合并到一个状态。",
+        "name": "恢复状态",
+        "expression": "resume_state({\"t1\": {\"step\": 2}}, \"t1\", {\"step\": 3}) == {\"step\": 3}",
+        "failure": "恢复应基于同一 thread 的状态。",
         "kind": "behavior"
       },
       {
-        "name": "冲突顺序",
-        "expression": "merge_parallel([{\"a\": 1}, {\"a\": 2}]) == {\"a\": 2} and merge_parallel([]) == {}",
-        "failure": "冲突键应按声明顺序覆盖，空输入应为空。",
+        "name": "线程隔离",
+        "expression": "resume_state({\"a\": {\"value\": 1}, \"b\": {\"value\": 2}}, \"b\", {}) == {\"value\": 2}",
+        "failure": "不能读取其他 thread 的状态。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-36": [
       {
-        "name": "选择 worker",
-        "expression": "choose_worker(\"search\", {\"search\": \"S\"}) == \"S\"",
-        "failure": "应返回任务类型对应的 worker。",
+        "name": "批准",
+        "expression": "review_gate(\"send\", \"approve\") == {\"status\": \"approved\", \"action\": \"send\"}",
+        "failure": "批准应返回可观察状态。",
         "kind": "behavior"
       },
       {
-        "name": "未知任务",
-        "expression": "_raises_key_error(lambda: choose_worker(\"write\", {\"search\": \"S\"}))",
-        "failure": "未注册任务不能静默路由。",
+        "name": "拒绝",
+        "expression": "review_gate(\"send\", \"reject\")[\"status\"] == \"cancelled\"",
+        "failure": "拒绝必须停止动作并留下状态。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-37": [
       {
-        "name": "交接协议",
-        "expression": "handoff(\"researcher\", \"完成检索\") == {\"recipient\": \"researcher\", \"content\": \"完成检索\"}",
-        "failure": "交接输出应符合稳定协议。",
+        "name": "顺序调度",
+        "expression": "dispatch([{\"role\": \"search\", \"input\": \"x\"}], {\"search\": lambda value: value + \"!\"}) == [{\"role\": \"search\", \"result\": \"x!\"}]",
+        "failure": "调度器应调用对应 worker 并保留结果。",
         "kind": "behavior"
       },
       {
-        "name": "拒绝非文本",
-        "expression": "_raises_type_error(lambda: handoff(\"researcher\", {\"x\": 1}))",
-        "failure": "消息内容必须是字符串。",
+        "name": "未知角色",
+        "expression": "_raises_key_error(lambda: dispatch([{\"role\": \"write\", \"input\": \"x\"}], {}))",
+        "failure": "未知角色不能静默跳过。",
         "kind": "behavior"
       }
     ],
     "langgraph-lesson-38": [
       {
-        "name": "审核决定",
-        "expression": "review_gate(\"send\", \"approve\") == \"send\" and review_gate(\"send\", \"reject\") == \"rejected\"",
-        "failure": "批准与拒绝应产生不同结果。",
+        "name": "用户隔离",
+        "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"u1\", \"theme\") == \"dark\"",
+        "failure": "应读取当前用户的长期记忆。",
         "kind": "behavior"
       },
       {
-        "name": "未知决定",
-        "expression": "_raises_value_error(lambda: review_gate(\"send\", \"later\"))",
-        "failure": "未知审核状态应明确失败。",
+        "name": "未知用户",
+        "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"u2\", \"theme\") is None",
+        "failure": "不能跨用户读取记忆。",
         "kind": "behavior"
       }
     ],
