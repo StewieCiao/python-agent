@@ -1,4 +1,4 @@
-import type { LearningLesson, LearningTrack } from "./learningCatalog.ts";
+import type { LearningLesson, LearningTrack } from "./authoring/types.ts";
 import type { CourseLesson, CourseSource, CourseStage } from "./schema.ts";
 
 type StageSpec = { id: string; title: string; description: string };
