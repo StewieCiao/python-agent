@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "d6605fb6c46e69f64e36ff1b91e9a1571fa6599e3f7b436753c22e4c65e0cb81",
+  "catalogHash": "000db6c356cbb5150c860143f1abd08ae6ca0c06ef10e5d1f19bc94490428e51",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -217,7 +217,7 @@
               "hints": [
                 "需要调用两次 print()。",
                 "乘法运算符是 *，不要手算后直接写 56。",
-                "用边界输入复测"
+                "不要使用中文引号或中文括号"
               ],
               "solution": "print(\"我的第一段 Python\")\nprint(8 * 7)"
             },
@@ -325,7 +325,7 @@
               "hints": [
                 "字符串需要引号，数字不需要。",
                 "试试：print(f\"{name}正在挑战第 {level} 关\")，留意文字中的空格。",
-                "用边界输入复测"
+                "不要把变量名写进引号"
               ],
               "solution": "name = \"小派\"\nlevel = 1\n\nprint(f\"{name}正在挑战第 {level} 关\")"
             },
@@ -433,7 +433,7 @@
               "hints": [
                 "可以连续调用 .strip().lower()。",
                 "直接 return 清理结果，不需要额外变量。",
-                "用边界输入复测"
+                "不要用 replace 删除所有空格"
               ],
               "solution": "def normalize_title(text):\n    return text.strip().lower()"
             },
@@ -530,7 +530,7 @@
               "hints": [
                 "建议使用 if / elif / else，或用提前 return 表达互斥边界。",
                 "先判断 score >= 90，再判断 score >= 60。",
-                "用边界输入复测"
+                "不要把 < 和 <= 随意互换"
               ],
               "solution": "def grade(score):\n    if score < 60:\n        return \"C\"\n    if score < 90:\n        return \"B\"\n    return \"A\""
             },
@@ -639,7 +639,7 @@
               "hints": [
                 "偶数满足 number % 2 == 0。",
                 "只有条件成立时才执行 total += number。",
-                "用边界输入复测"
+                "累加器在循环前创建"
               ],
               "solution": "def sum_even(numbers):\n    total = 0\n    for number in numbers:\n        if number % 2 == 0:\n            total += number\n    return total"
             },
@@ -747,7 +747,7 @@
               "hints": [
                 "“或”对应 or。",
                 "免费条件成立时 return 0，否则 return 10。",
-                "用边界输入复测"
+                "不要在函数中调试性 print"
               ],
               "solution": "def shipping_fee(price, member):\n    return 0 if member or price >= 99 else 10"
             },
@@ -856,7 +856,7 @@
               "hints": [
                 "先筛选 score >= 60。",
                 "min(score + 5, 100) 可以限制上限。",
-                "用边界输入复测"
+                "结果必须是列表"
               ],
               "solution": "def improve_scores(scores):\n    return [min(score + 5, 100) for score in scores if score >= 60]"
             },
@@ -965,7 +965,7 @@
               "hints": [
                 "每轮用 word 作为 counts 的键。",
                 "右侧可以写 counts.get(word, 0) + 1。",
-                "用边界输入复测"
+                "针对未知输入编写规则"
               ],
               "solution": "def word_counts(words):\n    result = {}\n    for word in words:\n        result[word] = result.get(word, 0) + 1\n    return result"
             },
@@ -1076,7 +1076,7 @@
               "hints": [
                 "int(text) 失败时会抛出 ValueError。",
                 "try 中直接 return int(text)，except ValueError 中 return None。",
-                "用边界输入复测"
+                "接受 except ValueError 和 except (ValueError)"
               ],
               "solution": "def parse_age(text):\n    try:\n        return int(text)\n    except ValueError:\n        return None"
             },
@@ -1197,7 +1197,7 @@
               "hints": [
                 "初始化时写 self.balance = 0。",
                 "非法 amount 用 raise ValueError(...) 主动拒绝。",
-                "用边界输入复测"
+                "<= 0 同时覆盖零和负数"
               ],
               "solution": "class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError(\"amount must be positive\")\n        self.balance += amount\n        return self.balance"
             },
@@ -1307,7 +1307,7 @@
               "hints": [
                 "range(0, limit + 1, 2) 会依次产生偶数。",
                 "循环中使用 yield number，而不是 return。",
-                "用边界输入复测"
+                "不要硬编码固定结果"
               ],
               "solution": "def even_numbers(limit):\n    for number in range(0, limit + 1, 2):\n        yield number"
             },
@@ -1418,7 +1418,7 @@
               "hints": [
                 "在 twice 内定义 wrapper(*args, **kwargs)。",
                 "调用两次 func；第一次不保存，第二次 return。",
-                "用边界输入复测"
+                "不要提前执行并返回 func() 作为装饰器结果"
               ],
               "solution": "def twice(func):\n    def wrapper(*positional, **named):\n        func(*positional, **named)\n        return func(*positional, **named)\n    return wrapper"
             },
@@ -1853,7 +1853,7 @@
               "hints": [
                 "先检查 name 是否已经存在，再保存 func。",
                 "执行时从 self.tools[name] 取函数，并用 **payload 展开关键字参数。",
-                "用边界输入复测"
+                "不要伪造默认工具结果"
               ],
               "solution": "class ToolRegistry:\n    def __init__(self):\n        self.tools = {}\n\n    def register(self, name, func):\n        if name in self.tools:\n            raise ValueError(\"duplicate tool\")\n        self.tools[name] = func\n\n    def execute(self, name, payload):\n        return self.tools[name](**payload)"
             },
@@ -1952,7 +1952,7 @@
               "hints": [
                 "先用 strip() 清理整段文本。",
                 "可检查 '[' 的位置和字符串是否以 ']' 结尾，再用 split('[', 1)。",
-                "用边界输入复测"
+                "空动作名无效"
               ],
               "solution": "def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    if not name:\n        return None, None\n    return name, payload"
             },
@@ -2062,7 +2062,7 @@
               "hints": [
                 "遍历 actions[:max_steps]，每读一个动作就更新 steps。",
                 "先处理 Finish；否则从 tools 字典取函数并记录 observation。",
-                "用边界输入复测"
+                "限制步数防止无限循环"
               ],
               "solution": "def parse_action(text):\n    text = text.strip()\n    if \"[\" not in text or not text.endswith(\"]\"):\n        return None, None\n    name, payload = text[:-1].split(\"[\", 1)\n    return (name, payload) if name else (None, None)\n\n\ndef run_react(actions, tools, max_steps=5):\n    history = []\n    steps = 0\n    for action_text in actions[:max_steps]:\n        steps += 1\n        name, payload = parse_action(action_text)\n        if name == \"Finish\":\n            return {\"answer\": payload, \"history\": history, \"steps\": steps}\n        observation = tools[name](payload)\n        history.append({\n            \"action\": name,\n            \"input\": payload,\n            \"observation\": observation,\n        })\n    return {\"answer\": None, \"history\": history, \"steps\": steps}"
             },
@@ -2172,7 +2172,7 @@
               "hints": [
                 "每步调用 executor(step['task'], context.copy())。",
                 "先把结果加入 results，再用当前 id 更新 context。",
-                "用边界输入复测"
+                "空计划返回空列表"
               ],
               "solution": "def execute_plan(steps, executor):\n    context = {}\n    results = []\n    for step in steps:\n        result = executor(step[\"task\"], context.copy())\n        results.append({\"id\": step[\"id\"], \"result\": result})\n        context[step[\"id\"]] = result\n    return results"
             },
@@ -2271,7 +2271,7 @@
               "hints": [
                 "先验证 max_rounds，再用 range(max_rounds) 控制改进次数。",
                 "循环后还未达标时，返回最后一次 revise 的结果。",
-                "用边界输入复测"
+                "不要先修改再评估"
               ],
               "solution": "def reflection_loop(draft, evaluate, revise, max_rounds=3):\n    if max_rounds < 0:\n        raise ValueError(\"max_rounds must be non-negative\")\n    for _ in range(max_rounds):\n        if evaluate(draft):\n            return draft\n        draft = revise(draft)\n    return draft"
             },
@@ -2381,7 +2381,7 @@
               "hints": [
                 "用 set(query.lower().split()) 得到查询词集合。",
                 "把 (命中数, importance, 原索引, content) 放进列表后统一排序。",
-                "用边界输入复测"
+                "不要修改原 memories 列表"
               ],
               "solution": "def retrieve_memories(memories, query, limit=2):\n    if limit <= 0:\n        return []\n    query_words = set(query.lower().split())\n    scored = []\n    for index, memory in enumerate(memories):\n        content_words = set(memory[\"content\"].lower().split())\n        overlap = len(query_words & content_words)\n        if overlap:\n            scored.append((\n                overlap,\n                memory[\"importance\"],\n                index,\n                memory[\"content\"],\n            ))\n    scored.sort(key=lambda item: (-item[0], -item[1], item[2]))\n    return [item[3] for item in scored[:limit]]"
             },
@@ -2480,7 +2480,7 @@
               "hints": [
                 "按 agents 原顺序遍历。",
                 "命中时只构造新字典；遍历结束仍未命中再 raise LookupError。",
-                "用边界输入复测"
+                "不要静默选择不匹配者"
               ],
               "solution": "def handoff(sender, task, agents):\n    for agent in agents:\n        if task[\"capability\"] in agent[\"capabilities\"]:\n            return {\n                \"from\": sender,\n                \"to\": agent[\"name\"],\n                \"task\": task[\"description\"],\n            }\n    raise LookupError(f\"no agent for {task['capability']}\")"
             },

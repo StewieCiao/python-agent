@@ -85,7 +85,7 @@ export const pythonLessons: CourseLesson[] = lessons.map((lesson) => ({
   exercise: {
     prompt: lesson.requirements.join("\n"),
     starterCode: lesson.starterCode,
-    hints: lesson.hints,
+    hints: lesson.hints.length === 2 ? [...lesson.hints, lessonGuides[lesson.id][2].bullets[0]] : lesson.hints,
     solution: lessonSolutions[lesson.id],
   },
   browserChecks: lesson.tests.map(browserCheck),
