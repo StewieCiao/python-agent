@@ -307,6 +307,18 @@ test("LangChain 检索与 Agent 项目课保留旧写法迁移边界", async () 
   }
 });
 
+test("框架作者路线保留可解释的先修链", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  for (const trackId of ["langchain-rag", "langgraph"]) {
+    const track = learningTracks.find(({ id }) => id === trackId);
+    assert.ok(track);
+    for (const [index, lesson] of track.lessons.entries()) {
+      if (index === 0) continue;
+      assert.ok(lesson.prerequisites?.length, `${trackId}/${lesson.id} 缺少先修关系`);
+    }
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);

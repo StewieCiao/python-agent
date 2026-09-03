@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "69b72e4d04c843d43ddca147638201ac31695003c42ae7e4ae4229c105dfa48c",
+  "catalogHash": "1b771155d661814ac6bf8dea4f005d01f9d101f2c06dc7ae3738ca3eb74ede40",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6572,7 +6572,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "继续第 39–42 节，理解 Loader 的真正产物是带 page_content 和 metadata 的 Document。",
             "minutes": 70,
-            "prerequisites": [],
+            "prerequisites": [
+              "memory-modernization"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -6719,7 +6721,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "把第 41–43 节串成可解释的 indexing 流程，避免只记住某个向量库的方法名。",
             "minutes": 65,
-            "prerequisites": [],
+            "prerequisites": [
+              "document-loaders"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -6850,7 +6854,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。",
             "minutes": 55,
-            "prerequisites": [],
+            "prerequisites": [
+              "indexing-vector-store"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -6981,7 +6987,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "对应第 46–54 节，把服装客服项目拆成边界清晰的离线索引和在线问答流程。",
             "minutes": 120,
-            "prerequisites": [],
+            "prerequisites": [
+              "retrieval-chain"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -7120,7 +7128,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。",
             "minutes": 75,
-            "prerequisites": [],
+            "prerequisites": [
+              "rag-project"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -7287,7 +7297,9 @@
             "kicker": "langchain-rag 学习",
             "summary": "为团队建立可追溯的文档问答入口，回答始终带真实来源。",
             "minutes": 150,
-            "prerequisites": [],
+            "prerequisites": [
+              "agent-v1"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -11750,7 +11762,9 @@
             "kicker": "langgraph 学习",
             "summary": "控制状态如何合并，并让下一步由明确路由结果决定。",
             "minutes": 60,
-            "prerequisites": [],
+            "prerequisites": [
+              "graph-foundations"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -11865,7 +11879,9 @@
             "kicker": "langgraph 学习",
             "summary": "用 checkpointer 保存图状态，让同一 thread 可恢复、检查和继续。",
             "minutes": 60,
-            "prerequisites": [],
+            "prerequisites": [
+              "state-reducers-routing"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -11986,7 +12002,9 @@
             "kicker": "langgraph 学习",
             "summary": "使用 namespace/key 保存用户资料、偏好或可检索记忆。",
             "minutes": 65,
-            "prerequisites": [],
+            "prerequisites": [
+              "persistence-short-memory"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -12109,7 +12127,9 @@
             "kicker": "langgraph 学习",
             "summary": "让长任务及时反馈，并在高风险动作前安全暂停。",
             "minutes": 70,
-            "prerequisites": [],
+            "prerequisites": [
+              "long-term-store"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -12224,7 +12244,9 @@
             "kicker": "langgraph 学习",
             "summary": "为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。",
             "minutes": 65,
-            "prerequisites": [],
+            "prerequisites": [
+              "streaming-interrupts"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -12337,7 +12359,9 @@
             "kicker": "langgraph 学习",
             "summary": "组合检索、并行研究、人工确认、短期状态和长期偏好。",
             "minutes": 150,
-            "prerequisites": [],
+            "prerequisites": [
+              "subgraphs-parallelism"
+            ],
             "difficulty": "beginner",
             "tags": [],
             "guide": [

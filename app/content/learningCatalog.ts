@@ -1114,6 +1114,11 @@ const langgraphTrack: LearningTrack = {
 };
 
 for (const track of [langchainTrack, langgraphTrack]) {
+  for (const [index, lesson] of track.lessons.entries()) {
+    if (index > 0 && (!lesson.prerequisites || lesson.prerequisites.length === 0)) {
+      lesson.prerequisites = [track.lessons[index - 1].id];
+    }
+  }
   for (const lesson of track.lessons) {
     const checks = authoredFeedbackChecks[lesson.id];
     if (checks) lesson.browserChecks = checks;
