@@ -123,6 +123,7 @@ export function ModelSettings() {
           <div className="form-heading">
             <h3>OpenAI-compatible 配置</h3>
             <p>API Key 保存后不会回显，也不会写入浏览器或配置 JSON。</p>
+            <p>仅桌面完整版提供系统安全存储；浏览器和离线版不会接收或保存 API Key。</p>
           </div>
           <div className="form-grid">
             <label>配置 ID<input value={profile.id} onChange={(event) => editProfile("id", event.target.value)} /></label>
