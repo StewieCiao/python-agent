@@ -7,7 +7,8 @@ import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
 import type { LessonTest } from "../content/python/curriculum";
 import type { LearningTrack } from "../content/learningCatalog";
-import { loadMastery, loadPersonalizedExercise, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
+import { loadMastery, loadPersonalizedExercise, loadTutorPlan, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
+import type { TutorPlan } from "../lib/platformBridge";
 import {
   buildGptHelpPrompt,
   type GptHelpPromptInput,
@@ -149,6 +150,7 @@ export function LearningApp() {
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
   const [reviewQueueCount, setReviewQueueCount] = useState<number | null>(null);
   const [reviewQueue, setReviewQueue] = useState<string[]>([]);
+  const [tutorPlan, setTutorPlan] = useState<TutorPlan | null>(null);
   const workerRef = useRef<Worker | null>(null);
   const pendingRunRef = useRef<PendingRun | null>(null);
   const runLockRef = useRef(false);
@@ -229,7 +231,10 @@ export function LearningApp() {
     }).catch((error) => {
       setStorageError(`复习队列无法读取：${errorMessage(error)}`);
     });
-  }, [progress.mistakes.length]);
+    void loadTutorPlan().then(setTutorPlan).catch((error) => {
+      setStorageError(`导师计划无法读取：${errorMessage(error)}`);
+    });
+  }, [progress.mistakes.length, progress.completed.length]);
 
   useEffect(() => {
     if (!hydrated || !persistenceEnabled) return;
@@ -410,6 +415,19 @@ export function LearningApp() {
       ? current
       : { ...current, completed: [...current.completed, lessonId] });
     setNotice("已记录本节学习完成");
+  }
+
+  function openTutorLesson(lessonId: string) {
+    const pythonIndex = lessons.findIndex((item) => item.id === lessonId);
+    if (pythonIndex >= 0) {
+      openLesson(pythonIndex);
+      return;
+    }
+    const track = learningTracks.find((item) => item.lessons.some((lesson) => lesson.id === lessonId));
+    if (!track) return;
+    setActiveTrackId(track.id);
+    setActiveLearningLessonId(lessonId);
+    setViewMode("learn");
   }
 
   function updateCode(nextCode: string) {
@@ -1008,6 +1026,12 @@ export function LearningApp() {
                     return <button key={lessonId} disabled={isRunning} onClick={() => openLesson(lessons.findIndex((candidate) => candidate.id === lessonId), item.starterCode)} type="button">{item.title} →</button>;
                   })}
                 </div>
+              </section>
+            )}
+            {tutorPlan && tutorPlan.steps.length > 0 && (
+              <section className="tutor-plan" aria-label="导师学习计划">
+                <div><span>STEWIE TUTOR</span><strong>{tutorPlan.status === "review" ? "按错题安排下一步" : "从推荐顺序开始"}</strong></div>
+                <ol>{tutorPlan.steps.map((step) => <li key={step.lessonId}><button disabled={isRunning} onClick={() => openTutorLesson(step.lessonId)} type="button"><strong>{step.title}</strong><small>{step.reason}</small></button><p>{step.actions.join(" → ")}</p></li>)}</ol>
               </section>
             )}
             {latestMistakes.length === 0 ? (

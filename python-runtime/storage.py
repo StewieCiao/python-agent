@@ -8,6 +8,7 @@ from pathlib import Path
 
 from exercises import generate_personalized_exercise, select_family, validate_generated_exercise
 from mastery import compute_mastery, select_review_queue
+from tutor import build_tutor_plan
 
 
 PROFILE_FIELDS = {
@@ -416,7 +417,11 @@ class Storage:
         return {"recorded": True}
 
     def get_mastery(self, now):
-        events = [
+        mastery = compute_mastery(self._mastery_events(), now)
+        return {"mastery": mastery, "reviewQueue": select_review_queue(mastery, now)}
+
+    def _mastery_events(self):
+        return [
             {
                 "lessonId": row["lesson_id"],
                 "familyId": row["family_id"],
@@ -426,8 +431,9 @@ class Storage:
             }
             for row in self.connection.execute("SELECT lesson_id, family_id, outcome, mistake_codes_json, created_at FROM mastery_attempts ORDER BY id")
         ]
-        mastery = compute_mastery(events, now)
-        return {"mastery": mastery, "reviewQueue": select_review_queue(mastery, now)}
+
+    def get_tutor_plan(self, learning_bundle, now):
+        return build_tutor_plan(learning_bundle, compute_mastery(self._mastery_events(), now), now)
 
     def record_rag_evaluation(self, record):
         _validate_rag_evaluation(record)

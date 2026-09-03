@@ -116,6 +116,8 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.record_mastery_attempt(params["event"])
     if method == "mastery.get":
         return storage.get_mastery(params["now"])
+    if method == "tutor.plan":
+        return storage.get_tutor_plan(learning_bundle, params["now"])
     if method == "personalization.next":
         return storage.next_personalized_exercise(learning_bundle, params["lessonId"], params["seed"])
     if method == "documents.parse":

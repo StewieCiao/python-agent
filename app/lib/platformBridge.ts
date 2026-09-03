@@ -250,6 +250,11 @@ export type MasteryResult = {
   reviewQueue: string[];
 };
 
+export type TutorPlan = {
+  status: "review" | "start";
+  steps: Array<{ lessonId: string; title: string; reason: string; actions: string[] }>;
+};
+
 export async function recordMasteryAttempt(event: MasteryEvent): Promise<void> {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "掌握度记录仅在桌面版可用。");
@@ -260,6 +265,12 @@ export async function loadMastery(now = new Date().toISOString()): Promise<Maste
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "掌握度读取仅在桌面版可用。");
   return unwrapDesktop(await desktop.getMastery(now));
+}
+
+export async function loadTutorPlan(now = new Date().toISOString()): Promise<TutorPlan> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "导师计划仅在桌面版可用。");
+  return unwrapDesktop(await desktop.getTutorPlan(now));
 }
 
 export async function loadPersonalizedExercise(lessonId: string, seed: number): Promise<{

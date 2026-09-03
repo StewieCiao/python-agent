@@ -53,6 +53,11 @@ export type MasteryResult = {
   reviewQueue: string[];
 };
 
+export type TutorPlan = {
+  status: "review" | "start";
+  steps: Array<{ lessonId: string; title: string; reason: string; actions: string[] }>;
+};
+
 export type PersonalizedExerciseResult = {
   exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown>; tests: Array<{ name: string; expression: string; failure: string; kind: "behavior" | "structure" }> };
   recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
@@ -128,6 +133,10 @@ function isMasteryResult(value: unknown): value is MasteryResult {
     if (!isRecord(item) || !hasExactKeys(item, ["familyId", "score", "attempts", "mistakeCodes", "lastAttemptAt"])) return false;
     return typeof item.familyId === "string" && typeof item.score === "number" && Number.isFinite(item.score) && typeof item.attempts === "number" && Number.isInteger(item.attempts) && item.attempts >= 1 && Array.isArray(item.mistakeCodes) && item.mistakeCodes.every((code) => typeof code === "string") && typeof item.lastAttemptAt === "string";
   });
+}
+
+function isTutorPlan(value: unknown): value is TutorPlan {
+  return isRecord(value) && hasExactKeys(value, ["status", "steps"]) && (value.status === "review" || value.status === "start") && Array.isArray(value.steps) && value.steps.every((step) => isRecord(step) && hasExactKeys(step, ["lessonId", "title", "reason", "actions"]) && typeof step.lessonId === "string" && typeof step.title === "string" && typeof step.reason === "string" && Array.isArray(step.actions) && step.actions.length === 3 && step.actions.every((action) => typeof action === "string"));
 }
 
 function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExerciseResult {
@@ -374,6 +383,10 @@ export class PythonServiceClient {
 
   getMastery(now: string): Promise<MasteryResult> {
     return this.#requestChecked("mastery.get", { now }, isMasteryResult, "掌握度响应结构无效");
+  }
+
+  getTutorPlan(now: string): Promise<TutorPlan> {
+    return this.#requestChecked("tutor.plan", { now }, isTutorPlan, "导师计划响应结构无效");
   }
 
   getPersonalizedExercise(lessonId: string, seed: number): Promise<PersonalizedExerciseResult> {

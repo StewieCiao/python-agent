@@ -65,6 +65,7 @@ class ProtocolTest(unittest.TestCase):
     def test_learning_and_chat_methods_accept_only_exact_parameter_contracts(self):
         valid_requests = [
             {"id": "m1", "method": "mastery.get", "params": {"now": "2026-09-02T00:00:00+00:00"}},
+            {"id": "t1", "method": "tutor.plan", "params": {"now": "2026-09-02T00:00:00+00:00"}},
             {"id": "m2", "method": "mastery.record", "params": {"event": {}}},
             {"id": "p1", "method": "personalization.next", "params": {"lessonId": "loops", "seed": 1}},
             {"id": "l1", "method": "learning.get", "params": {}},
@@ -105,6 +106,7 @@ class ProtocolTest(unittest.TestCase):
 
         invalid_requests = [
             {"id": "x", "method": "mastery.get", "params": {"now": ""}},
+            {"id": "x", "method": "tutor.plan", "params": {"now": ""}},
             {"id": "x", "method": "mastery.record", "params": {"event": []}},
             {"id": "x", "method": "personalization.next", "params": {"lessonId": "loops", "seed": True}},
             {"id": "x", "method": "learning.get", "params": {"state": {}}},
