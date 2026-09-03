@@ -163,13 +163,14 @@ export function LearningApp() {
   progressRef.current = progress;
 
   const currentIndex = lessons.findIndex((lesson) => lesson.id === currentLessonId);
+  const allLessonIds = useMemo(() => learningTracks.flatMap((track) => track.lessons.map((item) => item.id)), []);
   const lesson = lessons[currentIndex];
   const activeTrack = learningTracks.find((track) => track.id === activeTrackId)!;
   const activeCatalogLesson = activeTrack.lessons.find((item) =>
     item.id === (activeTrackId === "python" ? currentLessonId : activeLearningLessonId)
   )!;
   const result = runRecord?.result ?? null;
-  const completedPercent = Math.round((progress.completed.length / lessons.length) * 100);
+  const completedPercent = Math.round((progress.completed.length / allLessonIds.length) * 100);
   const visibleHintCount = revealedHints[lesson.id] ?? 0;
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
 
@@ -200,7 +201,7 @@ export function LearningApp() {
 
   useEffect(() => {
     let active = true;
-    void loadLearningState(lessons.map((item) => item.id)).then((loaded) => {
+    void loadLearningState(allLessonIds).then((loaded) => {
       if (!active) return;
       const initialCode = loaded.state.drafts[lessons[0].id] ?? lessons[0].starterCode;
       codeRef.current = initialCode;
@@ -218,7 +219,7 @@ export function LearningApp() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [allLessonIds]);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.stewie) return;
@@ -404,6 +405,13 @@ export function LearningApp() {
     setPersonalizedStatus("");
   }
 
+  function markCatalogLessonComplete(lessonId: string) {
+    setProgress((current) => current.completed.includes(lessonId)
+      ? current
+      : { ...current, completed: [...current.completed, lessonId] });
+    setNotice("已记录本节学习完成");
+  }
+
   function updateCode(nextCode: string) {
     if (runLockRef.current) return;
     codeRef.current = nextCode;
@@ -566,7 +574,7 @@ export function LearningApp() {
           <div className="progress-track" aria-label={`学习进度 ${completedPercent}%`}>
             <span style={{ width: `${completedPercent}%` }} />
           </div>
-          <small>{progress.completed.length} / {lessons.length} 个练习完成 · 不锁定顺序</small>
+          <small>{progress.completed.length} / {allLessonIds.length} 个课程完成 · 不锁定顺序</small>
           {reviewQueueCount !== null && <small>待复习 {reviewQueueCount} 项</small>}
         </div>
 
@@ -975,6 +983,8 @@ export function LearningApp() {
             lesson={activeCatalogLesson}
             onOpenChat={() => setChatOpen(true)}
             track={activeTrack}
+            completed={progress.completed.includes(activeCatalogLesson.id)}
+            onComplete={() => markCatalogLessonComplete(activeCatalogLesson.id)}
           />
         ))}
 

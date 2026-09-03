@@ -1474,6 +1474,17 @@ textarea:focus-visible {
   margin: 18px 0 32px;
 }
 
+.lesson-complete {
+  margin: 12px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--green);
+  font-size: 11px;
+  cursor: pointer;
+}
+
 .source-row a,
 .migration-card footer a {
   color: #2e6c55;

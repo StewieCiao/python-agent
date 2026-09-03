@@ -3,10 +3,12 @@
 import { useState } from "react";
 import type { LearningLesson, LearningTrack } from "../content/learningCatalog";
 
-export function CatalogLesson({ track, lesson, onOpenChat }: {
+export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete }: {
   track: LearningTrack;
   lesson: LearningLesson;
   onOpenChat: () => void;
+  completed: boolean;
+  onComplete: () => void;
 }) {
   const [code, setCode] = useState(lesson.exercise.starterCode);
   const [showSolution, setShowSolution] = useState(false);
@@ -22,6 +24,7 @@ export function CatalogLesson({ track, lesson, onOpenChat }: {
         <p className="lesson-kicker">CURRENT LEARNING MODULE</p>
         <h2>{lesson.title}</h2>
         <p className="lesson-goal">{lesson.summary}</p>
+        <button className="lesson-complete" onClick={onComplete} type="button">{completed ? "已标记完成" : "标记本节完成"}</button>
         <div className="source-row">
           {lesson.officialSources.map((source) => <a href={source.url} key={source.url} rel="noreferrer" target="_blank">{source.label} ↗</a>)}
         </div>
