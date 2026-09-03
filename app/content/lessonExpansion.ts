@@ -512,6 +512,28 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
       { name: "零上限", expression: "run_agent([lambda: 1], 0) == []", failure: "非正上限应停止执行。", kind: "behavior" },
     ],
   },
+  "langchain-rag:多查询检索": {
+    summary: "从一个问题生成互补查询，再合并结果并保留来源去重。",
+    prompt: "实现 expand_queries(query, rewrites)，返回去重后的查询列表，原问题必须位于第一项。",
+    starterCode: "def expand_queries(query, rewrites):\n    pass\n",
+    solution: "def expand_queries(query, rewrites):\n    return list(dict.fromkeys([query, *rewrites]))\n",
+    hints: ["原问题应优先保留。", "dict.fromkeys 可按首次出现顺序去重。", "不要用无关默认查询替换用户问题。"],
+    checks: [
+      { name: "扩展去重", expression: "expand_queries(\"状态保存\", [\"如何保存状态\", \"状态保存\"]) == [\"状态保存\", \"如何保存状态\"]", failure: "应保留原问题并去除重复查询。", kind: "behavior" },
+      { name: "空改写", expression: "expand_queries(\"问题\", []) == [\"问题\"]", failure: "没有改写时仍应检索原问题。", kind: "behavior" },
+    ],
+  },
+  "langchain-rag:RAG 项目": {
+    summary: "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。",
+    prompt: "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。",
+    starterCode: "def answer_with_sources(contexts):\n    pass\n",
+    solution: "def answer_with_sources(contexts):\n    if not contexts:\n        return {\"answer\": \"资料不足\", \"sources\": []}\n    return {\"answer\": contexts[0][\"text\"], \"sources\": [item[\"source\"] for item in contexts]}\n",
+    hints: ["先处理没有召回资料的分支。", "有资料时只使用真实 text 和 source。", "输出结构固定为 answer 与 sources。"],
+    checks: [
+      { name: "来源可追溯", expression: "answer_with_sources([{\"text\": \"答案\", \"source\": \"a.md\"}]) == {\"answer\": \"答案\", \"sources\": [\"a.md\"]}", failure: "回答必须带回真实来源。", kind: "behavior" },
+      { name: "无资料", expression: "answer_with_sources([]) == {\"answer\": \"资料不足\", \"sources\": []}", failure: "无召回时不能伪造回答或来源。", kind: "behavior" },
+    ],
+  },
   "langgraph:恢复执行": {
     summary: "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
     prompt: "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
@@ -543,6 +565,61 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "传递边界", expression: "invoke_subgraph(lambda state: {\"done\": state[\"value\"] + 1}, {\"value\": 2}) == {\"done\": 3}", failure: "子图应接收状态并返回结果。", kind: "behavior" },
       { name: "隔离父状态", expression: "((lambda state: (invoke_subgraph(lambda value: {\"value\": 9}, state), state))({\"value\": 2}))[1] == {\"value\": 2}", failure: "子图调用不应修改父状态。", kind: "behavior" },
+    ],
+  },
+  "langgraph:并行分支": {
+    summary: "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
+    prompt: "实现 merge_parallel(results)，按输入顺序合并字典；后出现的同名键覆盖前值，空输入返回空字典。",
+    starterCode: "def merge_parallel(results):\n    pass\n",
+    solution: "def merge_parallel(results):\n    merged = {}\n    for result in results:\n        merged.update(result)\n    return merged\n",
+    hints: ["每个分支返回一个字典更新。", "按输入顺序合并以得到确定结果。", "不要为缺失字段猜测默认值。"],
+    checks: [
+      { name: "合并分支", expression: "merge_parallel([{\"a\": 1}, {\"b\": 2}]) == {\"a\": 1, \"b\": 2}", failure: "独立分支结果应合并到一个状态。", kind: "behavior" },
+      { name: "冲突顺序", expression: "merge_parallel([{\"a\": 1}, {\"a\": 2}]) == {\"a\": 2} and merge_parallel([]) == {}", failure: "冲突键应按声明顺序覆盖，空输入应为空。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Supervisor": {
+    summary: "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
+    prompt: "实现 choose_worker(task_type, workers)，返回 workers 中对应的可调用对象；未知类型抛出 KeyError。",
+    starterCode: "def choose_worker(task_type, workers):\n    pass\n",
+    solution: "def choose_worker(task_type, workers):\n    return workers[task_type]\n",
+    hints: ["任务类型就是路由键。", "返回已注册 worker，不要执行它。", "未知类型应保留 KeyError。"],
+    checks: [
+      { name: "选择 worker", expression: "choose_worker(\"search\", {\"search\": \"S\"}) == \"S\"", failure: "应返回任务类型对应的 worker。", kind: "behavior" },
+      { name: "未知任务", expression: "_raises_key_error(lambda: choose_worker(\"write\", {\"search\": \"S\"}))", failure: "未注册任务不能静默路由。", kind: "behavior" },
+    ],
+  },
+  "langgraph:多 Agent 协作": {
+    summary: "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
+    prompt: "实现 handoff(agent, message)，返回包含 recipient 和 content 的字典；message 必须为字符串。",
+    starterCode: "def handoff(agent, message):\n    pass\n",
+    solution: "def handoff(agent, message):\n    if not isinstance(message, str):\n        raise TypeError(\"message must be a string\")\n    return {\"recipient\": agent, \"content\": message}\n",
+    hints: ["交接消息至少包含接收者和内容。", "先验证内容类型。", "不要把对象 repr 当作自然语言消息。"],
+    checks: [
+      { name: "交接协议", expression: "handoff(\"researcher\", \"完成检索\") == {\"recipient\": \"researcher\", \"content\": \"完成检索\"}", failure: "交接输出应符合稳定协议。", kind: "behavior" },
+      { name: "拒绝非文本", expression: "_raises_type_error(lambda: handoff(\"researcher\", {\"x\": 1}))", failure: "消息内容必须是字符串。", kind: "behavior" },
+    ],
+  },
+  "langgraph:人工审核": {
+    summary: "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
+    prompt: "实现 review_gate(action, decision)，decision 为 approve 返回 action，为 reject 返回 rejected，其他值抛出 ValueError。",
+    starterCode: "def review_gate(action, decision):\n    pass\n",
+    solution: "def review_gate(action, decision):\n    if decision == \"approve\":\n        return action\n    if decision == \"reject\":\n        return \"rejected\"\n    raise ValueError(\"unknown decision\")\n",
+    hints: ["批准和拒绝是两个显式状态。", "未知决定不能当作批准。", "保留 action 原值以便后续节点执行。"],
+    checks: [
+      { name: "审核决定", expression: "review_gate(\"send\", \"approve\") == \"send\" and review_gate(\"send\", \"reject\") == \"rejected\"", failure: "批准与拒绝应产生不同结果。", kind: "behavior" },
+      { name: "未知决定", expression: "_raises_value_error(lambda: review_gate(\"send\", \"later\"))", failure: "未知审核状态应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Graph 项目": {
+    summary: "把状态、路由、检查点和人工边界组合成可演示的图项目。",
+    prompt: "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。",
+    starterCode: "def project_step(state):\n    pass\n",
+    solution: "def project_step(state):\n    updated = dict(state)\n    updated[\"step\"] = state[\"step\"] + 1\n    return updated\n",
+    hints: ["先读取题目要求的两个状态字段。", "复制状态后只推进 step。", "缺失字段应保留 KeyError，便于定位图契约问题。"],
+    checks: [
+      { name: "推进项目状态", expression: "project_step({\"thread_id\": \"t1\", \"step\": 1}) == {\"thread_id\": \"t1\", \"step\": 2}", failure: "项目步骤应在同一 thread 上推进。", kind: "behavior" },
+      { name: "契约缺失", expression: "_raises_key_error(lambda: project_step({\"step\": 1}))", failure: "缺失 thread_id 的状态不能继续。", kind: "behavior" },
     ],
   },
   "langgraph:Checkpoint": {

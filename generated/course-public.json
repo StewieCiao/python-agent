@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "9290e8ab00d2311afa6144343df09c359c17153fbcef4a73e6ad140e667b9211",
-  "familyHash": "2604e2ae41476826616fb7c97f3547806b9088eec5f1b4538f36644e565381ef",
+  "catalogHash": "efc2bf22e1c37b3bbe740e50d2b053f15989492d8a6dc18cfb832a9a8a53e1e1",
+  "familyHash": "d57544b16f78532336dd8e9cdf0c48b5eca5e03afc56bb66f73411ae74303aaa",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8172,9 +8172,9 @@
             "id": "langchain-rag-lesson-18",
             "stageId": "langchain-rag-stage-5",
             "order": 19,
-            "title": "多查询检索：从概念到练习（第 19 节）",
+            "title": "多查询检索：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 多查询检索 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "从一个问题生成互补查询，再合并结果并保留来源去重。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-17"
@@ -8234,26 +8234,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“多查询检索”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 expand_queries(query, rewrites)，返回去重后的查询列表，原问题必须位于第一项。",
+              "starterCode": "def expand_queries(query, rewrites):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "原问题应优先保留。",
+                "dict.fromkeys 可按首次出现顺序去重。",
+                "不要用无关默认查询替换用户问题。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def expand_queries(query, rewrites):\n    return list(dict.fromkeys([query, *rewrites]))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "扩展去重",
+                "expression": "expand_queries(\"状态保存\", [\"如何保存状态\", \"状态保存\"]) == [\"状态保存\", \"如何保存状态\"]",
+                "failure": "应保留原问题并去除重复查询。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空改写",
+                "expression": "expand_queries(\"问题\", []) == [\"问题\"]",
+                "failure": "没有改写时仍应检索原问题。",
                 "kind": "behavior"
               }
             ]
@@ -8262,9 +8262,9 @@
             "id": "langchain-rag-lesson-19",
             "stageId": "langchain-rag-stage-6",
             "order": 20,
-            "title": "RAG 项目：从概念到练习（第 20 节）",
+            "title": "RAG 项目：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 项目 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-18"
@@ -8324,26 +8324,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 项目”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。",
+              "starterCode": "def answer_with_sources(contexts):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理没有召回资料的分支。",
+                "有资料时只使用真实 text 和 source。",
+                "输出结构固定为 answer 与 sources。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def answer_with_sources(contexts):\n    if not contexts:\n        return {\"answer\": \"资料不足\", \"sources\": []}\n    return {\"answer\": contexts[0][\"text\"], \"sources\": [item[\"source\"] for item in contexts]}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "来源可追溯",
+                "expression": "answer_with_sources([{\"text\": \"答案\", \"source\": \"a.md\"}]) == {\"answer\": \"答案\", \"sources\": [\"a.md\"]}",
+                "failure": "回答必须带回真实来源。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无资料",
+                "expression": "answer_with_sources([]) == {\"answer\": \"资料不足\", \"sources\": []}",
+                "failure": "无召回时不能伪造回答或来源。",
                 "kind": "behavior"
               }
             ]
@@ -9972,9 +9972,9 @@
             "id": "langchain-rag-lesson-38",
             "stageId": "langchain-rag-stage-4",
             "order": 39,
-            "title": "多查询检索迁移练习 2：从概念到练习（第 39 节）",
+            "title": "多查询检索迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 多查询检索迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "从一个问题生成互补查询，再合并结果并保留来源去重。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-37"
@@ -10034,26 +10034,26 @@
               "langchain-rag-lesson-45"
             ],
             "exercise": {
-              "prompt": "完成“多查询检索迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 expand_queries(query, rewrites)，返回去重后的查询列表，原问题必须位于第一项。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def expand_queries(query, rewrites):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "原问题应优先保留。",
+                "dict.fromkeys 可按首次出现顺序去重。",
+                "不要用无关默认查询替换用户问题。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def expand_queries(query, rewrites):\n    return list(dict.fromkeys([query, *rewrites]))\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "扩展去重",
+                "expression": "expand_queries(\"状态保存\", [\"如何保存状态\", \"状态保存\"]) == [\"状态保存\", \"如何保存状态\"]",
+                "failure": "应保留原问题并去除重复查询。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "空改写",
+                "expression": "expand_queries(\"问题\", []) == [\"问题\"]",
+                "failure": "没有改写时仍应检索原问题。",
                 "kind": "behavior"
               }
             ]
@@ -10062,9 +10062,9 @@
             "id": "langchain-rag-lesson-39",
             "stageId": "langchain-rag-stage-5",
             "order": 40,
-            "title": "RAG 项目迁移练习 2：从概念到练习（第 40 节）",
+            "title": "RAG 项目迁移练习 2：写出可验证的实现",
             "kicker": "LangChain / RAG 学习",
-            "summary": "理解 RAG 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-38"
@@ -10124,26 +10124,26 @@
               "langchain-rag-lesson-42"
             ],
             "exercise": {
-              "prompt": "完成“RAG 项目迁移练习 2”练习并通过行为检查。",
-              "starterCode": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = None",
+              "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def answer_with_sources(contexts):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先处理没有召回资料的分支。",
+                "有资料时只使用真实 text 和 source。",
+                "输出结构固定为 answer 与 sources。"
               ],
-              "solution": "messages = [{\"role\": \"user\", \"content\": \"hello\"}]\nresult = messages"
+              "solution": "def answer_with_sources(contexts):\n    if not contexts:\n        return {\"answer\": \"资料不足\", \"sources\": []}\n    return {\"answer\": contexts[0][\"text\"], \"sources\": [item[\"source\"] for item in contexts]}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "来源可追溯",
+                "expression": "answer_with_sources([{\"text\": \"答案\", \"source\": \"a.md\"}]) == {\"answer\": \"答案\", \"sources\": [\"a.md\"]}",
+                "failure": "回答必须带回真实来源。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "无资料",
+                "expression": "answer_with_sources([]) == {\"answer\": \"资料不足\", \"sources\": []}",
+                "failure": "无召回时不能伪造回答或来源。",
                 "kind": "behavior"
               }
             ]
@@ -12307,9 +12307,9 @@
             "id": "langgraph-lesson-15",
             "stageId": "langgraph-stage-2",
             "order": 16,
-            "title": "并行分支：从概念到练习（第 16 节）",
+            "title": "并行分支：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 并行分支 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-14"
@@ -12369,26 +12369,26 @@
               "langgraph-lesson-36"
             ],
             "exercise": {
-              "prompt": "完成“并行分支”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 merge_parallel(results)，按输入顺序合并字典；后出现的同名键覆盖前值，空输入返回空字典。",
+              "starterCode": "def merge_parallel(results):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "每个分支返回一个字典更新。",
+                "按输入顺序合并以得到确定结果。",
+                "不要为缺失字段猜测默认值。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def merge_parallel(results):\n    merged = {}\n    for result in results:\n        merged.update(result)\n    return merged\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合并分支",
+                "expression": "merge_parallel([{\"a\": 1}, {\"b\": 2}]) == {\"a\": 1, \"b\": 2}",
+                "failure": "独立分支结果应合并到一个状态。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "冲突顺序",
+                "expression": "merge_parallel([{\"a\": 1}, {\"a\": 2}]) == {\"a\": 2} and merge_parallel([]) == {}",
+                "failure": "冲突键应按声明顺序覆盖，空输入应为空。",
                 "kind": "behavior"
               }
             ]
@@ -12397,9 +12397,9 @@
             "id": "langgraph-lesson-16",
             "stageId": "langgraph-stage-3",
             "order": 17,
-            "title": "Supervisor：从概念到练习（第 17 节）",
+            "title": "Supervisor：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Supervisor 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-15"
@@ -12459,26 +12459,26 @@
               "langgraph-lesson-37"
             ],
             "exercise": {
-              "prompt": "完成“Supervisor”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 choose_worker(task_type, workers)，返回 workers 中对应的可调用对象；未知类型抛出 KeyError。",
+              "starterCode": "def choose_worker(task_type, workers):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "任务类型就是路由键。",
+                "返回已注册 worker，不要执行它。",
+                "未知类型应保留 KeyError。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def choose_worker(task_type, workers):\n    return workers[task_type]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "选择 worker",
+                "expression": "choose_worker(\"search\", {\"search\": \"S\"}) == \"S\"",
+                "failure": "应返回任务类型对应的 worker。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知任务",
+                "expression": "_raises_key_error(lambda: choose_worker(\"write\", {\"search\": \"S\"}))",
+                "failure": "未注册任务不能静默路由。",
                 "kind": "behavior"
               }
             ]
@@ -12487,9 +12487,9 @@
             "id": "langgraph-lesson-17",
             "stageId": "langgraph-stage-4",
             "order": 18,
-            "title": "多 Agent 协作：从概念到练习（第 18 节）",
+            "title": "多 Agent 协作：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 多 Agent 协作 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-16"
@@ -12549,26 +12549,26 @@
               "langgraph-lesson-38"
             ],
             "exercise": {
-              "prompt": "完成“多 Agent 协作”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 handoff(agent, message)，返回包含 recipient 和 content 的字典；message 必须为字符串。",
+              "starterCode": "def handoff(agent, message):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "交接消息至少包含接收者和内容。",
+                "先验证内容类型。",
+                "不要把对象 repr 当作自然语言消息。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def handoff(agent, message):\n    if not isinstance(message, str):\n        raise TypeError(\"message must be a string\")\n    return {\"recipient\": agent, \"content\": message}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "交接协议",
+                "expression": "handoff(\"researcher\", \"完成检索\") == {\"recipient\": \"researcher\", \"content\": \"完成检索\"}",
+                "failure": "交接输出应符合稳定协议。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝非文本",
+                "expression": "_raises_type_error(lambda: handoff(\"researcher\", {\"x\": 1}))",
+                "failure": "消息内容必须是字符串。",
                 "kind": "behavior"
               }
             ]
@@ -12577,9 +12577,9 @@
             "id": "langgraph-lesson-18",
             "stageId": "langgraph-stage-5",
             "order": 19,
-            "title": "人工审核：从概念到练习（第 19 节）",
+            "title": "人工审核：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 人工审核 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-17"
@@ -12639,26 +12639,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“人工审核”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 review_gate(action, decision)，decision 为 approve 返回 action，为 reject 返回 rejected，其他值抛出 ValueError。",
+              "starterCode": "def review_gate(action, decision):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "批准和拒绝是两个显式状态。",
+                "未知决定不能当作批准。",
+                "保留 action 原值以便后续节点执行。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def review_gate(action, decision):\n    if decision == \"approve\":\n        return action\n    if decision == \"reject\":\n        return \"rejected\"\n    raise ValueError(\"unknown decision\")\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "审核决定",
+                "expression": "review_gate(\"send\", \"approve\") == \"send\" and review_gate(\"send\", \"reject\") == \"rejected\"",
+                "failure": "批准与拒绝应产生不同结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知决定",
+                "expression": "_raises_value_error(lambda: review_gate(\"send\", \"later\"))",
+                "failure": "未知审核状态应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -12667,9 +12667,9 @@
             "id": "langgraph-lesson-19",
             "stageId": "langgraph-stage-6",
             "order": 20,
-            "title": "Graph 项目：从概念到练习（第 20 节）",
+            "title": "Graph 项目：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Graph 项目 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-18"
@@ -12729,26 +12729,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“Graph 项目”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。",
+              "starterCode": "def project_step(state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先读取题目要求的两个状态字段。",
+                "复制状态后只推进 step。",
+                "缺失字段应保留 KeyError，便于定位图契约问题。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def project_step(state):\n    updated = dict(state)\n    updated[\"step\"] = state[\"step\"] + 1\n    return updated\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "推进项目状态",
+                "expression": "project_step({\"thread_id\": \"t1\", \"step\": 1}) == {\"thread_id\": \"t1\", \"step\": 2}",
+                "failure": "项目步骤应在同一 thread 上推进。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "契约缺失",
+                "expression": "_raises_key_error(lambda: project_step({\"step\": 1}))",
+                "failure": "缺失 thread_id 的状态不能继续。",
                 "kind": "behavior"
               }
             ]
@@ -14107,9 +14107,9 @@
             "id": "langgraph-lesson-35",
             "stageId": "langgraph-stage-1",
             "order": 36,
-            "title": "并行分支迁移练习 2：从概念到练习（第 36 节）",
+            "title": "并行分支迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 并行分支迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-34"
@@ -14167,26 +14167,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“并行分支迁移练习 2：从概念到练习（第 36 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "阶段项目：围绕“并行分支迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def merge_parallel(results):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def merge_parallel(results):\n    merged = {}\n    for result in results:\n        merged.update(result)\n    return merged\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "合并分支",
+                "expression": "merge_parallel([{\"a\": 1}, {\"b\": 2}]) == {\"a\": 1, \"b\": 2}",
+                "failure": "独立分支结果应合并到一个状态。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "冲突顺序",
+                "expression": "merge_parallel([{\"a\": 1}, {\"a\": 2}]) == {\"a\": 2} and merge_parallel([]) == {}",
+                "failure": "冲突键应按声明顺序覆盖，空输入应为空。",
                 "kind": "behavior"
               }
             ]
@@ -14195,9 +14195,9 @@
             "id": "langgraph-lesson-36",
             "stageId": "langgraph-stage-2",
             "order": 37,
-            "title": "Supervisor迁移练习 2：从概念到练习（第 37 节）",
+            "title": "Supervisor迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Supervisor迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-35"
@@ -14255,26 +14255,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“Supervisor迁移练习 2：从概念到练习（第 37 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "阶段项目：围绕“Supervisor迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def choose_worker(task_type, workers):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def choose_worker(task_type, workers):\n    return workers[task_type]\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "选择 worker",
+                "expression": "choose_worker(\"search\", {\"search\": \"S\"}) == \"S\"",
+                "failure": "应返回任务类型对应的 worker。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知任务",
+                "expression": "_raises_key_error(lambda: choose_worker(\"write\", {\"search\": \"S\"}))",
+                "failure": "未注册任务不能静默路由。",
                 "kind": "behavior"
               }
             ]
@@ -14283,9 +14283,9 @@
             "id": "langgraph-lesson-37",
             "stageId": "langgraph-stage-3",
             "order": 38,
-            "title": "多 Agent 协作迁移练习 2：从概念到练习（第 38 节）",
+            "title": "多 Agent 协作迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 多 Agent 协作迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-36"
@@ -14343,26 +14343,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“多 Agent 协作迁移练习 2：从概念到练习（第 38 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "阶段项目：围绕“多 Agent 协作迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def handoff(agent, message):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def handoff(agent, message):\n    if not isinstance(message, str):\n        raise TypeError(\"message must be a string\")\n    return {\"recipient\": agent, \"content\": message}\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "交接协议",
+                "expression": "handoff(\"researcher\", \"完成检索\") == {\"recipient\": \"researcher\", \"content\": \"完成检索\"}",
+                "failure": "交接输出应符合稳定协议。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "拒绝非文本",
+                "expression": "_raises_type_error(lambda: handoff(\"researcher\", {\"x\": 1}))",
+                "failure": "消息内容必须是字符串。",
                 "kind": "behavior"
               }
             ]
@@ -14371,9 +14371,9 @@
             "id": "langgraph-lesson-38",
             "stageId": "langgraph-stage-4",
             "order": 39,
-            "title": "人工审核迁移练习 2：从概念到练习（第 39 节）",
+            "title": "人工审核迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 人工审核迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-37"
@@ -14431,26 +14431,26 @@
             "project": true,
             "projectLinks": [],
             "exercise": {
-              "prompt": "阶段项目：围绕“人工审核迁移练习 2：从概念到练习（第 39 节）”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "阶段项目：围绕“人工审核迁移练习 2：写出可验证的实现”交付一个可演示的最小版本。\n输入与输出：先写清数据契约；失败状态：保留真实异常或无结果状态；验收：补充典型、变化和边界测试，并在 README 记录运行方式、取舍与限制。",
+              "starterCode": "def review_gate(action, decision):\n    pass\n",
               "hints": [
                 "先拆成一个能独立运行的最小里程碑。",
                 "让每个中间结果可观察，并为失败保留真实原因。",
                 "最后用未出现在示例中的输入和边界情况回归。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def review_gate(action, decision):\n    if decision == \"approve\":\n        return action\n    if decision == \"reject\":\n        return \"rejected\"\n    raise ValueError(\"unknown decision\")\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "审核决定",
+                "expression": "review_gate(\"send\", \"approve\") == \"send\" and review_gate(\"send\", \"reject\") == \"rejected\"",
+                "failure": "批准与拒绝应产生不同结果。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "未知决定",
+                "expression": "_raises_value_error(lambda: review_gate(\"send\", \"later\"))",
+                "failure": "未知审核状态应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -14459,9 +14459,9 @@
             "id": "langgraph-lesson-39",
             "stageId": "langgraph-stage-5",
             "order": 40,
-            "title": "Graph 项目迁移练习 2：从概念到练习（第 40 节）",
+            "title": "Graph 项目迁移练习 2：写出可验证的实现",
             "kicker": "LangGraph 学习",
-            "summary": "理解 Graph 项目迁移练习 2 的输入、处理过程和边界，并完成一个可验证练习。",
+            "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-38"
@@ -14521,26 +14521,26 @@
               "langgraph-lesson-35"
             ],
             "exercise": {
-              "prompt": "完成“Graph 项目迁移练习 2”练习并通过行为检查。",
-              "starterCode": "state = {\"count\": 0}\nresult = None",
+              "prompt": "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。\n迁移要求：改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def project_step(state):\n    pass\n",
               "hints": [
-                "先描述数据流",
-                "实现最小步骤",
-                "用边界输入复测"
+                "先读取题目要求的两个状态字段。",
+                "复制状态后只推进 step。",
+                "缺失字段应保留 KeyError，便于定位图契约问题。"
               ],
-              "solution": "state = {\"count\": 0}\nstate[\"count\"] += 1\nresult = state"
+              "solution": "def project_step(state):\n    updated = dict(state)\n    updated[\"step\"] = state[\"step\"] + 1\n    return updated\n"
             },
             "browserChecks": [
               {
-                "name": "典型输入",
-                "expression": "behavioral result",
-                "failure": "典型输入行为不符",
+                "name": "推进项目状态",
+                "expression": "project_step({\"thread_id\": \"t1\", \"step\": 1}) == {\"thread_id\": \"t1\", \"step\": 2}",
+                "failure": "项目步骤应在同一 thread 上推进。",
                 "kind": "behavior"
               },
               {
-                "name": "边界输入",
-                "expression": "boundary result",
-                "failure": "边界输入行为不符",
+                "name": "契约缺失",
+                "expression": "_raises_key_error(lambda: project_step({\"step\": 1}))",
+                "failure": "缺失 thread_id 的状态不能继续。",
                 "kind": "behavior"
               }
             ]

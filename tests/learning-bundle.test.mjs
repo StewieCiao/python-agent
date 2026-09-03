@@ -331,6 +331,23 @@ test("LangGraph 执行主题提供恢复与组合练习", async () => {
   }
 });
 
+test("扩展路线的剩余主题不使用概念占位练习", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const cases = [
+    ["langchain-rag", ["多查询检索", "RAG 项目"]],
+    ["langgraph", ["并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"]],
+  ];
+  for (const [trackId, topics] of cases) {
+    const track = authoredCatalog.tracks.find(({ id }) => id === trackId);
+    assert.ok(track);
+    for (const topic of topics) {
+      const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+      assert.ok(lesson, `缺少 ${topic} 课程`);
+      assert.ok(lesson.browserChecks.length >= 2);
+    }
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
