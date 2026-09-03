@@ -189,6 +189,7 @@ function validateLesson(value: unknown, path: string, stageIds: Set<string>, les
   if (!Array.isArray(value.videos) || !Array.isArray(value.officialSources) || !Array.isArray(value.migrations)) {
     throw new Error(`${path} 缺少来源或资源数组`);
   }
+  if (value.officialSources.length === 0) throw new Error(`${path} 必须至少包含一个官方来源`);
   if (typeof value.project !== "boolean") throw new Error(`${path}.project 必须是布尔值`);
   requireStringArray(value.projectLinks, `${path}.projectLinks`);
   if (!isRecord(value.exercise)) throw new Error(`${path}.exercise 必须是对象`);

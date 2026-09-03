@@ -144,6 +144,13 @@ test("schema validator rejects unsafe video domains and incomplete migrations", 
     () => schema.validateAuthoredCatalog(missingGuide),
     /guide/,
   );
+
+  const missingSource = structuredClone(validCatalog);
+  missingSource.tracks[0].lessons[0].officialSources = [];
+  assert.throws(
+    () => schema.validateAuthoredCatalog(missingSource),
+    /官方来源/,
+  );
 });
 
 test("正式作者路线保留讲解、提示、判题和项目关系", () => {
