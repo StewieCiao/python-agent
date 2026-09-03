@@ -344,6 +344,18 @@ test("LangChain 结构化输出代表课明确字段校验和失败状态", asyn
   assert.match(lesson.exercise.solution, /confidence/);
 });
 
+test("LangGraph 持久化代表课明确 thread 恢复与隔离", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph").lessons.find(({ id }) => id === "persistence-short-memory");
+  assert.match(lesson.exercise.prompt, /输入是.*thread_id.*state/);
+  assert.match(lesson.exercise.prompt, /输出是.*resumed_state/);
+  assert.match(lesson.exercise.prompt, /不同 thread/);
+  assert.match(lesson.exercise.starterCode, /checkpoints = \{\}/);
+  assert.match(lesson.exercise.solution, /config = \{"configurable": \{"thread_id"/);
+  assert.match(lesson.exercise.solution, /saved_state/);
+  assert.match(lesson.exercise.solution, /resumed_state/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);

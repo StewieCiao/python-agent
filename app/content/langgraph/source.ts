@@ -178,9 +178,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "用两个 thread_id 调用同一图，验证同线程连续、不同线程隔离。",
-        starterCode: `config_a = {"configurable": {"thread_id": ""}}\nconfig_b = {"configurable": {"thread_id": ""}}`,
-        solution: `config_a = {"configurable": {"thread_id": "user-a"}}\nconfig_b = {"configurable": {"thread_id": "user-b"}}`,
+        prompt: "输入是两个 thread_id 和各自的 state；输出是从 checkpoint 取回的 resumed_state。请用一个 checkpoints 字典模拟 checkpointer：同一 thread 能恢复已保存状态，不同 thread 不能互相读取。",
+        starterCode: `checkpoints = {}\nthread_a = "user-a"\nthread_b = "user-b"\nconfig = {"configurable": {"thread_id": thread_a}}\nsaved_state = {"messages": ["先问候"]}\nresumed_state = None`,
+        solution: `checkpoints = {}\nthread_a = "user-a"\nthread_b = "user-b"\nconfig = {"configurable": {"thread_id": thread_a}}\nsaved_state = {"messages": ["先问候"]}\ncheckpoints[config["configurable"]["thread_id"]] = saved_state\nresumed_state = checkpoints.get(thread_a)\nother_thread_state = checkpoints.get(thread_b)`,
       },
     },
     {
