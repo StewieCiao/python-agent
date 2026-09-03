@@ -1019,6 +1019,7 @@ export function LearningApp() {
                     <div className="project-number">{track.shortTitle} · PROJECT</div>
                     <h3>{item.title}</h3>
                     <p>{item.summary}</p>
+                    <p className="project-contract">项目契约：{item.exercise.prompt.split("\n")[0]}</p>
                     <div className="project-tags">
                       <span>{item.minutes} 分钟</span>
                       <span>{(item.browserChecks ?? []).length} 项验收</span>
@@ -1026,7 +1027,7 @@ export function LearningApp() {
                     <ol className="project-milestones">
                       <li>写清目标与输入输出</li>
                       <li>完成最小可运行版本</li>
-                      <li>补边界测试并记录失败</li>
+                      {(item.browserChecks ?? []).slice(0, 2).map((check) => <li key={check.name}>验收：{check.name}</li>)}
                       <li>整理 README 与演示步骤</li>
                     </ol>
                     <button disabled={isRunning} onClick={() => {

@@ -1334,6 +1334,12 @@ textarea:focus-visible {
   line-height: 1.65;
 }
 
+.project-card .project-contract {
+  margin-top: 10px;
+  color: #53675d;
+  font-size: 11px;
+}
+
 .project-tags {
   display: flex;
   gap: 7px;
