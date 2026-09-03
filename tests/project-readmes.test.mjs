@@ -6,6 +6,7 @@ const projects = [
   ["private-rag-study-assistant", /资料不足/, /recall@k/],
   ["recoverable-research-graph", /thread_id/, /interrupt/],
   ["adaptive-python-coach", /mistake code/, /4 秒超时/],
+  ["rag-quality-workbench", /引用覆盖/, /no_results/],
 ];
 
 test("三项简历项目都有可复现 README 和成功/失败演示", async () => {
