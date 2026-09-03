@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "6225cff020c46bc9abc5d93d476c200a47a34749ce8948f77e44043b688ea990",
+  "catalogHash": "867dcc6afacf2921e40425f50f3130e4daab500688d1e2b4103df5517ec71314",
   "familyHash": "b73b7f7b1421a052fb06841c192effc0422c876c93b147e1c194e67447f9c556",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7547,7 +7547,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -7637,7 +7646,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -7725,7 +7743,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -7813,7 +7840,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -7901,7 +7937,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -7991,7 +8036,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8081,7 +8135,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8171,7 +8234,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8261,7 +8333,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8349,7 +8430,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8437,7 +8527,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8525,7 +8624,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8615,7 +8723,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8705,7 +8822,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8795,7 +8921,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8885,7 +9020,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -8973,7 +9117,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9061,7 +9214,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9149,7 +9311,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9239,7 +9410,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9329,7 +9509,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9419,7 +9608,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9509,7 +9707,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9597,7 +9804,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9685,7 +9901,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9773,7 +9998,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9863,7 +10097,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -9953,7 +10196,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10043,7 +10295,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10133,7 +10394,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10221,7 +10491,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10309,7 +10588,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10397,7 +10685,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10485,7 +10782,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10573,7 +10879,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10661,7 +10976,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10749,7 +11073,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain for LLM Application Development",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充模型、Prompt 与 Runnable 的完整数据流。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -10837,7 +11170,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangChain: Chat with Your Data",
+                "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/",
+                "provider": "DeepLearning.AI",
+                "language": "英文",
+                "duration": "短课程",
+                "note": "补充文档加载、切分、检索与引用。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangChain 官方文档",
@@ -11733,7 +12075,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -11823,7 +12174,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -11913,7 +12273,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12003,7 +12372,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12093,7 +12471,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12181,7 +12568,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12269,7 +12665,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12357,7 +12762,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12447,7 +12861,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12537,7 +12960,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12627,7 +13059,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12717,7 +13158,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12805,7 +13255,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12893,7 +13352,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -12981,7 +13449,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13071,7 +13548,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13161,7 +13647,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13251,7 +13746,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13341,7 +13845,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13429,7 +13942,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13517,7 +14039,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13605,7 +14136,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13695,7 +14235,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13785,7 +14334,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13875,7 +14433,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -13965,7 +14532,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14053,7 +14629,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14141,7 +14726,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14229,7 +14823,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14317,7 +14920,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14405,7 +15017,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14493,7 +15114,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14581,7 +15211,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14669,7 +15308,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "Introduction to LangGraph",
+                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充 StateGraph、节点、边和执行模型。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",
@@ -14757,7 +15405,16 @@
                 "example": "assert actual == expected"
               }
             ],
-            "videos": [],
+            "videos": [
+              {
+                "title": "LangGraph Essentials",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "课程",
+                "note": "补充持久化、中断、恢复与多 Agent。"
+              }
+            ],
             "officialSources": [
               {
                 "label": "LangGraph 官方文档",

@@ -386,6 +386,16 @@ test("框架项目课使用清晰的作品主题而不是迁移练习标题", as
   }
 });
 
+test("扩展后的框架课程每节都有允许域名的视频资源", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks.filter(({ id }) => id !== "python")) {
+    for (const lesson of track.lessons) {
+      assert.ok(lesson.videos.length > 0, `${lesson.id} 缺少配套视频`);
+      assert.ok(lesson.videos.every((video) => ["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"].includes(new URL(video.url).hostname)), `${lesson.id} 视频域名不允许`);
+    }
+  }
+});
+
 test("每节课程至少提供两项可解释的反馈检查", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {

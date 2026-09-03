@@ -1,4 +1,4 @@
-import type { CourseLesson, CourseStage, CourseTrack } from "./schema.ts";
+import type { CourseLesson, CourseStage, CourseTrack, CourseVideo } from "./schema.ts";
 
 type Expansion = { targetLessons: number; stageCount: number; projectCount: number; stageTitles: string[] };
 
@@ -26,6 +26,17 @@ const PROJECT_BRIEFS: Record<"langchain-rag" | "langgraph", Array<{ title: strin
     { title: "人工审核 Agent 流程", summary: "为高风险动作加入人工审核节点，拒绝时留下明确状态。" },
     { title: "多 Agent 协作调度器", summary: "为多角色 Agent 设计可观察的交接和 supervisor 路由。" },
     { title: "带长期记忆的任务图", summary: "为用户偏好建立跨 thread 的 Store，并与短期状态分离。" },
+  ],
+};
+
+const FRAMEWORK_VIDEOS: Record<"langchain-rag" | "langgraph", CourseVideo[]> = {
+  "langchain-rag": [
+    { title: "LangChain for LLM Application Development", url: "https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/", provider: "DeepLearning.AI", language: "英文", duration: "短课程", note: "补充模型、Prompt 与 Runnable 的完整数据流。" },
+    { title: "LangChain: Chat with Your Data", url: "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/", provider: "DeepLearning.AI", language: "英文", duration: "短课程", note: "补充文档加载、切分、检索与引用。" },
+  ],
+  langgraph: [
+    { title: "Introduction to LangGraph", url: "https://academy.langchain.com/courses/intro-to-langgraph", provider: "LangChain Academy", language: "英文", duration: "课程", note: "补充 StateGraph、节点、边和执行模型。" },
+    { title: "LangGraph Essentials", url: "https://academy.langchain.com/courses/langgraph-essentials-python", provider: "LangChain Academy", language: "英文", duration: "课程", note: "补充持久化、中断、恢复与多 Agent。" },
   ],
 };
 
@@ -724,7 +735,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
       { kind: "概念入门", title: `${baseTopic}要解决什么问题`, body: guideSummary, bullets: ["找出输入契约", "标出核心状态", "说清输出形状"], example: guidePrompt },
       { kind: "逐步拆解", title: `把${baseTopic}拆成步骤`, body: `先实现题目要求的最小路径，再逐项验证：${guidePrompt}`, bullets: topicSpec.hints, example: "输入 → 处理 → 输出" },
       { kind: "常见误区", title: `${baseTopic}的边界检查`, body: `不要只复现示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。`, bullets: ["换一组输入", "保留真实输出", "解释期望与实际"], example: "assert actual == expected" },
-    ], videos: [], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
+    ], videos: track.id === "python" ? [] : [FRAMEWORK_VIDEOS[track.id][index % FRAMEWORK_VIDEOS[track.id].length]], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
     projectLinks: [], exercise: { prompt: `${topicSpec.prompt}${variant > 1 ? `\n迁移要求：改用第 ${variant} 组未在示例出现的输入，说明实现为何仍成立。` : ""}`, starterCode: topicSpec.starterCode, hints: topicSpec.hints, solution: topicSpec.solution },
     browserChecks: topicSpec.checks,
   };
