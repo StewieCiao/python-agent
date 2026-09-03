@@ -248,6 +248,72 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
 };
 
 const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
+  "langgraph:StateGraph": {
+    summary: "把状态模式、节点和入口组织成可读的图结构。",
+    prompt: "实现 graph_shape(state, nodes)，返回包含 state_keys 与 node_count 的字典；不修改输入。",
+    starterCode: "def graph_shape(state, nodes):\n    pass\n",
+    solution: "def graph_shape(state, nodes):\n    return {\"state_keys\": sorted(state), \"node_count\": len(nodes)}\n",
+    hints: ["StateGraph 先关心状态形状。", "节点数量来自输入列表。", "返回新字典，别在 state 上添加字段。"],
+    checks: [
+      { name: "描述图形状", expression: "graph_shape({\"messages\": []}, [\"start\", \"end\"]) == {\"state_keys\": [\"messages\"], \"node_count\": 2}", failure: "应同时返回状态键和节点数量。", kind: "behavior" },
+      { name: "保持输入", expression: "((lambda state: (graph_shape(state, []), state))({\"count\": 1}))[1] == {\"count\": 1}", failure: "描述图结构不应修改输入状态。", kind: "behavior" },
+    ],
+  },
+  "langgraph:节点与边": {
+    summary: "用节点输出和边目标描述图的下一步，而不是隐藏控制流。",
+    prompt: "实现 next_edge(edges, current)，返回 edges 中 current 的目标；未知节点抛出 KeyError。",
+    starterCode: "def next_edge(edges, current):\n    pass\n",
+    solution: "def next_edge(edges, current):\n    return edges[current]\n",
+    hints: ["把边表当作 current 到目标的映射。", "字典索引会保留未知节点错误。", "不要为未知节点猜测默认目标。"],
+    checks: [
+      { name: "选择目标", expression: "next_edge({\"start\": \"review\", \"review\": \"end\"}, \"start\") == \"review\"", failure: "应返回当前节点配置的目标。", kind: "behavior" },
+      { name: "未知节点", expression: "_raises_key_error(lambda: next_edge({\"start\": \"end\"}, \"missing\"))", failure: "未知节点应明确失败。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Reducer": {
+    summary: "把多个节点更新合并成确定的状态，明确追加与覆盖语义。",
+    prompt: "实现 merge_updates(state, update)，返回新状态；messages 列表追加，其余字段由 update 覆盖。",
+    starterCode: "def merge_updates(state, update):\n    pass\n",
+    solution: "def merge_updates(state, update):\n    merged = {**state, **update}\n    merged[\"messages\"] = [*state.get(\"messages\", []), *update.get(\"messages\", [])]\n    return merged\n",
+    hints: ["先复制顶层状态。", "messages 使用追加 reducer。", "普通字段采用最新 update 的值。"],
+    checks: [
+      { name: "追加消息", expression: "merge_updates({\"messages\": [\"a\"], \"count\": 1}, {\"messages\": [\"b\"], \"count\": 2}) == {\"messages\": [\"a\", \"b\"], \"count\": 2}", failure: "消息应追加，普通字段应覆盖。", kind: "behavior" },
+      { name: "不修改状态", expression: "((lambda state: (merge_updates(state, {\"messages\": [\"b\"]}), state))({\"messages\": [\"a\"]}))[1] == {\"messages\": [\"a\"]}", failure: "合并更新不应原地修改旧状态。", kind: "behavior" },
+    ],
+  },
+  "langgraph:短期记忆": {
+    summary: "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。",
+    prompt: "实现 append_message(threads, thread_id, message)，返回新字典并只追加到指定线程。",
+    starterCode: "def append_message(threads, thread_id, message):\n    pass\n",
+    solution: "def append_message(threads, thread_id, message):\n    updated = {key: list(value) for key, value in threads.items()}\n    updated.setdefault(thread_id, []).append(message)\n    return updated\n",
+    hints: ["先复制每个线程的消息列表。", "setdefault 只为新线程创建列表。", "检查另一个 thread 的历史没有被污染。"],
+    checks: [
+      { name: "追加线程消息", expression: "append_message({\"a\": [\"hi\"]}, \"a\", \"there\") == {\"a\": [\"hi\", \"there\"]}", failure: "消息应追加到指定 thread。", kind: "behavior" },
+      { name: "线程隔离", expression: "append_message({\"a\": [\"a\"], \"b\": [\"b\"]}, \"a\", \"x\")[\"b\"] == [\"b\"]", failure: "其他 thread 的历史必须保持不变。", kind: "behavior" },
+    ],
+  },
+  "langgraph:Store": {
+    summary: "用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。",
+    prompt: "实现 put_store(store, namespace, key, value)，返回新字典并只更新 namespace/key；不修改原 store。",
+    starterCode: "def put_store(store, namespace, key, value):\n    pass\n",
+    solution: "def put_store(store, namespace, key, value):\n    updated = {name: dict(values) for name, values in store.items()}\n    updated.setdefault(namespace, {})[key] = value\n    return updated\n",
+    hints: ["先复制已有 namespace。", "key 只在目标 namespace 下生效。", "用两个 namespace 检查数据隔离。"],
+    checks: [
+      { name: "写入命名空间", expression: "put_store({}, \"user-1\", \"theme\", \"dark\") == {\"user-1\": {\"theme\": \"dark\"}}", failure: "值应保存到指定 namespace 和 key。", kind: "behavior" },
+      { name: "保留原存储", expression: "((lambda store: (put_store(store, \"u\", \"k\", 1), store))({}))[1] == {}", failure: "写入 Store 不应修改原字典。", kind: "behavior" },
+    ],
+  },
+  "langgraph:长期记忆": {
+    summary: "按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。",
+    prompt: "实现 read_preference(store, user_id, key)，从 user_id 命名空间读取 key；不存在返回 None。",
+    starterCode: "def read_preference(store, user_id, key):\n    pass\n",
+    solution: "def read_preference(store, user_id, key):\n    return store.get(user_id, {}).get(key)\n",
+    hints: ["先按 user_id 找 namespace。", "再按 key 读取偏好。", "未知用户或 key 都返回 None，不读取其他用户。"],
+    checks: [
+      { name: "读取偏好", expression: "read_preference({\"u1\": {\"theme\": \"dark\"}}, \"u1\", \"theme\") == \"dark\"", failure: "应读取指定用户的长期偏好。", kind: "behavior" },
+      { name: "用户隔离", expression: "read_preference({\"u1\": {\"theme\": \"dark\"}}, \"u2\", \"theme\") is None", failure: "未知用户不能拿到其他用户数据。", kind: "behavior" },
+    ],
+  },
   "langchain-rag:消息角色": {
     summary: "区分 system、user、assistant 消息，让提示上下文保持可预测。",
     prompt: "实现 split_messages(messages)，返回按 role 分组的字典；未知 role 抛出 ValueError，不能静默归类。",
