@@ -96,7 +96,7 @@ export const langgraphTrack: LearningTrack = {
           title: "条件边返回有限的路由名",
           body: "路由函数读取 state，返回下一分支标识。它不负责调用工具或修改数据；所有可能返回值应在图中有对应目标，让未知状态成为明确错误而不是悄悄走默认节点。",
           bullets: ["路由只做决策", "分支集合可枚举", "循环必须有退出条件"],
-          example: `def route(state):\n    return "revise" if state["score"] < 0.8 else "finish"\n\nbuilder.add_conditional_edges("review", route, {"revise": "draft", "finish": END})`,
+          example: `state = {"score": 0.6, "attempts": 1}\nroute_result = route(state)  # "revise"\nnext_state = {**state, "attempts": state["attempts"] + 1}\nbuilder.add_conditional_edges("review", route, {"revise": "draft", "finish": END})`,
         },
         {
           title: "Reducer、条件边与循环的常见误区",

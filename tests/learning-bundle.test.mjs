@@ -328,6 +328,9 @@ test("LangGraph 路由代表课明确状态输入、分支输出和循环上限"
   assert.match(lesson.exercise.starterCode, /def route\(state\)/);
   assert.match(lesson.exercise.solution, /route_result = route\(/);
   assert.match(lesson.exercise.solution, /attempts.*2/);
+  assert.match(lesson.guide[1].example, /state =/);
+  assert.match(lesson.guide[1].example, /route_result =/);
+  assert.match(lesson.guide[1].example, /revise/);
 });
 
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {

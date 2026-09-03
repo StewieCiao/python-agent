@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "e5c6bb16722e89318521ee89e8d9d824b3b6631a97480f90d22af6e1454e6824",
+  "catalogHash": "0da7c67142ce22a47be3eab5a12eac634dde9d634484d9526f25765d087841a9",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -11791,7 +11791,7 @@
                   "分支集合可枚举",
                   "循环必须有退出条件"
                 ],
-                "example": "def route(state):\n    return \"revise\" if state[\"score\"] < 0.8 else \"finish\"\n\nbuilder.add_conditional_edges(\"review\", route, {\"revise\": \"draft\", \"finish\": END})"
+                "example": "state = {\"score\": 0.6, \"attempts\": 1}\nroute_result = route(state)  # \"revise\"\nnext_state = {**state, \"attempts\": state[\"attempts\"] + 1}\nbuilder.add_conditional_edges(\"review\", route, {\"revise\": \"draft\", \"finish\": END})"
               },
               {
                 "kind": "常见误区",
