@@ -20,3 +20,14 @@ test("学习导出 JSON 可往返并保留聊天顺序", () => {
 test("学习导入拒绝错误版本且不猜测结构", () => {
   assert.throws(() => parseLearningExport(JSON.stringify({ schema: "v2" }), ["first-output"]), /版本或字段/);
 });
+
+test("学习导入接受框架路线的课程完成记录", () => {
+  const frameworkLesson = "graph-foundations";
+  const document = {
+    schema: "stewie-learning-export-v1",
+    exportedAt: "2026-09-03T00:00:00.000Z",
+    learning: { completed: [frameworkLesson], drafts: {}, mistakes: [] },
+    chats: [],
+  };
+  assert.equal(parseLearningExport(JSON.stringify(document), [frameworkLesson]).learning.completed[0], frameworkLesson);
+});

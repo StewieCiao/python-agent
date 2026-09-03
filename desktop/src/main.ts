@@ -42,11 +42,13 @@ import {
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
 import { migrateLegacyDesktopFiles } from "./legacyMigration.mjs";
-import { lessons } from "../../app/content/publicCatalog.ts";
+import { learningTracks } from "../../app/content/publicCatalog.ts";
 import { parseLearningExport } from "../../app/lib/learningExport.ts";
 import { assertCatalogHashes } from "./catalogBundle.mts";
 import { createRagService } from "./ragService.mjs";
 import { evaluateRag } from "./ragEvaluation.mjs";
+
+const ALL_LESSON_IDS = learningTracks.flatMap((track) => track.lessons.map((lesson) => lesson.id));
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -288,7 +290,7 @@ void runStartupTask(app.whenReady().then(async () => {
     });
     if (selection.canceled || selection.filePaths.length === 0) return { status: "cancelled" as const };
     const raw = await readFile(selection.filePaths[0], "utf8");
-    const document = parseLearningExport(raw, lessons.map((lesson) => lesson.id));
+    const document = parseLearningExport(raw, ALL_LESSON_IDS);
     const result = await activePythonService().importLearningExport(document as unknown as Record<string, unknown>);
     return { status: "imported" as const, counts: result.counts };
   }));
