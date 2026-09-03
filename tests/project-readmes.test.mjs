@@ -23,3 +23,10 @@ test("三项简历项目都有可复现 README 和成功/失败演示", async ()
     assert.match(readme, evidence);
   }
 });
+
+test("RAG Quality Workbench 的演示包含重排与 top_k 验收", async () => {
+  const readme = await readFile(new URL("../projects/rag-quality-workbench/README.md", import.meta.url), "utf8");
+  assert.match(readme, /重排/);
+  assert.match(readme, /top_k/);
+  assert.match(readme, /retrieve → threshold → rerank → cite → evaluate/);
+});
