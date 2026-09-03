@@ -380,6 +380,15 @@ test("LangGraph 中断代表课保留真实事件顺序和审批状态", async (
   assert.match(lesson.browserChecks[1].expression, /interrupt_state\["requires_approval"\]/);
 });
 
+test("LangGraph 并行代表课明确子图结果和 reducer 汇总", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph").lessons.find(({ id }) => id === "subgraphs-parallelism");
+  assert.match(lesson.guide[1].example, /topics/);
+  assert.match(lesson.guide[1].example, /findings/);
+  assert.match(lesson.guide[1].example, /reducer/);
+  assert.match(lesson.guide[2].body, /失败/);
+});
+
 test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);

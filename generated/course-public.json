@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7e9803fabdc57d0d0fcada7030c9dc91f83af0ec177cfb83a0ea1386f0bc73f0",
+  "catalogHash": "3414aa4b76a5dd5df17e5fa896f779756fb452da4b9a0636cfee4668479b6026",
   "familyHash": "fb21e0627d2f9aad7dfa523effa580e231606810a28b0cd2af8b820ca4353e04",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -12273,12 +12273,12 @@
                   "共享字段定义 reducer",
                   "汇总节点处理空结果与失败列表"
                 ],
-                "example": "def fan_out(state):\n    return [Send(\"research_section\", {\"topic\": topic}) for topic in state[\"topics\"]]"
+                "example": "def fan_out(state):\n    return [Send(\"research_section\", {\"topic\": topic}) for topic in state[\"topics\"]]\n\n# reducer 把每个子图的结果追加到 findings\nfindings = []\nfindings.extend([{\"topic\": \"检索\"}, {\"topic\": \"引用\"}])"
               },
               {
                 "kind": "常见误区",
                 "title": "子图、并行与 Map-Reduce 的常见误区",
-                "body": "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则。",
+                "body": "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则，并让失败结果进入可观察的 findings。",
                 "bullets": [
                   "父子状态边界清楚",
                   "共享字段显式合并",

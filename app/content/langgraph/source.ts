@@ -309,11 +309,11 @@ export const langgraphTrack: LearningTrack = {
           title: "并行结果需要 reducer 合并",
           body: "多个节点可以读取同一初始状态并行工作，但写入同一字段时必须定义合并方式。Map-Reduce 常把主题拆成多个 Send 任务，再将 findings 追加到列表，最终节点统一生成报告。",
           bullets: ["并行任务互不依赖", "共享字段定义 reducer", "汇总节点处理空结果与失败列表"],
-          example: `def fan_out(state):\n    return [Send("research_section", {"topic": topic}) for topic in state["topics"]]`,
+          example: `def fan_out(state):\n    return [Send("research_section", {"topic": topic}) for topic in state["topics"]]\n\n# reducer 把每个子图的结果追加到 findings\nfindings = []\nfindings.extend([{"topic": "检索"}, {"topic": "引用"}])`,
         },
         {
           title: "子图、并行与 Map-Reduce 的常见误区",
-          body: "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则。",
+          body: "完成“子图、并行与 Map-Reduce”时，不要让子图偷偷改写父状态，也不要在并行分支写入没有 reducer 的共享字段；先定义输入映射和合并规则，并让失败结果进入可观察的 findings。",
           bullets: ["父子状态边界清楚", "共享字段显式合并", "失败结果可观察"],
           example: `parent.add_node("research", research_graph)`,
         },
