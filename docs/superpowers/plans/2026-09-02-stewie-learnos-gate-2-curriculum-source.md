@@ -48,7 +48,7 @@
 ### 3. 固定事实
 
 - 课程 id 顺序固定为：`python`、`langchain-rag`、`langgraph`。
-- 当前 lesson id 必须原样保留：Python 25 个，LangChain/RAG 7 个，LangGraph 7 个。
+- 当前 lesson id 必须原样保留：Python 25 个，LangChain/RAG 10 个，LangGraph 7 个。
 - 当前可执行基线必须来自项目锁定依赖，而非官网最新版本：
   - Python `3.13.15`
   - Pyodide `314.0.3`
@@ -254,7 +254,7 @@ type SnapshotMeta = {
 不改变 lesson id。阶段只作为新元数据加入：
 
 - Python：沿用现有 6 个 `MODULE_ORDER` 值，每个模块建立一个稳定 stage id。
-- LangChain/RAG：按现有 7 节顺序建立 7 个阶段，stage id 与对应 lesson id 相同并加 `stage-` 前缀。
+- LangChain/RAG：按现有 10 节顺序建立 7 个阶段，stage id 与对应 lesson id 相同并加 `stage-` 前缀。
 - LangGraph：按现有 7 节顺序建立 7 个阶段，规则同上。
 
 不要在 Gate 2 强行把当前内容改造成最终 8 阶段/64 节路线；该扩展属于 Gate 4。
@@ -465,7 +465,7 @@ git commit -m "refactor: unify python curriculum content"
 新增以下数据驱动断言：
 
 - track 顺序精确为 `python`、`langchain-rag`、`langgraph`；
-- LangChain/RAG 和 LangGraph 各 7 个现有 lesson id，顺序不变；
+- LangChain/RAG 10 个、LangGraph 7 个现有 lesson id，顺序不变；
 - 每个 stage 的 `lessonIds` 非空并与课程顺序一致；
 - migration card 的版本是锁定运行时版本 `1.2.12`/`1.1.2`，而非当前旧文件中的 `1.3.17`/`1.2.11`；
 - 官方来源、视频和迁移卡仍与旧站内容对应；
@@ -892,7 +892,7 @@ git log --oneline 7be691a..HEAD
 全部勾选后立即停止，不进入 Gate 3：
 
 - [ ] `app/content/catalog.ts` 是唯一作者聚合根，且只有生成器导入。
-- [ ] Python 25、LangChain/RAG 7、LangGraph 7 个 lesson id 全部不变。
+- [ ] Python 25、LangChain/RAG 10、LangGraph 7 个 lesson id 全部不变。
 - [ ] `generated/course-public.json` 与 `generated/learning-service.json` 均由同一命令确定性生成。
 - [ ] 两快照 schema、catalogHash、familyHash 相同且均经过内容重算。
 - [ ] browser、renderer、offline 只消费 public；Python 只消费 service。
