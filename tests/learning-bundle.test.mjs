@@ -282,6 +282,21 @@ test("LangChain/RAG 十节原始课程的 id 顺序保持稳定", async () => {
   assert.deepEqual(track.lessons.map(({ id }) => id), expected);
 });
 
+test("课程视频只使用允许的视频域名，官方文档不会伪装成视频", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const allowedHosts = new Set(["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"]);
+  for (const track of learningTracks) {
+    for (const lesson of track.lessons) {
+      for (const video of lesson.videos) {
+        assert.ok(allowedHosts.has(new URL(video.url).hostname), `${track.id}/${lesson.id} 使用了不允许的视频域名`);
+      }
+      for (const source of lesson.officialSources) {
+        assert.equal(new URL(source.url).protocol, "https:");
+      }
+    }
+  }
+});
+
 test("LangChain 草稿为旧 API 提供可核验迁移卡", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
