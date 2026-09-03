@@ -38,6 +38,8 @@ const SERVICE_FILES = [
   "protocol.py",
   "service.py",
   "storage.py",
+  "tutor.py",
+  "tutor_graph.py",
   "migrations/001-model-profiles.sql",
   "migrations/002-learning-state.sql",
   "migrations/003-mastery-attempts.sql",
