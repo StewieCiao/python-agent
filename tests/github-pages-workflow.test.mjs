@@ -7,6 +7,7 @@ const workflow = await readFile(new URL("../.github/workflows/pages.yml", import
 test("GitHub Pages 工作流发布确定性的静态目录", () => {
   assert.match(workflow, /actions\/checkout@v4/);
   assert.match(workflow, /npm ci/);
+  assert.match(workflow, /actions\/configure-pages@v5/);
   assert.match(workflow, /npm run build:pages/);
   assert.match(workflow, /actions\/upload-pages-artifact@v3/);
   assert.match(workflow, /path: dist-pages/);
