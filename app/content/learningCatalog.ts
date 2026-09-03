@@ -660,6 +660,12 @@ const langgraphTrack: LearningTrack = {
           bullets: ["节点名称表达职责", "edge 不承担业务计算", "避免把每行代码拆成节点"],
           example: `builder = StateGraph(State)\nbuilder.add_node("draft", draft)\nbuilder.add_edge(START, "draft")\nbuilder.add_edge("draft", END)\ngraph = builder.compile()`,
         },
+        {
+          title: "StateGraph、Node 与 Edge 的常见误区",
+          body: "完成“StateGraph、Node 与 Edge”时，不要把业务计算塞进 edge，也不要把每个小步骤拆成无法理解的节点；先确认 state 的输入、节点更新和 END 边界。",
+          bullets: ["节点负责计算", "边只负责去向", "编译后再运行"],
+          example: `builder.add_edge("draft", END)`,
+        },
       ],
       videos: [
         {
@@ -714,6 +720,12 @@ const langgraphTrack: LearningTrack = {
           bullets: ["路由只做决策", "分支集合可枚举", "循环必须有退出条件"],
           example: `def route(state):\n    return "revise" if state["score"] < 0.8 else "finish"\n\nbuilder.add_conditional_edges("review", route, {"revise": "draft", "finish": END})`,
         },
+        {
+          title: "Reducer、条件边与循环的常见误区",
+          body: "完成“Reducer、条件边与循环”时，不要让 reducer 悄悄丢失历史，也不要让路由返回未声明的节点名；每个循环都必须有可验证的终止条件。",
+          bullets: ["先验证合并结果", "路由值必须可枚举", "明确循环上限"],
+          example: `builder.add_conditional_edges("review", route, {"revise": "draft", "finish": END})`,
+        },
       ],
       videos: [{
         title: "Introduction to LangGraph · Modules 1–2",
@@ -757,6 +769,12 @@ const langgraphTrack: LearningTrack = {
           body: "同一 thread 的后续调用能够读取之前状态；更换 thread_id 就是新会话。用户长期偏好不应依靠扫描全部 thread 历史获得，而应写入 Store。",
           bullets: ["会话连续性复用 thread_id", "新任务使用新 thread", "跨 thread 数据交给 Store"],
           example: `same_thread = {"configurable": {"thread_id": "chat-42"}}\nnew_thread = {"configurable": {"thread_id": "chat-43"}}`,
+        },
+        {
+          title: "Persistence 与线程短期记忆的常见误区",
+          body: "完成“Persistence 与线程短期记忆”时，不要遗漏 thread_id，也不要把跨用户资料混进单个线程的 checkpoint；恢复前先确认读取的是同一条线程。",
+          bullets: ["thread_id 必须稳定", "检查点不等于用户画像", "恢复保留真实状态"],
+          example: `config = {"configurable": {"thread_id": "chat-42"}}`,
         },
       ],
       videos: [{

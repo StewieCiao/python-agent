@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "67b2e7dd6686d39684b73a272e390ca482ead56cfae4bfe722ee490010208e77",
+  "catalogHash": "945c67ea46e29a427108fb6233dec2e12342c3b8e2a202775b1b870101f00ef0",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -11550,14 +11550,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "StateGraph、Node 与 Edge的边界检查",
-                "body": "完成“StateGraph、Node 与 Edge”时，不要只复现示例；回到目标“先把图看成共享状态上的函数流程，再学习 Agent。”，用变化输入检查实际结果与失败边界。",
+                "title": "StateGraph、Node 与 Edge 的常见误区",
+                "body": "完成“StateGraph、Node 与 Edge”时，不要把业务计算塞进 edge，也不要把每个小步骤拆成无法理解的节点；先确认 state 的输入、节点更新和 END 边界。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "节点负责计算",
+                  "边只负责去向",
+                  "编译后再运行"
                 ],
-                "example": "builder = StateGraph(State)\n# 添加 outline 和 answer 节点"
+                "example": "builder.add_edge(\"draft\", END)"
               }
             ],
             "videos": [
@@ -11673,14 +11673,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "Reducer、条件边与循环的边界检查",
-                "body": "完成“Reducer、条件边与循环”时，不要只复现示例；回到目标“控制状态如何合并，并让下一步由明确路由结果决定。”，用变化输入检查实际结果与失败边界。",
+                "title": "Reducer、条件边与循环的常见误区",
+                "body": "完成“Reducer、条件边与循环”时，不要让 reducer 悄悄丢失历史，也不要让路由返回未声明的节点名；每个循环都必须有可验证的终止条件。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "先验证合并结果",
+                  "路由值必须可枚举",
+                  "明确循环上限"
                 ],
-                "example": "def route(state):\n    pass"
+                "example": "builder.add_conditional_edges(\"review\", route, {\"revise\": \"draft\", \"finish\": END})"
               }
             ],
             "videos": [
@@ -11788,14 +11788,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "Persistence 与线程短期记忆的边界检查",
-                "body": "完成“Persistence 与线程短期记忆”时，不要只复现示例；回到目标“用 checkpointer 保存图状态，让同一 thread 可恢复、检查和继续。”，用变化输入检查实际结果与失败边界。",
+                "title": "Persistence 与线程短期记忆的常见误区",
+                "body": "完成“Persistence 与线程短期记忆”时，不要遗漏 thread_id，也不要把跨用户资料混进单个线程的 checkpoint；恢复前先确认读取的是同一条线程。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "thread_id 必须稳定",
+                  "检查点不等于用户画像",
+                  "恢复保留真实状态"
                 ],
-                "example": "config_a = {\"configurable\": {\"thread_id\": \"\"}}\nconfig_b = {\"configurable\": {\"thread_id\": \"\"}}"
+                "example": "config = {\"configurable\": {\"thread_id\": \"chat-42\"}}"
               }
             ],
             "videos": [
