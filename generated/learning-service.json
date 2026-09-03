@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "c5cbad531d343e203f0493bedd7b82018a5c32fdad87d7d222749a83db40069b",
+  "catalogHash": "d6605fb6c46e69f64e36ff1b91e9a1571fa6599e3f7b436753c22e4c65e0cb81",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7449,7 +7449,8 @@
             ],
             "difficulty": "beginner",
             "tags": [
-              "model-messages-prompts"
+              "messages",
+              "prompts"
             ],
             "guide": [
               {
@@ -7542,9 +7543,9 @@
               "prompt": "创建一个包含 system 与 human 消息的模板，接收 topic 变量并返回消息列表。",
               "starterCode": "topic = \"\"\nmessages = []",
               "hints": [
-                "先区分 system、human 与 assistant 消息。",
-                "让 topic 变量在模板中显式声明。",
-                "渲染后检查消息顺序和缺失变量。"
+                "区分消息角色",
+                "声明模板变量",
+                "检查渲染结果"
               ],
               "solution": "from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])\nmessages = prompt.invoke({\"topic\": topic})"
             },
@@ -7576,7 +7577,8 @@
             ],
             "difficulty": "beginner",
             "tags": [
-              "structured-output"
+              "structured-output",
+              "validation"
             ],
             "guide": [
               {
@@ -7661,9 +7663,9 @@
               "prompt": "定义 Answer schema，拒绝缺少 summary 或 confidence 的结果。",
               "starterCode": "result = {}\nvalid = False",
               "hints": [
-                "先写出必需字段和类型。",
-                "让 schema 验证缺失字段。",
-                "解析失败时保留真实异常。"
+                "先写出结构",
+                "保留真实错误",
+                "用边界输入验证"
               ],
               "solution": "from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float\nvalid = Answer.model_validate(result)"
             },
@@ -7695,7 +7697,8 @@
             ],
             "difficulty": "intermediate",
             "tags": [
-              "runnable-pipeline"
+              "runnable",
+              "composition"
             ],
             "guide": [
               {
@@ -7780,9 +7783,9 @@
               "prompt": "写出 template → model → parser 的三步组合，并说明每一步输入输出。",
               "starterCode": "template = None\nmodel = None\nparser = None",
               "hints": [
-                "先分别确认 template、model、parser。",
-                "按输入输出顺序组合 Runnable。",
-                "任一步失败都不要返回空结果。"
+                "先写出结构",
+                "保留真实错误",
+                "用边界输入验证"
               ],
               "solution": "chain = template | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})"
             },

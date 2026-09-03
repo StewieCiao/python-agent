@@ -1,10 +1,8 @@
 import type { CourseTrack } from "../schema.ts";
 import { authorTrackFromLessons } from "../formalizeTrack.ts";
-import { learningTracks } from "../learningCatalog.ts";
+import { langchainTrack as sourceTrack } from "./source.ts";
 
-const legacyTrack = learningTracks.find(({ id }) => id === "langchain-rag");
-if (!legacyTrack) throw new Error("缺少 LangChain/RAG 课程路线");
-const authored = authorTrackFromLessons(legacyTrack, [
+const authored = authorTrackFromLessons(sourceTrack, [
   { id: "langchain-rag-stage-1", title: "模型与提示", description: "建立模型输入输出与结构化交互。" },
   { id: "langchain-rag-stage-2", title: "Runnable", description: "把调用组合为可观察的数据流。" },
   { id: "langchain-rag-stage-3", title: "文档处理", description: "加载、切分并保留文档来源。" },
@@ -15,12 +13,12 @@ const authored = authorTrackFromLessons(legacyTrack, [
 ]);
 
 export const langchainRagTrack: CourseTrack = {
-  id: "langchain-rag",
-  title: legacyTrack.title,
-  shortTitle: legacyTrack.shortTitle,
-  description: legacyTrack.description,
-  accent: legacyTrack.accent,
-  currentLessonId: legacyTrack.currentLessonId,
+  id: sourceTrack.id,
+  title: sourceTrack.title,
+  shortTitle: sourceTrack.shortTitle,
+  description: sourceTrack.description,
+  accent: sourceTrack.accent,
+  currentLessonId: sourceTrack.currentLessonId,
   stages: authored.stages,
   lessons: authored.lessons,
 };

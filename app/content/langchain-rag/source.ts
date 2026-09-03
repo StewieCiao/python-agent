@@ -1,4 +1,5 @@
 import type { LearningTrack, VideoResource } from "../authoring/types.ts";
+import { langchainChecks, langchainHints } from "./metadata.ts";
 
 const VERIFIED_AT = "2026-09-02";
 const VERIFIED_VERSIONS = { langchain: "1.2.12", langgraph: "1.1.2" };
@@ -508,4 +509,14 @@ export const langchainTrack: LearningTrack = {
   ],
 };
 
+for (const [index, lesson] of langchainTrack.lessons.entries()) {
+  if (index > 0 && (!lesson.prerequisites || lesson.prerequisites.length === 0)) {
+    lesson.prerequisites = [langchainTrack.lessons[index - 1].id];
+  }
+  const hints = langchainHints[lesson.id];
+  if (!hints) throw new Error(`langchain-rag/${lesson.id} 缺少作者提示`);
+  lesson.exercise.hints = [...hints];
+  const checks = langchainChecks[lesson.id];
+  if (checks) lesson.browserChecks = checks;
+}
 
