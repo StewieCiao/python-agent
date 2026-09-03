@@ -237,6 +237,18 @@ test("LangChain 草稿为旧 API 提供可核验迁移卡", async () => {
   }
 });
 
+test("LangGraph 核心草稿标出旧记忆/图 API 的迁移边界", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  for (const id of ["graph-foundations", "persistence-short-memory", "long-term-store"]) {
+    const lesson = track.lessons.find((item) => item.id === id);
+    assert.ok(lesson);
+    assert.ok(lesson.migrations.length >= 1, `${id} 缺少迁移卡`);
+    assert.ok(lesson.migrations.every((item) => item.beforeCode && item.afterCode && item.officialSources.length >= 1));
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);

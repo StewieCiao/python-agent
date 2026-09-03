@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "9d8724047c51284461bf5ff847e2f4670d9bdbcf98e4c32ea3167f637633f78a",
+  "catalogHash": "67b2e7dd6686d39684b73a272e390ca482ead56cfae4bfe722ee490010208e77",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -11586,7 +11586,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从旧 Chain 组合迁移到 StateGraph",
+                "status": "replaced",
+                "explanation": "需要分支、恢复或可观察状态时，用 StateGraph 明确声明节点、边和状态；简单的单次调用仍可保留 Runnable。",
+                "beforeCode": "chain = prompt | model\nanswer = chain.invoke(input)",
+                "afterCode": "builder = StateGraph(State)\nbuilder.add_node(\"answer\", answer_node)\nbuilder.add_edge(START, \"answer\")\nbuilder.add_edge(\"answer\", END)",
+                "officialSources": [
+                  {
+                    "label": "LangGraph Graph API",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "subgraphs-parallelism"
@@ -11680,7 +11701,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从隐式 if 路由迁移到条件边",
+                "status": "replaced",
+                "explanation": "把路由函数返回值与图中的目标节点显式绑定；未知分支不应静默落到默认节点。",
+                "beforeCode": "if score < 0.8:\n    draft_again()\nelse:\n    finish()",
+                "afterCode": "builder.add_conditional_edges(\"review\", route, {\"revise\": \"draft\", \"finish\": END})",
+                "officialSources": [
+                  {
+                    "label": "LangGraph Graph API",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "subgraphs-parallelism"
@@ -11780,7 +11822,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从手写 history 迁移到 checkpointer",
+                "status": "replaced",
+                "explanation": "短期线程状态由 checkpointer 按 thread_id 保存和恢复；手写消息历史仍可用于展示，但不再承担完整 Agent 状态持久化。",
+                "beforeCode": "history = load_messages(session_id)\nhistory.append(message)\nsave_messages(session_id, history)",
+                "afterCode": "graph = builder.compile(checkpointer=InMemorySaver())\nconfig = {\"configurable\": {\"thread_id\": \"chat-42\"}}\ngraph.invoke(input_state, config)",
+                "officialSources": [
+                  {
+                    "label": "LangGraph persistence",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/persistence",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "subgraphs-parallelism"
@@ -11882,7 +11945,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "从 thread history 迁移到 Store",
+                "status": "replaced",
+                "explanation": "跨线程的用户偏好和资料应写入 Store 的 namespace/key；不要扫描某个 thread 的历史来猜测长期记忆。",
+                "beforeCode": "profile = history[-1].get(\"profile\")",
+                "afterCode": "profile = store.get((\"users\", user_id, \"profile\"), \"current\")",
+                "officialSources": [
+                  {
+                    "label": "LangChain long-term memory",
+                    "url": "https://docs.langchain.com/oss/python/langchain/long-term-memory",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "subgraphs-parallelism"
