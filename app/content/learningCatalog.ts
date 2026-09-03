@@ -482,7 +482,7 @@ const langchainTrack: LearningTrack = {
       guide: [
         { title: "消息是有角色的输入", body: "system 约束行为，human 描述当前任务，assistant 是历史结果。明确角色比把所有内容拼成一段字符串更容易调试。", bullets: ["先固定输入变量", "不要把用户文本当系统规则", "记录最终消息序列"], example: `from langchain_core.messages import SystemMessage, HumanMessage\nmessages = [SystemMessage(\"你是 Python 导师\"), HumanMessage(\"解释列表\")]` },
         { title: "模板让变化显式", body: "Prompt 模板只负责生成消息。渲染后先检查变量，再交给模型，缺变量应立即失败。", bullets: ["变量命名稳定", "输出结构交给 parser", "不在模板中执行工具"], example: `from langchain_core.prompts import ChatPromptTemplate\nprompt = ChatPromptTemplate.from_messages([(\"system\", \"你是导师\"), (\"human\", \"解释 {topic}\")])` },
-        { title: "运行前预测消息", body: "先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。", bullets: ["确认变量名一致", "检查消息顺序", "再调用 invoke"], example: `messages = prompt.invoke({"topic": "RAG"})\nprint(messages.messages)` },
+        { title: "运行前预测消息", body: "完成“模型、消息与 Prompt 模板”时，先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。", bullets: ["确认变量名一致", "检查消息顺序", "再调用 invoke"], example: `messages = prompt.invoke({"topic": "RAG"})\nprint(messages.messages)` },
       ],
       videos: [heimaVideo(12, "提示词模板与消息", "24:00"), { title: "LangChain for LLM Application Development", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充消息、模板与输出解析。" }],
       officialSources: [{ label: "LangChain agents", url: AGENTS }], migrations: [], project: false, projectLinks: [],
@@ -497,6 +497,7 @@ const langchainTrack: LearningTrack = {
       guide: [
         { title: "结构不是字符串约定", body: "当下游需要字段时，用 Pydantic 或 JSON schema 验证，而不是猜测逗号和换行。缺字段就是失败。", bullets: ["字段类型写进 schema", "保留原始解析错误", "验证失败停止下游"], example: `from pydantic import BaseModel\nclass Answer(BaseModel):\n    summary: str\n    confidence: float` },
         { title: "失败必须可追踪", body: "记录模板、请求和解析的阶段，保留异常类型；不要把错误改成空对象或默认回答。", bullets: ["边界状态显式", "不吞异常", "测试缺字段输入"], example: `answer = model.with_structured_output(Answer).invoke(messages)` },
+        { title: "结构化输出的常见误区", body: "完成“结构化输出与失败边界”时，不要把解析失败改成空字典或把字符串强行当作合法结果；字段缺失应停在解析边界并保留真实错误。", bullets: ["区分解析与业务失败", "拒绝缺失字段", "保留异常类型"], example: `Answer.model_validate({"summary": "ok", "confidence": 0.8})` },
       ],
       videos: [{ title: "LangChain structured output", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充结构化输出与解析边界。" }],
       officialSources: [{ label: "LangChain agents", url: AGENTS }], migrations: [], project: false, projectLinks: [],
@@ -511,6 +512,7 @@ const langchainTrack: LearningTrack = {
       guide: [
         { title: "每一步都有输入输出", body: "Runnable 组合允许每一步单独 invoke、记录和测试。使用 | 表达顺序，避免不可检查的巨型函数。", bullets: ["单测每段输入输出", "顺序由管道表达", "步骤失败立即停止"], example: `chain = prompt | model | parser\nresult = chain.invoke({\"topic\": \"RAG\"})` },
         { title: "可观察性先于魔法", body: "链失败时必须知道是模板变量、模型请求还是解析器失败；保留原始错误才能修正。", bullets: ["为步骤命名", "记录耗时与状态", "不返回空字符串冒充成功"], example: `named = chain.with_config({\"run_name\": \"lesson-answer\"})` },
+        { title: "Runnable 管道的常见误区", body: "完成“Runnable 组合的第一条链”时，不要把多个步骤藏进一个不可观察的函数，也不要在任一步失败时返回空结果；分别检查 template、model、parser 的输入输出。", bullets: ["保持步骤边界", "失败停止并留痕", "验证组合顺序"], example: `chain = template | model | parser` },
       ],
       videos: [{ title: "LangChain Expression Language", url: DLAI_LANGCHAIN, provider: "DeepLearning.AI", language: "英文", duration: "约 1 小时", note: "补充 Runnable 和组合语义。" }],
       officialSources: [{ label: "LangChain v1", url: LANGCHAIN_V1 }], migrations: [], project: false, projectLinks: [],

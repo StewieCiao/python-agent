@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "fc033cd4410eb208c324efaa0a3cb46aada17afad3043ab795af29a5c58e679c",
+  "catalogHash": "38beefbada16d6816749bbe9d58e039edb53913d64b136e9b4a20d62ac2784bb",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -7360,7 +7360,7 @@
               {
                 "kind": "常见误区",
                 "title": "运行前预测消息",
-                "body": "先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。",
+                "body": "完成“模型、消息与 Prompt 模板”时，先写出 topic 被替换后的两条消息，再调用模板。预测能帮助你区分模板渲染问题和模型请求问题。",
                 "bullets": [
                   "确认变量名一致",
                   "检查消息顺序",
@@ -7465,14 +7465,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个新输入验证你的理解。",
+                "title": "结构化输出的常见误区",
+                "body": "完成“结构化输出与失败边界”时，不要把解析失败改成空字典或把字符串强行当作合法结果；字段缺失应停在解析边界并保留真实错误。",
                 "bullets": [
-                  "先预测",
-                  "再运行",
-                  "记录结果"
+                  "区分解析与业务失败",
+                  "拒绝缺失字段",
+                  "保留异常类型"
                 ],
-                "example": "print(result)"
+                "example": "Answer.model_validate({\"summary\": \"ok\", \"confidence\": 0.8})"
               }
             ],
             "videos": [
@@ -7563,14 +7563,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "验证边界",
-                "body": "用一个新输入验证你的理解。",
+                "title": "Runnable 管道的常见误区",
+                "body": "完成“Runnable 组合的第一条链”时，不要把多个步骤藏进一个不可观察的函数，也不要在任一步失败时返回空结果；分别检查 template、model、parser 的输入输出。",
                 "bullets": [
-                  "先预测",
-                  "再运行",
-                  "记录结果"
+                  "保持步骤边界",
+                  "失败停止并留痕",
+                  "验证组合顺序"
                 ],
-                "example": "print(result)"
+                "example": "chain = template | model | parser"
               }
             ],
             "videos": [
