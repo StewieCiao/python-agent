@@ -527,7 +527,20 @@ for (const lesson of langchainTrack.lessons.slice(-3)) {
   lesson.project = false;
   lesson.projectLinks = [];
   lesson.exercise.hints = lesson.id === "model-messages-prompts" ? ["区分消息角色", "声明模板变量", "检查渲染结果"] : ["先写出结构", "保留真实错误", "用边界输入验证"];
-  lesson.browserChecks = [{ name: "行为检查", expression: "lesson behavior", failure: "行为不符合要求", kind: "behavior" }, { name: "结构检查", expression: "lesson structure", failure: "缺少教学结构", kind: "structure" }];
+  lesson.browserChecks = lesson.id === "model-messages-prompts"
+    ? [
+        { name: "消息角色", expression: "messages[0][\"role\"] == \"system\" and messages[-1][\"role\"] == \"user\"", failure: "应明确区分 system 与 user 消息。", kind: "structure" },
+        { name: "模板变量", expression: "\"topic\" in prompt_variables", failure: "模板应声明题目要求的变量。", kind: "structure" },
+      ]
+    : lesson.id === "structured-output"
+      ? [
+          { name: "字段完整", expression: "isinstance(result, dict) and \"summary\" in result and \"confidence\" in result", failure: "结构化结果必须包含 summary 与 confidence。", kind: "structure" },
+          { name: "置信度范围", expression: "0 <= result[\"confidence\"] <= 1", failure: "confidence 必须位于 0 到 1。", kind: "behavior" },
+        ]
+      : [
+          { name: "管道顺序", expression: "chain_steps == [\"template\", \"model\", \"parser\"]", failure: "Runnable 应按 template → model → parser 顺序组合。", kind: "structure" },
+          { name: "保留错误", expression: "pipeline_error is not None or result is not None", failure: "管道应保留真实错误或真实结果。", kind: "behavior" },
+        ];
 }
 
 const langgraphTrack: LearningTrack = {

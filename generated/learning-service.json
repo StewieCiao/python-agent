@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "a81ae56dd93e579d29883c2c530b3f84a82518714d7074528dad68f04e4cde4b",
-  "familyHash": "d57544b16f78532336dd8e9cdf0c48b5eca5e03afc56bb66f73411ae74303aaa",
+  "catalogHash": "f9131c86ddb2dd4ee74bdc42ccb10d6f37b04de4a9b245666201c678bbeade96",
+  "familyHash": "06565b0e18a7a6af658827b7f544986f26c085e7ac26f9aa6e60e04ababa19ef",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7239,15 +7239,15 @@
             },
             "browserChecks": [
               {
-                "name": "行为检查",
-                "expression": "lesson behavior",
-                "failure": "行为不符合要求",
-                "kind": "behavior"
+                "name": "消息角色",
+                "expression": "messages[0][\"role\"] == \"system\" and messages[-1][\"role\"] == \"user\"",
+                "failure": "应明确区分 system 与 user 消息。",
+                "kind": "structure"
               },
               {
-                "name": "结构检查",
-                "expression": "lesson structure",
-                "failure": "缺少教学结构",
+                "name": "模板变量",
+                "expression": "\"topic\" in prompt_variables",
+                "failure": "模板应声明题目要求的变量。",
                 "kind": "structure"
               }
             ]
@@ -7337,16 +7337,16 @@
             },
             "browserChecks": [
               {
-                "name": "行为检查",
-                "expression": "lesson behavior",
-                "failure": "行为不符合要求",
-                "kind": "behavior"
+                "name": "字段完整",
+                "expression": "isinstance(result, dict) and \"summary\" in result and \"confidence\" in result",
+                "failure": "结构化结果必须包含 summary 与 confidence。",
+                "kind": "structure"
               },
               {
-                "name": "结构检查",
-                "expression": "lesson structure",
-                "failure": "缺少教学结构",
-                "kind": "structure"
+                "name": "置信度范围",
+                "expression": "0 <= result[\"confidence\"] <= 1",
+                "failure": "confidence 必须位于 0 到 1。",
+                "kind": "behavior"
               }
             ]
           },
@@ -7435,16 +7435,16 @@
             },
             "browserChecks": [
               {
-                "name": "行为检查",
-                "expression": "lesson behavior",
-                "failure": "行为不符合要求",
-                "kind": "behavior"
+                "name": "管道顺序",
+                "expression": "chain_steps == [\"template\", \"model\", \"parser\"]",
+                "failure": "Runnable 应按 template → model → parser 顺序组合。",
+                "kind": "structure"
               },
               {
-                "name": "结构检查",
-                "expression": "lesson structure",
-                "failure": "缺少教学结构",
-                "kind": "structure"
+                "name": "保留错误",
+                "expression": "pipeline_error is not None or result is not None",
+                "failure": "管道应保留真实错误或真实结果。",
+                "kind": "behavior"
               }
             ]
           },
@@ -16209,44 +16209,44 @@
     "agent-rag-project": [],
     "model-messages-prompts": [
       {
-        "name": "行为检查",
-        "expression": "lesson behavior",
-        "failure": "行为不符合要求",
-        "kind": "behavior"
+        "name": "消息角色",
+        "expression": "messages[0][\"role\"] == \"system\" and messages[-1][\"role\"] == \"user\"",
+        "failure": "应明确区分 system 与 user 消息。",
+        "kind": "structure"
       },
       {
-        "name": "结构检查",
-        "expression": "lesson structure",
-        "failure": "缺少教学结构",
+        "name": "模板变量",
+        "expression": "\"topic\" in prompt_variables",
+        "failure": "模板应声明题目要求的变量。",
         "kind": "structure"
       }
     ],
     "structured-output": [
       {
-        "name": "行为检查",
-        "expression": "lesson behavior",
-        "failure": "行为不符合要求",
-        "kind": "behavior"
+        "name": "字段完整",
+        "expression": "isinstance(result, dict) and \"summary\" in result and \"confidence\" in result",
+        "failure": "结构化结果必须包含 summary 与 confidence。",
+        "kind": "structure"
       },
       {
-        "name": "结构检查",
-        "expression": "lesson structure",
-        "failure": "缺少教学结构",
-        "kind": "structure"
+        "name": "置信度范围",
+        "expression": "0 <= result[\"confidence\"] <= 1",
+        "failure": "confidence 必须位于 0 到 1。",
+        "kind": "behavior"
       }
     ],
     "runnable-pipeline": [
       {
-        "name": "行为检查",
-        "expression": "lesson behavior",
-        "failure": "行为不符合要求",
-        "kind": "behavior"
+        "name": "管道顺序",
+        "expression": "chain_steps == [\"template\", \"model\", \"parser\"]",
+        "failure": "Runnable 应按 template → model → parser 顺序组合。",
+        "kind": "structure"
       },
       {
-        "name": "结构检查",
-        "expression": "lesson structure",
-        "failure": "缺少教学结构",
-        "kind": "structure"
+        "name": "保留错误",
+        "expression": "pipeline_error is not None or result is not None",
+        "failure": "管道应保留真实错误或真实结果。",
+        "kind": "behavior"
       }
     ],
     "langchain-rag-lesson-10": [

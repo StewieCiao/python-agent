@@ -194,6 +194,7 @@ test("LangChain 草稿具备三段讲解、三层提示、先修与行为检查"
     assert.equal(lesson.exercise.hints.length, 3);
     assert.ok(lesson.prerequisites.length >= 1);
     assert.ok(lesson.browserChecks.length >= 2);
+    assert.ok(lesson.browserChecks.every(({ expression }) => !["lesson behavior", "lesson structure"].includes(expression)));
     assert.ok(lesson.officialSources.length >= 1);
     assert.ok(lesson.videos.every((video) => ["www.bilibili.com", "academy.langchain.com", "www.deeplearning.ai"].includes(new URL(video.url).hostname)));
   }
