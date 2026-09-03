@@ -33,7 +33,7 @@ npm run dev
 ## 课程与反馈
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
-- 每关提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐行代码示例和阅读要点照顾零基础学习者。
+- 每节课提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐步代码示例和阅读要点照顾零基础学习者。
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
 - 桌面版可在模型设置中保存 OpenAI-compatible 配置；API Key 只进入操作系统安全存储，不回显给页面。
