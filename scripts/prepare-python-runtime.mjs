@@ -32,6 +32,9 @@ const LEARNING_BUNDLE = join(PROJECT_ROOT, "generated", "learning-service.json")
 const LOCK_PATH = join(SOURCE_ROOT, "requirements.lock");
 const SERVICE_FILES = [
   "catalog.py",
+  "documents.py",
+  "exercises.py",
+  "mastery.py",
   "protocol.py",
   "service.py",
   "storage.py",
