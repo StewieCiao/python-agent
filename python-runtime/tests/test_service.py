@@ -17,6 +17,31 @@ BUNDLE = load_learning_bundle(CATALOG_PATH)
 
 
 class ServiceTest(unittest.TestCase):
+    def test_tutor_validate_persists_a_thread_scoped_graph_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            storage = Storage(Path(directory) / "stewie.db")
+            state = {
+                "course_id": "python",
+                "lesson_id": "functions",
+                "user_question": "如何返回值？",
+                "mastery_snapshot": {},
+                "retrieved_chunks": [{"id": "c1", "source": "lesson.md", "text": "return"}],
+                "response": {"answer": "return 把值交给调用方。", "citations": [{"source": "lesson.md"}]},
+                "citations": [],
+                "next_action": "",
+                "thread_id": "thread-a",
+            }
+            result = dispatch_request(
+                {"method": "tutor.validate", "params": {"state": state}},
+                storage,
+                BUNDLE,
+            )
+            storage.close()
+
+        self.assertEqual(result["thread_id"], "thread-a")
+        self.assertEqual(result["response"]["status"], "ok")
+        self.assertTrue(result["turn_ready"])
+
     def test_health_proves_runtime_packages_sqlite_transactions_and_fts5(self):
         health = build_health_result(load_learning_bundle(CATALOG_PATH))
 

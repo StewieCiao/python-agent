@@ -3,7 +3,7 @@ import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelC
 import type { ModelMessage } from "./modelClient.mjs";
 import type { RagDocument, RagMatch } from "./ragService.mjs";
 import type { RagEvaluationCase, RagEvaluationResult } from "./ragEvaluation.mjs";
-import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState, RagEvaluationRecord, TutorPlan } from "./pythonService.mjs";
+import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState, RagEvaluationRecord, TutorGraphState, TutorPlan } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
   name: string;
@@ -47,6 +47,7 @@ export type StewieDesktopBridge = {
   recordMasteryAttempt(event: MasteryEvent): Promise<DesktopIpcResult<{ recorded: true }>>;
   getMastery(now: string): Promise<DesktopIpcResult<MasteryResult>>;
   getTutorPlan(now: string): Promise<DesktopIpcResult<TutorPlan>>;
+  validateTutorTurn(state: TutorGraphState): Promise<DesktopIpcResult<TutorGraphState>>;
   getPersonalizedExercise(lessonId: string, seed: number): Promise<DesktopIpcResult<PersonalizedExerciseResult>>;
   importLegacyLearningState(state: PythonLearningState, rawSource: string): Promise<DesktopIpcResult<{
     imported: boolean;

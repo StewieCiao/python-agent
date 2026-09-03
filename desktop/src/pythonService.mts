@@ -58,6 +58,18 @@ export type TutorPlan = {
   steps: Array<{ lessonId: string; title: string; reason: string; actions: string[] }>;
 };
 
+export type TutorGraphState = {
+  course_id: string;
+  lesson_id: string;
+  user_question: string;
+  mastery_snapshot: Record<string, unknown>;
+  retrieved_chunks: Array<{ id: string; source: string; text: string }>;
+  response: { answer: string; citations: Array<{ source: string }> };
+  citations: Array<{ source: string }>;
+  next_action: string;
+  thread_id: string;
+};
+
 export type PersonalizedExerciseResult = {
   exercise: { familyId: string; validatorVersion: string; prompt: string; starterCode: string; hints: string[]; parameters: Record<string, unknown>; tests: Array<{ name: string; expression: string; failure: string; kind: "behavior" | "structure" }> };
   recommendation: { lessonId: string; familyId: string; mistakeCodes: string[]; difficulty: string };
@@ -137,6 +149,14 @@ function isMasteryResult(value: unknown): value is MasteryResult {
 
 function isTutorPlan(value: unknown): value is TutorPlan {
   return isRecord(value) && hasExactKeys(value, ["status", "steps"]) && (value.status === "review" || value.status === "start") && Array.isArray(value.steps) && value.steps.every((step) => isRecord(step) && hasExactKeys(step, ["lessonId", "title", "reason", "actions"]) && typeof step.lessonId === "string" && typeof step.title === "string" && typeof step.reason === "string" && Array.isArray(step.actions) && step.actions.length === 3 && step.actions.every((action) => typeof action === "string"));
+}
+
+function isTutorGraphState(value: unknown): value is TutorGraphState {
+  if (!isRecord(value) || !hasExactKeys(value, ["course_id", "lesson_id", "user_question", "mastery_snapshot", "retrieved_chunks", "response", "citations", "next_action", "thread_id", "turn_ready"])) return false;
+  if (["course_id", "lesson_id", "user_question", "next_action", "thread_id"].some((key) => typeof value[key] !== "string")) return false;
+  if (!isRecord(value.mastery_snapshot) || !Array.isArray(value.retrieved_chunks) || !Array.isArray(value.citations) || !isRecord(value.response) || value.response.status !== "ok" && value.response.status !== "insufficient_context" || typeof value.response.answer !== "string" || !Array.isArray(value.response.citations) || value.turn_ready !== true) return false;
+  const validCitation = (citation: unknown): citation is { source: string } => isRecord(citation) && hasExactKeys(citation, ["source"]) && typeof citation.source === "string";
+  return value.retrieved_chunks.every((chunk) => isRecord(chunk) && hasExactKeys(chunk, ["id", "source", "text"]) && typeof chunk.id === "string" && typeof chunk.source === "string" && typeof chunk.text === "string") && value.citations.every(validCitation) && value.response.citations.every(validCitation);
 }
 
 function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExerciseResult {
@@ -387,6 +407,10 @@ export class PythonServiceClient {
 
   getTutorPlan(now: string): Promise<TutorPlan> {
     return this.#requestChecked("tutor.plan", { now }, isTutorPlan, "导师计划响应结构无效");
+  }
+
+  validateTutorTurn(state: TutorGraphState): Promise<TutorGraphState> {
+    return this.#requestChecked("tutor.validate", { state }, isTutorGraphState, "导师 Graph 响应结构无效");
   }
 
   getPersonalizedExercise(lessonId: string, seed: number): Promise<PersonalizedExerciseResult> {

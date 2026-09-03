@@ -18,6 +18,7 @@ const bridge: StewieDesktopBridge = Object.freeze({
   recordMasteryAttempt: (event) => ipcRenderer.invoke("mastery:record", event),
   getMastery: (now) => ipcRenderer.invoke("mastery:get", now),
   getTutorPlan: (now) => ipcRenderer.invoke("tutor:plan", now),
+  validateTutorTurn: (state) => ipcRenderer.invoke("tutor:validate", state),
   getPersonalizedExercise: (lessonId, seed) => ipcRenderer.invoke("personalization:next", lessonId, seed),
   importLegacyLearningState: (state, rawSource) => ipcRenderer.invoke("learning:import-legacy", state, rawSource),
   listChatMessages: (courseId, lessonId) => ipcRenderer.invoke("chat:list", courseId, lessonId),

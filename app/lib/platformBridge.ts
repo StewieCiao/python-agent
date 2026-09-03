@@ -255,6 +255,18 @@ export type TutorPlan = {
   steps: Array<{ lessonId: string; title: string; reason: string; actions: string[] }>;
 };
 
+export type TutorGraphState = {
+  course_id: string;
+  lesson_id: string;
+  user_question: string;
+  mastery_snapshot: Record<string, unknown>;
+  retrieved_chunks: Array<{ id: string; source: string; text: string }>;
+  response: { answer: string; citations: Array<{ source: string }> };
+  citations: Array<{ source: string }>;
+  next_action: string;
+  thread_id: string;
+};
+
 export async function recordMasteryAttempt(event: MasteryEvent): Promise<void> {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "掌握度记录仅在桌面版可用。");
@@ -271,6 +283,12 @@ export async function loadTutorPlan(now = new Date().toISOString()): Promise<Tut
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "导师计划仅在桌面版可用。");
   return unwrapDesktop(await desktop.getTutorPlan(now));
+}
+
+export async function validateTutorTurn(state: TutorGraphState): Promise<TutorGraphState> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "导师 Graph 仅在桌面版可用。");
+  return unwrapDesktop(await desktop.validateTutorTurn(state));
 }
 
 export async function loadPersonalizedExercise(lessonId: string, seed: number): Promise<{
