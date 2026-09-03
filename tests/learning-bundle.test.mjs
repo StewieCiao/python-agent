@@ -628,6 +628,16 @@ test("LangChain 混合检索课明确合并排序与阈值边界", async () => {
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
+test("扩展课程讲解卡使用主题骨架而不是统一占位示例", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const generated = authoredCatalog.tracks.flatMap(({ lessons }) => lessons).find(({ id }) => id.includes("-lesson-") && !id.endsWith("-01"));
+  assert.ok(generated);
+  assert.notEqual(generated.guide[1].example, "输入 → 处理 → 输出");
+  assert.ok(generated.guide[1].example.includes("def "));
+  assert.notEqual(generated.guide[2].example, "assert actual == expected");
+  assert.ok(generated.guide[2].example.includes("检查："));
+});
+
 test("框架作者路线保留可解释的先修链", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   for (const trackId of ["langchain-rag", "langgraph"]) {
