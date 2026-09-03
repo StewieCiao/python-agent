@@ -121,6 +121,13 @@ test("schema validator rejects duplicate lesson ids and broken stage references"
     () => schema.validateAuthoredCatalog(brokenStage),
     /未知阶段/,
   );
+
+  const brokenPrerequisite = structuredClone(validCatalog);
+  brokenPrerequisite.tracks[0].lessons[0].prerequisites = ["future-lesson"];
+  assert.throws(
+    () => schema.validateAuthoredCatalog(brokenPrerequisite),
+    /先修课程必须存在且早于当前课程/,
+  );
 });
 
 test("schema validator rejects unsafe video domains and incomplete migrations", () => {

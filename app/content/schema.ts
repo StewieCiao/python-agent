@@ -253,9 +253,17 @@ export function validateAuthoredCatalog(value: unknown): AuthoredCatalog {
       stageIds.add(stageId);
       requireStringArray(stage.lessonIds, `${stagePath}.lessonIds`);
     }
+    const priorGlobalLessonIds = new Set(allLessonIds);
     const trackLessonIds = new Set<string>();
     const lessons = track.lessons.map((lesson, lessonIndex) => validateLesson(lesson, `${path}.lessons[${lessonIndex}]`, stageIds, allLessonIds));
+    const seenLessonIds = new Set<string>();
     for (const lesson of lessons) {
+      for (const prerequisite of lesson.prerequisites) {
+        if (!priorGlobalLessonIds.has(prerequisite) && !seenLessonIds.has(prerequisite)) {
+          throw new Error(`${path}.lessons[${lesson.order - 1}].先修课程必须存在且早于当前课程：${prerequisite}`);
+        }
+      }
+      seenLessonIds.add(lesson.id);
       trackLessonIds.add(lesson.id);
       if (lesson.projectLinks.some((id) => !lessons.some((item) => item.id === id && item.project))) throw new Error(`${path}.lessons[${lesson.order - 1}].projectLinks 引用了无效项目`);
     }
