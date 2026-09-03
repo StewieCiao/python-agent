@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f9131c86ddb2dd4ee74bdc42ccb10d6f37b04de4a9b245666201c678bbeade96",
-  "familyHash": "06565b0e18a7a6af658827b7f544986f26c085e7ac26f9aa6e60e04ababa19ef",
+  "catalogHash": "06523c787503a2b103c6265c45c0629ae6f5ccaadc4369b2f27a5f240f369267",
+  "familyHash": "9afbeff9df66b137d8e73f4736a8547501f6b1c2d29ca76ecfbfa83eeb79838f",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1342,6 +1342,17 @@
                   "expected": "两次调用参数一致，返回第 2 次结果",
                   "actualExpression": "_decorator_observation(twice)",
                   "rule": "用真实位置参数、仅关键字参数和调用次数记录验证"
+                }
+              },
+              {
+                "name": "关键字参数不丢失",
+                "expression": "_decorator_kwargs_probe(twice)",
+                "failure": "包装器必须把关键字参数原样转发给两次调用。",
+                "kind": "behavior",
+                "feedback": {
+                  "expected": "两次调用收到相同的关键字参数",
+                  "actualExpression": "_decorator_kwargs_probe(twice)",
+                  "rule": "用关键字参数探针验证，而不是检查参数变量名"
                 }
               }
             ]
@@ -6465,7 +6476,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "线程隔离",
+                "expression": "memory_terms[\"checkpointer\"] != memory_terms[\"store\"]",
+                "failure": "短期线程状态和长期 Store 应明确区分。",
+                "kind": "behavior"
+              },
+              {
+                "name": "持久化历史",
+                "expression": "memory_terms[\"json_history\"] != \"\"",
+                "failure": "应说明 JSON 记录解决的是消息历史持久化。",
+                "kind": "structure"
+              }
+            ]
           },
           {
             "id": "document-loaders",
@@ -6578,7 +6602,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "保留来源",
+                "expression": "documents and all(\"source\" in document.metadata for document in documents)",
+                "failure": "每个文档都应保留 source metadata。",
+                "kind": "behavior"
+              },
+              {
+                "name": "正文非空",
+                "expression": "all(document.page_content.strip() for document in documents)",
+                "failure": "加载结果不应包含空正文。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "indexing-vector-store",
@@ -6675,7 +6712,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "向量对应",
+                "expression": "len(documents) == len(vectors)",
+                "failure": "文档与向量必须一一对应。",
+                "kind": "behavior"
+              },
+              {
+                "name": "可追溯元数据",
+                "expression": "all(\"source\" in document.metadata for document in documents)",
+                "failure": "索引记录必须保留来源。",
+                "kind": "structure"
+              }
+            ]
           },
           {
             "id": "retrieval-chain",
@@ -6772,7 +6822,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "返回候选",
+                "expression": "isinstance(retrieved, list)",
+                "failure": "检索步骤应返回候选列表。",
+                "kind": "behavior"
+              },
+              {
+                "name": "限制数量",
+                "expression": "len(retrieved) <= top_k",
+                "failure": "检索结果不应超过 top_k。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "rag-project",
@@ -6877,7 +6940,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "引用来源",
+                "expression": "answer.sources and all(source for source in answer.sources)",
+                "failure": "项目回答应带有真实来源。",
+                "kind": "behavior"
+              },
+              {
+                "name": "无资料边界",
+                "expression": "no_match.answer == \"资料不足\" and no_match.sources == []",
+                "failure": "无命中时应停止生成并明确资料不足。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "agent-v1",
@@ -7031,7 +7107,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "工具输入",
+                "expression": "tool_call.name and isinstance(tool_call.arguments, dict)",
+                "failure": "工具调用应包含名称和字典参数。",
+                "kind": "structure"
+              },
+              {
+                "name": "真实错误",
+                "expression": "tool_error is not None or tool_result is not None",
+                "failure": "工具失败或成功都必须保留真实结果。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "agent-rag-project",
@@ -7144,7 +7233,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "检索后引用",
+                "expression": "response.sources and response.answer",
+                "failure": "Agent RAG 回答必须同时有答案和来源。",
+                "kind": "behavior"
+              },
+              {
+                "name": "无命中停止",
+                "expression": "empty_response.answer == \"资料不足\"",
+                "failure": "无资料时 Agent 不应自行编造答案。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "model-messages-prompts",
@@ -11061,7 +11163,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "节点输出",
+                "expression": "isinstance(node_update, dict)",
+                "failure": "节点应返回局部状态更新字典。",
+                "kind": "behavior"
+              },
+              {
+                "name": "边界终点",
+                "expression": "END in graph_edges",
+                "failure": "图必须声明明确的结束边界。",
+                "kind": "structure"
+              }
+            ]
           },
           {
             "id": "state-reducers-routing",
@@ -11142,7 +11257,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "路由有限",
+                "expression": "route_result in {\"revise\", \"finish\"}",
+                "failure": "路由结果必须属于已声明分支。",
+                "kind": "behavior"
+              },
+              {
+                "name": "循环上限",
+                "expression": "attempts <= 2",
+                "failure": "循环应有明确的尝试次数上限。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "persistence-short-memory",
@@ -11229,7 +11357,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "线程键",
+                "expression": "config[\"configurable\"][\"thread_id\"]",
+                "failure": "持久化调用必须提供 thread_id。",
+                "kind": "structure"
+              },
+              {
+                "name": "恢复状态",
+                "expression": "resumed_state == saved_state",
+                "failure": "同一线程恢复时应读回检查点状态。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "long-term-store",
@@ -11318,7 +11459,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "用户命名空间",
+                "expression": "namespace[0] == user_id",
+                "failure": "长期记忆应按 user_id 隔离。",
+                "kind": "structure"
+              },
+              {
+                "name": "跨线程读取",
+                "expression": "store.get(namespace, key) == value",
+                "failure": "Store 应能按 namespace/key 读取值。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "streaming-interrupts",
@@ -11399,7 +11553,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "事件顺序",
+                "expression": "events[0].node != events[-1].node",
+                "failure": "流式事件应保留节点执行顺序。",
+                "kind": "behavior"
+              },
+              {
+                "name": "中断状态",
+                "expression": "interrupt_state.requires_approval is True",
+                "failure": "高风险步骤应留下待审核状态。",
+                "kind": "structure"
+              }
+            ]
           },
           {
             "id": "subgraphs-parallelism",
@@ -11480,7 +11647,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "子图边界",
+                "expression": "subgraph_result is not None",
+                "failure": "子图必须返回可合并结果。",
+                "kind": "behavior"
+              },
+              {
+                "name": "并行合并",
+                "expression": "merged_state[\"branches\"] == 2",
+                "failure": "并行分支结果应在父图中合并。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "memory-research-project",
@@ -11581,7 +11761,20 @@
                 "用边界输入复测"
               ]
             },
-            "browserChecks": []
+            "browserChecks": [
+              {
+                "name": "线程恢复",
+                "expression": "resume(thread_id) == checkpoint_state",
+                "failure": "研究项目应能从同一 thread 检查点恢复。",
+                "kind": "behavior"
+              },
+              {
+                "name": "长期偏好",
+                "expression": "store.get((\"user\", user_id), \"profile\") is not None",
+                "failure": "项目应把跨线程偏好保存到 Store。",
+                "kind": "behavior"
+              }
+            ]
           },
           {
             "id": "langgraph-lesson-07",
@@ -15240,6 +15433,17 @@
           "actualExpression": "_decorator_observation(twice)",
           "rule": "用真实位置参数、仅关键字参数和调用次数记录验证"
         }
+      },
+      {
+        "name": "关键字参数不丢失",
+        "expression": "_decorator_kwargs_probe(twice)",
+        "failure": "包装器必须把关键字参数原样转发给两次调用。",
+        "kind": "behavior",
+        "feedback": {
+          "expected": "两次调用收到相同的关键字参数",
+          "actualExpression": "_decorator_kwargs_probe(twice)",
+          "rule": "用关键字参数探针验证，而不是检查参数变量名"
+        }
       }
     ],
     "project-text": [
@@ -16200,13 +16404,104 @@
         "kind": "behavior"
       }
     ],
-    "memory-modernization": [],
-    "document-loaders": [],
-    "indexing-vector-store": [],
-    "retrieval-chain": [],
-    "rag-project": [],
-    "agent-v1": [],
-    "agent-rag-project": [],
+    "memory-modernization": [
+      {
+        "name": "线程隔离",
+        "expression": "memory_terms[\"checkpointer\"] != memory_terms[\"store\"]",
+        "failure": "短期线程状态和长期 Store 应明确区分。",
+        "kind": "behavior"
+      },
+      {
+        "name": "持久化历史",
+        "expression": "memory_terms[\"json_history\"] != \"\"",
+        "failure": "应说明 JSON 记录解决的是消息历史持久化。",
+        "kind": "structure"
+      }
+    ],
+    "document-loaders": [
+      {
+        "name": "保留来源",
+        "expression": "documents and all(\"source\" in document.metadata for document in documents)",
+        "failure": "每个文档都应保留 source metadata。",
+        "kind": "behavior"
+      },
+      {
+        "name": "正文非空",
+        "expression": "all(document.page_content.strip() for document in documents)",
+        "failure": "加载结果不应包含空正文。",
+        "kind": "behavior"
+      }
+    ],
+    "indexing-vector-store": [
+      {
+        "name": "向量对应",
+        "expression": "len(documents) == len(vectors)",
+        "failure": "文档与向量必须一一对应。",
+        "kind": "behavior"
+      },
+      {
+        "name": "可追溯元数据",
+        "expression": "all(\"source\" in document.metadata for document in documents)",
+        "failure": "索引记录必须保留来源。",
+        "kind": "structure"
+      }
+    ],
+    "retrieval-chain": [
+      {
+        "name": "返回候选",
+        "expression": "isinstance(retrieved, list)",
+        "failure": "检索步骤应返回候选列表。",
+        "kind": "behavior"
+      },
+      {
+        "name": "限制数量",
+        "expression": "len(retrieved) <= top_k",
+        "failure": "检索结果不应超过 top_k。",
+        "kind": "behavior"
+      }
+    ],
+    "rag-project": [
+      {
+        "name": "引用来源",
+        "expression": "answer.sources and all(source for source in answer.sources)",
+        "failure": "项目回答应带有真实来源。",
+        "kind": "behavior"
+      },
+      {
+        "name": "无资料边界",
+        "expression": "no_match.answer == \"资料不足\" and no_match.sources == []",
+        "failure": "无命中时应停止生成并明确资料不足。",
+        "kind": "behavior"
+      }
+    ],
+    "agent-v1": [
+      {
+        "name": "工具输入",
+        "expression": "tool_call.name and isinstance(tool_call.arguments, dict)",
+        "failure": "工具调用应包含名称和字典参数。",
+        "kind": "structure"
+      },
+      {
+        "name": "真实错误",
+        "expression": "tool_error is not None or tool_result is not None",
+        "failure": "工具失败或成功都必须保留真实结果。",
+        "kind": "behavior"
+      }
+    ],
+    "agent-rag-project": [
+      {
+        "name": "检索后引用",
+        "expression": "response.sources and response.answer",
+        "failure": "Agent RAG 回答必须同时有答案和来源。",
+        "kind": "behavior"
+      },
+      {
+        "name": "无命中停止",
+        "expression": "empty_response.answer == \"资料不足\"",
+        "failure": "无资料时 Agent 不应自行编造答案。",
+        "kind": "behavior"
+      }
+    ],
     "model-messages-prompts": [
       {
         "name": "消息角色",
@@ -16781,13 +17076,104 @@
         "kind": "behavior"
       }
     ],
-    "graph-foundations": [],
-    "state-reducers-routing": [],
-    "persistence-short-memory": [],
-    "long-term-store": [],
-    "streaming-interrupts": [],
-    "subgraphs-parallelism": [],
-    "memory-research-project": [],
+    "graph-foundations": [
+      {
+        "name": "节点输出",
+        "expression": "isinstance(node_update, dict)",
+        "failure": "节点应返回局部状态更新字典。",
+        "kind": "behavior"
+      },
+      {
+        "name": "边界终点",
+        "expression": "END in graph_edges",
+        "failure": "图必须声明明确的结束边界。",
+        "kind": "structure"
+      }
+    ],
+    "state-reducers-routing": [
+      {
+        "name": "路由有限",
+        "expression": "route_result in {\"revise\", \"finish\"}",
+        "failure": "路由结果必须属于已声明分支。",
+        "kind": "behavior"
+      },
+      {
+        "name": "循环上限",
+        "expression": "attempts <= 2",
+        "failure": "循环应有明确的尝试次数上限。",
+        "kind": "behavior"
+      }
+    ],
+    "persistence-short-memory": [
+      {
+        "name": "线程键",
+        "expression": "config[\"configurable\"][\"thread_id\"]",
+        "failure": "持久化调用必须提供 thread_id。",
+        "kind": "structure"
+      },
+      {
+        "name": "恢复状态",
+        "expression": "resumed_state == saved_state",
+        "failure": "同一线程恢复时应读回检查点状态。",
+        "kind": "behavior"
+      }
+    ],
+    "long-term-store": [
+      {
+        "name": "用户命名空间",
+        "expression": "namespace[0] == user_id",
+        "failure": "长期记忆应按 user_id 隔离。",
+        "kind": "structure"
+      },
+      {
+        "name": "跨线程读取",
+        "expression": "store.get(namespace, key) == value",
+        "failure": "Store 应能按 namespace/key 读取值。",
+        "kind": "behavior"
+      }
+    ],
+    "streaming-interrupts": [
+      {
+        "name": "事件顺序",
+        "expression": "events[0].node != events[-1].node",
+        "failure": "流式事件应保留节点执行顺序。",
+        "kind": "behavior"
+      },
+      {
+        "name": "中断状态",
+        "expression": "interrupt_state.requires_approval is True",
+        "failure": "高风险步骤应留下待审核状态。",
+        "kind": "structure"
+      }
+    ],
+    "subgraphs-parallelism": [
+      {
+        "name": "子图边界",
+        "expression": "subgraph_result is not None",
+        "failure": "子图必须返回可合并结果。",
+        "kind": "behavior"
+      },
+      {
+        "name": "并行合并",
+        "expression": "merged_state[\"branches\"] == 2",
+        "failure": "并行分支结果应在父图中合并。",
+        "kind": "behavior"
+      }
+    ],
+    "memory-research-project": [
+      {
+        "name": "线程恢复",
+        "expression": "resume(thread_id) == checkpoint_state",
+        "failure": "研究项目应能从同一 thread 检查点恢复。",
+        "kind": "behavior"
+      },
+      {
+        "name": "长期偏好",
+        "expression": "store.get((\"user\", user_id), \"profile\") is not None",
+        "failure": "项目应把跨线程偏好保存到 Store。",
+        "kind": "behavior"
+      }
+    ],
     "langgraph-lesson-07": [
       {
         "name": "线程隔离",

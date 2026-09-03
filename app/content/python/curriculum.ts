@@ -710,6 +710,16 @@ export const lessons: Lesson[] = [
           rule: "用真实位置参数、仅关键字参数和调用次数记录验证",
         },
       },
+      {
+        name: "关键字参数不丢失",
+        expression: `_decorator_kwargs_probe(twice)`,
+        failure: "包装器必须把关键字参数原样转发给两次调用。",
+        feedback: {
+          expected: "两次调用收到相同的关键字参数",
+          actualExpression: `_decorator_kwargs_probe(twice)`,
+          rule: "用关键字参数探针验证，而不是检查参数变量名",
+        },
+      },
     ],
   },
   {

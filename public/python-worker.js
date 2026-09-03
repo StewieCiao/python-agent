@@ -145,6 +145,17 @@ def _decorator_contract(decorator):
         "result": 8,
     }
 
+def _decorator_kwargs_probe(decorator):
+    calls = []
+    def target(*, label, enabled):
+        calls.append({"label": label, "enabled": enabled})
+        return len(calls)
+    result = decorator(target)(label="demo", enabled=True)
+    return calls == [
+        {"label": "demo", "enabled": True},
+        {"label": "demo", "enabled": True},
+    ] and result == 2
+
 def _plan_preserves_input(func):
     items = [{"name": "x", "priority": 2}, {"name": "y", "priority": 4}]
     before = copy.deepcopy(items)
@@ -348,6 +359,7 @@ if _result["exception"] is None:
         "_wallet_sequence": _wallet_sequence,
         "_decorator_observation": _decorator_observation,
         "_decorator_contract": _decorator_contract,
+        "_decorator_kwargs_probe": _decorator_kwargs_probe,
         "_plan_preserves_input": _plan_preserves_input,
         "_tool_registry_observation": _tool_registry_observation,
         "_tool_registry_contract": _tool_registry_contract,

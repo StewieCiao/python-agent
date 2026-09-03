@@ -361,6 +361,16 @@ test("框架项目课使用清晰的作品主题而不是迁移练习标题", as
   }
 });
 
+test("每节课程至少提供两项可解释的反馈检查", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    for (const lesson of track.lessons) {
+      assert.ok(lesson.browserChecks.length >= 2, `${track.id}/${lesson.id}`);
+      assert.ok(lesson.browserChecks.every(({ name, expression, failure }) => name && expression && failure));
+    }
+  }
+});
+
 test("项目节点覆盖多个阶段并优先连接同阶段项目", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
