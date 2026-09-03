@@ -75,9 +75,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "创建一个接收 topic、生成 outline、再生成 answer 的两节点图。",
-        starterCode: `builder = StateGraph(State)\n# 添加 outline 和 answer 节点`,
-        solution: `builder = StateGraph(State)\nbuilder.add_node("outline", make_outline)\nbuilder.add_node("answer", write_answer)\nbuilder.add_edge(START, "outline")\nbuilder.add_edge("outline", "answer")\nbuilder.add_edge("answer", END)\ngraph = builder.compile()`,
+        prompt: "输入是一个 topic 字符串；输出是第一个节点产生的 node_update 字典。请用两个节点依次生成 outline 和 answer，并用 graph_edges 明确到达 END。先用纯 Python 数据观察 StateGraph 的输入、节点输出和结束边界，再映射到官方 API。",
+        starterCode: `topic = "RAG"\nEND = "END"\n\ndef draft(state):\n    pass\n\nnode_update = {}\ngraph_edges = ["START"]`,
+        solution: `topic = "RAG"\nEND = "END"\n\ndef draft(state):\n    return {"answer": f"关于 {state['topic']} 的草稿"}\n\nnode_update = draft({"topic": topic})\ngraph_edges = ["START", "draft", "END"]`,
       },
     },
     {
