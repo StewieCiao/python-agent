@@ -273,6 +273,16 @@ test("LangGraph 其余核心作者课也直接提供三张讲解卡", async () =
   }
 });
 
+test("框架作者源的每节课程都直接提供三张讲解卡", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  for (const track of learningTracks.filter(({ id }) => id !== "python")) {
+    for (const lesson of track.lessons) {
+      assert.equal(lesson.guide.length, 3, `${track.id}/${lesson.id} 仍依赖转换器补卡`);
+      assert.ok(lesson.guide[2].body.includes(lesson.title), `${track.id}/${lesson.id} 的误区卡未关联标题`);
+    }
+  }
+});
+
 test("Python 内容模块保留现有 25 个 lesson id 并合并讲义、答案和判题", async () => {
   const { pythonLessons } = await import("../app/content/python/index.ts");
   assert.equal(pythonLessons.length, 25);

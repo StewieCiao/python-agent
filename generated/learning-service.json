@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "354b442f9777f66ad95c3a6616f8c265692ed11a43fd4e5ddf77843a327b6301",
+  "catalogHash": "f8170840aa4d37c1c6750d38e3ac5555800b7abf33a501228e64699bda580cfd",
   "familyHash": "0e28f63afbd9404c0b71fd36f97dd1e2a0eff4f4b41908ee14cd7a781aa662d7",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6426,7 +6426,7 @@
               {
                 "kind": "常见误区",
                 "title": "用新版 Agent 建立短期记忆",
-                "body": "LangChain v1 的 Agent 以 LangGraph 为运行时。给 create_agent 传入 checkpointer，再在调用配置中提供 thread_id，状态会按线程保存。开发时可用 InMemorySaver，持久化环境应使用官方数据库 checkpointer。",
+                "body": "完成“记忆：会话历史、短期状态与长期记忆”时，LangChain v1 的 Agent 以 LangGraph 为运行时。给 create_agent 传入 checkpointer，再在调用配置中提供 thread_id，状态会按线程保存。开发时可用 InMemorySaver，持久化环境应使用官方数据库 checkpointer。",
                 "bullets": [
                   "Agent 与保存器职责分开",
                   "每次调用复用同一个 thread_id",
@@ -6600,14 +6600,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "文档加载器与统一 Document的边界检查",
-                "body": "完成“文档加载器与统一 Document”时，不要只复现示例；回到目标“继续第 39–42 节，理解 Loader 的真正产物是带 page_content 和 metadata 的 Document。”，用变化输入检查实际结果与失败边界。",
+                "title": "文档加载器与统一 Document 的常见误区",
+                "body": "完成“文档加载器与统一 Document”时，不要把读取成功当成内容可信，也不要丢弃 source 或 page metadata；先检查正文和来源，再进入切分。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "读取和回答分开",
+                  "来源字段不可丢",
+                  "解析错误保留原样"
                 ],
-                "example": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页"
+                "example": "print(docs[0].metadata)"
               }
             ],
             "videos": [
@@ -6726,14 +6726,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "切分、嵌入与向量存储的边界检查",
-                "body": "完成“切分、嵌入与向量存储”时，不要只复现示例；回到目标“把第 41–43 节串成可解释的 indexing 流程，避免只记住某个向量库的方法名。”，用变化输入检查实际结果与失败边界。",
+                "title": "切分、嵌入与向量存储的常见误区",
+                "body": "完成“切分、嵌入与向量存储”时，不要把 top-k 当成答案正确率，也不要在写入向量时删除 chunk 的来源；召回后仍要核验文本和 metadata。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "chunk 保留来源",
+                  "距离不是可信度",
+                  "召回结果需要复核"
                 ],
-                "example": "# 建立 chunks 和 vector_store 后检索“退款”"
+                "example": "results = vector_store.similarity_search(\"退款\", k=2)"
               }
             ],
             "videos": [
@@ -6836,14 +6836,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "从 Retriever 到可核验的 RAG 回答的边界检查",
-                "body": "完成“从 Retriever 到可核验的 RAG 回答”时，不要只复现示例；回到目标“学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。”，用变化输入检查实际结果与失败边界。",
+                "title": "从 Retriever 到可核验的 RAG 回答的常见误区",
+                "body": "完成“从 Retriever 到可核验的 RAG 回答”时，不要跳过召回检查直接调用模型，也不要在空 context 时猜测答案；把 question、context 和来源分别观察。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "先看召回片段",
+                  "空资料明确反馈",
+                  "回答保留真实来源"
                 ],
-                "example": "def format_docs(docs):\n    pass"
+                "example": "context = format_docs(retriever.invoke(question))"
               }
             ],
             "videos": [
@@ -6946,14 +6946,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "RAG 项目：上传、索引、检索与会话的边界检查",
-                "body": "完成“RAG 项目：上传、索引、检索与会话”时，不要只复现示例；回到目标“对应第 46–54 节，把服装客服项目拆成边界清晰的离线索引和在线问答流程。”，用变化输入检查实际结果与失败边界。",
+                "title": "RAG 项目：上传、索引、检索与会话的常见误区",
+                "body": "完成“RAG 项目：上传、索引、检索与会话”时，不要把索引半成品标为成功，也不要把历史、检索失败和模型失败混成一种状态；每一步都保留可追踪结果。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "索引完成后再写状态",
+                  "区分三类失败",
+                  "会话和知识库分离"
                 ],
-                "example": "def index_document(path):\n    pass\n\ndef answer(question, thread_id):\n    pass"
+                "example": "status = {\"index\": \"ready\", \"retrieval\": \"ok\", \"answer\": \"ok\"}"
               }
             ],
             "videos": [
@@ -7064,14 +7064,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "LangChain v1 Agent 与中间件的边界检查",
-                "body": "完成“LangChain v1 Agent 与中间件”时，不要只复现示例；回到目标“对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。”，用变化输入检查实际结果与失败边界。",
+                "title": "LangChain v1 Agent 与中间件的常见误区",
+                "body": "完成“LangChain v1 Agent 与中间件”时，不要让中间件隐藏工具异常或把 Agent 变成无限循环；工具输入、Observation 和步数边界都要可观察。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "工具失败保留原因",
+                  "限制循环步数",
+                  "横切逻辑不要吞错"
                 ],
-                "example": "from langgraph.prebuilt import create_react_agent\nagent = create_react_agent(model, tools)"
+                "example": "agent = create_agent(model, tools=[search_docs])"
               }
             ],
             "videos": [
@@ -7231,14 +7231,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "Agent + RAG 综合项目的边界检查",
-                "body": "完成“Agent + RAG 综合项目”时，不要只复现示例；回到目标“对应第 60–67 节，把日志、配置、检索工具、中间件和 Agent 组合成一条可调试路径。”，用变化输入检查实际结果与失败边界。",
+                "title": "Agent + RAG 综合项目的常见误区",
+                "body": "完成“Agent + RAG 综合项目”时，不要把日志中的成功文案当作真实结果，也不要让 Agent 绕过检索工具直接编造；先验证工具，再观察每次调用和来源。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "日志记录真实状态",
+                  "无命中明确停止",
+                  "来源随回答返回"
                 ],
-                "example": "def search_knowledge(query: str):\n    pass"
+                "example": "event = {\"tool\": \"search_knowledge\", \"status\": \"ok\"}"
               }
             ],
             "videos": [
@@ -11909,14 +11909,14 @@
               },
               {
                 "kind": "常见误区",
-                "title": "Store 与跨线程长期记忆的边界检查",
-                "body": "完成“Store 与跨线程长期记忆”时，不要只复现示例；回到目标“使用 namespace/key 保存用户资料、偏好或可检索记忆。”，用变化输入检查实际结果与失败边界。",
+                "title": "Store 与跨线程长期记忆的常见误区",
+                "body": "完成“Store 与跨线程长期记忆”时，不要把 thread_id 当作用户身份，也不要在缺少记录时猜测偏好；namespace、key 和 value 的契约必须明确。",
                 "bullets": [
-                  "改变一个输入",
-                  "记录实际结果",
-                  "对照练习规则"
+                  "用户和线程分开",
+                  "缺失记录保留 None",
+                  "写入结构可验证"
                 ],
-                "example": "profile_namespace = ()\nevents_namespace = ()"
+                "example": "item = store.get((\"memories\", user_id), \"profile\")"
               }
             ],
             "videos": [

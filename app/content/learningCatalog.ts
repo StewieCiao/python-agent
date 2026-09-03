@@ -172,7 +172,7 @@ const langchainTrack: LearningTrack = {
         },
         {
           title: "用新版 Agent 建立短期记忆",
-          body: "LangChain v1 的 Agent 以 LangGraph 为运行时。给 create_agent 传入 checkpointer，再在调用配置中提供 thread_id，状态会按线程保存。开发时可用 InMemorySaver，持久化环境应使用官方数据库 checkpointer。",
+          body: "完成“记忆：会话历史、短期状态与长期记忆”时，LangChain v1 的 Agent 以 LangGraph 为运行时。给 create_agent 传入 checkpointer，再在调用配置中提供 thread_id，状态会按线程保存。开发时可用 InMemorySaver，持久化环境应使用官方数据库 checkpointer。",
           bullets: ["Agent 与保存器职责分开", "每次调用复用同一个 thread_id", "跨用户资料不要塞进线程历史"],
           example: `from langchain.agents import create_agent\nfrom langgraph.checkpoint.memory import InMemorySaver\n\nagent = create_agent(model, tools=[], checkpointer=InMemorySaver())\nconfig = {"configurable": {"thread_id": "stewie-1"}}\nagent.invoke({"messages": [{"role": "user", "content": "我在学 RAG"}]}, config)`,
         },
@@ -246,6 +246,12 @@ const langchainTrack: LearningTrack = {
           bullets: ["一条业务记录对应一个 Document", "PDF 要保留页码", "加载后先抽样检查文本和 metadata"],
           example: `for doc in docs[:2]:\n    print(len(doc.page_content))\n    print(doc.metadata.get("source"))`,
         },
+        {
+          title: "文档加载器与统一 Document 的常见误区",
+          body: "完成“文档加载器与统一 Document”时，不要把读取成功当成内容可信，也不要丢弃 source 或 page metadata；先检查正文和来源，再进入切分。",
+          bullets: ["读取和回答分开", "来源字段不可丢", "解析错误保留原样"],
+          example: `print(docs[0].metadata)`,
+        },
       ],
       videos: [
         heimaVideo(39, "CSVLoader", "16:40"),
@@ -287,6 +293,12 @@ const langchainTrack: LearningTrack = {
           bullets: ["query 与文档使用兼容 embedding", "top-k 是召回数量而非可信度", "检索结果应保留来源"],
           example: `vector_store.add_documents(chunks)\nresults = vector_store.similarity_search("退货期限", k=3)\nfor doc in results:\n    print(doc.page_content, doc.metadata)`,
         },
+        {
+          title: "切分、嵌入与向量存储的常见误区",
+          body: "完成“切分、嵌入与向量存储”时，不要把 top-k 当成答案正确率，也不要在写入向量时删除 chunk 的来源；召回后仍要核验文本和 metadata。",
+          bullets: ["chunk 保留来源", "距离不是可信度", "召回结果需要复核"],
+          example: `results = vector_store.similarity_search("退款", k=2)`,
+        },
       ],
       videos: [
         heimaVideo(41, "TextLoader 和文档分割器", "11:54"),
@@ -325,6 +337,12 @@ const langchainTrack: LearningTrack = {
           body: "字典 Runnable 会并行计算字段。context 字段执行检索和格式化，question 字段使用 RunnablePassthrough 原样保留用户问题。理解输入输出形状后，LCEL 才容易阅读和测试。",
           bullets: ["为每一步写清输入输出类型", "格式化函数只做 Document → str", "不要在格式化阶段偷偷调用模型"],
           example: `def format_docs(docs):\n    return "\n\n".join(\n        f"来源: {d.metadata.get('source')}\n{d.page_content}" for d in docs\n    )`,
+        },
+        {
+          title: "从 Retriever 到可核验的 RAG 回答的常见误区",
+          body: "完成“从 Retriever 到可核验的 RAG 回答”时，不要跳过召回检查直接调用模型，也不要在空 context 时猜测答案；把 question、context 和来源分别观察。",
+          bullets: ["先看召回片段", "空资料明确反馈", "回答保留真实来源"],
+          example: `context = format_docs(retriever.invoke(question))`,
         },
       ],
       videos: [
@@ -365,6 +383,12 @@ const langchainTrack: LearningTrack = {
           bullets: ["检索失败与模型失败分别显示", "历史窗口有明确上限", "回答附带真实来源"],
           example: `docs = retriever.invoke(question)\nanswer = rag_chain.invoke({"question": question, "context": format_docs(docs)})\nhistory.add_messages([HumanMessage(question), AIMessage(answer)])`,
         },
+        {
+          title: "RAG 项目：上传、索引、检索与会话的常见误区",
+          body: "完成“RAG 项目：上传、索引、检索与会话”时，不要把索引半成品标为成功，也不要把历史、检索失败和模型失败混成一种状态；每一步都保留可追踪结果。",
+          bullets: ["索引完成后再写状态", "区分三类失败", "会话和知识库分离"],
+          example: `status = {"index": "ready", "retrieval": "ok", "answer": "ok"}`,
+        },
       ],
       videos: [
         heimaVideo(46, "RAG 项目案例介绍", "06:17"),
@@ -397,6 +421,12 @@ const langchainTrack: LearningTrack = {
           body: "中间件适合统一处理动态提示词、模型选择、工具过滤、摘要和人工审批。它不应隐藏业务主流程，也不应把失败改写为成功；调试时需要知道错误发生在模型、工具还是中间件。",
           bullets: ["只为重复的横切需求使用", "保持调用顺序可观察", "不要吞掉工具异常"],
           example: `agent = create_agent(\n    model,\n    tools=[search_docs],\n    middleware=[summarization_middleware],\n)`,
+        },
+        {
+          title: "LangChain v1 Agent 与中间件的常见误区",
+          body: "完成“LangChain v1 Agent 与中间件”时，不要让中间件隐藏工具异常或把 Agent 变成无限循环；工具输入、Observation 和步数边界都要可观察。",
+          bullets: ["工具失败保留原因", "限制循环步数", "横切逻辑不要吞错"],
+          example: `agent = create_agent(model, tools=[search_docs])`,
         },
       ],
       videos: [
@@ -456,6 +486,12 @@ const langchainTrack: LearningTrack = {
           body: "模型请求、工具调用、耗时、异常类型和最终回答应分开记录。日志不能包含 API Key，也不能在失败时写入“完成”。先有可观察性，才有资格优化 Agent 的提示词和检索效果。",
           bullets: ["密钥和完整敏感内容不入日志", "记录工具输入摘要与状态", "失败保留原始阶段"],
           example: `logger.info("tool_complete", extra={"tool": "search_knowledge", "count": len(docs)})`,
+        },
+        {
+          title: "Agent + RAG 综合项目的常见误区",
+          body: "完成“Agent + RAG 综合项目”时，不要把日志中的成功文案当作真实结果，也不要让 Agent 绕过检索工具直接编造；先验证工具，再观察每次调用和来源。",
+          bullets: ["日志记录真实状态", "无命中明确停止", "来源随回答返回"],
+          example: `event = {"tool": "search_knowledge", "status": "ok"}`,
         },
       ],
       videos: [
@@ -822,6 +858,12 @@ const langgraphTrack: LearningTrack = {
           body: "系统必须决定何时写、写什么、何时更新和怎样召回。把所有对话原样写入 Store 既浪费空间，也会积累冲突信息。可以显式让用户确认，也可以在后台抽取结构化事实，但都要保留来源和更新时间。",
           bullets: ["区分 profile 与事件集合", "更新覆盖与追加规则不同", "召回结果仍需检查相关性"],
           example: `item = store.get(("memories", user_id), "profile")\npreferred_language = item.value["language"] if item else "zh-CN"`,
+        },
+        {
+          title: "Store 与跨线程长期记忆的常见误区",
+          body: "完成“Store 与跨线程长期记忆”时，不要把 thread_id 当作用户身份，也不要在缺少记录时猜测偏好；namespace、key 和 value 的契约必须明确。",
+          bullets: ["用户和线程分开", "缺失记录保留 None", "写入结构可验证"],
+          example: `item = store.get(("memories", user_id), "profile")`,
         },
       ],
       videos: [
