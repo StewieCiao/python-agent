@@ -19,6 +19,7 @@
 - `npm run build`：通过。
 - `git diff --check`：通过。
 - 项目自带 Python 3.13.15 运行环境准备完成；`python-runtime` 37 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、SQLite FTS5）。
+- packaged renderer smoke 已验证 Python 执行与安全存储失败边界：失败时保留真实原因且不留下半成品配置；当前环境未提供可用系统钥匙串，因此未伪造成功分支。
 
 ## 尚未完成的内容审校
 
