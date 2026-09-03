@@ -1,6 +1,6 @@
-import { learningTracks } from "../learningCatalog.ts";
 import type { CourseTrack } from "../schema.ts";
 import { authorTrackFromLessons } from "../formalizeTrack.ts";
+import { learningTracks } from "../learningCatalog.ts";
 
 const legacyTrack = learningTracks.find(({ id }) => id === "langchain-rag");
 if (!legacyTrack) throw new Error("缺少 LangChain/RAG 课程路线");
