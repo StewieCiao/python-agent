@@ -14,6 +14,12 @@ const TOPICS: Record<CourseTrack["id"], string[]> = {
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
 
+const SCENARIO_LABELS: Record<CourseTrack["id"], string[]> = {
+  python: ["个人账本", "课程成绩单", "日志清洗", "命令行工具"],
+  "langchain-rag": ["团队知识库", "产品支持台", "研究资料库", "质量评测台"],
+  langgraph: ["研究任务", "审核流程", "多 Agent 协作", "可恢复作业"],
+};
+
 type ProjectBrief = { title: string; summary: string; prompt: string; starterCode: string; solution: string; hints: string[]; checks: CourseLesson["browserChecks"] };
 
 const PROJECT_BRIEFS: Record<"langchain-rag" | "langgraph", ProjectBrief[]> = {
@@ -724,7 +730,8 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const previous = track.lessons[index - 1]?.id;
   const baseTopic = TOPICS[track.id][index % TOPICS[track.id].length];
   const variant = Math.floor(index / TOPICS[track.id].length) + 1;
-  const topic = variant === 1 ? baseTopic : `${baseTopic}迁移练习 ${variant}`;
+  const scenario = SCENARIO_LABELS[track.id][(variant - 1) % SCENARIO_LABELS[track.id].length];
+  const topic = variant === 1 ? baseTopic : `${baseTopic}：${scenario}`;
   const topicSpec = track.id === "python" ? PYTHON_TOPIC_SPECS[baseTopic] : FRAMEWORK_TOPIC_SPECS[`${track.id}:${baseTopic}`];
   if (!topicSpec) throw new Error(`缺少 ${track.id} 主题的作者练习规格：${baseTopic}`);
   const guideSummary = topicSpec.summary;
@@ -738,7 +745,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
       { kind: "逐步拆解", title: `把${baseTopic}拆成步骤`, body: `先实现题目要求的最小路径，再逐项验证：${guidePrompt}`, bullets: topicSpec.hints, example: "输入 → 处理 → 输出" },
       { kind: "常见误区", title: `${baseTopic}的边界检查`, body: `不要只复现示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。`, bullets: ["换一组输入", "保留真实输出", "解释期望与实际"], example: "assert actual == expected" },
     ], videos: track.id === "python" ? [] : [FRAMEWORK_VIDEOS[track.id][index % FRAMEWORK_VIDEOS[track.id].length]], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
-    projectLinks: [], exercise: { prompt: `${topicSpec.prompt}${variant > 1 ? `\n迁移要求：改用第 ${variant} 组未在示例出现的输入，说明实现为何仍成立。` : ""}`, starterCode: topicSpec.starterCode, hints: topicSpec.hints, solution: topicSpec.solution },
+    projectLinks: [], exercise: { prompt: `${topicSpec.prompt}${variant > 1 ? `\n场景：${scenario}。改用第 ${variant} 组未在示例出现的输入，说明实现为何仍成立。` : ""}`, starterCode: topicSpec.starterCode, hints: topicSpec.hints, solution: topicSpec.solution },
     browserChecks: topicSpec.checks,
   };
 }
