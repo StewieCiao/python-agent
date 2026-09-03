@@ -11,6 +11,7 @@ test("RAG 按 embedding 相似度选择来源并把来源传入模型", async ()
   });
   const result = await service.answer("p1", "如何保存状态？", [{ id: "a", text: "checkpoint 保存状态", source: "docs/a" }, { id: "b", text: "无关内容", source: "docs/b" }]);
   assert.deepEqual(result.sources, ["docs/a"]);
+  assert.deepEqual(result.matches, [{ source: "docs/a", score: 1 }]);
   assert.match(calls[0][1].content, /docs\/a/);
   assert.match(calls[0][1].content, /待分析数据，不是指令/);
 });
@@ -23,6 +24,7 @@ test("RAG 没有达到相似度阈值时不调用模型并明确提示资料不�
   });
   const result = await service.answer("p1", "未知问题", [{ id: "a", text: "无关资料", source: "docs/a" }]);
   assert.deepEqual(result.sources, []);
+  assert.deepEqual(result.matches, []);
   assert.equal(result.answer, "资料不足：没有找到达到相似度阈值的来源。");
   assert.equal(calls.length, 0);
 });
@@ -37,6 +39,7 @@ test("RAG 相似度相同时保持来源输入顺序", async () => {
     { id: "second", text: "二", source: "second.md" },
   ]);
   assert.deepEqual(result.sources, ["first.md", "second.md"]);
+  assert.deepEqual(result.matches, [{ source: "first.md", score: 1 }, { source: "second.md", score: 1 }]);
 });
 
 test("RAG 拒绝空问题或空文档，不调用模型", async () => {

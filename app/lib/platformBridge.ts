@@ -167,7 +167,7 @@ export async function answerWithRag(input: {
   profileId: string;
   query: string;
   documents: Array<{ id: string; text: string; source: string }>;
-}): Promise<{ answer: string; sources: string[] }> {
+}): Promise<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> }> {
   const desktop = desktopBridge();
   if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "RAG 检索仅在桌面安全服务中可用。");
   return unwrapDesktop(await desktop.answerWithRag(input));

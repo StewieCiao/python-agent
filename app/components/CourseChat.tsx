@@ -31,7 +31,7 @@ export function CourseChat({ track, lesson, onClose }: {
   const [ragSource, setRagSource] = useState("本地资料");
   const [ragDocuments, setRagDocuments] = useState<Array<{ id: string; text: string; source: string }>>([]);
   const [ragQuery, setRagQuery] = useState("");
-  const [ragResult, setRagResult] = useState<{ answer: string; sources: string[] } | null>(null);
+  const [ragResult, setRagResult] = useState<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> } | null>(null);
 
   useEffect(() => {
     Promise.all([
@@ -88,7 +88,7 @@ export function CourseChat({ track, lesson, onClose }: {
             const result = await answerWithRag({ profileId, query: ragQuery, documents });
             setRagResult(result);
           })} type="button">检索并回答</button>
-          {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.sources.join("、")}</small></div>}
+          {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.matches.map(({ source, score }) => `${source}（相似度 ${score.toFixed(2)}）`).join("、") || "无"}</small></div>}
         </details>}
 
         <div className="chat-messages">
