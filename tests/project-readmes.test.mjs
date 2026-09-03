@@ -7,6 +7,7 @@ const projects = [
   ["recoverable-research-graph", /thread_id/, /interrupt/],
   ["adaptive-python-coach", /mistake code/, /4 秒超时/],
   ["rag-quality-workbench", /引用覆盖/, /no_results/],
+  ["supervisor-research-graph", /角色路由/, /未知角色/],
 ];
 
 test("三项简历项目都有可复现 README 和成功/失败演示", async () => {
