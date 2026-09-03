@@ -602,6 +602,18 @@ test("Python 工程路线包含本地配置安全边界课程", async () => {
   assert.ok(lesson.exercise.prompt.includes("API Key"));
 });
 
+test("Python 工程路线包含日志与可观测性课程", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "python");
+  assert.ok(track);
+  const lesson = track.lessons.find(({ title }) => title.includes("日志与可观测性"));
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.ok(lesson.browserChecks.length >= 2);
+  assert.ok(lesson.exercise.prompt.includes("api_key"));
+});
+
 test("框架作者路线保留可解释的先修链", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   for (const trackId of ["langchain-rag", "langgraph"]) {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "308de2164b03d43c505ae9729d466322505453524277c83fc31e012756fa5623",
-  "familyHash": "5d0df40ce18c0e3b2775a7bf416e7cf9281e4cb0e44f1ed2588c03e2b71c4e35",
+  "catalogHash": "33cc3285f5591e38f21b5c93868d3952db2cd0222b4f4f0d9f681b2db840ccdf",
+  "familyHash": "fc34dde50ffbbeab974763acfbe323af99703c0333051dfc29a1686a60925f25",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2815,12 +2815,102 @@
             "id": "python-lesson-25",
             "stageId": "python-stage-4",
             "order": 26,
+            "title": "字符串处理：课程成绩单：写出可验证的实现",
+            "kicker": "Python 学习",
+            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
+            "minutes": 35,
+            "prerequisites": [
+              "agent-framework-capstone"
+            ],
+            "difficulty": "advanced",
+            "tags": [
+              "python",
+              "stage-python-stage-4"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "字符串处理要解决什么问题",
+                "body": "把课程成绩单中的真实任务先翻译成输入、处理和输出，再理解这个知识点：组合字符串方法完成清洗，同时保留输入语义和顺序。",
+                "bullets": [
+                  "找出输入契约",
+                  "标出核心状态",
+                  "说清输出形状"
+                ],
+                "example": "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "把字符串处理拆成步骤",
+                "body": "先实现课程成绩单场景下题目要求的最小路径，再逐项验证：实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。",
+                "bullets": [
+                  "strip 处理两端空白。",
+                  "split 不带参数可以合并连续空白。",
+                  "用 join 重新组合清洗后的片段。"
+                ],
+                "example": "输入 → 处理 → 输出"
+              },
+              {
+                "kind": "常见误区",
+                "title": "字符串处理的边界检查",
+                "body": "不要只复现课程成绩单的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "bullets": [
+                  "换一组输入",
+                  "保留真实输出",
+                  "解释期望与实际"
+                ],
+                "example": "assert actual == expected"
+              }
+            ],
+            "videos": [],
+            "officialSources": [
+              {
+                "label": "Python 官方教程",
+                "url": "https://docs.python.org/3/tutorial/",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [],
+            "project": false,
+            "projectLinks": [
+              "agent-framework-capstone"
+            ],
+            "exercise": {
+              "prompt": "实现 slugify(title)，去掉两端空白、转小写，并把连续空格替换为一个连字符。\n场景：课程成绩单。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def slugify(title):\n    pass\n",
+              "hints": [
+                "strip 处理两端空白。",
+                "split 不带参数可以合并连续空白。",
+                "用 join 重新组合清洗后的片段。"
+              ],
+              "solution": "def slugify(title):\n    return \"-\".join(title.strip().lower().split())\n"
+            },
+            "browserChecks": [
+              {
+                "name": "清洗文本",
+                "expression": "slugify(\"  Hello   Python  \") == \"hello-python\"",
+                "failure": "应同时清理两端和连续空白。",
+                "kind": "behavior"
+              },
+              {
+                "name": "中文保持",
+                "expression": "slugify(\" RAG 学习 \") == \"rag-学习\"",
+                "failure": "清洗不应破坏非 ASCII 文字。",
+                "kind": "behavior"
+              }
+            ]
+          },
+          {
+            "id": "python-lesson-26",
+            "stageId": "python-stage-4",
+            "order": 27,
             "title": "条件分支：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
             "minutes": 35,
             "prerequisites": [
-              "agent-framework-capstone"
+              "python-lesson-25"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -2902,15 +2992,15 @@
             ]
           },
           {
-            "id": "python-lesson-26",
+            "id": "python-lesson-27",
             "stageId": "python-stage-4",
-            "order": 27,
+            "order": 28,
             "title": "循环与迭代：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-25"
+              "python-lesson-26"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -2992,15 +3082,15 @@
             ]
           },
           {
-            "id": "python-lesson-27",
+            "id": "python-lesson-28",
             "stageId": "python-stage-4",
-            "order": 28,
+            "order": 29,
             "title": "函数参数：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-26"
+              "python-lesson-27"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3082,15 +3172,15 @@
             ]
           },
           {
-            "id": "python-lesson-28",
+            "id": "python-lesson-29",
             "stageId": "python-stage-4",
-            "order": 29,
+            "order": 30,
             "title": "作用域：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-27"
+              "python-lesson-28"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3172,15 +3262,15 @@
             ]
           },
           {
-            "id": "python-lesson-29",
+            "id": "python-lesson-30",
             "stageId": "python-stage-4",
-            "order": 30,
+            "order": 31,
             "title": "列表与切片：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-28"
+              "python-lesson-29"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3262,15 +3352,15 @@
             ]
           },
           {
-            "id": "python-lesson-30",
+            "id": "python-lesson-31",
             "stageId": "python-stage-4",
-            "order": 31,
+            "order": 32,
             "title": "字典聚合：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-29"
+              "python-lesson-30"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3352,20 +3442,20 @@
             ]
           },
           {
-            "id": "python-lesson-31",
-            "stageId": "python-stage-4",
-            "order": 32,
+            "id": "python-lesson-32",
+            "stageId": "python-stage-5",
+            "order": 33,
             "title": "集合运算：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-30"
+              "python-lesson-31"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-4"
+              "stage-python-stage-5"
             ],
             "guide": [
               {
@@ -3413,9 +3503,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "agent-framework-capstone"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 common_tags(left, right)，返回两个列表共有标签的排序后列表，重复标签只保留一次。\n场景：课程成绩单。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def common_tags(left, right):\n    pass\n",
@@ -3442,15 +3530,15 @@
             ]
           },
           {
-            "id": "python-lesson-32",
+            "id": "python-lesson-33",
             "stageId": "python-stage-5",
-            "order": 33,
+            "order": 34,
             "title": "异常边界：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-31"
+              "python-lesson-32"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3536,15 +3624,15 @@
             ]
           },
           {
-            "id": "python-lesson-33",
+            "id": "python-lesson-34",
             "stageId": "python-stage-5",
-            "order": 34,
+            "order": 35,
             "title": "类与对象：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-32"
+              "python-lesson-33"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3624,15 +3712,15 @@
             ]
           },
           {
-            "id": "python-lesson-34",
+            "id": "python-lesson-35",
             "stageId": "python-stage-5",
-            "order": 35,
+            "order": 36,
             "title": "生成器：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-33"
+              "python-lesson-34"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3712,15 +3800,15 @@
             ]
           },
           {
-            "id": "python-lesson-35",
+            "id": "python-lesson-36",
             "stageId": "python-stage-5",
-            "order": 36,
+            "order": 37,
             "title": "装饰器：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-34"
+              "python-lesson-35"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3800,15 +3888,15 @@
             ]
           },
           {
-            "id": "python-lesson-36",
+            "id": "python-lesson-37",
             "stageId": "python-stage-5",
-            "order": 37,
+            "order": 38,
             "title": "模块拆分：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-35"
+              "python-lesson-36"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3888,15 +3976,15 @@
             ]
           },
           {
-            "id": "python-lesson-37",
+            "id": "python-lesson-38",
             "stageId": "python-stage-5",
-            "order": 38,
+            "order": 39,
             "title": "文件读写：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-36"
+              "python-lesson-37"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -3976,15 +4064,15 @@
             ]
           },
           {
-            "id": "python-lesson-38",
+            "id": "python-lesson-39",
             "stageId": "python-stage-5",
-            "order": 39,
+            "order": 40,
             "title": "测试设计：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-37"
+              "python-lesson-38"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4064,20 +4152,20 @@
             ]
           },
           {
-            "id": "python-lesson-39",
-            "stageId": "python-stage-5",
-            "order": 40,
+            "id": "python-lesson-40",
+            "stageId": "python-stage-6",
+            "order": 41,
             "title": "数据清洗：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-38"
+              "python-lesson-39"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-5"
+              "stage-python-stage-6"
             ],
             "guide": [
               {
@@ -4152,15 +4240,15 @@
             ]
           },
           {
-            "id": "python-lesson-40",
+            "id": "python-lesson-41",
             "stageId": "python-stage-6",
-            "order": 41,
+            "order": 42,
             "title": "命令行工具：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把命令行参数解析与业务函数分开，让入口可测试且错误明确。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-39"
+              "python-lesson-40"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4240,15 +4328,15 @@
             ]
           },
           {
-            "id": "python-lesson-41",
+            "id": "python-lesson-42",
             "stageId": "python-stage-6",
-            "order": 42,
+            "order": 43,
             "title": "并发基础：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用可观察的任务结果理解并发，不共享未经保护的可变状态。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-40"
+              "python-lesson-41"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4328,15 +4416,15 @@
             ]
           },
           {
-            "id": "python-lesson-42",
+            "id": "python-lesson-43",
             "stageId": "python-stage-6",
-            "order": 43,
+            "order": 44,
             "title": "HTTP 请求与失败边界：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把 HTTP 状态、超时和响应正文作为显式结果处理，不伪造成功。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-41"
+              "python-lesson-42"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4422,15 +4510,15 @@
             ]
           },
           {
-            "id": "python-lesson-43",
+            "id": "python-lesson-44",
             "stageId": "python-stage-6",
-            "order": 44,
+            "order": 45,
             "title": "SQLite 持久化与事务边界：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用事务保证本地数据要么完整提交、要么回滚，不留下半成品。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-42"
+              "python-lesson-43"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4510,15 +4598,15 @@
             ]
           },
           {
-            "id": "python-lesson-44",
+            "id": "python-lesson-45",
             "stageId": "python-stage-6",
-            "order": 45,
+            "order": 46,
             "title": "本地配置与安全边界：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "区分普通配置和敏感凭据，设计不回显、不落明文的本地接口。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-43"
+              "python-lesson-44"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4598,15 +4686,103 @@
             ]
           },
           {
-            "id": "python-lesson-45",
+            "id": "python-lesson-46",
             "stageId": "python-stage-6",
-            "order": 46,
+            "order": 47,
+            "title": "日志与可观测性：课程成绩单：写出可验证的实现",
+            "kicker": "Python 学习",
+            "summary": "记录可定位的阶段和结果，同时过滤 API Key 等敏感值。",
+            "minutes": 35,
+            "prerequisites": [
+              "python-lesson-45"
+            ],
+            "difficulty": "advanced",
+            "tags": [
+              "python",
+              "stage-python-stage-6"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "日志与可观测性要解决什么问题",
+                "body": "把课程成绩单中的真实任务先翻译成输入、处理和输出，再理解这个知识点：记录可定位的阶段和结果，同时过滤 API Key 等敏感值。",
+                "bullets": [
+                  "找出输入契约",
+                  "标出核心状态",
+                  "说清输出形状"
+                ],
+                "example": "实现 safe_event(stage, result, api_key)，返回 stage、result 和 redacted_key；redacted_key 只能是 '[redacted]'，不能包含 api_key。"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "把日志与可观测性拆成步骤",
+                "body": "先实现课程成绩单场景下题目要求的最小路径，再逐项验证：实现 safe_event(stage, result, api_key)，返回 stage、result 和 redacted_key；redacted_key 只能是 '[redacted]'，不能包含 api_key。",
+                "bullets": [
+                  "事件要保留阶段和真实结果。",
+                  "密钥字段只输出固定脱敏标记。",
+                  "检查返回值中不能出现原始 api_key。"
+                ],
+                "example": "输入 → 处理 → 输出"
+              },
+              {
+                "kind": "常见误区",
+                "title": "日志与可观测性的边界检查",
+                "body": "不要只复现课程成绩单的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
+                "bullets": [
+                  "换一组输入",
+                  "保留真实输出",
+                  "解释期望与实际"
+                ],
+                "example": "assert actual == expected"
+              }
+            ],
+            "videos": [],
+            "officialSources": [
+              {
+                "label": "Python 官方教程",
+                "url": "https://docs.python.org/3/tutorial/",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [],
+            "project": false,
+            "projectLinks": [],
+            "exercise": {
+              "prompt": "实现 safe_event(stage, result, api_key)，返回 stage、result 和 redacted_key；redacted_key 只能是 '[redacted]'，不能包含 api_key。\n场景：课程成绩单。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "starterCode": "def safe_event(stage, result, api_key):\n    pass\n",
+              "hints": [
+                "事件要保留阶段和真实结果。",
+                "密钥字段只输出固定脱敏标记。",
+                "检查返回值中不能出现原始 api_key。"
+              ],
+              "solution": "def safe_event(stage, result, api_key):\n    return {\"stage\": stage, \"result\": result, \"redacted_key\": \"[redacted]\"}\n"
+            },
+            "browserChecks": [
+              {
+                "name": "保留阶段",
+                "expression": "safe_event(\"retrieve\", {\"count\": 2}, \"secret\") == {\"stage\": \"retrieve\", \"result\": {\"count\": 2}, \"redacted_key\": \"[redacted]\"}",
+                "failure": "事件应保留阶段与真实结果。",
+                "kind": "behavior"
+              },
+              {
+                "name": "密钥脱敏",
+                "expression": "safe_event(\"model\", \"ok\", \"secret\")[\"redacted_key\"] == \"[redacted]\"",
+                "failure": "日志不得回显 API Key。",
+                "kind": "behavior"
+              }
+            ]
+          },
+          {
+            "id": "python-lesson-47",
+            "stageId": "python-stage-6",
+            "order": 48,
             "title": "Agent 工具契约：课程成绩单：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-44"
+              "python-lesson-46"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4686,20 +4862,20 @@
             ]
           },
           {
-            "id": "python-lesson-46",
-            "stageId": "python-stage-6",
-            "order": 47,
+            "id": "python-lesson-48",
+            "stageId": "python-stage-7",
+            "order": 49,
             "title": "变量与类型：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用明确的值和类型转换表达数据契约，避免把字符串误当数字。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-45"
+              "python-lesson-47"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-6"
+              "stage-python-stage-7"
             ],
             "guide": [
               {
@@ -4774,20 +4950,20 @@
             ]
           },
           {
-            "id": "python-lesson-47",
-            "stageId": "python-stage-6",
-            "order": 48,
+            "id": "python-lesson-49",
+            "stageId": "python-stage-7",
+            "order": 50,
             "title": "字符串处理：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-46"
+              "python-lesson-48"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-6"
+              "stage-python-stage-7"
             ],
             "guide": [
               {
@@ -4862,15 +5038,15 @@
             ]
           },
           {
-            "id": "python-lesson-48",
+            "id": "python-lesson-50",
             "stageId": "python-stage-7",
-            "order": 49,
+            "order": 51,
             "title": "条件分支：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-47"
+              "python-lesson-49"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -4950,15 +5126,15 @@
             ]
           },
           {
-            "id": "python-lesson-49",
+            "id": "python-lesson-51",
             "stageId": "python-stage-7",
-            "order": 50,
+            "order": 52,
             "title": "循环与迭代：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-48"
+              "python-lesson-50"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5038,15 +5214,15 @@
             ]
           },
           {
-            "id": "python-lesson-50",
+            "id": "python-lesson-52",
             "stageId": "python-stage-7",
-            "order": 51,
+            "order": 53,
             "title": "函数参数：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-49"
+              "python-lesson-51"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5126,15 +5302,15 @@
             ]
           },
           {
-            "id": "python-lesson-51",
+            "id": "python-lesson-53",
             "stageId": "python-stage-7",
-            "order": 52,
+            "order": 54,
             "title": "作用域：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-50"
+              "python-lesson-52"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5214,15 +5390,15 @@
             ]
           },
           {
-            "id": "python-lesson-52",
+            "id": "python-lesson-54",
             "stageId": "python-stage-7",
-            "order": 53,
+            "order": 55,
             "title": "列表与切片：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-51"
+              "python-lesson-53"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5302,15 +5478,15 @@
             ]
           },
           {
-            "id": "python-lesson-53",
+            "id": "python-lesson-55",
             "stageId": "python-stage-7",
-            "order": 54,
+            "order": 56,
             "title": "字典聚合：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-52"
+              "python-lesson-54"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5390,20 +5566,20 @@
             ]
           },
           {
-            "id": "python-lesson-54",
-            "stageId": "python-stage-7",
-            "order": 55,
+            "id": "python-lesson-56",
+            "stageId": "python-stage-8",
+            "order": 57,
             "title": "集合运算：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-53"
+              "python-lesson-55"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-7"
+              "stage-python-stage-8"
             ],
             "guide": [
               {
@@ -5478,20 +5654,20 @@
             ]
           },
           {
-            "id": "python-lesson-55",
-            "stageId": "python-stage-7",
-            "order": 56,
+            "id": "python-lesson-57",
+            "stageId": "python-stage-8",
+            "order": 58,
             "title": "异常边界：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-54"
+              "python-lesson-56"
             ],
             "difficulty": "advanced",
             "tags": [
               "python",
-              "stage-python-stage-7"
+              "stage-python-stage-8"
             ],
             "guide": [
               {
@@ -5572,15 +5748,15 @@
             ]
           },
           {
-            "id": "python-lesson-56",
+            "id": "python-lesson-58",
             "stageId": "python-stage-8",
-            "order": 57,
+            "order": 59,
             "title": "类与对象：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-55"
+              "python-lesson-57"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5660,15 +5836,15 @@
             ]
           },
           {
-            "id": "python-lesson-57",
+            "id": "python-lesson-59",
             "stageId": "python-stage-8",
-            "order": 58,
+            "order": 60,
             "title": "生成器：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-56"
+              "python-lesson-58"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5748,15 +5924,15 @@
             ]
           },
           {
-            "id": "python-lesson-58",
+            "id": "python-lesson-60",
             "stageId": "python-stage-8",
-            "order": 59,
+            "order": 61,
             "title": "装饰器：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-57"
+              "python-lesson-59"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5836,15 +6012,15 @@
             ]
           },
           {
-            "id": "python-lesson-59",
+            "id": "python-lesson-61",
             "stageId": "python-stage-8",
-            "order": 60,
+            "order": 62,
             "title": "模块拆分：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-58"
+              "python-lesson-60"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -5924,15 +6100,15 @@
             ]
           },
           {
-            "id": "python-lesson-60",
+            "id": "python-lesson-62",
             "stageId": "python-stage-8",
-            "order": 61,
+            "order": 63,
             "title": "文件读写：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-59"
+              "python-lesson-61"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -6012,15 +6188,15 @@
             ]
           },
           {
-            "id": "python-lesson-61",
+            "id": "python-lesson-63",
             "stageId": "python-stage-8",
-            "order": 62,
+            "order": 64,
             "title": "测试设计：日志清洗：写出可验证的实现",
             "kicker": "Python 学习",
             "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
             "minutes": 35,
             "prerequisites": [
-              "python-lesson-60"
+              "python-lesson-62"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -6095,182 +6271,6 @@
                 "name": "非法输入",
                 "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
                 "failure": "过短或含非法符号的名字应拒绝。",
-                "kind": "behavior"
-              }
-            ]
-          },
-          {
-            "id": "python-lesson-62",
-            "stageId": "python-stage-8",
-            "order": 63,
-            "title": "数据清洗：日志清洗：写出可验证的实现",
-            "kicker": "Python 学习",
-            "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
-            "minutes": 35,
-            "prerequisites": [
-              "python-lesson-61"
-            ],
-            "difficulty": "advanced",
-            "tags": [
-              "python",
-              "stage-python-stage-8"
-            ],
-            "guide": [
-              {
-                "kind": "概念入门",
-                "title": "数据清洗要解决什么问题",
-                "body": "把日志清洗中的真实任务先翻译成输入、处理和输出，再理解这个知识点：把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
-                "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
-                ],
-                "example": "实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。"
-              },
-              {
-                "kind": "逐步拆解",
-                "title": "把数据清洗拆成步骤",
-                "body": "先实现日志清洗场景下题目要求的最小路径，再逐项验证：实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。",
-                "bullets": [
-                  "转换失败和范围不合法是两类不同边界。",
-                  "只把通过两层检查的值加入结果。",
-                  "使用字符串、数字、None 和超范围值混合测试。"
-                ],
-                "example": "输入 → 处理 → 输出"
-              },
-              {
-                "kind": "常见误区",
-                "title": "数据清洗的边界检查",
-                "body": "不要只复现日志清洗的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
-                "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
-                ],
-                "example": "assert actual == expected"
-              }
-            ],
-            "videos": [],
-            "officialSources": [
-              {
-                "label": "Python 官方教程",
-                "url": "https://docs.python.org/3/tutorial/",
-                "kind": "official-doc",
-                "verifiedAt": "2026-09-02"
-              }
-            ],
-            "migrations": [],
-            "project": false,
-            "projectLinks": [],
-            "exercise": {
-              "prompt": "实现 clean_scores(values)，把可转换为整数且在 0–100 的值返回为整数列表，忽略其他值。\n场景：日志清洗。改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
-              "starterCode": "def clean_scores(values):\n    pass\n",
-              "hints": [
-                "转换失败和范围不合法是两类不同边界。",
-                "只把通过两层检查的值加入结果。",
-                "使用字符串、数字、None 和超范围值混合测试。"
-              ],
-              "solution": "def clean_scores(values):\n    scores = []\n    for value in values:\n        try:\n            score = int(value)\n        except (TypeError, ValueError):\n            continue\n        if 0 <= score <= 100:\n            scores.append(score)\n    return scores\n"
-            },
-            "browserChecks": [
-              {
-                "name": "混合输入",
-                "expression": "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]",
-                "failure": "应保留可转换且在范围内的分数。",
-                "kind": "behavior"
-              },
-              {
-                "name": "空输入",
-                "expression": "clean_scores([]) == []",
-                "failure": "空输入应返回空列表。",
-                "kind": "behavior"
-              }
-            ]
-          },
-          {
-            "id": "python-lesson-63",
-            "stageId": "python-stage-8",
-            "order": 64,
-            "title": "命令行工具：日志清洗：写出可验证的实现",
-            "kicker": "Python 学习",
-            "summary": "把命令行参数解析与业务函数分开，让入口可测试且错误明确。",
-            "minutes": 35,
-            "prerequisites": [
-              "python-lesson-62"
-            ],
-            "difficulty": "advanced",
-            "tags": [
-              "python",
-              "stage-python-stage-8"
-            ],
-            "guide": [
-              {
-                "kind": "概念入门",
-                "title": "命令行工具要解决什么问题",
-                "body": "把日志清洗中的真实任务先翻译成输入、处理和输出，再理解这个知识点：把命令行参数解析与业务函数分开，让入口可测试且错误明确。",
-                "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
-                ],
-                "example": "实现 parse_args(argv)，读取 --name 后的值并返回字典；缺少值或参数名错误时抛出 ValueError。"
-              },
-              {
-                "kind": "逐步拆解",
-                "title": "把命令行工具拆成步骤",
-                "body": "先实现日志清洗场景下题目要求的最小路径，再逐项验证：实现 parse_args(argv)，读取 --name 后的值并返回字典；缺少值或参数名错误时抛出 ValueError。",
-                "bullets": [
-                  "先验证参数数量和开关位置。",
-                  "空值也属于缺少参数。",
-                  "错误输入应抛出 ValueError 而不是伪造默认名。"
-                ],
-                "example": "输入 → 处理 → 输出"
-              },
-              {
-                "kind": "常见误区",
-                "title": "命令行工具的边界检查",
-                "body": "不要只复现日志清洗的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
-                "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
-                ],
-                "example": "assert actual == expected"
-              }
-            ],
-            "videos": [],
-            "officialSources": [
-              {
-                "label": "Python 官方教程",
-                "url": "https://docs.python.org/3/tutorial/",
-                "kind": "official-doc",
-                "verifiedAt": "2026-09-02"
-              }
-            ],
-            "migrations": [],
-            "project": false,
-            "projectLinks": [],
-            "exercise": {
-              "prompt": "实现 parse_args(argv)，读取 --name 后的值并返回字典；缺少值或参数名错误时抛出 ValueError。\n场景：日志清洗。改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
-              "starterCode": "def parse_args(argv):\n    pass\n",
-              "hints": [
-                "先验证参数数量和开关位置。",
-                "空值也属于缺少参数。",
-                "错误输入应抛出 ValueError 而不是伪造默认名。"
-              ],
-              "solution": "def parse_args(argv):\n    if len(argv) != 2 or argv[0] != \"--name\" or not argv[1]:\n        raise ValueError(\"expected --name VALUE\")\n    return {\"name\": argv[1]}\n"
-            },
-            "browserChecks": [
-              {
-                "name": "解析参数",
-                "expression": "parse_args([\"--name\", \"Stewie\"]) == {\"name\": \"Stewie\"}",
-                "failure": "应按约定读取 --name 的值。",
-                "kind": "behavior"
-              },
-              {
-                "name": "参数错误",
-                "expression": "_raises_value_error(lambda: parse_args([\"--name\"])) and _raises_value_error(lambda: parse_args([\"--other\", \"x\"]))",
-                "failure": "缺少值或未知参数应明确失败。",
                 "kind": "behavior"
               }
             ]
@@ -17732,6 +17732,20 @@
     ],
     "python-lesson-25": [
       {
+        "name": "清洗文本",
+        "expression": "slugify(\"  Hello   Python  \") == \"hello-python\"",
+        "failure": "应同时清理两端和连续空白。",
+        "kind": "behavior"
+      },
+      {
+        "name": "中文保持",
+        "expression": "slugify(\" RAG 学习 \") == \"rag-学习\"",
+        "failure": "清洗不应破坏非 ASCII 文字。",
+        "kind": "behavior"
+      }
+    ],
+    "python-lesson-26": [
+      {
         "name": "边界分类",
         "expression": "[shipping_level(x) for x in [0, 0.5, 1, 5, 6]] == [\"invalid\", \"light\", \"standard\", \"standard\", \"heavy\"]",
         "failure": "各重量边界应进入正确分类。",
@@ -17744,7 +17758,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-26": [
+    "python-lesson-27": [
       {
         "name": "最长值",
         "expression": "longest_word([\"api\", \"langchain\", \"rag\"]) == \"langchain\"",
@@ -17758,7 +17772,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-27": [
+    "python-lesson-28": [
       {
         "name": "默认参数",
         "expression": "describe_task(\"整理笔记\") == {\"name\": \"整理笔记\", \"priority\": \"normal\"}",
@@ -17772,7 +17786,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-28": [
+    "python-lesson-29": [
       {
         "name": "连续调用递增",
         "expression": "((lambda counter: [counter(), counter(), counter()])(make_counter(4))) == [5, 6, 7]",
@@ -17786,7 +17800,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-29": [
+    "python-lesson-30": [
       {
         "name": "保留顺序",
         "expression": "take_every_other([10, 20, 30, 40, 50]) == [10, 30, 50]",
@@ -17800,7 +17814,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-30": [
+    "python-lesson-31": [
       {
         "name": "动态统计",
         "expression": "count_categories([{\"category\": \"rust\"}, {\"category\": \"py\"}, {\"category\": \"rust\"}]) == {\"rust\": 2, \"py\": 1}",
@@ -17814,7 +17828,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-31": [
+    "python-lesson-32": [
       {
         "name": "交集去重",
         "expression": "common_tags([\"rag\", \"python\", \"rag\"], [\"graph\", \"rag\"]) == [\"rag\"]",
@@ -17828,7 +17842,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-32": [
+    "python-lesson-33": [
       {
         "name": "有效值",
         "expression": "parse_positive_int(\"12\") == 12",
@@ -17848,7 +17862,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-33": [
+    "python-lesson-34": [
       {
         "name": "连续存款",
         "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
@@ -17862,7 +17876,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-34": [
+    "python-lesson-35": [
       {
         "name": "延迟遍历",
         "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
@@ -17876,7 +17890,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-35": [
+    "python-lesson-36": [
       {
         "name": "位置参数",
         "expression": "_decorator_probe(twice)",
@@ -17890,7 +17904,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-36": [
+    "python-lesson-37": [
       {
         "name": "公开接口",
         "expression": "callable(make_slug_module()[\"slugify\"])",
@@ -17904,7 +17918,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-37": [
+    "python-lesson-38": [
       {
         "name": "保留非空行",
         "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
@@ -17918,7 +17932,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-38": [
+    "python-lesson-39": [
       {
         "name": "合法边界",
         "expression": "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)",
@@ -17932,7 +17946,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-39": [
+    "python-lesson-40": [
       {
         "name": "混合输入",
         "expression": "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]",
@@ -17946,7 +17960,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-40": [
+    "python-lesson-41": [
       {
         "name": "解析参数",
         "expression": "parse_args([\"--name\", \"Stewie\"]) == {\"name\": \"Stewie\"}",
@@ -17960,7 +17974,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-41": [
+    "python-lesson-42": [
       {
         "name": "按序执行",
         "expression": "run_tasks([lambda: \"a\", lambda: 2]) == [\"a\", 2]",
@@ -17974,7 +17988,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-42": [
+    "python-lesson-43": [
       {
         "name": "成功响应",
         "expression": "classify_response(200, \"ok\", False) == {\"status\": \"ok\", \"body\": \"ok\"}",
@@ -17994,7 +18008,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-43": [
+    "python-lesson-44": [
       {
         "name": "提交更新",
         "expression": "apply_changes({\"count\": 1}, {\"count\": 2}, False) == {\"count\": 2}",
@@ -18008,7 +18022,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-44": [
+    "python-lesson-45": [
       {
         "name": "脱敏密钥",
         "expression": "redact_config({\"model\": \"demo\", \"api_key\": \"secret\"}) == {\"model\": \"demo\", \"api_key\": \"[stored securely]\"}",
@@ -18022,7 +18036,21 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-45": [
+    "python-lesson-46": [
+      {
+        "name": "保留阶段",
+        "expression": "safe_event(\"retrieve\", {\"count\": 2}, \"secret\") == {\"stage\": \"retrieve\", \"result\": {\"count\": 2}, \"redacted_key\": \"[redacted]\"}",
+        "failure": "事件应保留阶段与真实结果。",
+        "kind": "behavior"
+      },
+      {
+        "name": "密钥脱敏",
+        "expression": "safe_event(\"model\", \"ok\", \"secret\")[\"redacted_key\"] == \"[redacted]\"",
+        "failure": "日志不得回显 API Key。",
+        "kind": "behavior"
+      }
+    ],
+    "python-lesson-47": [
       {
         "name": "输出契约",
         "expression": "weather_tool(\" 成都 \") == {\"city\": \"成都\", \"condition\": \"unknown\"}",
@@ -18036,7 +18064,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-46": [
+    "python-lesson-48": [
       {
         "name": "转换数字",
         "expression": "parse_price(\" 12.5 \") == 12.5",
@@ -18050,7 +18078,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-47": [
+    "python-lesson-49": [
       {
         "name": "清洗文本",
         "expression": "slugify(\"  Hello   Python  \") == \"hello-python\"",
@@ -18064,7 +18092,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-48": [
+    "python-lesson-50": [
       {
         "name": "边界分类",
         "expression": "[shipping_level(x) for x in [0, 0.5, 1, 5, 6]] == [\"invalid\", \"light\", \"standard\", \"standard\", \"heavy\"]",
@@ -18078,7 +18106,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-49": [
+    "python-lesson-51": [
       {
         "name": "最长值",
         "expression": "longest_word([\"api\", \"langchain\", \"rag\"]) == \"langchain\"",
@@ -18092,7 +18120,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-50": [
+    "python-lesson-52": [
       {
         "name": "默认参数",
         "expression": "describe_task(\"整理笔记\") == {\"name\": \"整理笔记\", \"priority\": \"normal\"}",
@@ -18106,7 +18134,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-51": [
+    "python-lesson-53": [
       {
         "name": "连续调用递增",
         "expression": "((lambda counter: [counter(), counter(), counter()])(make_counter(4))) == [5, 6, 7]",
@@ -18120,7 +18148,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-52": [
+    "python-lesson-54": [
       {
         "name": "保留顺序",
         "expression": "take_every_other([10, 20, 30, 40, 50]) == [10, 30, 50]",
@@ -18134,7 +18162,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-53": [
+    "python-lesson-55": [
       {
         "name": "动态统计",
         "expression": "count_categories([{\"category\": \"rust\"}, {\"category\": \"py\"}, {\"category\": \"rust\"}]) == {\"rust\": 2, \"py\": 1}",
@@ -18148,7 +18176,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-54": [
+    "python-lesson-56": [
       {
         "name": "交集去重",
         "expression": "common_tags([\"rag\", \"python\", \"rag\"], [\"graph\", \"rag\"]) == [\"rag\"]",
@@ -18162,7 +18190,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-55": [
+    "python-lesson-57": [
       {
         "name": "有效值",
         "expression": "parse_positive_int(\"12\") == 12",
@@ -18182,7 +18210,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-56": [
+    "python-lesson-58": [
       {
         "name": "连续存款",
         "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
@@ -18196,7 +18224,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-57": [
+    "python-lesson-59": [
       {
         "name": "延迟遍历",
         "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-2, 0, 3, 5])) == [3, 5]",
@@ -18210,7 +18238,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-58": [
+    "python-lesson-60": [
       {
         "name": "位置参数",
         "expression": "_decorator_probe(twice)",
@@ -18224,7 +18252,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-59": [
+    "python-lesson-61": [
       {
         "name": "公开接口",
         "expression": "callable(make_slug_module()[\"slugify\"])",
@@ -18238,7 +18266,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-60": [
+    "python-lesson-62": [
       {
         "name": "保留非空行",
         "expression": "_file_probe(read_nonempty_lines, [\" a \", \"\\n\", \"b\\n\"]) == [\"a\", \"b\"]",
@@ -18252,7 +18280,7 @@
         "kind": "behavior"
       }
     ],
-    "python-lesson-61": [
+    "python-lesson-63": [
       {
         "name": "合法边界",
         "expression": "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)",
@@ -18263,34 +18291,6 @@
         "name": "非法输入",
         "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
         "failure": "过短或含非法符号的名字应拒绝。",
-        "kind": "behavior"
-      }
-    ],
-    "python-lesson-62": [
-      {
-        "name": "混合输入",
-        "expression": "clean_scores([\"80\", 95, \"x\", -1, 101]) == [80, 95]",
-        "failure": "应保留可转换且在范围内的分数。",
-        "kind": "behavior"
-      },
-      {
-        "name": "空输入",
-        "expression": "clean_scores([]) == []",
-        "failure": "空输入应返回空列表。",
-        "kind": "behavior"
-      }
-    ],
-    "python-lesson-63": [
-      {
-        "name": "解析参数",
-        "expression": "parse_args([\"--name\", \"Stewie\"]) == {\"name\": \"Stewie\"}",
-        "failure": "应按约定读取 --name 的值。",
-        "kind": "behavior"
-      },
-      {
-        "name": "参数错误",
-        "expression": "_raises_value_error(lambda: parse_args([\"--name\"])) and _raises_value_error(lambda: parse_args([\"--other\", \"x\"]))",
-        "failure": "缺少值或未知参数应明确失败。",
         "kind": "behavior"
       }
     ],

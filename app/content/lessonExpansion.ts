@@ -9,7 +9,7 @@ const SOURCES: Record<CourseTrack["id"], { label: string; url: string }> = {
 };
 
 const TOPICS: Record<CourseTrack["id"], string[]> = {
-  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "SQLite 持久化与事务边界", "本地配置与安全边界", "Agent 工具契约"],
+  python: ["变量与类型", "字符串处理", "条件分支", "循环与迭代", "函数参数", "作用域", "列表与切片", "字典聚合", "集合运算", "异常边界", "类与对象", "生成器", "装饰器", "模块拆分", "文件读写", "测试设计", "数据清洗", "命令行工具", "并发基础", "HTTP 请求与失败边界", "SQLite 持久化与事务边界", "本地配置与安全边界", "日志与可观测性", "Agent 工具契约"],
   "langchain-rag": ["消息角色", "Prompt 模板", "结构化输出", "Runnable 组合", "模型配置", "文档加载", "文本切分", "Embedding", "向量存储", "相似度检索", "混合检索", "重排", "引用生成", "无答案边界", "RAG 评估", "追踪与观测", "工具调用", "Agent 循环", "多查询检索", "RAG 项目"],
   langgraph: ["StateGraph", "节点与边", "状态更新", "条件路由", "循环终止", "Reducer", "Checkpoint", "thread_id", "短期记忆", "Store", "长期记忆", "Interrupt", "恢复执行", "流式事件", "子图", "并行分支", "Supervisor", "多 Agent 协作", "人工审核", "Graph 项目"],
 };
@@ -311,6 +311,17 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
     checks: [
       { name: "脱敏密钥", expression: "redact_config({\"model\": \"demo\", \"api_key\": \"secret\"}) == {\"model\": \"demo\", \"api_key\": \"[stored securely]\"}", failure: "返回配置不得回显 API Key。", kind: "behavior" },
       { name: "不改原值", expression: "((lambda config: (redact_config(config), config))({\"api_key\": \"secret\"}))[1] == {\"api_key\": \"secret\"}", failure: "脱敏不应修改调用者持有的原配置。", kind: "behavior" },
+    ],
+  },
+  "日志与可观测性": {
+    summary: "记录可定位的阶段和结果，同时过滤 API Key 等敏感值。",
+    prompt: "实现 safe_event(stage, result, api_key)，返回 stage、result 和 redacted_key；redacted_key 只能是 '[redacted]'，不能包含 api_key。",
+    starterCode: "def safe_event(stage, result, api_key):\n    pass\n",
+    solution: "def safe_event(stage, result, api_key):\n    return {\"stage\": stage, \"result\": result, \"redacted_key\": \"[redacted]\"}\n",
+    hints: ["事件要保留阶段和真实结果。", "密钥字段只输出固定脱敏标记。", "检查返回值中不能出现原始 api_key。"],
+    checks: [
+      { name: "保留阶段", expression: "safe_event(\"retrieve\", {\"count\": 2}, \"secret\") == {\"stage\": \"retrieve\", \"result\": {\"count\": 2}, \"redacted_key\": \"[redacted]\"}", failure: "事件应保留阶段与真实结果。", kind: "behavior" },
+      { name: "密钥脱敏", expression: "safe_event(\"model\", \"ok\", \"secret\")[\"redacted_key\"] == \"[redacted]\"", failure: "日志不得回显 API Key。", kind: "behavior" },
     ],
   },
 };
