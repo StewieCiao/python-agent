@@ -98,6 +98,10 @@ const modelConfigCases = [
 ] as const;
 const messageCases = ["RAG", "检索", "Agent", "LangGraph", "评测", "记忆"] as const;
 const runnableCases = ["退款政策", "部署手册", "权限规则", "数据字典", "审核流程", "服务协议"] as const;
+const supervisorCases = [
+  ["researcher", "RAG", "RAG!"], ["writer", "摘要", "摘要!"], ["reviewer", "草稿", "草稿!"],
+  ["planner", "步骤", "步骤!"], ["retriever", "文档", "文档!"], ["editor", "标题", "标题!"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -210,6 +214,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `chain_steps == ["template", "model", "parser"] and result["answer"] == "关于 ${topic} 的说明" and pipeline_error is None`,
       `result is not None and pipeline_error is None`,
       "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+    ))),
+  },
+  {
+    id: "langgraph-supervisor-v1", lessonIds: ["supervisor-routing"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-worker", "lost-handoff-context"], constraints: ["route by explicit role", "preserve task and result"],
+    variants: supervisorCases.map(([role, task, expected]) => variant(`${role}：${task}`, `${role} / ${task}`, twoBehaviorChecks(
+      `handoff({"role":"${role}","task":"${task}"}, {"${role}": lambda value: value + "!"}) == {"role":"${role}","task":"${task}","result":"${expected}"}`,
+      `_raises_key_error(lambda: handoff({"role":"missing","task":"x"}, {}))`,
+      "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
     ))),
   },
   {

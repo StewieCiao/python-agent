@@ -430,6 +430,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "supervisor-routing",
+      familyId: "langgraph-supervisor-v1",
       title: "Supervisor 路由与角色交接",
       summary: "让 Supervisor 根据任务类型选择已注册的 Agent，并保留可观察的交接结果。",
       prerequisites: ["subgraphs-parallelism"], difficulty: "advanced", tags: ["supervisor", "multi-agent", "routing"],

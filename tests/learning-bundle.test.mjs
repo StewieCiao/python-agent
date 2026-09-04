@@ -761,6 +761,16 @@ test("LangChain Runnable 课接入步骤顺序个性化练习 family", async () 
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("chain_steps"))));
 });
 
+test("LangGraph Supervisor 课接入角色交接个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph")?.lessons.find(({ id }) => id === "supervisor-routing");
+  assert.equal(lesson?.familyId, "langgraph-supervisor-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("handoff"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

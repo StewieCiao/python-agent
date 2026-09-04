@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "5060d3e8a39dfca260d34dca33f9af8f200322c7dd9b5944e1255635476ae47a",
-  "familyHash": "cc705fd63746e6459720eb5370dce8e854b39f04a54fd0aa098384d6f7f2e8e6",
+  "catalogHash": "54ce22ef3c68d05b36aa2d18c4c33789846098672dca9c842f83e1638ea7b88f",
+  "familyHash": "9dcccea0584720877f9cff1f26451596a003b3546a9fd86bf666b4f5e74e254f",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12792,6 +12792,7 @@
           },
           {
             "id": "supervisor-routing",
+            "familyId": "langgraph-supervisor-v1",
             "stageId": "langgraph-stage-2",
             "order": 9,
             "title": "Supervisor 路由与角色交接",
@@ -18088,6 +18089,132 @@
             {
               "name": "边界行为",
               "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-supervisor-v1": {
+      "id": "langgraph-supervisor-v1",
+      "lessonIds": [
+        "supervisor-routing"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-worker",
+        "lost-handoff-context"
+      ],
+      "constraints": [
+        "route by explicit role",
+        "preserve task and result"
+      ],
+      "variants": [
+        {
+          "label": "researcher：RAG",
+          "values": "researcher / RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"researcher\",\"task\":\"RAG\"}, {\"researcher\": lambda value: value + \"!\"}) == {\"role\":\"researcher\",\"task\":\"RAG\",\"result\":\"RAG!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "writer：摘要",
+          "values": "writer / 摘要",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"writer\",\"task\":\"摘要\"}, {\"writer\": lambda value: value + \"!\"}) == {\"role\":\"writer\",\"task\":\"摘要\",\"result\":\"摘要!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reviewer：草稿",
+          "values": "reviewer / 草稿",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"reviewer\",\"task\":\"草稿\"}, {\"reviewer\": lambda value: value + \"!\"}) == {\"role\":\"reviewer\",\"task\":\"草稿\",\"result\":\"草稿!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "planner：步骤",
+          "values": "planner / 步骤",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"planner\",\"task\":\"步骤\"}, {\"planner\": lambda value: value + \"!\"}) == {\"role\":\"planner\",\"task\":\"步骤\",\"result\":\"步骤!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "retriever：文档",
+          "values": "retriever / 文档",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"retriever\",\"task\":\"文档\"}, {\"retriever\": lambda value: value + \"!\"}) == {\"role\":\"retriever\",\"task\":\"文档\",\"result\":\"文档!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "editor：标题",
+          "values": "editor / 标题",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff({\"role\":\"editor\",\"task\":\"标题\"}, {\"editor\": lambda value: value + \"!\"}) == {\"role\":\"editor\",\"task\":\"标题\",\"result\":\"标题!\"}",
+              "failure": "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
