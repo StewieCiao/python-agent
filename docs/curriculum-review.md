@@ -20,6 +20,7 @@
 - 桌面 RAG 面板现可对用户提供的小型问答集逐条执行真实检索并显示 recall@k、MRR、引用覆盖、引用一致性代理和耗时；模型未返回 token usage 时明确标为不可用，不估算成本。
 - 个性化练习 family 现在从作者源携带六组变体和独立行为检查；覆盖 Python 输出/循环/字符串/分支/函数/容器/异常/类与对象/生成器/装饰器/文本分析/项目汇总/任务优先级/Plan-and-Solve/Reflection/记忆检索/Agent 交接/旅行助手/DeepResearch/ReAct 循环/Mini Agent 毕业项目/Tool Registry/Action 解析，以及 LangChain 消息/模型配置/Runnable、工具调用项目、文档问答项目、RAG 观测项目、结构化输出、检索链、混合检索、重排、引用、RAG 评估和 LangGraph 路由、checkpoint、Store 长期记忆、Interrupt 审批、人工审核、审核项目、多 Agent 调度项目、长期记忆项目、可恢复研究项目、Supervisor 角色交接、工具节点错误状态。Python 服务只校验签名快照中的检查，桌面 Worker 使用个性题检查而不是原关卡样例。
 - 个性题生成会从当前种子位置顺序跳过最近已使用的变体；仅当近期记录覆盖全部候选时明确失败，避免同一学习者重复点击时误报。
+- 项目个性化覆盖回归已锁定 14 个阶段项目（Python 6、LangChain/RAG 4、LangGraph 4）全部绑定 family；每个 family 固定六组变体并至少包含两项行为检查，防止新增项目只完成静态题面而遗漏错题闭环。
 - 每节课程至少包含两项带名称、表达式和失败说明的反馈检查；旧草稿中的占位表达式已移除。
 - `npm run lint -- --max-warnings=0`：通过。
 - `npm run build`：通过。
