@@ -17,9 +17,11 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
   const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
   const [personalizedStatus, setPersonalizedStatus] = useState("");
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
-  const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => learningTracks
-    .flatMap((candidateTrack) => candidateTrack.lessons)
-    .find((item) => item.id === id)?.title ?? id);
+  const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => {
+    const prerequisiteTrack = learningTracks.find((candidateTrack) => candidateTrack.lessons.some((item) => item.id === id));
+    const title = prerequisiteTrack?.lessons.find((item) => item.id === id)?.title ?? id;
+    return prerequisiteTrack && prerequisiteTrack.id !== track.id ? `${prerequisiteTrack.shortTitle} · ${title}` : title;
+  });
 
   async function requestPersonalized() {
     if (!lesson.familyId) return;
