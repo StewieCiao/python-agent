@@ -53,6 +53,15 @@ test("RAG 在向量信号不足时保留明确关键词命中", async () => {
   assert.deepEqual(result.sources, ["docs/a"]);
 });
 
+test("RAG 关键词召回覆盖中文短语", async () => {
+  const service = createRagService({
+    embeddings: async (_profile, inputs) => inputs.map((_input, index) => index === 0 ? [1, 0] : [0, 1]),
+    chat: async () => "答案",
+  });
+  const result = await service.answer("p1", "如何保存状态", [{ id: "a", text: "checkpointer 保存状态", source: "docs/a" }]);
+  assert.deepEqual(result.sources, ["docs/a"]);
+});
+
 test("RAG 拒绝空问题或空文档，不调用模型", async () => {
   let called = false;
   const service = createRagService({ embeddings: async () => { called = true; return []; }, chat: async () => "" });

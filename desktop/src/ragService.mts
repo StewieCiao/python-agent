@@ -17,9 +17,19 @@ function cosine(a: number[], b: number[]): number {
   return left && right ? dot / Math.sqrt(left * right) : 0;
 }
 
+function lexicalTokens(value: string): string[] {
+  const tokens: string[] = [];
+  for (const part of value.toLocaleLowerCase().match(/[a-z\d_]+|[\u4e00-\u9fff]+/giu) ?? []) {
+    if (/^[\u4e00-\u9fff]+$/u.test(part)) {
+      for (let index = 0; index < part.length - 1; index += 1) tokens.push(part.slice(index, index + 2));
+    } else tokens.push(part);
+  }
+  return [...new Set(tokens)];
+}
+
 function lexicalScore(query: string, text: string): number {
-  const queryTokens = [...new Set(query.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? [])];
-  const documentTokens = new Set(text.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []);
+  const queryTokens = lexicalTokens(query);
+  const documentTokens = new Set(lexicalTokens(text));
   if (queryTokens.length === 0) return 0;
   return queryTokens.filter((token) => documentTokens.has(token)).length / queryTokens.length;
 }
@@ -32,7 +42,7 @@ export function createRagService(client: Pick<ModelClient, "embeddings" | "chat"
       const ranked = documents.map((document, index) => {
         const score = cosine(vectors[0], vectors[index + 1]);
         const lexical = lexicalScore(query, document.text);
-        return { document, score, relevance: score * 0.75 + lexical * 0.25 };
+        return { document, score, relevance: score * 0.6 + lexical * 0.4 };
       })
         .filter(({ relevance }) => relevance >= MIN_SIMILARITY)
         .sort((left, right) => right.relevance - left.relevance).slice(0, 4);
