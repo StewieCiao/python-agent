@@ -32,7 +32,7 @@
     "start": "node scripts/run-local.mjs start",
     "start:site": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
-    "test:all": "npm run prepare:python-runtime && npm run test:python && npm run test && npm run lint -- --max-warnings=0 && npm run desktop:typecheck && npm run build",
+    "test:all": "npm run prepare:python-runtime && npm run test:python && npm run test && npm run lint -- --max-warnings=0 && npm run desktop:typecheck && npm run build && npm run build:pages",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern public/pyodide"
   },
   "dependencies": {
