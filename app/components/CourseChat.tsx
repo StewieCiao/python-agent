@@ -101,6 +101,7 @@ export function CourseChat({ track, lesson, onClose }: {
             })}>保存到本地资料库</button>
             <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await listRagDocuments()))}>读取已保存资料</button>
           </div>
+          {ragDocuments.length > 0 && <small className="rag-library-count">当前已载入 {ragDocuments.length} 个资料片段，可直接用于检索。</small>}
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
           <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
             const result = await answerWithRag({ profileId, query: ragQuery, documents: currentRagDocuments() });
