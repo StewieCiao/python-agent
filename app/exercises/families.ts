@@ -103,6 +103,14 @@ const supervisorCases = [
   ["planner", "步骤", "步骤!"], ["retriever", "文档", "文档!"], ["editor", "标题", "标题!"],
 ] as const;
 const toolNodeCases = ["天气", "检索", "汇率", "日历", "状态", "摘要"] as const;
+const planCases = [
+  ['[{"name":"write","priority":3},{"name":"learn","priority":5},{"name":"build","priority":3}]', '["learn", "build", "write"]'],
+  ['[{"name":"zeta","priority":2},{"name":"alpha","priority":2},{"name":"mid","priority":4}]', '["mid", "alpha", "zeta"]'],
+  ['[{"name":"api","priority":1},{"name":"test","priority":5}]', '["test", "api"]'],
+  ['[{"name":"docs","priority":4},{"name":"code","priority":4},{"name":"ship","priority":2}]', '["code", "docs", "ship"]'],
+  ['[{"name":"b","priority":3},{"name":"a","priority":3},{"name":"c","priority":3}]', '["a", "b", "c"]'],
+  ['[{"name":"one","priority":1}]', '["one"]'],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -233,6 +241,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `run_tool({"tool_args":{"value":"${topic}"}}, lambda value: value + "!" ) == {"tool_status":"ok","tool_result":"${topic}!","tool_error":None}`,
       `run_tool({}, lambda value: value) ["tool_status"] == "error" and run_tool({"tool_args":{"value":"x"}}, lambda value: (_ for _ in ()).throw(ValueError("bad")))["tool_error"]["type"] == "ValueError"`,
       "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+    ))),
+  },
+  {
+    id: "python-plan-v1", lessonIds: ["project-tasks"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-priority-order", "accepted-invalid-priority"], constraints: ["sort priority descending then name", "reject priorities outside 1..5"],
+    variants: planCases.map(([tasks, expected]) => variant(`任务 ${tasks}`, tasks, twoBehaviorChecks(
+      `plan(${tasks}) == ${expected}`,
+      `_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))`,
+      "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
     ))),
   },
   {

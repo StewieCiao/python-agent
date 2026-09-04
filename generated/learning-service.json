@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "dadc3ced033dd60b0e8feb1fa2b1e0e97abdc2d3b85f28ae0696c1316080576e",
-  "familyHash": "e175b06eb4cf75f77e86f8cba4525015a8ebcfef950e6a9022c19a331a162b44",
+  "catalogHash": "2154ad468a5dacad91944c8ab5df8377876d548ff37a2e71fffd03d3fb533bf3",
+  "familyHash": "4b353525b41f4be379f08f78a97d66aa9182ecd6a3f26907a5140ccec9f071b0",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1671,6 +1671,7 @@
           },
           {
             "id": "project-tasks",
+            "familyId": "python-plan-v1",
             "stageId": "python-stage-2",
             "order": 15,
             "title": "Agent 任务优先级引擎",
@@ -18342,6 +18343,132 @@
             {
               "name": "边界行为",
               "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-plan-v1": {
+      "id": "python-plan-v1",
+      "lessonIds": [
+        "project-tasks"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-priority-order",
+        "accepted-invalid-priority"
+      ],
+      "constraints": [
+        "sort priority descending then name",
+        "reject priorities outside 1..5"
+      ],
+      "variants": [
+        {
+          "label": "任务 [{\"name\":\"write\",\"priority\":3},{\"name\":\"learn\",\"priority\":5},{\"name\":\"build\",\"priority\":3}]",
+          "values": "[{\"name\":\"write\",\"priority\":3},{\"name\":\"learn\",\"priority\":5},{\"name\":\"build\",\"priority\":3}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"write\",\"priority\":3},{\"name\":\"learn\",\"priority\":5},{\"name\":\"build\",\"priority\":3}]) == [\"learn\", \"build\", \"write\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "任务 [{\"name\":\"zeta\",\"priority\":2},{\"name\":\"alpha\",\"priority\":2},{\"name\":\"mid\",\"priority\":4}]",
+          "values": "[{\"name\":\"zeta\",\"priority\":2},{\"name\":\"alpha\",\"priority\":2},{\"name\":\"mid\",\"priority\":4}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"zeta\",\"priority\":2},{\"name\":\"alpha\",\"priority\":2},{\"name\":\"mid\",\"priority\":4}]) == [\"mid\", \"alpha\", \"zeta\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "任务 [{\"name\":\"api\",\"priority\":1},{\"name\":\"test\",\"priority\":5}]",
+          "values": "[{\"name\":\"api\",\"priority\":1},{\"name\":\"test\",\"priority\":5}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"api\",\"priority\":1},{\"name\":\"test\",\"priority\":5}]) == [\"test\", \"api\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "任务 [{\"name\":\"docs\",\"priority\":4},{\"name\":\"code\",\"priority\":4},{\"name\":\"ship\",\"priority\":2}]",
+          "values": "[{\"name\":\"docs\",\"priority\":4},{\"name\":\"code\",\"priority\":4},{\"name\":\"ship\",\"priority\":2}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"docs\",\"priority\":4},{\"name\":\"code\",\"priority\":4},{\"name\":\"ship\",\"priority\":2}]) == [\"code\", \"docs\", \"ship\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "任务 [{\"name\":\"b\",\"priority\":3},{\"name\":\"a\",\"priority\":3},{\"name\":\"c\",\"priority\":3}]",
+          "values": "[{\"name\":\"b\",\"priority\":3},{\"name\":\"a\",\"priority\":3},{\"name\":\"c\",\"priority\":3}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"b\",\"priority\":3},{\"name\":\"a\",\"priority\":3},{\"name\":\"c\",\"priority\":3}]) == [\"a\", \"b\", \"c\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "任务 [{\"name\":\"one\",\"priority\":1}]",
+          "values": "[{\"name\":\"one\",\"priority\":1}]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "plan([{\"name\":\"one\",\"priority\":1}]) == [\"one\"]",
+              "failure": "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
