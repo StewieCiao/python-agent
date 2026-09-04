@@ -11,6 +11,7 @@ export const langgraphHints: Record<string, [string, string, string]> = {
   "subgraphs-parallelism": ["先画出父图与子图的状态边界。", "为并行写入字段定义 reducer。", "检查空分支和失败分支的汇总结果。"],
   "memory-research-project": ["先列出 thread state 与 Store memory。", "再安排检索、审核和写作节点。", "最后用恢复和引用测试验收项目。"],
   "tool-node-boundaries": ["先校验 tool_args", "分别记录成功与错误状态", "用缺失参数和工具异常验证路由"],
+  "human-review-state": ["先保存 pending_review 状态", "批准后才执行副作用", "用 reject 和未知决定验证恢复边界"],
 };
 
 export const langgraphChecks: Record<string, NonNullable<LearningLesson["browserChecks"]>> = {
@@ -56,5 +57,10 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "成功结果", expression: "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: value * 2)[\"tool_status\"] == \"ok\"", failure: "有效参数和工具成功时应返回 ok。", kind: "behavior" },
     { name: "失败状态", expression: "run_tool({\"tool_args\": {\"value\": 2}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_status\"] == \"error\"", failure: "工具异常应保留 error 状态，不能伪装成功。", kind: "behavior" },
     { name: "错误详情", expression: "run_tool({}, lambda: 1)[\"tool_error\"][\"type\"] == \"ValueError\"", failure: "缺少 tool_args 时应记录明确的错误类型。", kind: "behavior" },
+  ],
+  "human-review-state": [
+    { name: "批准恢复", expression: "resume_review({\"action\": \"send\"}, \"approve\") == {\"status\": \"approved\", \"action\": \"send\"}", failure: "approve 应恢复动作并保留原 action。", kind: "behavior" },
+    { name: "拒绝取消", expression: "resume_review({\"action\": \"send\"}, \"reject\") == {\"status\": \"cancelled\", \"action\": \"send\"}", failure: "reject 应取消动作并保留可复盘状态。", kind: "behavior" },
+    { name: "未知决定", expression: "_raises_value_error(lambda: resume_review({\"action\": \"send\"}, \"later\"))", failure: "未知人工决定不能默认批准。", kind: "behavior" },
   ],
 };

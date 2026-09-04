@@ -442,6 +442,23 @@ export const langgraphTrack: LearningTrack = {
       exercise: { prompt: "实现 handoff(state, workers)：从 state['role'] 选择 worker 执行 state['task']，返回 role、task 和 result；未知 role 必须抛出 KeyError。", starterCode: `def handoff(state, workers):\n    pass\n`, solution: `def handoff(state, workers):\n    role = state[\"role\"]\n    result = workers[role](state[\"task\"])\n    return {\"role\": role, \"task\": state[\"task\"], \"result\": result}\n` },
     },
     {
+      id: "human-review-state",
+      title: "人工审核状态与恢复",
+      prerequisites: ["streaming-interrupts"], difficulty: "advanced", tags: ["interrupt", "human-in-the-loop", "recovery"],
+      summary: "把高风险动作暂停为 pending_review，并根据人工决定恢复或取消。",
+      minutes: 40,
+      guide: [
+        { title: "暂停是显式状态", body: "interrupt 不只是暂停函数，它应让图留下可恢复的状态和待审核内容。后续节点读取 pending_review，才能知道流程为什么停下。", bullets: ["保存待审核动作", "状态包含 thread 范围", "暂停不等于成功"], example: `review = {"status": "pending_review", "action": "send_report"}` },
+        { title: "恢复只接受明确决定", body: "恢复时把人工决定作为输入：approve 才继续，reject 则结束并保留取消原因。未知决定必须失败，不能默认批准。", bullets: ["批准和拒绝分支明确", "拒绝也写回状态", "未知决定保留错误"], example: `def resume_review(review, decision):\n    if decision == "approve":\n        return {**review, "status": "approved"}` },
+        { title: "审核状态的常见误区", body: "完成“人工审核状态与恢复”时，不要在 interrupt 前执行不可逆副作用，也不要用布尔值覆盖待审核上下文；先验证状态，再恢复同一 thread。", bullets: ["副作用放在批准后", "保留原动作", "恢复使用原 thread"], example: `{"status": "cancelled", "action": review["action"]}` },
+      ],
+      videos: [{ title: "LangGraph Essentials - Python", url: ACADEMY_ESSENTIALS, provider: "LangChain Academy", language: "英文", duration: "1 小时", note: "补充 interrupt、人工审核与恢复执行。" }],
+      officialSources: [{ label: "LangGraph interrupts", url: INTERRUPTS }],
+      migrations: [{ title: "隐式布尔确认 → 可恢复审核状态", status: "replaced", explanation: "把待审核动作、人工决定和恢复结果写入图状态；未知决定不默认批准。", beforeCode: "if approved:\n    send_report()", afterCode: "review = interrupt({" + "\"action\": \"send_report\"})", officialSources: [{ label: "LangGraph interrupts", url: INTERRUPTS }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      project: false, projectLinks: [],
+      exercise: { prompt: "实现 resume_review(review, decision)：review 包含 action；approve 返回 status=approved，reject 返回 status=cancelled；两者都保留 action 并清除 pending_review，其他决定抛出 ValueError。", starterCode: `def resume_review(review, decision):\n    pass\n`, solution: `def resume_review(review, decision):\n    if decision == "approve":\n        return {"status": "approved", "action": review["action"]}\n    if decision == "reject":\n        return {"status": "cancelled", "action": review["action"]}\n    raise ValueError("unknown decision")\n` },
+    },
+    {
       id: "tool-node-boundaries",
       title: "工具节点的输入校验与错误状态",
       summary: "让工具节点把参数校验、真实执行结果和失败状态写回图状态。",

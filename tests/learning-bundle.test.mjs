@@ -670,6 +670,19 @@ test("LangGraph 工具节点课明确输入校验与错误状态", async () => {
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("graph")));
 });
 
+test("LangGraph 人工审核课明确暂停状态和批准恢复", async () => {
+  const { learningTracks } = await import("../app/content/learningCatalog.ts");
+  const track = learningTracks.find(({ id }) => id === "langgraph");
+  assert.ok(track);
+  const lesson = track.lessons.find((item) => item.id === "human-review-state");
+  assert.ok(lesson);
+  assert.equal(lesson.guide.length, 3);
+  assert.equal(lesson.exercise.hints.length, 3);
+  assert.equal(lesson.browserChecks.length, 3);
+  assert.ok(lesson.exercise.prompt.includes("pending_review"));
+  assert.ok(lesson.officialSources.some(({ url }) => url.includes("interrupt")));
+});
+
 test("扩展课程讲解卡使用主题骨架而不是统一占位示例", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const generated = authoredCatalog.tracks.flatMap(({ lessons }) => lessons).find(({ id }) => id.includes("-lesson-") && !id.endsWith("-01"));

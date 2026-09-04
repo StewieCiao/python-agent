@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "793b8af6a74f876632861af296b8dc1e73c298585963e9cbcaf59fead68de5e3",
-  "familyHash": "c90adf6ee321dd06e28d60ee167035ac886da26282b89eb9e60e679ce84d4d3e",
+  "catalogHash": "e32bc8c949afdb62566b887c072e9f522c3ffedef65b352a30c2e2f7096b49ec",
+  "familyHash": "e42764be4e5d3c19d9fa0ac190f64485ccc65490f81cdd018d52bd02e3b4efcc",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -11705,8 +11705,8 @@
               "memory-research-project",
               "checkpoint-configuration",
               "supervisor-routing",
+              "human-review-state",
               "tool-node-boundaries",
-              "langgraph-lesson-10",
               "langgraph-lesson-11"
             ]
           },
@@ -12898,9 +12898,136 @@
             ]
           },
           {
-            "id": "tool-node-boundaries",
+            "id": "human-review-state",
             "stageId": "langgraph-stage-2",
             "order": 10,
+            "title": "人工审核状态与恢复",
+            "kicker": "langgraph 学习",
+            "summary": "把高风险动作暂停为 pending_review，并根据人工决定恢复或取消。",
+            "minutes": 40,
+            "prerequisites": [
+              "streaming-interrupts"
+            ],
+            "difficulty": "advanced",
+            "tags": [
+              "interrupt",
+              "human-in-the-loop",
+              "recovery"
+            ],
+            "guide": [
+              {
+                "kind": "概念入门",
+                "title": "暂停是显式状态",
+                "body": "interrupt 不只是暂停函数，它应让图留下可恢复的状态和待审核内容。后续节点读取 pending_review，才能知道流程为什么停下。",
+                "bullets": [
+                  "保存待审核动作",
+                  "状态包含 thread 范围",
+                  "暂停不等于成功"
+                ],
+                "example": "review = {\"status\": \"pending_review\", \"action\": \"send_report\"}"
+              },
+              {
+                "kind": "逐步拆解",
+                "title": "恢复只接受明确决定",
+                "body": "恢复时把人工决定作为输入：approve 才继续，reject 则结束并保留取消原因。未知决定必须失败，不能默认批准。",
+                "bullets": [
+                  "批准和拒绝分支明确",
+                  "拒绝也写回状态",
+                  "未知决定保留错误"
+                ],
+                "example": "def resume_review(review, decision):\n    if decision == \"approve\":\n        return {**review, \"status\": \"approved\"}"
+              },
+              {
+                "kind": "常见误区",
+                "title": "审核状态的常见误区",
+                "body": "完成“人工审核状态与恢复”时，不要在 interrupt 前执行不可逆副作用，也不要用布尔值覆盖待审核上下文；先验证状态，再恢复同一 thread。",
+                "bullets": [
+                  "副作用放在批准后",
+                  "保留原动作",
+                  "恢复使用原 thread"
+                ],
+                "example": "{\"status\": \"cancelled\", \"action\": review[\"action\"]}"
+              }
+            ],
+            "videos": [
+              {
+                "title": "LangGraph Essentials - Python",
+                "url": "https://academy.langchain.com/courses/langgraph-essentials-python",
+                "provider": "LangChain Academy",
+                "language": "英文",
+                "duration": "1 小时",
+                "note": "补充 interrupt、人工审核与恢复执行。"
+              }
+            ],
+            "officialSources": [
+              {
+                "label": "LangGraph interrupts",
+                "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+                "kind": "official-doc",
+                "verifiedAt": "2026-09-02"
+              }
+            ],
+            "migrations": [
+              {
+                "title": "隐式布尔确认 → 可恢复审核状态",
+                "status": "replaced",
+                "explanation": "把待审核动作、人工决定和恢复结果写入图状态；未知决定不默认批准。",
+                "beforeCode": "if approved:\n    send_report()",
+                "afterCode": "review = interrupt({\"action\": \"send_report\"})",
+                "officialSources": [
+                  {
+                    "label": "LangGraph interrupts",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
+            "project": false,
+            "projectLinks": [
+              "langgraph-lesson-11"
+            ],
+            "exercise": {
+              "prompt": "实现 resume_review(review, decision)：review 包含 action；approve 返回 status=approved，reject 返回 status=cancelled；两者都保留 action 并清除 pending_review，其他决定抛出 ValueError。",
+              "starterCode": "def resume_review(review, decision):\n    pass\n",
+              "hints": [
+                "先保存 pending_review 状态",
+                "批准后才执行副作用",
+                "用 reject 和未知决定验证恢复边界"
+              ],
+              "solution": "def resume_review(review, decision):\n    if decision == \"approve\":\n        return {\"status\": \"approved\", \"action\": review[\"action\"]}\n    if decision == \"reject\":\n        return {\"status\": \"cancelled\", \"action\": review[\"action\"]}\n    raise ValueError(\"unknown decision\")\n"
+            },
+            "browserChecks": [
+              {
+                "name": "批准恢复",
+                "expression": "resume_review({\"action\": \"send\"}, \"approve\") == {\"status\": \"approved\", \"action\": \"send\"}",
+                "failure": "approve 应恢复动作并保留原 action。",
+                "kind": "behavior"
+              },
+              {
+                "name": "拒绝取消",
+                "expression": "resume_review({\"action\": \"send\"}, \"reject\") == {\"status\": \"cancelled\", \"action\": \"send\"}",
+                "failure": "reject 应取消动作并保留可复盘状态。",
+                "kind": "behavior"
+              },
+              {
+                "name": "未知决定",
+                "expression": "_raises_value_error(lambda: resume_review({\"action\": \"send\"}, \"later\"))",
+                "failure": "未知人工决定不能默认批准。",
+                "kind": "behavior"
+              }
+            ]
+          },
+          {
+            "id": "tool-node-boundaries",
+            "stageId": "langgraph-stage-2",
+            "order": 11,
             "title": "工具节点的输入校验与错误状态",
             "kicker": "langgraph 学习",
             "summary": "让工具节点把参数校验、真实执行结果和失败状态写回图状态。",
@@ -13025,105 +13152,6 @@
             ]
           },
           {
-            "id": "langgraph-lesson-10",
-            "stageId": "langgraph-stage-2",
-            "order": 11,
-            "title": "长期记忆：写出可验证的实现",
-            "kicker": "LangGraph 学习",
-            "summary": "按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。",
-            "minutes": 35,
-            "prerequisites": [
-              "tool-node-boundaries"
-            ],
-            "difficulty": "advanced",
-            "tags": [
-              "langgraph",
-              "stage-langgraph-stage-2"
-            ],
-            "guide": [
-              {
-                "kind": "概念入门",
-                "title": "长期记忆要解决什么问题",
-                "body": "把研究任务中的真实任务先翻译成输入、处理和输出，再理解这个知识点：按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。",
-                "bullets": [
-                  "找出输入契约",
-                  "标出核心状态",
-                  "说清输出形状"
-                ],
-                "example": "实现 read_preference(store, user_id, key)，从 user_id 命名空间读取 key；不存在返回 None。"
-              },
-              {
-                "kind": "逐步拆解",
-                "title": "把长期记忆拆成步骤",
-                "body": "先实现研究任务场景下题目要求的最小路径，再逐项验证：实现 read_preference(store, user_id, key)，从 user_id 命名空间读取 key；不存在返回 None。",
-                "bullets": [
-                  "先按 user_id 找 namespace。",
-                  "再按 key 读取偏好。",
-                  "未知用户或 key 都返回 None，不读取其他用户。"
-                ],
-                "example": "def read_preference(store, user_id, key):\n    pass\n"
-              },
-              {
-                "kind": "常见误区",
-                "title": "长期记忆的边界检查",
-                "body": "不要只复现研究任务的示例；使用未出现在题面中的输入，观察失败属于行为不符还是缺少教学构造。",
-                "bullets": [
-                  "换一组输入",
-                  "保留真实输出",
-                  "解释期望与实际"
-                ],
-                "example": "检查：读取偏好、用户隔离"
-              }
-            ],
-            "videos": [
-              {
-                "title": "Introduction to LangGraph",
-                "url": "https://academy.langchain.com/courses/intro-to-langgraph",
-                "provider": "LangChain Academy",
-                "language": "英文",
-                "duration": "课程",
-                "note": "补充 StateGraph、节点、边和执行模型。"
-              }
-            ],
-            "officialSources": [
-              {
-                "label": "LangGraph 官方文档",
-                "url": "https://docs.langchain.com/oss/python/langgraph/overview",
-                "kind": "official-doc",
-                "verifiedAt": "2026-09-02"
-              }
-            ],
-            "migrations": [],
-            "project": false,
-            "projectLinks": [
-              "langgraph-lesson-11"
-            ],
-            "exercise": {
-              "prompt": "实现 read_preference(store, user_id, key)，从 user_id 命名空间读取 key；不存在返回 None。",
-              "starterCode": "def read_preference(store, user_id, key):\n    pass\n",
-              "hints": [
-                "先按 user_id 找 namespace。",
-                "再按 key 读取偏好。",
-                "未知用户或 key 都返回 None，不读取其他用户。"
-              ],
-              "solution": "def read_preference(store, user_id, key):\n    return store.get(user_id, {}).get(key)\n"
-            },
-            "browserChecks": [
-              {
-                "name": "读取偏好",
-                "expression": "read_preference({\"u1\": {\"theme\": \"dark\"}}, \"u1\", \"theme\") == \"dark\"",
-                "failure": "应读取指定用户的长期偏好。",
-                "kind": "behavior"
-              },
-              {
-                "name": "用户隔离",
-                "expression": "read_preference({\"u1\": {\"theme\": \"dark\"}}, \"u2\", \"theme\") is None",
-                "failure": "未知用户不能拿到其他用户数据。",
-                "kind": "behavior"
-              }
-            ]
-          },
-          {
             "id": "langgraph-lesson-11",
             "stageId": "langgraph-stage-2",
             "order": 12,
@@ -13132,7 +13160,7 @@
             "summary": "为高风险动作加入人工审核节点，拒绝时留下明确状态。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-10"
+              "tool-node-boundaries"
             ],
             "difficulty": "advanced",
             "tags": [
