@@ -11,16 +11,18 @@ def rerank(candidates, top_k):
     return ranked[:top_k]
 
 
-def evaluate(expected_sources, candidates, top_k):
+def evaluate(expected_sources, candidates, top_k, cited_sources):
     """返回可解释的召回、引用覆盖和 no_results 状态。"""
     selected = rerank(candidates, top_k)
     expected = set(expected_sources)
     retrieved = {item["source"] for item in selected}
+    cited = set(cited_sources)
     if not expected or not retrieved:
-        return {"status": "no_results", "recall": 0.0, "sources": []}
+        return {"status": "no_results", "recall": 0.0, "citation_coverage": 0.0, "sources": []}
     return {
         "status": "ok",
         "recall": len(expected & retrieved) / len(expected),
+        "citation_coverage": len(expected & cited) / len(expected),
         "sources": [item["source"] for item in selected],
     }
 
@@ -30,8 +32,8 @@ def main():
         {"source": "guide.md", "rerank_score": 0.72},
         {"source": "policy.md", "rerank_score": 0.94},
     ]
-    print(json.dumps(evaluate(["policy.md"], candidates, 1), ensure_ascii=False))
-    print(json.dumps(evaluate(["missing.md"], candidates, 1), ensure_ascii=False))
+    print(json.dumps(evaluate(["policy.md"], candidates, 1, ["policy.md"]), ensure_ascii=False))
+    print(json.dumps(evaluate(["missing.md"], candidates, 1, []), ensure_ascii=False))
 
 
 if __name__ == "__main__":

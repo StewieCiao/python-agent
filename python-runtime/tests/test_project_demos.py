@@ -47,8 +47,9 @@ class ProjectDemosTest(unittest.TestCase):
             {"source": "high.md", "rerank_score": 0.9},
         ]
         self.assertEqual(workbench.rerank(candidates, 1), [candidates[1]])
-        self.assertEqual(workbench.evaluate(["high.md"], candidates, 1), {"status": "ok", "recall": 1.0, "sources": ["high.md"]})
-        self.assertEqual(workbench.evaluate(["missing.md"], candidates, 0), {"status": "no_results", "recall": 0.0, "sources": []})
+        self.assertEqual(workbench.evaluate(["high.md"], candidates, 1, ["high.md"]), {"status": "ok", "recall": 1.0, "citation_coverage": 1.0, "sources": ["high.md"]})
+        self.assertEqual(workbench.evaluate(["high.md"], candidates, 1, ["low.md"])["citation_coverage"], 0.0)
+        self.assertEqual(workbench.evaluate(["missing.md"], candidates, 0, []), {"status": "no_results", "recall": 0.0, "citation_coverage": 0.0, "sources": []})
         with self.assertRaisesRegex(ValueError, "top_k"):
             workbench.rerank(candidates, -1)
 

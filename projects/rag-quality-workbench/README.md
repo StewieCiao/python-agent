@@ -8,7 +8,7 @@
 
 ## 输入与输出
 
-- 输入：带 `query`、`expectedSources` 的固定问答样本，以及检索结果和回答引用。
+- 输入：带 `query`、`expectedSources` 的固定问答样本，以及检索结果和回答引用（`cited_sources`）。
 - 输出：每条样本的实际来源、`recall`、`citation_coverage`、状态和耗时；原始文本与来源 metadata 一并保留。
 - 不做：不把主观回答相似度当作检索通过，也不估算缺失的 token usage。
 
