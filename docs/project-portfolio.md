@@ -33,6 +33,12 @@
 
 ## 简历展示证据
 
+三个核心项目都提供无外部服务的确定性演示，可在仓库根目录分别运行：
+
+- `python projects/rag-quality-workbench/demo.py`：重排、`top_k`、召回与引用覆盖。
+- `python projects/recoverable-research-graph/demo.py`：中断后按同一 `thread_id` 恢复。
+- `python projects/agentic-rag-router/demo.py`：检索路由、来源和资料不足边界。
+
 每个项目至少准备一条可复现的成功路径和一条失败路径：
 
 - RAG：固定文档集、召回与重排结果、来源、`top_k` 边界、无命中时的拒答，以及一次引用覆盖率记录。
