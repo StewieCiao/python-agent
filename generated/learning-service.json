@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "432a5f914725d1d10342eda3cab4af027b2c59f038aebe9bda14ba65e5af63cd",
-  "familyHash": "26f7ea5994bf30a4ed398181421c84dd4fc5326cc2e17f629a3cacb0576ac661",
+  "catalogHash": "4b9c9604ffdb128446a0e52d6b765843dd16a10c19aae356624fce471eff04d3",
+  "familyHash": "89342cda2313608f2116b870085ddcb03a0ebce6691ef055fd549d4d8a129749",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1454,6 +1454,7 @@
           },
           {
             "id": "project-text",
+            "familyId": "python-text-analysis-v1",
             "stageId": "python-stage-2",
             "order": 13,
             "title": "Prompt 文本分析器",
@@ -16334,6 +16335,132 @@
             {
               "name": "边界行为",
               "expression": "_second_print_uses_multiplication(_source)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-text-analysis-v1": {
+      "id": "python-text-analysis-v1",
+      "lessonIds": [
+        "project-text"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-tokenization",
+        "wrong-tie-break"
+      ],
+      "constraints": [
+        "return complete statistics",
+        "choose first word on ties"
+      ],
+      "variants": [
+        {
+          "label": "分析 Py PY code",
+          "values": "Py PY code",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"Py PY code\") == {\"words\":3,\"unique\":2,\"top\":\"py\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分析 RAG docs docs",
+          "values": "RAG docs docs",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"RAG docs docs\") == {\"words\":3,\"unique\":2,\"top\":\"docs\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分析 agent tool",
+          "values": "agent tool",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"agent tool\") == {\"words\":2,\"unique\":2,\"top\":\"agent\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分析 graph graph state",
+          "values": "graph graph state",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"graph graph state\") == {\"words\":3,\"unique\":2,\"top\":\"graph\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分析 learn build build",
+          "values": "learn build build",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"learn build build\") == {\"words\":3,\"unique\":2,\"top\":\"build\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分析 one two three",
+          "values": "one two three",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "analyze(\"one two three\") == {\"words\":3,\"unique\":3,\"top\":\"one\"}",
+              "failure": "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "analyze(\"   \") == {\"words\":0,\"unique\":0,\"top\":None}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

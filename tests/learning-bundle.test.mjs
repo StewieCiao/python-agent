@@ -871,6 +871,16 @@ test("Python ReAct 循环接入观察记录与步数限制练习 family", async 
   assert.ok(family.variants.every(({ checks }) => checks.every(({ expression }) => expression.includes("run_react"))));
 });
 
+test("Python 文本分析项目接入完整统计与同频边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "project-text");
+  assert.equal(lesson?.familyId, "python-text-analysis-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("unique") && expression.includes("top"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

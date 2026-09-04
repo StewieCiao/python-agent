@@ -135,6 +135,10 @@ const reactCases = [
   ["echo", "你好"], ["upper", "rag"], ["length", "python"],
   ["reverse", "graph"], ["title", "agent"], ["count", "tools"],
 ] as const;
+const textAnalysisCases = [
+  ["Py PY code", 3, 2, "py"], ["RAG docs docs", 3, 2, "docs"], ["agent tool", 2, 2, "agent"],
+  ["graph graph state", 3, 2, "graph"], ["learn build build", 3, 2, "build"], ["one two three", 3, 3, "one"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -146,6 +150,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
     id: "python-output-v1", lessonIds: ["first-output"], difficulty: "beginner", validatorVersion: "1",
     mistakeCodes: ["wrong-line", "missing-expression"], constraints: ["two output lines", "second print contains multiplication"],
     variants: output.map(([label, expression, expected]) => variant(label, expression, twoBehaviorChecks(`len(_output_lines) == 2 and _output_lines[1].strip() == "${expected}"`, "_second_print_uses_multiplication(_source)", "第二行应输出本变体乘法结果，并保留直接乘法表达式。"))),
+  },
+  {
+    id: "python-text-analysis-v1", lessonIds: ["project-text"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-tokenization", "wrong-tie-break"], constraints: ["return complete statistics", "choose first word on ties"],
+    variants: textAnalysisCases.map(([text, words, unique, top]) => variant(`分析 ${text}`, text, twoBehaviorChecks(
+      `analyze("${text}") == {"words":${words},"unique":${unique},"top":"${top}"}`,
+      `analyze("   ") == {"words":0,"unique":0,"top":None}`,
+      "应忽略大小写和空白，返回完整统计字典；同频时选择最先出现的单词。",
+    ))),
   },
   {
     id: "python-loops-v1", lessonIds: ["loops"], difficulty: "beginner", validatorVersion: "1",
