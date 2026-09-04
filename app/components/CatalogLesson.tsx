@@ -5,10 +5,11 @@ import type { CourseLesson, CourseTrack } from "../content/schema";
 import { learningTracks } from "../content/publicCatalog";
 import { loadPersonalizedExercise } from "../lib/platformBridge";
 
-export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete }: {
+export function CatalogLesson({ track, lesson, onOpenChat, onOpenLesson, completed, onComplete }: {
   track: CourseTrack;
   lesson: CourseLesson;
   onOpenChat: () => void;
+  onOpenLesson: (trackId: CourseTrack["id"], lessonId: string) => void;
   completed: boolean;
   onComplete: () => void;
 }) {
@@ -20,7 +21,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
   const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => {
     const prerequisiteTrack = learningTracks.find((candidateTrack) => candidateTrack.lessons.some((item) => item.id === id));
     const title = prerequisiteTrack?.lessons.find((item) => item.id === id)?.title ?? id;
-    return prerequisiteTrack && prerequisiteTrack.id !== track.id ? `${prerequisiteTrack.shortTitle} · ${title}` : title;
+    return { id, title: prerequisiteTrack && prerequisiteTrack.id !== track.id ? `${prerequisiteTrack.shortTitle} · ${title}` : title, trackId: prerequisiteTrack?.id };
   });
 
   async function requestPersonalized() {
@@ -51,7 +52,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
         <div className="lesson-meta">
           <span>{track.shortTitle}</span>
           <span>约 {lesson.minutes} 分钟</span>
-          <span>{prerequisiteTitles.length > 0 ? `建议先学：${prerequisiteTitles.join("、")}` : "建议从本节开始"}</span>
+          {prerequisiteTitles.length > 0 ? <span className="prerequisite-list">建议先学：{prerequisiteTitles.map((prerequisite) => <button className="prerequisite-link" key={prerequisite.id} onClick={() => prerequisite.trackId && onOpenLesson(prerequisite.trackId, prerequisite.id)} type="button">{prerequisite.title}</button>)}</span> : <span>建议从本节开始</span>}
         </div>
         <p className="lesson-kicker">CURRENT LEARNING MODULE</p>
         <h2>{lesson.title}</h2>

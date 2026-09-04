@@ -410,6 +410,19 @@ export function LearningApp() {
     setPersonalizedStatus("");
   }
 
+  function openCatalogPrerequisite(trackId: CourseTrack["id"], lessonId: string) {
+    if (runLockRef.current) return;
+    if (trackId === "python") {
+      openLesson(lessons.findIndex((item) => item.id === lessonId));
+      return;
+    }
+    setActiveTrackId(trackId);
+    setActiveLearningLessonId(lessonId);
+    setViewMode("learn");
+    setPersonalized(null);
+    setPersonalizedStatus("");
+  }
+
   function markCatalogLessonComplete(lessonId: string) {
     setProgress((current) => current.completed.includes(lessonId)
       ? current
@@ -1000,6 +1013,7 @@ export function LearningApp() {
             key={`${activeTrack.id}/${activeCatalogLesson.id}`}
             lesson={activeCatalogLesson}
             onOpenChat={() => setChatOpen(true)}
+            onOpenLesson={openCatalogPrerequisite}
             track={activeTrack}
             completed={progress.completed.includes(activeCatalogLesson.id)}
             onComplete={() => markCatalogLessonComplete(activeCatalogLesson.id)}
