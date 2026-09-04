@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "edb34f561455f5410da3b0c084de7a2da7ac1f7f8dbc191abf4af766857fc694",
+  "catalogHash": "a04e95395ad1ee8cbb3124b8c01c567294fa7e95c19deb63f68736b891e08c4f",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -1460,7 +1460,7 @@
             "title": "Prompt 文本分析器",
             "kicker": "Agent 前置项目 · 上下文统计",
             "summary": "组合字符串、列表和字典，分析进入 Agent 上下文的文本规模与高频词。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "decorators"
             ],
@@ -1569,7 +1569,7 @@
             "title": "Agent 调用成本汇总器",
             "kicker": "Agent 前置项目 · 成本观测",
             "summary": "从模型与工具调用记录中计算总成本和分类成本，为 Agent 评估建立观测能力。",
-            "minutes": 40,
+            "minutes": 60,
             "prerequisites": [
               "project-text"
             ],
@@ -1678,7 +1678,7 @@
             "title": "Agent 任务优先级引擎",
             "kicker": "Agent 前置项目 · 计划排序",
             "summary": "综合函数、排序、异常边界与数据契约，为 Planner 排出稳定的执行顺序。",
-            "minutes": 50,
+            "minutes": 60,
             "prerequisites": [
               "project-expense"
             ],
@@ -2531,7 +2531,7 @@
             "title": "智能旅行助手",
             "kicker": "Hello-Agents 案例 · 天气与景点协作",
             "summary": "复现 Hello-Agents 旅行助手的工具链：先查天气，再基于天气选择景点，并保留完整调用轨迹。",
-            "minutes": 45,
+            "minutes": 60,
             "prerequisites": [
               "agent-handoff"
             ],
@@ -2629,7 +2629,7 @@
             "title": "自动化 DeepResearch",
             "kicker": "Hello-Agents 案例 · 规划、检索、报告",
             "summary": "把研究主题拆成子任务，逐项收集资料，并生成带去重来源的结构化研究报告。",
-            "minutes": 52,
+            "minutes": 60,
             "prerequisites": [
               "agent-travel-project"
             ],
@@ -8236,7 +8236,7 @@
             "title": "混合检索评估台",
             "kicker": "langchain-rag 学习",
             "summary": "为检索调优提供关键词、向量召回和命中率对比。",
-            "minutes": 40,
+            "minutes": 60,
             "prerequisites": [
               "hybrid-retrieval"
             ],
@@ -8979,7 +8979,7 @@
             "title": "带工具调用的知识助手",
             "kicker": "LangChain / RAG 学习",
             "summary": "为业务助手连接受约束的工具，并保留每次调用结果。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "langchain-rag-lesson-19"
             ],
@@ -9671,7 +9671,7 @@
             "title": "RAG 质量观测面板",
             "kicker": "LangChain / RAG 学习",
             "summary": "为 RAG 流程记录召回、引用和无答案边界，定位质量回归。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "langchain-rag-lesson-26"
             ],
@@ -13196,7 +13196,7 @@
             "title": "人工审核 Agent 流程",
             "kicker": "LangGraph 学习",
             "summary": "为高风险动作加入人工审核节点，拒绝时留下明确状态。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "tool-node-boundaries"
             ],
@@ -13789,7 +13789,7 @@
             "title": "多 Agent 协作调度器",
             "kicker": "LangGraph 学习",
             "summary": "为多角色 Agent 设计可观察的交接和 supervisor 路由。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "langgraph-lesson-16"
             ],
@@ -14382,7 +14382,7 @@
             "title": "带长期记忆的任务图",
             "kicker": "LangGraph 学习",
             "summary": "为用户偏好建立跨 thread 的 Store，并与短期状态分离。",
-            "minutes": 35,
+            "minutes": 60,
             "prerequisites": [
               "langgraph-lesson-22"
             ],

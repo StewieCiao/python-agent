@@ -1405,6 +1405,13 @@ test("项目节点覆盖多个阶段并优先连接同阶段项目", async () =>
   }
 });
 
+test("所有阶段项目都提供足够的实践时长", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const projects = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter(({ project }) => project));
+  assert.equal(projects.length, 14);
+  assert.ok(projects.every(({ minutes }) => minutes >= 60));
+});
+
 test("自动生成项目课包含可交付验收契约", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const generatedProjects = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter(({ project, id }) => project && id.includes("-lesson-")));

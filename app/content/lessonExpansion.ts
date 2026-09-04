@@ -823,6 +823,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   for (const lesson of stageProjectCandidates) {
     if (projects >= expansion.projectCount) break;
     lesson.project = true;
+    lesson.minutes = Math.max(60, lesson.minutes);
     const briefs = track.id === "langchain-rag" || track.id === "langgraph" ? PROJECT_BRIEFS[track.id] : [];
     const brief = briefs[generatedProjectIndex];
     if (brief) {
@@ -835,11 +836,12 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   if (projects < expansion.projectCount) {
     for (const lesson of [...lessons].reverse()) {
       if (projects >= expansion.projectCount) break;
-      if (!lesson.project) { lesson.project = true; projects += 1; }
+      if (!lesson.project) { lesson.project = true; lesson.minutes = Math.max(60, lesson.minutes); projects += 1; }
     }
   }
   for (const lesson of lessons) {
     if (!lesson.project) continue;
+    lesson.minutes = Math.max(60, lesson.minutes);
     const brief = (track.id === "langchain-rag" || track.id === "langgraph")
       ? PROJECT_BRIEFS[track.id][lessons.filter(({ project }) => project).indexOf(lesson)]
       : undefined;
