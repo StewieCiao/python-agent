@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "2154ad468a5dacad91944c8ab5df8377876d548ff37a2e71fffd03d3fb533bf3",
-  "familyHash": "4b353525b41f4be379f08f78a97d66aa9182ecd6a3f26907a5140ccec9f071b0",
+  "catalogHash": "ad9014c5dac99501f3cc16985f643fc3caf2c1d9cfab40af2e0eece76b6e90a1",
+  "familyHash": "5c111a683e06ad1427e1d711aa95864d3f49bded69f6bbd3e8c2af4b220fb15f",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2112,6 +2112,7 @@
           },
           {
             "id": "agent-plan-solve",
+            "familyId": "python-plan-solve-v1",
             "stageId": "python-stage-3",
             "order": 19,
             "title": "先规划，再逐步求解",
@@ -18469,6 +18470,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-plan-solve-v1": {
+      "id": "python-plan-solve-v1",
+      "lessonIds": [
+        "agent-plan-solve"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "future-context-leak",
+        "wrong-step-order"
+      ],
+      "constraints": [
+        "execute steps in order",
+        "pass only completed context"
+      ],
+      "variants": [
+        {
+          "label": "计划 收集资料",
+          "values": "收集资料",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"收集资料\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"收集资料|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计划 整理字段",
+          "values": "整理字段",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"整理字段\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"整理字段|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计划 运行测试",
+          "values": "运行测试",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"运行测试\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"运行测试|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计划 生成摘要",
+          "values": "生成摘要",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"生成摘要\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"生成摘要|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计划 检查来源",
+          "values": "检查来源",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"检查来源\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"检查来源|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "计划 发布报告",
+          "values": "发布报告",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "execute_plan([{\"id\":\"first\",\"task\":\"发布报告\"},{\"id\":\"second\",\"task\":\"下一步\"}], lambda current, context: current + \"|\" + \",\".join(sorted(context))) == [{\"id\":\"first\",\"result\":\"发布报告|\"},{\"id\":\"second\",\"result\":\"下一步|first\"}]",
+              "failure": "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

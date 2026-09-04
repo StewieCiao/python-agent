@@ -111,6 +111,7 @@ const planCases = [
   ['[{"name":"b","priority":3},{"name":"a","priority":3},{"name":"c","priority":3}]', '["a", "b", "c"]'],
   ['[{"name":"one","priority":1}]', '["one"]'],
 ] as const;
+const planSolveCases = ["收集资料", "整理字段", "运行测试", "生成摘要", "检查来源", "发布报告"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -250,6 +251,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `plan(${tasks}) == ${expected}`,
       `_raises_value_error(lambda: plan([{\"name\":\"low\",\"priority\":0}])) and _raises_value_error(lambda: plan([{\"name\":\"high\",\"priority\":6}]))`,
       "应先按 priority 降序、再按 name 升序，并拒绝 0 和 6 等非法优先级。",
+    ))),
+  },
+  {
+    id: "python-plan-solve-v1", lessonIds: ["agent-plan-solve"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["future-context-leak", "wrong-step-order"], constraints: ["execute steps in order", "pass only completed context"],
+    variants: planSolveCases.map((task) => variant(`计划 ${task}`, task, twoBehaviorChecks(
+      `execute_plan([{"id":"first","task":"${task}"},{"id":"second","task":"下一步"}], lambda current, context: current + "|" + ",".join(sorted(context))) == [{"id":"first","result":"${task}|"},{"id":"second","result":"下一步|first"}]`,
+      `execute_plan([], lambda current, context: 1 / 0) == []`,
+      "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
     ))),
   },
   {
