@@ -631,13 +631,18 @@ export function LearningApp() {
               })}
             </section>
           )) : (
-            <section className="module-group">
-              <div className="module-title"><span>NOW</span><strong>{activeTrack.title}</strong></div>
-              {activeTrack.lessons.map((item, index) => <button className={`lesson-link ${item.id === activeCatalogLesson.id && viewMode === "learn" ? "active" : ""}`} disabled={isRunning} key={item.id} onClick={() => selectLearningLesson(item.id)} type="button">
-                <span className="lesson-state">{String(index + 1).padStart(2, "0")}</span>
-                <span><strong>{item.title}</strong><small>{item.minutes} 分钟</small></span>
-              </button>)}
-            </section>
+            activeTrack.stages.map((stage) => {
+              const stageLessons = stage.lessonIds
+                .map((lessonId) => activeTrack.lessons.find((item) => item.id === lessonId))
+                .filter((item): item is CourseTrack["lessons"][number] => Boolean(item));
+              return <section className="module-group" key={stage.id}>
+                <div className="module-title"><span>{String(stage.order).padStart(2, "0")}</span><div><strong>{stage.title}</strong><small className="stage-description">{stage.description}</small></div></div>
+                {stageLessons.map((item) => <button className={`lesson-link ${item.id === activeCatalogLesson.id && viewMode === "learn" ? "active" : ""}`} disabled={isRunning} key={item.id} onClick={() => selectLearningLesson(item.id)} type="button">
+                  <span className="lesson-state">{String(item.order).padStart(2, "0")}</span>
+                  <span><strong>{item.title}</strong><small>{item.minutes} 分钟</small></span>
+                </button>)}
+              </section>;
+            })
           )}
         </nav>
 

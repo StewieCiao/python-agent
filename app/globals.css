@@ -173,6 +173,15 @@ textarea:focus-visible {
   letter-spacing: 0.12em;
 }
 
+.stage-description {
+  display: block;
+  max-width: 190px;
+  margin-top: 3px;
+  color: #668278;
+  font-size: 9px;
+  line-height: 1.35;
+}
+
 .lesson-link {
   width: 100%;
   min-height: 48px;
