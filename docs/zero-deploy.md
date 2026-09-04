@@ -37,3 +37,5 @@ desktop/.runtime/python/bin/python3.13 projects/recoverable-research-graph/demo.
 ```
 
 其余项目可替换最后的路径；演示使用确定性本地数据，不需要模型 Key 或网络。
+
+也可以在仓库根目录直接运行 `npm run demo:projects`，按固定顺序执行全部简历项目；任一项目失败都会保留退出码并停止。

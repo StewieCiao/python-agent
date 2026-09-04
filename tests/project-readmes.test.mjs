@@ -39,6 +39,15 @@ test("需要 LangGraph 的项目明确使用随仓库提供的运行时", async 
   assert.match(readme, /不需要另外安装 LangGraph/);
 });
 
+test("简历项目提供单一内置运行时演示入口", async () => {
+  const packageJson = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(packageJson.scripts["demo:projects"], "node scripts/run-project-demos.mjs");
+  const script = await readFile(new URL("../scripts/run-project-demos.mjs", import.meta.url), "utf8");
+  assert.match(script, /\.runtime/);
+  assert.match(script, /python3\.13/);
+  assert.doesNotMatch(script, /fallback|system python|模拟/);
+});
+
 test("零部署指南明确离线、Pages 与桌面版的安全边界", async () => {
   const guide = await readFile(new URL("../docs/zero-deploy.md", import.meta.url), "utf8");
   assert.match(guide, /双击打开/);
