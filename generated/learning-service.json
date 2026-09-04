@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "2dcad1687ccfa9076cec32f20eaf85f9cdfe42dfca1ec237e86707813fa62a0a",
-  "familyHash": "3dc7009a831584e99c2a6096cabbb470880d14968e5ab2b518f52424982d182a",
+  "catalogHash": "894440bf6390af4013f087ab94483275e7817133365324f2575de2a497e5c372",
+  "familyHash": "7c3c75f07f74885f443e0a6ff2f6465ef86bf0b774179d7b27d22da4d6ddbda4",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1885,6 +1885,7 @@
           },
           {
             "id": "agent-action-parser",
+            "familyId": "python-action-parser-v1",
             "stageId": "python-stage-3",
             "order": 17,
             "title": "读懂模型的 Action",
@@ -18582,6 +18583,132 @@
             {
               "name": "边界行为",
               "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-action-parser-v1": {
+      "id": "python-action-parser-v1",
+      "lessonIds": [
+        "agent-action-parser"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-parse",
+        "rewritten-payload"
+      ],
+      "constraints": [
+        "preserve action payload",
+        "reject malformed protocol"
+      ],
+      "variants": [
+        {
+          "label": "weather[成都]",
+          "values": "weather / 成都",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  weather[成都]  \") == (\"weather\", \"成都\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"weather 成都\") == (None, None)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "search[RAG]",
+          "values": "search / RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  search[RAG]  \") == (\"search\", \"RAG\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"search RAG\") == (None, None)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "calendar[周五]",
+          "values": "calendar / 周五",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  calendar[周五]  \") == (\"calendar\", \"周五\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"calendar 周五\") == (None, None)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "Finish[已完成]",
+          "values": "Finish / 已完成",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  Finish[已完成]  \") == (\"Finish\", \"已完成\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"Finish 已完成\") == (None, None)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "lookup[LangGraph]",
+          "values": "lookup / LangGraph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  lookup[LangGraph]  \") == (\"lookup\", \"LangGraph\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"lookup LangGraph\") == (None, None)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "summarize[资料]",
+          "values": "summarize / 资料",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "parse_action(\"  summarize[资料]  \") == (\"summarize\", \"资料\")",
+              "failure": "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "parse_action(\"summarize 资料\") == (None, None)",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

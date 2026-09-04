@@ -68,6 +68,10 @@ const toolRegistryCases = [
   ["weather", "成都"], ["search", "RAG"], ["calendar", "周五"],
   ["currency", "CNY"], ["status", "ready"], ["lookup", "LangGraph"],
 ] as const;
+const actionCases = [
+  ["weather", "成都"], ["search", "RAG"], ["calendar", "周五"],
+  ["Finish", "已完成"], ["lookup", "LangGraph"], ["summarize", "资料"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -216,6 +220,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `((lambda registry: (registry.register("${name}", lambda value: value), registry.execute("${name}", {"value": "${value}"}))[1])(ToolRegistry())) == "${value}"`,
       `_tool_registry_errors(ToolRegistry) == (True, True)`,
       "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+    ))),
+  },
+  {
+    id: "python-action-parser-v1", lessonIds: ["agent-action-parser"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-parse", "rewritten-payload"], constraints: ["preserve action payload", "reject malformed protocol"],
+    variants: actionCases.map(([name, payload]) => variant(`${name}[${payload}]`, `${name} / ${payload}`, twoBehaviorChecks(
+      `parse_action("  ${name}[${payload}]  ") == ("${name}", "${payload}")`,
+      `parse_action("${name} ${payload}") == (None, None)`,
+      "应保留动作名和 payload 原文，并拒绝缺少方括号的模糊格式。",
     ))),
   },
 ];
