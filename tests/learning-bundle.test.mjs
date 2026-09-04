@@ -1412,6 +1412,16 @@ test("所有阶段项目都提供足够的实践时长", async () => {
   assert.ok(projects.every(({ minutes }) => minutes >= 60));
 });
 
+test("扩展课程的常见误区卡引用真实检查失败说明", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const [trackId, lessonId] of [["python", "python-lesson-25"], ["langchain-rag", "langchain-rag-lesson-30"], ["langgraph", "langgraph-lesson-30"]]) {
+    const lesson = authoredCatalog.tracks.find(({ id }) => id === trackId)?.lessons.find(({ id }) => id === lessonId);
+    assert.ok(lesson);
+    const mistakes = lesson.guide.find(({ kind }) => kind === "常见误区");
+    assert.deepEqual(mistakes?.bullets, lesson.browserChecks.map(({ failure }) => failure));
+  }
+});
+
 test("自动生成项目课包含可交付验收契约", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const generatedProjects = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter(({ project, id }) => project && id.includes("-lesson-")));
