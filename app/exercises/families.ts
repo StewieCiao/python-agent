@@ -55,6 +55,10 @@ const storeCases = [
   ["u-1", "dark"], ["u-2", "zh-CN"], ["researcher", "python"],
   ["reviewer", "graph"], ["u-5", "beginner"], ["guest", "en"],
 ] as const;
+const interruptCases = [
+  ["send_report", "approve"], ["publish_note", "reject"], ["delete_record", "approve"],
+  ["export_data", "reject"], ["reset_access", "approve"], ["merge_branch", "reject"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -176,6 +180,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `read_store({("${userId}", "profile"): {"language": "${language}"}}, "${userId}", "language") == "${language}"`,
       `read_store({("${userId}", "profile"): {"language": "${language}"}}, "other-user", "language") is None`,
       "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+    ))),
+  },
+  {
+    id: "langgraph-interrupt-v1", lessonIds: ["streaming-interrupts"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["ignored-rejection", "unknown-decision"], constraints: ["pause before side effects", "reject explicitly"],
+    variants: interruptCases.map(([action, decision]) => variant(`${action} / ${decision}`, `${action} / ${decision}`, twoBehaviorChecks(
+      `approve_email({"draft":"${action}","decision":"${decision}"}) == "${decision === "approve" ? "approved" : "cancelled"}"`,
+      `_raises_value_error(lambda: approve_email({"draft":"${action}","decision":"later"}))`,
+      "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
     ))),
   },
 ];

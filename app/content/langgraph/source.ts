@@ -247,6 +247,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "streaming-interrupts",
+      familyId: "langgraph-interrupt-v1",
       title: "Streaming、Interrupt 与人工确认",
       summary: "让长任务及时反馈，并在高风险动作前安全暂停。",
       minutes: 70,

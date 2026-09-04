@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "62c515de85674018bd4f97a0b6ec4d633ddb05cd9525a7c16dfee4a0e4260fd2",
-  "familyHash": "8f38bfdd91ff97f4833092f8ebeb00e7d17ac17df465196b0effa5d93eac5022",
+  "catalogHash": "c9142b8b68ed63d31a02139ebee1eb680fd26748fbf61376829e181bfb0b2bbb",
+  "familyHash": "9a10067e58bf8aeffba33e14c8d1fdfb8ed7d943ca93719390a79e5b0c274860",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12283,6 +12283,7 @@
           },
           {
             "id": "streaming-interrupts",
+            "familyId": "langgraph-interrupt-v1",
             "stageId": "langgraph-stage-1",
             "order": 5,
             "title": "Streaming、Interrupt 与人工确认",
@@ -18201,6 +18202,132 @@
             {
               "name": "边界行为",
               "expression": "read_store({(\"guest\", \"profile\"): {\"language\": \"en\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-interrupt-v1": {
+      "id": "langgraph-interrupt-v1",
+      "lessonIds": [
+        "streaming-interrupts"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "ignored-rejection",
+        "unknown-decision"
+      ],
+      "constraints": [
+        "pause before side effects",
+        "reject explicitly"
+      ],
+      "variants": [
+        {
+          "label": "send_report / approve",
+          "values": "send_report / approve",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"send_report\",\"decision\":\"approve\"}) == \"approved\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"send_report\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "publish_note / reject",
+          "values": "publish_note / reject",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"publish_note\",\"decision\":\"reject\"}) == \"cancelled\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"publish_note\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "delete_record / approve",
+          "values": "delete_record / approve",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"delete_record\",\"decision\":\"approve\"}) == \"approved\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"delete_record\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "export_data / reject",
+          "values": "export_data / reject",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"export_data\",\"decision\":\"reject\"}) == \"cancelled\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"export_data\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reset_access / approve",
+          "values": "reset_access / approve",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"reset_access\",\"decision\":\"approve\"}) == \"approved\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"reset_access\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "merge_branch / reject",
+          "values": "merge_branch / reject",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "approve_email({\"draft\":\"merge_branch\",\"decision\":\"reject\"}) == \"cancelled\"",
+              "failure": "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"merge_branch\",\"decision\":\"later\"}))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
