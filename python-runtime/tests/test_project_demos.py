@@ -57,6 +57,14 @@ class ProjectDemosTest(unittest.TestCase):
         result = graph.run("LangGraph", "thread-a", True)
         self.assertEqual(result["status"], "approved")
 
+    def test_supervisor_demo_records_role_handoffs_and_unknown_role_failure(self):
+        supervisor = load("supervisor_demo", "projects/supervisor-research-graph/demo.py")
+        steps = supervisor.run_workflow("LangGraph")
+        self.assertEqual([step["role"] for step in steps], ["researcher", "writer", "reviewer"])
+        self.assertEqual(steps[0]["result"]["sources"], ["LangGraph.md"])
+        with self.assertRaises(KeyError):
+            supervisor.dispatch({"role": "unknown", "input": "x"}, {})
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -25,7 +25,7 @@
 - GitHub Pages 工作流包含官方 Pages 配置动作，推送 `main` 后自动发布 `dist-pages` 静态入口。
 - 零部署入口审查确认：Pages 只发布单一自包含 `index.html`，不会依赖仓库子路径之外的资源。
 - `git diff --check`：通过。
-- 项目自带 Python 3.13.15 运行环境准备完成；内置运行时 `python-runtime` 57 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、pypdf 6.16.2、SQLite FTS5）。测试包含 RAG 空问题、重排 top_k、个性题重复轮换边界，打包复制清单包含 Tutor 图所需模块，桌面包可完成真实健康握手。
+- 项目自带 Python 3.13.15 运行环境准备完成；内置运行时 `python-runtime` 58 项测试与 packaged smoke 均通过（LangChain 1.2.12、LangGraph 1.1.2、pypdf 6.16.2、SQLite FTS5）。测试包含 RAG 空问题、重排 top_k、Supervisor 角色失败、个性题重复轮换边界，打包复制清单包含 Tutor 图所需模块，桌面包可完成真实健康握手。
 - packaged renderer smoke 已验证 Python 执行与安全存储失败边界：失败时保留真实原因且不留下半成品配置；当前环境未提供可用系统钥匙串，因此未伪造成功分支。
 - `npm run desktop:package` 已实际生成 macOS arm64 应用包；打包过程自动准备锁定的 Python 与 LangChain/LangGraph 运行时，目标电脑无需另装 Node.js 或 Python。
 - `npm run desktop:make` 已生成 macOS arm64 DMG（`desktop/out/make/Stewie-LearnOS.dmg`），可作为跨电脑分发的安装入口。

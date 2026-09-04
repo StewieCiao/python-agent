@@ -14,6 +14,8 @@
 
 ## 演示脚本
 
+在项目目录执行 `python demo.py` 可看到三个角色的交接记录。
+
 1. 用 `thread_id=research-1` 启动 researcher → writer → reviewer 三个节点，记录每次状态更新。
 2. 在 reviewer 前触发 `interrupt`，展示待审核状态和当前 checkpoint。
 3. 用同一个 `thread_id` 恢复并批准，确认只继续未完成节点。
@@ -29,4 +31,3 @@
 - 示例 worker 使用本地确定性函数，不代表真实搜索质量。
 - checkpoint 的 SQLite 部署、并行度和权限策略需要按生产环境单独配置。
 - 模型密钥不写入图状态或日志，只由桌面版系统安全存储管理。
-
