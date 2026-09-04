@@ -27,6 +27,10 @@ const reranking = [
   ["候选 m/n，取 1", "1", "m"], ["候选 r/s，取 2", "2", "s,r"], ["候选 u/v，取 1", "1", "v"],
 ] as const;
 const humanReview = ["send_report", "publish_note", "delete_record", "export_data", "reset_access", "merge_branch"] as const;
+const citationCases = [
+  ["退款政策", "policy.md", "30 天"], ["部署手册", "deploy.md", "先运行测试"], ["安全规范", "security.md", "最小权限"],
+  ["数据字典", "schema.md", "字段必须有类型"], ["服务协议", "service.md", "超时返回错误"], ["审核流程", "review.md", "拒绝会停止"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -85,6 +89,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `resume_review({"action":"${action}"}, "approve") == {"status":"approved","action":"${action}"}`,
       `resume_review({"action":"${action}"}, "reject") == {"status":"cancelled","action":"${action}"}`,
       "审核结果必须保留原 action，并区分批准与拒绝。",
+    ))),
+  },
+  {
+    id: "langchain-citation-v1", lessonIds: ["citation-grounded-generation"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["invented-source", "missing-no-results"], constraints: ["sources come from retrieved documents", "empty context returns no_results"],
+    variants: citationCases.map(([label, source, text]) => variant(label, source, twoBehaviorChecks(
+      `grounded_answer("${label}", [{"text":"${text}","source":"${source}"}])["sources"] == ["${source}"]`,
+      `grounded_answer("${label}", [])["status"] == "no_results"`,
+      "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
     ))),
   },
 ];

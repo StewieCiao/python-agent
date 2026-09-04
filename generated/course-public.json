@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1fa2ed86fcccdbad840f6959a35f05a73743c954a3e6987163477a38fb59e0e6",
-  "familyHash": "0cadabeab9dbc522ba082f9672ea956f4246364ccf4d70718c6b92322e01db30",
+  "catalogHash": "a7edb1386ccebb93fab947265eb7a3e5e32e0b1564e644af40642008a49e66cc",
+  "familyHash": "049886b6999cd0e5c35a8d7a89f8807740ef9700a7df951d5459986002ed766d",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8325,6 +8325,7 @@
           },
           {
             "id": "citation-grounded-generation",
+            "familyId": "langchain-citation-v1",
             "stageId": "langchain-rag-stage-3",
             "order": 15,
             "title": "引用约束生成与资料不足",
@@ -17312,6 +17313,132 @@
             {
               "name": "边界行为",
               "expression": "resume_review({\"action\":\"merge_branch\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"merge_branch\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-citation-v1": {
+      "id": "langchain-citation-v1",
+      "lessonIds": [
+        "citation-grounded-generation"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "invented-source",
+        "missing-no-results"
+      ],
+      "constraints": [
+        "sources come from retrieved documents",
+        "empty context returns no_results"
+      ],
+      "variants": [
+        {
+          "label": "退款政策",
+          "values": "policy.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"退款政策\", [{\"text\":\"30 天\",\"source\":\"policy.md\"}])[\"sources\"] == [\"policy.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"退款政策\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "部署手册",
+          "values": "deploy.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"部署手册\", [{\"text\":\"先运行测试\",\"source\":\"deploy.md\"}])[\"sources\"] == [\"deploy.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"部署手册\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "安全规范",
+          "values": "security.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"安全规范\", [{\"text\":\"最小权限\",\"source\":\"security.md\"}])[\"sources\"] == [\"security.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"安全规范\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "数据字典",
+          "values": "schema.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"数据字典\", [{\"text\":\"字段必须有类型\",\"source\":\"schema.md\"}])[\"sources\"] == [\"schema.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"数据字典\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "服务协议",
+          "values": "service.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"服务协议\", [{\"text\":\"超时返回错误\",\"source\":\"service.md\"}])[\"sources\"] == [\"service.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"服务协议\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核流程",
+          "values": "review.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "grounded_answer(\"审核流程\", [{\"text\":\"拒绝会停止\",\"source\":\"review.md\"}])[\"sources\"] == [\"review.md\"]",
+              "failure": "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grounded_answer(\"审核流程\", [])[\"status\"] == \"no_results\"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

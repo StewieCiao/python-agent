@@ -587,6 +587,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "citation-grounded-generation",
+      familyId: "langchain-citation-v1",
       title: "引用约束生成与资料不足",
       prerequisites: ["reranking"], difficulty: "intermediate", tags: ["citations", "grounding", "rag"],
       summary: "把检索片段、引用来源和资料不足状态组成可追溯的回答契约。",
