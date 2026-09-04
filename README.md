@@ -44,6 +44,7 @@ npm run desktop:make
 - 每节课提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐步代码示例和阅读要点照顾零基础学习者。
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
+- LangChain/RAG 的路线复核了 [pixegami/langchain-rag-tutorial](https://github.com/pixegami/langchain-rag-tutorial) 的端到端文档问答拆解；LangGraph 复核了官方 [langgraph-ai/langgraph](https://github.com/langchain-ai/langgraph) 示例与 [LangChain Academy](https://academy.langchain.com/courses/langgraph-essentials-python)。这些仓库只作为学习顺序和项目边界参考，站内代码仍以锁定版本的官方 API 与本地真实测试为准。
 - 桌面版可在模型设置中保存 OpenAI-compatible 配置；API Key 只进入操作系统安全存储，不回显给页面。
 - 桌面导师支持把本地多文档交给真实 Embedding 检索并返回来源；模型不可用时保留真实错误。
 - Python 在独立 Web Worker 中真实运行；无限循环超过 4 秒会被终止，页面不会冻结。

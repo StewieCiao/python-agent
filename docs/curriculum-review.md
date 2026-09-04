@@ -6,6 +6,7 @@
 
 - 作者目录已统一从 `app/content/catalog.ts` 生成，离线 HTML 与公开快照使用同一份数据。
 - 当前课程地图：Python 64 节 / 6 个项目，LangChain-RAG 48 节 / 4 个项目，LangGraph 42 节 / 4 个项目；阶段数分别为 8 / 7 / 7。
+- 路线来源复核（2026-09-04）：LangChain/RAG 参考 [pixegami/langchain-rag-tutorial](https://github.com/pixegami/langchain-rag-tutorial) 的文档问答拆解；LangGraph 参考官方 [langchain-ai/langgraph](https://github.com/langchain-ai/langgraph) 示例与 [LangChain Academy Essentials](https://academy.langchain.com/courses/langgraph-essentials-python)。仓库热度仅作筛选信号，不作为运行时依赖或课程正确性的证明。
 - LangChain 草稿的官方文档已归入 `officialSources`，三节代表课分别直链 messages、structured output 与 knowledge base；视频仅使用允许的视频域名。
 - 草稿具备三张讲解卡、三层提示、先修关系和行为/结构检查；适配器回归测试确认这些字段不会丢失。
 - 离线版重新生成并通过无外部资源检查；模型设置、聊天和 RAG runtime 不进入离线文件。
