@@ -386,6 +386,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "agent-rag-project",
+      familyId: "langchain-citation-project-v1",
       title: "Agent + RAG 综合项目",
       summary: "对应第 60–67 节，把日志、配置、检索工具、中间件和 Agent 组合成一条可调试路径。",
       minutes: 150,

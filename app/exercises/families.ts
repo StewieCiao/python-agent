@@ -155,6 +155,14 @@ const projectMemoryCases = [
   ["u1", "theme", "dark"], ["u2", "language", "zh-CN"], ["researcher", "format", "long"],
   ["reviewer", "tone", "brief"], ["guest", "level", "beginner"], ["team-a", "timezone", "Asia/Shanghai"],
 ] as const;
+const citationProjectCases = [
+  ["policy.md", "退款说明"], ["deploy.md", "部署步骤"], ["security.md", "安全规范"],
+  ["schema.md", "字段说明"], ["review.md", "审核规则"], ["service.md", "服务协议"],
+] as const;
+const resumeProjectCases = [
+  ["thread-a", "topic", 2], ["thread-b", "step", 4], ["research-1", "phase", 3],
+  ["review-2", "status", 1], ["chat-x", "count", 5], ["job-9", "attempt", 0],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -387,6 +395,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
     ))),
   },
   {
+    id: "langchain-citation-project-v1", lessonIds: ["agent-rag-project"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["invented-source", "missing-no-results"], constraints: ["deduplicate real sources", "return explicit no-results"],
+    variants: citationProjectCases.map(([source, answer]) => variant(`${source} / ${answer}`, source, twoBehaviorChecks(
+      `answer_with_sources([{"source":"${source}"},{"source":"${source}"}], "${answer}") == {"answer":"${answer}","sources":["${source}"]}`,
+      `answer_with_sources([], "猜测") == {"answer":"资料不足","sources":[]}`,
+      "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+    ))),
+  },
+  {
     id: "langchain-rag-observability-v1", lessonIds: ["langchain-rag-lesson-27"], difficulty: "advanced", validatorVersion: "1",
     mistakeCodes: ["wrong-metric", "ignored-empty-run"], constraints: ["compute observed metrics", "handle empty runs"],
     variants: ragRunCases.map(([first, second, insufficient]) => variant(`${first}/${second}ms`, `${first}, ${second}`, twoBehaviorChecks(
@@ -429,6 +446,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `read_memory({("${user}",): {"${key}": "${value}"}}, "${user}", "${key}") == "${value}"`,
       `read_memory({("${user}",): {"${key}": "${value}"}}, "other-user", "${key}") is None`,
       "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+    ))),
+  },
+  {
+    id: "langgraph-recovery-project-v1", lessonIds: ["subgraphs-parallelism"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-thread", "mutated-checkpoint"], constraints: ["resume selected thread", "preserve checkpoint"],
+    variants: resumeProjectCases.map(([thread, key, value]) => variant(`${thread}/${key}`, `${thread} / ${key}`, twoBehaviorChecks(
+      `resume_state({"${thread}": {"${key}": ${value}}}, "${thread}", {"${key}": ${value + 1}}) == {"${key}": ${value + 1}}`,
+      `_raises_key_error(lambda: resume_state({"${thread}": {"${key}": ${value}}}, "other-thread", {}))`,
+      "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
     ))),
   },
   {

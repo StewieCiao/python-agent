@@ -298,6 +298,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "subgraphs-parallelism",
+      familyId: "langgraph-recovery-project-v1",
       title: "子图、并行与 Map-Reduce",
       summary: "把可独立的工作分开执行，再通过明确 reducer 汇总结果。",
       minutes: 65,

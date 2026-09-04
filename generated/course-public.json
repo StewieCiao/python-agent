@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "448723236495bddaa54932cecbd3d0fa41c1f2e60749a2896da0baa03605c633",
-  "familyHash": "0135dfb301efbdf3854e3c4c42ba71e7f55a8347f107489708209230d5e955bc",
+  "catalogHash": "edb34f561455f5410da3b0c084de7a2da7ac1f7f8dbc191abf4af766857fc694",
+  "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7327,6 +7327,7 @@
           },
           {
             "id": "agent-rag-project",
+            "familyId": "langchain-citation-project-v1",
             "stageId": "langchain-rag-stage-1",
             "order": 7,
             "title": "可引用文档问答系统",
@@ -12424,6 +12425,7 @@
           },
           {
             "id": "subgraphs-parallelism",
+            "familyId": "langgraph-recovery-project-v1",
             "stageId": "langgraph-stage-1",
             "order": 6,
             "title": "可恢复研究工作流",
@@ -19750,6 +19752,132 @@
         }
       ]
     },
+    "langchain-citation-project-v1": {
+      "id": "langchain-citation-project-v1",
+      "lessonIds": [
+        "agent-rag-project"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "invented-source",
+        "missing-no-results"
+      ],
+      "constraints": [
+        "deduplicate real sources",
+        "return explicit no-results"
+      ],
+      "variants": [
+        {
+          "label": "policy.md / 退款说明",
+          "values": "policy.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"policy.md\"},{\"source\":\"policy.md\"}], \"退款说明\") == {\"answer\":\"退款说明\",\"sources\":[\"policy.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "deploy.md / 部署步骤",
+          "values": "deploy.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"deploy.md\"},{\"source\":\"deploy.md\"}], \"部署步骤\") == {\"answer\":\"部署步骤\",\"sources\":[\"deploy.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "security.md / 安全规范",
+          "values": "security.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"security.md\"},{\"source\":\"security.md\"}], \"安全规范\") == {\"answer\":\"安全规范\",\"sources\":[\"security.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "schema.md / 字段说明",
+          "values": "schema.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"schema.md\"},{\"source\":\"schema.md\"}], \"字段说明\") == {\"answer\":\"字段说明\",\"sources\":[\"schema.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "review.md / 审核规则",
+          "values": "review.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"review.md\"},{\"source\":\"review.md\"}], \"审核规则\") == {\"answer\":\"审核规则\",\"sources\":[\"review.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "service.md / 服务协议",
+          "values": "service.md",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "answer_with_sources([{\"source\":\"service.md\"},{\"source\":\"service.md\"}], \"服务协议\") == {\"answer\":\"服务协议\",\"sources\":[\"service.md\"]}",
+              "failure": "回答只能引用真实检索来源；无命中时必须明确返回资料不足。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "answer_with_sources([], \"猜测\") == {\"answer\":\"资料不足\",\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
     "langchain-rag-observability-v1": {
       "id": "langchain-rag-observability-v1",
       "lessonIds": [
@@ -20373,6 +20501,132 @@
             {
               "name": "边界行为",
               "expression": "read_memory({(\"team-a\",): {\"timezone\": \"Asia/Shanghai\"}}, \"other-user\", \"timezone\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-recovery-project-v1": {
+      "id": "langgraph-recovery-project-v1",
+      "lessonIds": [
+        "subgraphs-parallelism"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-thread",
+        "mutated-checkpoint"
+      ],
+      "constraints": [
+        "resume selected thread",
+        "preserve checkpoint"
+      ],
+      "variants": [
+        {
+          "label": "thread-a/topic",
+          "values": "thread-a / topic",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"thread-a\": {\"topic\": 2}}, \"thread-a\", {\"topic\": 3}) == {\"topic\": 3}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"thread-a\": {\"topic\": 2}}, \"other-thread\", {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "thread-b/step",
+          "values": "thread-b / step",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"thread-b\": {\"step\": 4}}, \"thread-b\", {\"step\": 5}) == {\"step\": 5}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"thread-b\": {\"step\": 4}}, \"other-thread\", {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "research-1/phase",
+          "values": "research-1 / phase",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"research-1\": {\"phase\": 3}}, \"research-1\", {\"phase\": 4}) == {\"phase\": 4}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"research-1\": {\"phase\": 3}}, \"other-thread\", {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "review-2/status",
+          "values": "review-2 / status",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"review-2\": {\"status\": 1}}, \"review-2\", {\"status\": 2}) == {\"status\": 2}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"review-2\": {\"status\": 1}}, \"other-thread\", {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "chat-x/count",
+          "values": "chat-x / count",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"chat-x\": {\"count\": 5}}, \"chat-x\", {\"count\": 6}) == {\"count\": 6}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"chat-x\": {\"count\": 5}}, \"other-thread\", {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "job-9/attempt",
+          "values": "job-9 / attempt",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_state({\"job-9\": {\"attempt\": 0}}, \"job-9\", {\"attempt\": 1}) == {\"attempt\": 1}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留未知线程的真实错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: resume_state({\"job-9\": {\"attempt\": 0}}, \"other-thread\", {}))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

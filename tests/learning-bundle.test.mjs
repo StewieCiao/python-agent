@@ -905,6 +905,16 @@ test("LangChain 工具调用项目接入真实工具封装与错误边界练习 
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("call_tool"))));
 });
 
+test("LangChain 文档问答项目接入引用去重与无资料边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag")?.lessons.find(({ id }) => id === "agent-rag-project");
+  assert.equal(lesson?.familyId, "langchain-citation-project-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("资料不足"))));
+});
+
 test("LangChain RAG 观测项目接入指标与空记录边界练习 family", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag")?.lessons.find(({ id }) => id === "langchain-rag-lesson-27");
@@ -956,6 +966,16 @@ test("LangGraph 长期记忆项目接入用户隔离与缺失边界练习 family
   assert.ok(family);
   assert.equal(family.variants.length, 6);
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("other-user"))));
+});
+
+test("LangGraph 可恢复研究项目接入 thread 恢复与错误边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph")?.lessons.find(({ id }) => id === "subgraphs-parallelism");
+  assert.equal(lesson?.familyId, "langgraph-recovery-project-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("other-thread"))));
 });
 
 test("Python 工程路线包含 HTTP 请求失败边界课程", async () => {
