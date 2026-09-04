@@ -44,6 +44,7 @@ npm run desktop:make
 
 - 三条路线按 Track → Stage → Lesson → Project 组织，从 Python 基础到 LangChain/RAG 与 LangGraph 实战。
 - 简历项目选型、演示证据和推荐表述见 [`docs/resume-projects.md`](docs/resume-projects.md)。
+- 不同电脑上的零部署入口和安全边界见 [`docs/zero-deploy.md`](docs/zero-deploy.md)。
 - 每节课提供“概念入门 → 逐步拆解 → 常见误区”的知识讲解，使用逐步代码示例和阅读要点照顾零基础学习者。
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
