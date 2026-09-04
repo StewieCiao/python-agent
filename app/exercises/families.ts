@@ -131,6 +131,10 @@ const capstoneCases = [
   ["echo", "你好"], ["upper", "rag"], ["length", "python"],
   ["reverse", "graph"], ["title", "agent"], ["count", "tools"],
 ] as const;
+const reactCases = [
+  ["echo", "你好"], ["upper", "rag"], ["length", "python"],
+  ["reverse", "graph"], ["title", "agent"], ["count", "tools"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -333,6 +337,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `((lambda agent: (agent.register_tool("${tool}", lambda value: value.upper()), agent.run(["${tool}[${input}]", "Finish[done]"]))[1])(Agent("demo", 2))) == {"answer":"done","history":[{"action":"${tool}","input":"${input}","observation":"${input.toUpperCase()}"}]}`,
       `((lambda agent: (agent.register_tool("${tool}", lambda value: value), agent.run(["${tool}[one]", "Finish[done]"]))[1])(Agent("demo", max_steps=1))) == {"answer":None,"history":[{"action":"${tool}","input":"one","observation":"one"}]}`,
       "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+    ))),
+  },
+  {
+    id: "python-react-loop-v1", lessonIds: ["agent-react-loop"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["missing-observation", "ignored-step-limit"], constraints: ["record tool observations", "enforce max_steps"],
+    variants: reactCases.map(([tool, input]) => variant(`${tool}[${input}]`, `${tool} / ${input}`, twoBehaviorChecks(
+      `run_react(["${tool}[${input}]", "Finish[done]"], {"${tool}": lambda value: value.upper()}, 2) == {"answer":"done","history":[{"action":"${tool}","input":"${input}","observation":"${input.toUpperCase()}"}],"steps":2}`,
+      `run_react(["${tool}[one]", "Finish[done]"], {"${tool}": lambda value: value}, max_steps=1) == {"answer":None,"history":[{"action":"${tool}","input":"one","observation":"one"}],"steps":1}`,
+      "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
     ))),
   },
   {

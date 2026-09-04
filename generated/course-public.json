@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "31c452585a407179d840c5ce034f1e1e7696d92795fc54cd8dae3cf385286d04",
-  "familyHash": "1b1104b6fca655784ded8d6de297a375781619e6f92fe53c0276e8b4f4db3422",
+  "catalogHash": "432a5f914725d1d10342eda3cab4af027b2c59f038aebe9bda14ba65e5af63cd",
+  "familyHash": "26f7ea5994bf30a4ed398181421c84dd4fc5326cc2e17f629a3cacb0576ac661",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2002,6 +2002,7 @@
           },
           {
             "id": "agent-react-loop",
+            "familyId": "python-react-loop-v1",
             "stageId": "python-stage-3",
             "order": 18,
             "title": "跑通 ReAct 循环",
@@ -19358,6 +19359,132 @@
             {
               "name": "边界行为",
               "expression": "((lambda agent: (agent.register_tool(\"count\", lambda value: value), agent.run([\"count[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"count\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-react-loop-v1": {
+      "id": "python-react-loop-v1",
+      "lessonIds": [
+        "agent-react-loop"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "missing-observation",
+        "ignored-step-limit"
+      ],
+      "constraints": [
+        "record tool observations",
+        "enforce max_steps"
+      ],
+      "variants": [
+        {
+          "label": "echo[你好]",
+          "values": "echo / 你好",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"echo[你好]\", \"Finish[done]\"], {\"echo\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"echo\",\"input\":\"你好\",\"observation\":\"你好\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"echo[one]\", \"Finish[done]\"], {\"echo\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"echo\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "upper[rag]",
+          "values": "upper / rag",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"upper[rag]\", \"Finish[done]\"], {\"upper\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"upper\",\"input\":\"rag\",\"observation\":\"RAG\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"upper[one]\", \"Finish[done]\"], {\"upper\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"upper\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "length[python]",
+          "values": "length / python",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"length[python]\", \"Finish[done]\"], {\"length\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"length\",\"input\":\"python\",\"observation\":\"PYTHON\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"length[one]\", \"Finish[done]\"], {\"length\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"length\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reverse[graph]",
+          "values": "reverse / graph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"reverse[graph]\", \"Finish[done]\"], {\"reverse\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"reverse\",\"input\":\"graph\",\"observation\":\"GRAPH\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"reverse[one]\", \"Finish[done]\"], {\"reverse\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"reverse\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "title[agent]",
+          "values": "title / agent",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"title[agent]\", \"Finish[done]\"], {\"title\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"title\",\"input\":\"agent\",\"observation\":\"AGENT\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"title[one]\", \"Finish[done]\"], {\"title\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"title\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "count[tools]",
+          "values": "count / tools",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_react([\"count[tools]\", \"Finish[done]\"], {\"count\": lambda value: value.upper()}, 2) == {\"answer\":\"done\",\"history\":[{\"action\":\"count\",\"input\":\"tools\",\"observation\":\"TOOLS\"}],\"steps\":2}",
+              "failure": "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_react([\"count[one]\", \"Finish[done]\"], {\"count\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"count\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

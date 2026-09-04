@@ -861,6 +861,16 @@ test("Python Agent 毕业项目接入工具注册与步数限制练习 family", 
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("max_steps"))));
 });
 
+test("Python ReAct 循环接入观察记录与步数限制练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "agent-react-loop");
+  assert.equal(lesson?.familyId, "python-react-loop-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.every(({ expression }) => expression.includes("run_react"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
