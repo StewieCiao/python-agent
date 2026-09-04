@@ -97,6 +97,7 @@ const modelConfigCases = [
   ["", 30, 0, "False", "model"], ["demo", 0, 0.2, "False", "timeout"], ["demo", 30, 1.5, "False", "temperature"],
 ] as const;
 const messageCases = ["RAG", "检索", "Agent", "LangGraph", "评测", "记忆"] as const;
+const runnableCases = ["退款政策", "部署手册", "权限规则", "数据字典", "审核流程", "服务协议"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -200,6 +201,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `prompt_variables == ["topic"] and messages[0]["role"] == "system" and messages[1]["role"] == "user" and messages[1]["content"] == "解释 ${topic}"`,
       `messages[0]["content"] != messages[1]["content"]`,
       "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+    ))),
+  },
+  {
+    id: "langchain-runnable-v1", lessonIds: ["runnable-pipeline"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-step-order", "swallowed-pipeline-error"], constraints: ["preserve template/model/parser order", "keep explicit pipeline error state"],
+    variants: runnableCases.map((topic) => variant(`管道主题 ${topic}`, topic, twoBehaviorChecks(
+      `chain_steps == ["template", "model", "parser"] and result["answer"] == "关于 ${topic} 的说明" and pipeline_error is None`,
+      `result is not None and pipeline_error is None`,
+      "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
     ))),
   },
   {

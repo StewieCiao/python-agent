@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "0d810952da885b5e542513b13009252a4ec874f37c51a4a931a200714ee308a8",
-  "familyHash": "9483c33049ec156b3970c3c39526f1f54054d68f0ab5232bcd6086d74b199c14",
+  "catalogHash": "5060d3e8a39dfca260d34dca33f9af8f200322c7dd9b5944e1255635476ae47a",
+  "familyHash": "cc705fd63746e6459720eb5370dce8e854b39f04a54fd0aa098384d6f7f2e8e6",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7842,6 +7842,7 @@
           },
           {
             "id": "runnable-pipeline",
+            "familyId": "langchain-runnable-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 11,
             "title": "Runnable 组合的第一条链",
@@ -17961,6 +17962,132 @@
             {
               "name": "边界行为",
               "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-runnable-v1": {
+      "id": "langchain-runnable-v1",
+      "lessonIds": [
+        "runnable-pipeline"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-step-order",
+        "swallowed-pipeline-error"
+      ],
+      "constraints": [
+        "preserve template/model/parser order",
+        "keep explicit pipeline error state"
+      ],
+      "variants": [
+        {
+          "label": "管道主题 退款政策",
+          "values": "退款政策",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 退款政策 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "管道主题 部署手册",
+          "values": "部署手册",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 部署手册 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "管道主题 权限规则",
+          "values": "权限规则",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 权限规则 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "管道主题 数据字典",
+          "values": "数据字典",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 数据字典 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "管道主题 审核流程",
+          "values": "审核流程",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 审核流程 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "管道主题 服务协议",
+          "values": "服务协议",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "chain_steps == [\"template\", \"model\", \"parser\"] and result[\"answer\"] == \"关于 服务协议 的说明\" and pipeline_error is None",
+              "failure": "管道应按 template → model → parser 顺序记录，并保留由输入主题生成的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "result is not None and pipeline_error is None",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

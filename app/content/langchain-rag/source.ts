@@ -514,6 +514,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "runnable-pipeline",
+      familyId: "langchain-runnable-v1",
       title: "Runnable 组合的第一条链",
       prerequisites: ["structured-output"], difficulty: "intermediate", tags: ["runnable", "composition"],
       summary: "把模板、模型和解析器组成可观察的 Runnable 管道。",
