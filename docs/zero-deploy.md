@@ -26,3 +26,14 @@ API Key 只在桌面端提交，并写入操作系统安全存储：macOS 使用
 | 使用个人模型 API | 桌面完整版，并在模型设置中保存 |
 
 离线版和 Pages 版不会伪装成支持模型调用；如果页面没有桌面桥或本地运行时，相关入口会明确显示不可用原因。
+
+## 运行简历项目演示
+
+项目目录中的 `demo.py` 也使用随仓库提供的运行时。仓库根目录执行一次：
+
+```bash
+npm run prepare:python-runtime
+desktop/.runtime/python/bin/python3.13 projects/recoverable-research-graph/demo.py
+```
+
+其余项目可替换最后的路径；演示使用确定性本地数据，不需要模型 Key 或网络。

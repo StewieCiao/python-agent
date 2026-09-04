@@ -46,4 +46,6 @@ test("零部署指南明确离线、Pages 与桌面版的安全边界", async ()
   assert.match(guide, /不会请求或保存 API Key/);
   assert.match(guide, /macOS 使用钥匙串/);
   assert.match(guide, /Windows 使用 DPAPI/);
+  assert.match(guide, /prepare:python-runtime/);
+  assert.match(guide, /desktop\/\.runtime\/python\/bin\/python3\.13/);
 });
