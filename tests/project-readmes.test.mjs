@@ -9,9 +9,10 @@ const projects = [
   ["rag-quality-workbench", /引用覆盖/, /no_results/],
   ["supervisor-research-graph", /角色路由/, /未知角色/],
   ["agentic-rag-router", /检索工具/, /资料不足/],
+  ["mini-agent-framework", /工具注册/, /max_steps/],
 ];
 
-test("三项简历项目都有可复现 README 和成功/失败演示", async () => {
+test("简历项目都有可复现 README 和成功/失败演示", async () => {
   for (const [directory, userStory, evidence] of projects) {
     const path = new URL(`../projects/${directory}/README.md`, import.meta.url);
     await access(path);
