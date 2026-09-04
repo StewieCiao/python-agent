@@ -80,6 +80,10 @@ const generatorCases = [
   ["[-3, 0, 2, 5]", "[2, 5]"], ["[1, -4, 8]", "[1, 8]"], ["[-9, -1]", "[]"],
   ["[0, 6, 7]", "[6, 7]"], ["[12, -2, 3]", "[12, 3]"], ["[]", "[]"],
 ] as const;
+const stringCases = [
+  ["  PyThOn  ", "python"], [" RAG   Guide ", "rag guide"], ["\tLangChain\n", "langchain"],
+  ["  Hello   World  ", "hello   world"], [" 数据   清洗 ", "数据   清洗"], [" MIXED Case ", "mixed case"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -138,6 +142,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `_is_generator_function(positive_numbers) and list(positive_numbers(${values})) == ${expected}`,
       `list(positive_numbers([-2, 0, -1])) == []`,
       "函数必须是真正的生成器，并按原顺序只产生正数。",
+    ))),
+  },
+  {
+    id: "python-strings-v1", lessonIds: ["strings"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["missing-strip", "wrong-case", "mutated-input"], constraints: ["trim outer whitespace", "normalize ASCII case without changing inner spacing"],
+    variants: stringCases.map(([label, expected]) => variant(`清洗 ${JSON.stringify(label)}`, label, twoBehaviorChecks(
+      `_silent_call(normalize_title, ${JSON.stringify(label)}) == (${JSON.stringify(expected)}, "")`,
+      `((lambda text: (normalize_title(text), text))(${JSON.stringify(label)}))[1] == ${JSON.stringify(label)}`,
+      "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
     ))),
   },
   {

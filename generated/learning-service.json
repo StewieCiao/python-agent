@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f51fa595622ff900a6e32c91c3d6dafcd6d496f3c9e3cbd59eb59718764d9d5b",
-  "familyHash": "1039cc6379eac199d246f154e816eee281238d96f19134267a98cc2433c13204",
+  "catalogHash": "57717623c261466ef4de2e43e3e8c3c4cbc4e83f65f4467b2560a73086e54016",
+  "familyHash": "08df08b05a7d08b1ed7f03f5220ec55ef55ede40e2d149a837edd999edc4d30d",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -367,6 +367,7 @@
           },
           {
             "id": "strings",
+            "familyId": "python-strings-v1",
             "stageId": "python-stage-1",
             "order": 3,
             "title": "处理真实文本",
@@ -17325,6 +17326,133 @@
             {
               "name": "边界行为",
               "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-strings-v1": {
+      "id": "python-strings-v1",
+      "lessonIds": [
+        "strings"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "missing-strip",
+        "wrong-case",
+        "mutated-input"
+      ],
+      "constraints": [
+        "trim outer whitespace",
+        "normalize ASCII case without changing inner spacing"
+      ],
+      "variants": [
+        {
+          "label": "清洗 \"  PyThOn  \"",
+          "values": "  PyThOn  ",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \"  PyThOn  \") == (\"python\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\"  PyThOn  \"))[1] == \"  PyThOn  \"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "清洗 \" RAG   Guide \"",
+          "values": " RAG   Guide ",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \" RAG   Guide \") == (\"rag guide\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\" RAG   Guide \"))[1] == \" RAG   Guide \"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "清洗 \"\\tLangChain\\n\"",
+          "values": "\tLangChain\n",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \"\\tLangChain\\n\") == (\"langchain\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\"\\tLangChain\\n\"))[1] == \"\\tLangChain\\n\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "清洗 \"  Hello   World  \"",
+          "values": "  Hello   World  ",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \"  Hello   World  \") == (\"hello   world\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\"  Hello   World  \"))[1] == \"  Hello   World  \"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "清洗 \" 数据   清洗 \"",
+          "values": " 数据   清洗 ",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \" 数据   清洗 \") == (\"数据   清洗\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\" 数据   清洗 \"))[1] == \" 数据   清洗 \"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "清洗 \" MIXED Case \"",
+          "values": " MIXED Case ",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(normalize_title, \" MIXED Case \") == (\"mixed case\", \"\")",
+              "failure": "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda text: (normalize_title(text), text))(\" MIXED Case \"))[1] == \" MIXED Case \"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
