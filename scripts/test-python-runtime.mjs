@@ -10,8 +10,11 @@ const executable = process.platform === "win32"
 
 try {
   await access(executable);
-} catch {
-  throw new Error("未找到项目内置 Python 运行时，请先运行 npm run prepare:python-runtime");
+} catch (error) {
+  if (error?.code === "ENOENT") {
+    throw new Error("未找到项目内置 Python 运行时，请先运行 npm run prepare:python-runtime");
+  }
+  throw error;
 }
 
 const exitCode = await new Promise((resolveExit, reject) => {
