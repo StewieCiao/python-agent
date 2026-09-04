@@ -1204,16 +1204,36 @@ test("Python 基础路线保留真实的先修关系", async () => {
   assert.deepEqual(byId.get("agent-tool-registry").prerequisites, ["project-tasks"]);
 });
 
-test("课程阶段按学习顺序连续分配，不交错基础与进阶课", async () => {
+test("课程阶段索引与目录中的 lesson 归属一致", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
-    const stageIndex = new Map(track.stages.map((stage, index) => [stage.id, index]));
-    let last = 0;
     for (const lesson of track.lessons) {
-      const current = stageIndex.get(lesson.stageId);
-      assert.ok(current !== undefined);
-      assert.ok(current >= last, `${track.id}/${lesson.id} 阶段顺序倒退`);
-      last = current;
+      assert.ok(track.stages.some((stage) => stage.id === lesson.stageId && stage.lessonIds.includes(lesson.id)), `${track.id}/${lesson.id} 未归入对应阶段`);
+    }
+  }
+});
+
+test("框架路线的核心课和项目位于匹配的学习阶段", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const expectedStages = {
+    "langchain-rag": {
+      "model-messages-prompts": "langchain-rag-stage-1",
+      "document-loaders": "langchain-rag-stage-3",
+      "retrieval-chain": "langchain-rag-stage-5",
+      "agent-rag-project": "langchain-rag-stage-7",
+    },
+    langgraph: {
+      "graph-foundations": "langgraph-stage-1",
+      "persistence-short-memory": "langgraph-stage-3",
+      "long-term-store": "langgraph-stage-4",
+      "memory-research-project": "langgraph-stage-7",
+    },
+  };
+  for (const [trackId, lessons] of Object.entries(expectedStages)) {
+    const track = authoredCatalog.tracks.find(({ id }) => id === trackId);
+    assert.ok(track);
+    for (const [lessonId, stageId] of Object.entries(lessons)) {
+      assert.equal(track.lessons.find(({ id }) => id === lessonId)?.stageId, stageId, `${trackId}/${lessonId} 阶段归属不匹配`);
     }
   }
 });

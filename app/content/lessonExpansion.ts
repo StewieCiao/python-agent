@@ -51,6 +51,65 @@ const STAGE_DESCRIPTIONS: Record<CourseTrack["id"], string[]> = {
   ],
 };
 
+const FRAMEWORK_STAGE_TOPICS: Record<"langchain-rag" | "langgraph", string[][]> = {
+  "langchain-rag": [
+    ["消息角色", "Prompt 模板", "结构化输出", "模型配置"],
+    ["Runnable 组合"],
+    ["文档加载", "文本切分"],
+    ["Embedding", "向量存储", "相似度检索", "混合检索", "重排"],
+    ["引用生成", "无答案边界"],
+    ["RAG 评估", "追踪与观测", "工具调用", "Agent 循环", "多查询检索"],
+    ["RAG 项目"],
+  ],
+  langgraph: [
+    ["StateGraph", "节点与边", "状态更新"],
+    ["Reducer", "条件路由", "循环终止"],
+    ["Checkpoint", "thread_id", "Persistence", "恢复执行"],
+    ["Store", "长期记忆", "短期记忆"],
+    ["Interrupt", "人工审核", "流式事件"],
+    ["子图", "并行分支", "Supervisor", "多 Agent 协作"],
+    ["Graph 项目"],
+  ],
+};
+
+const FRAMEWORK_MANUAL_STAGES: Record<string, number> = {
+  "langchain-rag:memory-modernization": 5,
+  "langchain-rag:document-loaders": 2,
+  "langchain-rag:indexing-vector-store": 3,
+  "langchain-rag:retrieval-chain": 4,
+  "langchain-rag:rag-project": 6,
+  "langchain-rag:agent-v1": 5,
+  "langchain-rag:model-messages-prompts": 0,
+  "langchain-rag:model-configuration": 0,
+  "langchain-rag:structured-output": 0,
+  "langchain-rag:runnable-pipeline": 1,
+  "langchain-rag:rag-evaluation": 5,
+  "langchain-rag:hybrid-retrieval": 3,
+  "langchain-rag:reranking": 4,
+  "langchain-rag:citation-grounded-generation": 4,
+  "langgraph:graph-foundations": 0,
+  "langgraph:state-reducers-routing": 1,
+  "langgraph:persistence-short-memory": 2,
+  "langgraph:long-term-store": 3,
+  "langgraph:streaming-interrupts": 4,
+  "langgraph:checkpoint-configuration": 2,
+  "langgraph:supervisor-routing": 5,
+  "langgraph:human-review-state": 4,
+  "langgraph:tool-node-boundaries": 5,
+};
+
+const FRAMEWORK_PROJECT_STAGES: Record<string, number> = {
+  "langchain-rag:agent-rag-project": 6,
+  "langchain-rag:reranking": 4,
+  "langchain-rag:langchain-rag-lesson-20": 5,
+  "langchain-rag:langchain-rag-lesson-27": 6,
+  "langgraph:subgraphs-parallelism": 2,
+  "langgraph:memory-research-project": 6,
+  "langgraph:langgraph-lesson-11": 4,
+  "langgraph:langgraph-lesson-17": 5,
+  "langgraph:langgraph-lesson-23": 6,
+};
+
 type ProjectBrief = { title: string; summary: string; prompt: string; starterCode: string; solution: string; hints: string[]; checks: CourseLesson["browserChecks"] };
 
 const PROJECT_BRIEFS: Record<"langchain-rag" | "langgraph", ProjectBrief[]> = {
@@ -931,6 +990,24 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   };
 }
 
+function assignFrameworkStages(track: CourseTrack, stages: CourseStage[], lessons: CourseLesson[]): void {
+  const topicStages = FRAMEWORK_STAGE_TOPICS[track.id as "langchain-rag" | "langgraph"];
+  for (const lesson of lessons) {
+    const explicitStage = FRAMEWORK_PROJECT_STAGES[`${track.id}:${lesson.id}`] ?? FRAMEWORK_MANUAL_STAGES[`${track.id}:${lesson.id}`];
+    if (explicitStage !== undefined) {
+      lesson.stageId = stages[explicitStage]!.id;
+      continue;
+    }
+    const baseTopic = topicStages
+      .map((topics, stageIndex) => ({ stageIndex, topics }))
+      .find(({ topics }) => topics.some((topic) => lesson.title === topic || lesson.title.startsWith(`${topic}：`)));
+    if (!baseTopic) throw new Error(`缺少 ${track.id}/${lesson.id} 的阶段主题映射`);
+    lesson.stageId = stages[baseTopic.stageIndex]!.id;
+  }
+  for (const stage of stages) stage.lessonIds = [];
+  for (const lesson of lessons) stages.find(({ id }) => id === lesson.stageId)!.lessonIds.push(lesson.id);
+}
+
 export function expandCourseTrack(track: CourseTrack, expansion: Expansion): CourseTrack {
   if (track.lessons.length >= expansion.targetLessons && track.stages.length === expansion.stageCount) return track;
   const stages: CourseStage[] = expansion.stageTitles.map((title, index) => ({
@@ -996,6 +1073,7 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
       lesson.exercise.hints = ["先拆成一个能独立运行的最小里程碑。", "让每个中间结果可观察，并为失败保留真实原因。", "最后用未出现在示例中的输入和边界情况回归。"];
     }
   }
+  if (track.id !== "python") assignFrameworkStages(track, stages, lessons);
   const projectIdsByStage = new Map<string, string>();
   for (const project of lessons.filter(({ project }) => project)) {
     if (!projectIdsByStage.has(project.stageId)) projectIdsByStage.set(project.stageId, project.id);

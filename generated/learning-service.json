@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "04b65f9e2f0844e0c27d5b6fa2834f533d1bbb271f4546ea40c5bd5710a38c2e",
+  "catalogHash": "57797fe58518155e9888728b02e4b60efc65742d909ce33531133806adb299ea",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6286,13 +6286,16 @@
             "title": "模型与提示",
             "description": "先理解消息、Prompt、模型配置和结构化输出，再观察每一步输入输出。",
             "lessonIds": [
-              "memory-modernization",
-              "document-loaders",
-              "indexing-vector-store",
-              "retrieval-chain",
-              "rag-project",
-              "agent-v1",
-              "agent-rag-project"
+              "model-messages-prompts",
+              "model-configuration",
+              "structured-output",
+              "langchain-rag-lesson-21",
+              "langchain-rag-lesson-22",
+              "langchain-rag-lesson-24",
+              "langchain-rag-lesson-40",
+              "langchain-rag-lesson-41",
+              "langchain-rag-lesson-42",
+              "langchain-rag-lesson-44"
             ]
           },
           {
@@ -6301,13 +6304,9 @@
             "title": "Runnable",
             "description": "用 Runnable 组合可读的数据流，区分模板、模型、解析器和错误边界。",
             "lessonIds": [
-              "model-messages-prompts",
-              "model-configuration",
-              "structured-output",
               "runnable-pipeline",
-              "rag-evaluation",
-              "hybrid-retrieval",
-              "reranking"
+              "langchain-rag-lesson-23",
+              "langchain-rag-lesson-43"
             ]
           },
           {
@@ -6316,13 +6315,11 @@
             "title": "文档处理",
             "description": "把 PDF、文本和表格转换为保留来源的 Document，并检查加载质量。",
             "lessonIds": [
-              "citation-grounded-generation",
-              "langchain-rag-lesson-15",
-              "langchain-rag-lesson-16",
-              "langchain-rag-lesson-17",
-              "langchain-rag-lesson-18",
-              "langchain-rag-lesson-19",
-              "langchain-rag-lesson-20"
+              "document-loaders",
+              "langchain-rag-lesson-25",
+              "langchain-rag-lesson-26",
+              "langchain-rag-lesson-45",
+              "langchain-rag-lesson-46"
             ]
           },
           {
@@ -6331,13 +6328,13 @@
             "title": "向量检索",
             "description": "完成切分、Embedding、向量存储与混合检索，理解召回不是答案。",
             "lessonIds": [
-              "langchain-rag-lesson-21",
-              "langchain-rag-lesson-22",
-              "langchain-rag-lesson-23",
-              "langchain-rag-lesson-24",
-              "langchain-rag-lesson-25",
-              "langchain-rag-lesson-26",
-              "langchain-rag-lesson-27"
+              "indexing-vector-store",
+              "hybrid-retrieval",
+              "langchain-rag-lesson-28",
+              "langchain-rag-lesson-29",
+              "langchain-rag-lesson-30",
+              "langchain-rag-lesson-31",
+              "langchain-rag-lesson-47"
             ]
           },
           {
@@ -6346,13 +6343,11 @@
             "title": "RAG 生成",
             "description": "将检索上下文交给模型生成回答，处理引用、无资料和来源一致性。",
             "lessonIds": [
-              "langchain-rag-lesson-28",
-              "langchain-rag-lesson-29",
-              "langchain-rag-lesson-30",
-              "langchain-rag-lesson-31",
+              "retrieval-chain",
+              "reranking",
+              "citation-grounded-generation",
               "langchain-rag-lesson-32",
-              "langchain-rag-lesson-33",
-              "langchain-rag-lesson-34"
+              "langchain-rag-lesson-33"
             ]
           },
           {
@@ -6361,13 +6356,19 @@
             "title": "评估与观测",
             "description": "用 recall、MRR、引用覆盖和追踪事件定位 RAG 质量回归。",
             "lessonIds": [
+              "memory-modernization",
+              "agent-v1",
+              "rag-evaluation",
+              "langchain-rag-lesson-15",
+              "langchain-rag-lesson-16",
+              "langchain-rag-lesson-17",
+              "langchain-rag-lesson-18",
+              "langchain-rag-lesson-20",
+              "langchain-rag-lesson-34",
               "langchain-rag-lesson-35",
               "langchain-rag-lesson-36",
               "langchain-rag-lesson-37",
-              "langchain-rag-lesson-38",
-              "langchain-rag-lesson-39",
-              "langchain-rag-lesson-40",
-              "langchain-rag-lesson-41"
+              "langchain-rag-lesson-38"
             ]
           },
           {
@@ -6376,19 +6377,18 @@
             "title": "RAG 项目",
             "description": "把检索、工具和 Agent 组合成可展示的 RAG 项目并记录取舍。",
             "lessonIds": [
-              "langchain-rag-lesson-42",
-              "langchain-rag-lesson-43",
-              "langchain-rag-lesson-44",
-              "langchain-rag-lesson-45",
-              "langchain-rag-lesson-46",
-              "langchain-rag-lesson-47"
+              "rag-project",
+              "agent-rag-project",
+              "langchain-rag-lesson-19",
+              "langchain-rag-lesson-27",
+              "langchain-rag-lesson-39"
             ]
           }
         ],
         "lessons": [
           {
             "id": "memory-modernization",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-6",
             "order": 1,
             "title": "记忆：会话历史、短期状态与长期记忆",
             "kicker": "langchain-rag 学习",
@@ -6538,7 +6538,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "agent-rag-project"
+              "langchain-rag-lesson-20"
             ],
             "exercise": {
               "prompt": "分别写出 thread_id 短期记忆和 user_id 长期记忆的适用场景，并把课程中的 JSON 历史准确重命名。",
@@ -6567,7 +6567,7 @@
           },
           {
             "id": "document-loaders",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-3",
             "order": 2,
             "title": "文档加载器与统一 Document",
             "kicker": "langchain-rag 学习",
@@ -6686,9 +6686,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "agent-rag-project"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "加载 PDF 后打印第一页正文长度、source 与 page 元数据，确认数据可追踪。",
               "starterCode": "from langchain_community.document_loaders import PyPDFLoader\n\ndocs = PyPDFLoader(\"guide.pdf\").load()\n# 检查第一页",
@@ -6716,7 +6714,7 @@
           },
           {
             "id": "indexing-vector-store",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-4",
             "order": 3,
             "title": "切分、嵌入与向量存储",
             "kicker": "langchain-rag 学习",
@@ -6819,9 +6817,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "agent-rag-project"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "对三段带 source 元数据的文本切分并检索，输出命中文本和来源。",
               "starterCode": "# 建立 chunks 和 vector_store 后检索“退款”",
@@ -6850,7 +6846,7 @@
           {
             "id": "retrieval-chain",
             "familyId": "langchain-retrieval-v1",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-5",
             "order": 4,
             "title": "从 Retriever 到可核验的 RAG 回答",
             "kicker": "langchain-rag 学习",
@@ -6954,7 +6950,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "agent-rag-project"
+              "reranking"
             ],
             "exercise": {
               "prompt": "输入是 question 字符串、documents 列表和 top_k；输出是 retrieved 候选列表与可传给 prompt 的 context。请先完成一个可观察的关键词检索：结果不超过 top_k，无命中时 retrieved 为空且 context 明确为“没有检索到资料”，再映射到 Retriever + Runnable。",
@@ -6983,7 +6979,7 @@
           },
           {
             "id": "rag-project",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-7",
             "order": 5,
             "title": "RAG 项目：上传、索引、检索与会话",
             "kicker": "langchain-rag 学习",
@@ -7124,7 +7120,7 @@
           },
           {
             "id": "agent-v1",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-6",
             "order": 6,
             "title": "LangChain v1 Agent 与中间件",
             "kicker": "langchain-rag 学习",
@@ -7264,7 +7260,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "agent-rag-project"
+              "langchain-rag-lesson-20"
             ],
             "exercise": {
               "prompt": "输入是一个包含工具名称与 arguments 的 tool_call；输出是 tool_result 或真实 tool_error。请先用字典验证工具调用契约，再把旧 create_react_agent 映射到 LangChain v1 的 create_agent，不能伪造成功结果。",
@@ -7294,7 +7290,7 @@
           {
             "id": "agent-rag-project",
             "familyId": "langchain-citation-project-v1",
-            "stageId": "langchain-rag-stage-1",
+            "stageId": "langchain-rag-stage-7",
             "order": 7,
             "title": "可引用文档问答系统",
             "kicker": "langchain-rag 学习",
@@ -7442,7 +7438,7 @@
           {
             "id": "model-messages-prompts",
             "familyId": "langchain-messages-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-1",
             "order": 8,
             "title": "模型、消息与 Prompt 模板",
             "kicker": "langchain-rag 学习",
@@ -7540,9 +7536,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "reranking"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "输入是一个 topic 字符串；输出是按顺序排列的 messages 列表。请先用纯 Python 字典表达 system 与 user 角色，并声明 prompt_variables，再把同一结构映射到 ChatPromptTemplate。",
               "starterCode": "topic = \"RAG\"\nprompt_variables = []\nmessages = []",
@@ -7571,7 +7565,7 @@
           {
             "id": "model-configuration",
             "familyId": "langchain-model-config-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-1",
             "order": 9,
             "title": "模型配置与可解释的失败边界",
             "kicker": "langchain-rag 学习",
@@ -7662,9 +7656,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "reranking"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 validate_model_config(config)：model 必须是非空字符串，timeout 必须是大于 0 的数字，temperature 必须在 0 到 1；返回包含 valid 和 error 字段的字典，失败时写明缺失边界。",
               "starterCode": "def validate_model_config(config):\n    pass\n",
@@ -7699,7 +7691,7 @@
           {
             "id": "structured-output",
             "familyId": "langchain-structured-output-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-1",
             "order": 10,
             "title": "结构化输出与失败边界",
             "kicker": "langchain-rag 学习",
@@ -7789,9 +7781,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "reranking"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "输入是一个可能缺少字段的 result 字典；输出是 valid 布尔值。请验证 summary 和 confidence 是否存在且 confidence 在 0 到 1，缺少字段或越界时返回 False；不要把失败改成空对象，再映射到 Answer schema。",
               "starterCode": "result = {\"summary\": \"可核验\", \"confidence\": 0.8}\n\ndef validate_answer(payload):\n    pass\n\nvalid = False",
@@ -7910,9 +7900,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "reranking"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "输入是 topic 字符串；输出是经过 template → model → parser 的 result。请记录三步 chain_steps，并在任一步失败时保留 pipeline_error，不返回空字符串冒充成功。",
               "starterCode": "topic = \"RAG\"\nchain_steps = []\nresult = None\npipeline_error = None",
@@ -7941,7 +7929,7 @@
           {
             "id": "rag-evaluation",
             "familyId": "langchain-rag-evaluation-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-6",
             "order": 12,
             "title": "RAG 评估：召回、引用与资料不足",
             "kicker": "langchain-rag 学习",
@@ -8033,7 +8021,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "reranking"
+              "langchain-rag-lesson-20"
             ],
             "exercise": {
               "prompt": "实现 evaluate_retrieval(expected_sources, retrieved_sources, answer_sources)：返回 recall、citation_coverage 和 status；期望来源为空或实际无命中时 status 为 no_results，不能把无资料当作满分。",
@@ -8069,7 +8057,7 @@
           {
             "id": "hybrid-retrieval",
             "familyId": "langchain-hybrid-retrieval-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-4",
             "order": 13,
             "title": "混合检索与相似度阈值",
             "kicker": "langchain-rag 学习",
@@ -8160,9 +8148,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "reranking"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 merge_retrieval(keyword_hits, vector_hits, threshold)：按 source 去重并按 score 降序返回 matches；最高分低于 threshold 或没有候选时 status 为 no_results，否则为 ok。",
               "starterCode": "def merge_retrieval(keyword_hits, vector_hits, threshold):\n    pass\n",
@@ -8197,7 +8183,7 @@
           {
             "id": "reranking",
             "familyId": "langchain-reranking-v1",
-            "stageId": "langchain-rag-stage-2",
+            "stageId": "langchain-rag-stage-5",
             "order": 14,
             "title": "混合检索评估台",
             "kicker": "langchain-rag 学习",
@@ -8317,7 +8303,7 @@
           {
             "id": "citation-grounded-generation",
             "familyId": "langchain-citation-v1",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-5",
             "order": 15,
             "title": "引用约束生成与资料不足",
             "kicker": "langchain-rag 学习",
@@ -8409,7 +8395,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-20"
+              "reranking"
             ],
             "exercise": {
               "prompt": "实现 grounded_answer(question, documents)：documents 是带 text/source 的字典列表；有资料时返回 status=ok、答案使用首个片段文本且 sources 只包含输入来源，无资料时返回 answer=资料不足、sources=[]、status=no_results。",
@@ -8444,7 +8430,7 @@
           },
           {
             "id": "langchain-rag-lesson-15",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-6",
             "order": 16,
             "title": "追踪与观测",
             "kicker": "LangChain / RAG 学习",
@@ -8542,7 +8528,7 @@
           },
           {
             "id": "langchain-rag-lesson-16",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-6",
             "order": 17,
             "title": "工具调用",
             "kicker": "LangChain / RAG 学习",
@@ -8661,7 +8647,7 @@
           },
           {
             "id": "langchain-rag-lesson-17",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-6",
             "order": 18,
             "title": "Agent 循环",
             "kicker": "LangChain / RAG 学习",
@@ -8759,7 +8745,7 @@
           },
           {
             "id": "langchain-rag-lesson-18",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-6",
             "order": 19,
             "title": "多查询检索",
             "kicker": "LangChain / RAG 学习",
@@ -8857,7 +8843,7 @@
           },
           {
             "id": "langchain-rag-lesson-19",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-7",
             "order": 20,
             "title": "RAG 项目",
             "kicker": "LangChain / RAG 学习",
@@ -8926,7 +8912,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "langchain-rag-lesson-20"
+              "agent-rag-project"
             ],
             "exercise": {
               "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。",
@@ -8956,7 +8942,7 @@
           {
             "id": "langchain-rag-lesson-20",
             "familyId": "langchain-tool-assistant-v1",
-            "stageId": "langchain-rag-stage-3",
+            "stageId": "langchain-rag-stage-6",
             "order": 21,
             "title": "带工具调用的知识助手",
             "kicker": "LangChain / RAG 学习",
@@ -9073,7 +9059,7 @@
           },
           {
             "id": "langchain-rag-lesson-21",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-1",
             "order": 22,
             "title": "Prompt 模板：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9141,9 +9127,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 render_prompt(template, values)，替换模板中的 {name} 占位符；缺少变量时抛出 KeyError。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def render_prompt(template, values):\n    pass\n",
@@ -9171,7 +9155,7 @@
           },
           {
             "id": "langchain-rag-lesson-22",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-1",
             "order": 23,
             "title": "结构化输出：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9260,9 +9244,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 validate_answer(value)，仅接受包含 answer 字符串和 confidence 0–1 数字的字典，否则抛出 ValueError。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def validate_answer(value):\n    pass\n",
@@ -9290,7 +9272,7 @@
           },
           {
             "id": "langchain-rag-lesson-23",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-2",
             "order": 24,
             "title": "Runnable 组合：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9358,9 +9340,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 compose_steps(first, second, value)，先调用 first 再把结果传给 second；返回 second 的结果并保留调用顺序。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def compose_steps(first, second, value):\n    pass\n",
@@ -9388,7 +9368,7 @@
           },
           {
             "id": "langchain-rag-lesson-24",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-1",
             "order": 25,
             "title": "模型配置：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9477,9 +9457,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 normalize_model_config(config)，返回 temperature 与 timeout；缺省分别为 0 和 30，参数必须为非负数字，否则抛出 ValueError。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def normalize_model_config(config):\n    pass\n",
@@ -9507,7 +9485,7 @@
           },
           {
             "id": "langchain-rag-lesson-25",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-3",
             "order": 26,
             "title": "文档加载：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9575,9 +9553,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 normalize_documents(records)，把每条记录转换为 {text, metadata:{source}}，空文本记录应被跳过。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def normalize_documents(records):\n    return []\n",
@@ -9605,7 +9581,7 @@
           },
           {
             "id": "langchain-rag-lesson-26",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-3",
             "order": 27,
             "title": "文本切分：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9673,9 +9649,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langchain-rag-lesson-27"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 split_text(text, size)，按 size 个字符切分并返回列表；空文本返回空列表，不产生空片段。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def split_text(text, size):\n    pass\n",
@@ -9704,7 +9678,7 @@
           {
             "id": "langchain-rag-lesson-27",
             "familyId": "langchain-rag-observability-v1",
-            "stageId": "langchain-rag-stage-4",
+            "stageId": "langchain-rag-stage-7",
             "order": 28,
             "title": "RAG 质量观测面板",
             "kicker": "LangChain / RAG 学习",
@@ -9821,7 +9795,7 @@
           },
           {
             "id": "langchain-rag-lesson-28",
-            "stageId": "langchain-rag-stage-5",
+            "stageId": "langchain-rag-stage-4",
             "order": 29,
             "title": "向量存储：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -9917,7 +9891,7 @@
           },
           {
             "id": "langchain-rag-lesson-29",
-            "stageId": "langchain-rag-stage-5",
+            "stageId": "langchain-rag-stage-4",
             "order": 30,
             "title": "相似度检索：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -10034,7 +10008,7 @@
           },
           {
             "id": "langchain-rag-lesson-30",
-            "stageId": "langchain-rag-stage-5",
+            "stageId": "langchain-rag-stage-4",
             "order": 31,
             "title": "混合检索：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -10130,7 +10104,7 @@
           },
           {
             "id": "langchain-rag-lesson-31",
-            "stageId": "langchain-rag-stage-5",
+            "stageId": "langchain-rag-stage-4",
             "order": 32,
             "title": "重排：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -10294,7 +10268,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "reranking"
+            ],
             "exercise": {
               "prompt": "实现 format_citations(results)，为每个结果生成 [n] source 行；结果为空时返回‘没有找到相关资料’。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def format_citations(results):\n    pass\n",
@@ -10390,7 +10366,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "reranking"
+            ],
             "exercise": {
               "prompt": "实现 choose_context(results, threshold)，只保留 score >= threshold 的结果；没有合格结果返回 None。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def choose_context(results, threshold):\n    pass\n",
@@ -10418,7 +10396,7 @@
           },
           {
             "id": "langchain-rag-lesson-34",
-            "stageId": "langchain-rag-stage-5",
+            "stageId": "langchain-rag-stage-6",
             "order": 35,
             "title": "RAG 评估：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -10486,7 +10464,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langchain-rag-lesson-20"
+            ],
             "exercise": {
               "prompt": "实现 evaluate_retrieval(expected, actual)，返回 hit、missing、unexpected 三个集合的排序列表。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def evaluate_retrieval(expected, actual):\n    pass\n",
@@ -10582,7 +10562,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langchain-rag-lesson-20"
+            ],
             "exercise": {
               "prompt": "实现 record_event(events, name, payload)，返回新列表并追加事件字典；payload 必须是字典，否则抛出 TypeError。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def record_event(events, name, payload):\n    pass\n",
@@ -10699,7 +10681,9 @@
               }
             ],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langchain-rag-lesson-20"
+            ],
             "exercise": {
               "prompt": "实现 call_tool(tool, arguments)，arguments 必须是字典并原样传给 tool；类型错误直接抛出。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def call_tool(tool, arguments):\n    pass\n",
@@ -10795,7 +10779,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langchain-rag-lesson-20"
+            ],
             "exercise": {
               "prompt": "实现 run_agent(steps, limit)，依次执行最多 limit 个无参步骤；limit <= 0 返回空列表。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def run_agent(steps, limit):\n    pass\n",
@@ -10891,7 +10877,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langchain-rag-lesson-20"
+            ],
             "exercise": {
               "prompt": "实现 expand_queries(query, rewrites)，返回去重后的查询列表，原问题必须位于第一项。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def expand_queries(query, rewrites):\n    pass\n",
@@ -10919,7 +10907,7 @@
           },
           {
             "id": "langchain-rag-lesson-39",
-            "stageId": "langchain-rag-stage-6",
+            "stageId": "langchain-rag-stage-7",
             "order": 40,
             "title": "RAG 项目：产品支持台",
             "kicker": "LangChain / RAG 学习",
@@ -10987,7 +10975,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "agent-rag-project"
+            ],
             "exercise": {
               "prompt": "实现 answer_with_sources(contexts)，返回 answer 与 sources；contexts 为空时 answer 必须为‘资料不足’且来源为空。\n场景：产品支持台。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def answer_with_sources(contexts):\n    pass\n",
@@ -11015,7 +11005,7 @@
           },
           {
             "id": "langchain-rag-lesson-40",
-            "stageId": "langchain-rag-stage-6",
+            "stageId": "langchain-rag-stage-1",
             "order": 41,
             "title": "消息角色：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11132,7 +11122,7 @@
           },
           {
             "id": "langchain-rag-lesson-41",
-            "stageId": "langchain-rag-stage-6",
+            "stageId": "langchain-rag-stage-1",
             "order": 42,
             "title": "Prompt 模板：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11228,7 +11218,7 @@
           },
           {
             "id": "langchain-rag-lesson-42",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-1",
             "order": 43,
             "title": "结构化输出：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11345,7 +11335,7 @@
           },
           {
             "id": "langchain-rag-lesson-43",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-2",
             "order": 44,
             "title": "Runnable 组合：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11441,7 +11431,7 @@
           },
           {
             "id": "langchain-rag-lesson-44",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-1",
             "order": 45,
             "title": "模型配置：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11558,7 +11548,7 @@
           },
           {
             "id": "langchain-rag-lesson-45",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-3",
             "order": 46,
             "title": "文档加载：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11654,7 +11644,7 @@
           },
           {
             "id": "langchain-rag-lesson-46",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-3",
             "order": 47,
             "title": "文本切分：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11750,7 +11740,7 @@
           },
           {
             "id": "langchain-rag-lesson-47",
-            "stageId": "langchain-rag-stage-7",
+            "stageId": "langchain-rag-stage-4",
             "order": 48,
             "title": "Embedding：研究资料库",
             "kicker": "LangChain / RAG 学习",
@@ -11882,11 +11872,11 @@
             "description": "从 StateGraph、节点和边开始，画出状态输入、更新和最终输出。",
             "lessonIds": [
               "graph-foundations",
-              "state-reducers-routing",
-              "persistence-short-memory",
-              "long-term-store",
-              "streaming-interrupts",
-              "subgraphs-parallelism"
+              "langgraph-lesson-20",
+              "langgraph-lesson-21",
+              "langgraph-lesson-22",
+              "langgraph-lesson-40",
+              "langgraph-lesson-41"
             ]
           },
           {
@@ -11895,12 +11885,9 @@
             "title": "状态与路由",
             "description": "练习条件路由、Reducer 与循环终止，让图的控制流可解释且有上限。",
             "lessonIds": [
-              "memory-research-project",
-              "checkpoint-configuration",
-              "supervisor-routing",
-              "human-review-state",
-              "tool-node-boundaries",
-              "langgraph-lesson-11"
+              "state-reducers-routing",
+              "langgraph-lesson-24",
+              "langgraph-lesson-25"
             ]
           },
           {
@@ -11909,12 +11896,13 @@
             "title": "持久化",
             "description": "用 Checkpoint 和 thread_id 保存、恢复线程状态，避免跨会话串线。",
             "lessonIds": [
+              "persistence-short-memory",
+              "subgraphs-parallelism",
+              "checkpoint-configuration",
               "langgraph-lesson-12",
-              "langgraph-lesson-13",
-              "langgraph-lesson-14",
-              "langgraph-lesson-15",
-              "langgraph-lesson-16",
-              "langgraph-lesson-17"
+              "langgraph-lesson-26",
+              "langgraph-lesson-27",
+              "langgraph-lesson-32"
             ]
           },
           {
@@ -11923,12 +11911,10 @@
             "title": "记忆",
             "description": "区分短期状态与 Store 长期记忆，按用户和命名空间隔离资料。",
             "lessonIds": [
-              "langgraph-lesson-18",
-              "langgraph-lesson-19",
-              "langgraph-lesson-20",
-              "langgraph-lesson-21",
-              "langgraph-lesson-22",
-              "langgraph-lesson-23"
+              "long-term-store",
+              "langgraph-lesson-28",
+              "langgraph-lesson-29",
+              "langgraph-lesson-30"
             ]
           },
           {
@@ -11937,12 +11923,14 @@
             "title": "中断与恢复",
             "description": "用 Interrupt 暂停高风险动作，并以明确决定恢复或拒绝流程。",
             "lessonIds": [
-              "langgraph-lesson-24",
-              "langgraph-lesson-25",
-              "langgraph-lesson-26",
-              "langgraph-lesson-27",
-              "langgraph-lesson-28",
-              "langgraph-lesson-29"
+              "streaming-interrupts",
+              "human-review-state",
+              "langgraph-lesson-11",
+              "langgraph-lesson-13",
+              "langgraph-lesson-18",
+              "langgraph-lesson-31",
+              "langgraph-lesson-33",
+              "langgraph-lesson-38"
             ]
           },
           {
@@ -11951,12 +11939,16 @@
             "title": "多 Agent",
             "description": "组合子图、并行分支与 Supervisor，观察多 Agent 的交接和失败状态。",
             "lessonIds": [
-              "langgraph-lesson-30",
-              "langgraph-lesson-31",
-              "langgraph-lesson-32",
-              "langgraph-lesson-33",
+              "supervisor-routing",
+              "tool-node-boundaries",
+              "langgraph-lesson-14",
+              "langgraph-lesson-15",
+              "langgraph-lesson-16",
+              "langgraph-lesson-17",
               "langgraph-lesson-34",
-              "langgraph-lesson-35"
+              "langgraph-lesson-35",
+              "langgraph-lesson-36",
+              "langgraph-lesson-37"
             ]
           },
           {
@@ -11965,12 +11957,10 @@
             "title": "Graph 项目",
             "description": "完成可恢复 Graph 项目，验证线程隔离、审批、错误和可复现运行。",
             "lessonIds": [
-              "langgraph-lesson-36",
-              "langgraph-lesson-37",
-              "langgraph-lesson-38",
-              "langgraph-lesson-39",
-              "langgraph-lesson-40",
-              "langgraph-lesson-41"
+              "memory-research-project",
+              "langgraph-lesson-19",
+              "langgraph-lesson-23",
+              "langgraph-lesson-39"
             ]
           }
         ],
@@ -12074,9 +12064,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "subgraphs-parallelism"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "输入是一个 topic 字符串；输出是第一个节点产生的 node_update 字典。请用两个节点依次生成 outline 和 answer，并用 graph_edges 明确到达 END。先用纯 Python 数据观察 StateGraph 的输入、节点输出和结束边界，再映射到官方 API。",
               "starterCode": "topic = \"RAG\"\nEND = \"END\"\n\ndef draft(state):\n    pass\n\nnode_update = {}\ngraph_edges = [\"START\"]",
@@ -12105,7 +12093,7 @@
           {
             "id": "state-reducers-routing",
             "familyId": "langgraph-routing-v1",
-            "stageId": "langgraph-stage-1",
+            "stageId": "langgraph-stage-2",
             "order": 2,
             "title": "Reducer、条件边与循环",
             "kicker": "langgraph 学习",
@@ -12192,9 +12180,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "subgraphs-parallelism"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "输入是包含 score 和 attempts 的 state 字典；输出是 route_result，必须是已声明的 revise 或 finish。请在 score 达标或 attempts 达到 2 时结束，否则返回 revise，观察条件边如何保证循环有上限。",
               "starterCode": "state = {\"score\": 0.6, \"attempts\": 1}\n\ndef route(state):\n    pass\n\nroute_result = \"\"",
@@ -12222,7 +12208,7 @@
           },
           {
             "id": "persistence-short-memory",
-            "stageId": "langgraph-stage-1",
+            "stageId": "langgraph-stage-3",
             "order": 3,
             "title": "Persistence 与线程短期记忆",
             "kicker": "langgraph 学习",
@@ -12346,7 +12332,7 @@
           {
             "id": "long-term-store",
             "familyId": "langgraph-store-v1",
-            "stageId": "langgraph-stage-1",
+            "stageId": "langgraph-stage-4",
             "order": 4,
             "title": "Store 与跨线程长期记忆",
             "kicker": "langgraph 学习",
@@ -12441,9 +12427,7 @@
               }
             ],
             "project": false,
-            "projectLinks": [
-              "subgraphs-parallelism"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 read_store(store, user_id, key)：只读取 (user_id, 'profile') 命名空间中的 key；不存在时返回 None，不能读取其他用户的数据。",
               "starterCode": "def read_store(store, user_id, key):\n    pass\n",
@@ -12472,7 +12456,7 @@
           {
             "id": "streaming-interrupts",
             "familyId": "langgraph-interrupt-v1",
-            "stageId": "langgraph-stage-1",
+            "stageId": "langgraph-stage-5",
             "order": 5,
             "title": "Streaming、Interrupt 与人工确认",
             "kicker": "langgraph 学习",
@@ -12560,7 +12544,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "subgraphs-parallelism"
+              "langgraph-lesson-11"
             ],
             "exercise": {
               "prompt": "输入是包含 draft 和 decision 的 state；输出是 events 列表与最终 status。请在发送邮件前记录 requires_approval=True 的中断状态，decision 为 reject（拒绝）时返回 cancelled 且不执行发送，观察每个节点产生的真实事件。",
@@ -12590,7 +12574,7 @@
           {
             "id": "subgraphs-parallelism",
             "familyId": "langgraph-recovery-project-v1",
-            "stageId": "langgraph-stage-1",
+            "stageId": "langgraph-stage-3",
             "order": 6,
             "title": "可恢复研究工作流",
             "kicker": "langgraph 学习",
@@ -12705,7 +12689,7 @@
           },
           {
             "id": "memory-research-project",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-7",
             "order": 7,
             "title": "项目：带长期记忆的研究助手",
             "kicker": "langgraph 学习",
@@ -12813,7 +12797,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-11"
+              "langgraph-lesson-23"
             ],
             "exercise": {
               "prompt": "列出研究助手的 thread state、Store memory、节点和人工中断点，保证两类状态不混用。",
@@ -12843,7 +12827,7 @@
           {
             "id": "checkpoint-configuration",
             "familyId": "langgraph-checkpoint-v1",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-3",
             "order": 8,
             "title": "Checkpoint 配置与恢复边界",
             "kicker": "langgraph 学习",
@@ -12935,7 +12919,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-11"
+              "subgraphs-parallelism"
             ],
             "exercise": {
               "prompt": "实现 resume(checkpoints, thread_id, updates)：复制指定 thread 的检查点并应用 updates，返回新状态；未知 thread_id 必须抛出 KeyError，且不能修改原检查点。",
@@ -12971,7 +12955,7 @@
           {
             "id": "supervisor-routing",
             "familyId": "langgraph-supervisor-v1",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-6",
             "order": 9,
             "title": "Supervisor 路由与角色交接",
             "kicker": "langgraph 学习",
@@ -13063,7 +13047,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-11"
+              "langgraph-lesson-17"
             ],
             "exercise": {
               "prompt": "实现 handoff(state, workers)：从 state['role'] 选择 worker 执行 state['task']，返回 role、task 和 result；未知 role 必须抛出 KeyError。",
@@ -13099,7 +13083,7 @@
           {
             "id": "human-review-state",
             "familyId": "langgraph-human-review-v1",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-5",
             "order": 10,
             "title": "人工审核状态与恢复",
             "kicker": "langgraph 学习",
@@ -13227,7 +13211,7 @@
           {
             "id": "tool-node-boundaries",
             "familyId": "langgraph-tool-node-v1",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-6",
             "order": 11,
             "title": "工具节点的输入校验与错误状态",
             "kicker": "langgraph 学习",
@@ -13319,7 +13303,7 @@
             ],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-11"
+              "langgraph-lesson-17"
             ],
             "exercise": {
               "prompt": "实现 run_tool(state, tool)：state 必须包含 tool_args 字典；成功返回 tool_status=ok、tool_result 和 tool_error=None；缺少 tool_args 或工具抛异常时返回 tool_status=error、tool_result=None，并把异常类型和消息写入 tool_error。",
@@ -13355,7 +13339,7 @@
           {
             "id": "langgraph-lesson-11",
             "familyId": "langgraph-review-project-v1",
-            "stageId": "langgraph-stage-2",
+            "stageId": "langgraph-stage-5",
             "order": 12,
             "title": "人工审核 Agent 流程",
             "kicker": "LangGraph 学习",
@@ -13541,7 +13525,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-17"
+              "subgraphs-parallelism"
             ],
             "exercise": {
               "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。",
@@ -13570,7 +13554,7 @@
           },
           {
             "id": "langgraph-lesson-13",
-            "stageId": "langgraph-stage-3",
+            "stageId": "langgraph-stage-5",
             "order": 14,
             "title": "流式事件",
             "kicker": "LangGraph 学习",
@@ -13639,7 +13623,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-17"
+              "langgraph-lesson-11"
             ],
             "exercise": {
               "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。",
@@ -13668,7 +13652,7 @@
           },
           {
             "id": "langgraph-lesson-14",
-            "stageId": "langgraph-stage-3",
+            "stageId": "langgraph-stage-6",
             "order": 15,
             "title": "子图",
             "kicker": "LangGraph 学习",
@@ -13766,7 +13750,7 @@
           },
           {
             "id": "langgraph-lesson-15",
-            "stageId": "langgraph-stage-3",
+            "stageId": "langgraph-stage-6",
             "order": 16,
             "title": "并行分支",
             "kicker": "LangGraph 学习",
@@ -13864,7 +13848,7 @@
           },
           {
             "id": "langgraph-lesson-16",
-            "stageId": "langgraph-stage-3",
+            "stageId": "langgraph-stage-6",
             "order": 17,
             "title": "Supervisor",
             "kicker": "LangGraph 学习",
@@ -13963,7 +13947,7 @@
           {
             "id": "langgraph-lesson-17",
             "familyId": "langgraph-dispatch-project-v1",
-            "stageId": "langgraph-stage-3",
+            "stageId": "langgraph-stage-6",
             "order": 18,
             "title": "多 Agent 协作调度器",
             "kicker": "LangGraph 学习",
@@ -14059,7 +14043,7 @@
           },
           {
             "id": "langgraph-lesson-18",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-5",
             "order": 19,
             "title": "人工审核",
             "kicker": "LangGraph 学习",
@@ -14128,7 +14112,7 @@
             "migrations": [],
             "project": false,
             "projectLinks": [
-              "langgraph-lesson-23"
+              "langgraph-lesson-11"
             ],
             "exercise": {
               "prompt": "实现 review_gate(action, decision)，decision 为 approve 返回 action，为 reject 返回 rejected，其他值抛出 ValueError。",
@@ -14157,7 +14141,7 @@
           },
           {
             "id": "langgraph-lesson-19",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-7",
             "order": 20,
             "title": "Graph 项目",
             "kicker": "LangGraph 学习",
@@ -14255,7 +14239,7 @@
           },
           {
             "id": "langgraph-lesson-20",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-1",
             "order": 21,
             "title": "StateGraph：审核流程",
             "kicker": "LangGraph 学习",
@@ -14323,9 +14307,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-23"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 graph_shape(state, nodes)，返回包含 state_keys 与 node_count 的字典；不修改输入。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def graph_shape(state, nodes):\n    pass\n",
@@ -14353,7 +14335,7 @@
           },
           {
             "id": "langgraph-lesson-21",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-1",
             "order": 22,
             "title": "节点与边：审核流程",
             "kicker": "LangGraph 学习",
@@ -14421,9 +14403,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-23"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 next_edge(edges, current)，返回 edges 中 current 的目标；未知节点抛出 KeyError。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def next_edge(edges, current):\n    pass\n",
@@ -14451,7 +14431,7 @@
           },
           {
             "id": "langgraph-lesson-22",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-1",
             "order": 23,
             "title": "状态更新：审核流程",
             "kicker": "LangGraph 学习",
@@ -14519,9 +14499,7 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [
-              "langgraph-lesson-23"
-            ],
+            "projectLinks": [],
             "exercise": {
               "prompt": "实现 add_observation(state, text)，返回只包含 observations 更新的字典，不直接修改输入 state。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def add_observation(state, text):\n    pass\n",
@@ -14550,7 +14528,7 @@
           {
             "id": "langgraph-lesson-23",
             "familyId": "langgraph-memory-project-v1",
-            "stageId": "langgraph-stage-4",
+            "stageId": "langgraph-stage-7",
             "order": 24,
             "title": "带长期记忆的任务图",
             "kicker": "LangGraph 学习",
@@ -14646,7 +14624,7 @@
           },
           {
             "id": "langgraph-lesson-24",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-2",
             "order": 25,
             "title": "循环终止：审核流程",
             "kicker": "LangGraph 学习",
@@ -14742,7 +14720,7 @@
           },
           {
             "id": "langgraph-lesson-25",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-2",
             "order": 26,
             "title": "Reducer：审核流程",
             "kicker": "LangGraph 学习",
@@ -14838,7 +14816,7 @@
           },
           {
             "id": "langgraph-lesson-26",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-3",
             "order": 27,
             "title": "Checkpoint：审核流程",
             "kicker": "LangGraph 学习",
@@ -14927,7 +14905,9 @@
               }
             ],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "subgraphs-parallelism"
+            ],
             "exercise": {
               "prompt": "实现 save_checkpoint(checkpoints, thread_id, state)，返回新的字典并只更新指定 thread；不要修改原字典。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def save_checkpoint(checkpoints, thread_id, state):\n    pass\n",
@@ -14955,7 +14935,7 @@
           },
           {
             "id": "langgraph-lesson-27",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-3",
             "order": 28,
             "title": "thread_id：审核流程",
             "kicker": "LangGraph 学习",
@@ -15023,7 +15003,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "subgraphs-parallelism"
+            ],
             "exercise": {
               "prompt": "实现 get_thread_state(store, thread_id)，返回该线程的 state；未知 thread_id 返回 None，不能返回其他线程数据。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def get_thread_state(store, thread_id):\n    pass\n",
@@ -15051,7 +15033,7 @@
           },
           {
             "id": "langgraph-lesson-28",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-4",
             "order": 29,
             "title": "短期记忆：审核流程",
             "kicker": "LangGraph 学习",
@@ -15168,7 +15150,7 @@
           },
           {
             "id": "langgraph-lesson-29",
-            "stageId": "langgraph-stage-5",
+            "stageId": "langgraph-stage-4",
             "order": 30,
             "title": "Store：审核流程",
             "kicker": "LangGraph 学习",
@@ -15264,7 +15246,7 @@
           },
           {
             "id": "langgraph-lesson-30",
-            "stageId": "langgraph-stage-6",
+            "stageId": "langgraph-stage-4",
             "order": 31,
             "title": "长期记忆：审核流程",
             "kicker": "LangGraph 学习",
@@ -15381,7 +15363,7 @@
           },
           {
             "id": "langgraph-lesson-31",
-            "stageId": "langgraph-stage-6",
+            "stageId": "langgraph-stage-5",
             "order": 32,
             "title": "Interrupt：审核流程",
             "kicker": "LangGraph 学习",
@@ -15470,7 +15452,9 @@
               }
             ],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-11"
+            ],
             "exercise": {
               "prompt": "实现 approval_route(approved)，approved 为 True 返回 execute，否则返回 cancel；不要用默认分支掩盖未知值。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def approval_route(approved):\n    pass\n",
@@ -15498,7 +15482,7 @@
           },
           {
             "id": "langgraph-lesson-32",
-            "stageId": "langgraph-stage-6",
+            "stageId": "langgraph-stage-3",
             "order": 33,
             "title": "恢复执行：审核流程",
             "kicker": "LangGraph 学习",
@@ -15566,7 +15550,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "subgraphs-parallelism"
+            ],
             "exercise": {
               "prompt": "实现 resume_state(checkpoints, thread_id, updates)，复制指定 thread 状态并应用 updates；未知 thread_id 抛出 KeyError。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def resume_state(checkpoints, thread_id, updates):\n    pass\n",
@@ -15594,7 +15580,7 @@
           },
           {
             "id": "langgraph-lesson-33",
-            "stageId": "langgraph-stage-6",
+            "stageId": "langgraph-stage-5",
             "order": 34,
             "title": "流式事件：审核流程",
             "kicker": "LangGraph 学习",
@@ -15662,7 +15648,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-11"
+            ],
             "exercise": {
               "prompt": "实现 stream_events(nodes, state)，依次调用每个节点并返回 (节点名, 新状态) 元组列表。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def stream_events(nodes, state):\n    pass\n",
@@ -15758,7 +15746,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-17"
+            ],
             "exercise": {
               "prompt": "实现 invoke_subgraph(subgraph, state)，复制 state 传给子图并返回其结果；不修改父状态。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def invoke_subgraph(subgraph, state):\n    pass\n",
@@ -15854,7 +15844,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-17"
+            ],
             "exercise": {
               "prompt": "实现 merge_parallel(results)，按输入顺序合并字典；后出现的同名键覆盖前值，空输入返回空字典。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def merge_parallel(results):\n    pass\n",
@@ -15882,7 +15874,7 @@
           },
           {
             "id": "langgraph-lesson-36",
-            "stageId": "langgraph-stage-7",
+            "stageId": "langgraph-stage-6",
             "order": 37,
             "title": "Supervisor：审核流程",
             "kicker": "LangGraph 学习",
@@ -15950,7 +15942,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-17"
+            ],
             "exercise": {
               "prompt": "实现 choose_worker(task_type, workers)，返回 workers 中对应的可调用对象；未知类型抛出 KeyError。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def choose_worker(task_type, workers):\n    pass\n",
@@ -15978,7 +15972,7 @@
           },
           {
             "id": "langgraph-lesson-37",
-            "stageId": "langgraph-stage-7",
+            "stageId": "langgraph-stage-6",
             "order": 38,
             "title": "多 Agent 协作：审核流程",
             "kicker": "LangGraph 学习",
@@ -16046,7 +16040,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-17"
+            ],
             "exercise": {
               "prompt": "实现 handoff(agent, message)，返回包含 recipient 和 content 的字典；message 必须为字符串。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def handoff(agent, message):\n    pass\n",
@@ -16074,7 +16070,7 @@
           },
           {
             "id": "langgraph-lesson-38",
-            "stageId": "langgraph-stage-7",
+            "stageId": "langgraph-stage-5",
             "order": 39,
             "title": "人工审核：审核流程",
             "kicker": "LangGraph 学习",
@@ -16142,7 +16138,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-11"
+            ],
             "exercise": {
               "prompt": "实现 review_gate(action, decision)，decision 为 approve 返回 action，为 reject 返回 rejected，其他值抛出 ValueError。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def review_gate(action, decision):\n    pass\n",
@@ -16238,7 +16236,9 @@
             ],
             "migrations": [],
             "project": false,
-            "projectLinks": [],
+            "projectLinks": [
+              "langgraph-lesson-23"
+            ],
             "exercise": {
               "prompt": "实现 project_step(state)，返回新的状态副本；state 必须包含 thread_id 和 step，否则抛出 KeyError，并将 step 加一。\n场景：审核流程。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def project_step(state):\n    pass\n",
@@ -16266,7 +16266,7 @@
           },
           {
             "id": "langgraph-lesson-40",
-            "stageId": "langgraph-stage-7",
+            "stageId": "langgraph-stage-1",
             "order": 41,
             "title": "StateGraph：多 Agent 协作",
             "kicker": "LangGraph 学习",
@@ -16362,7 +16362,7 @@
           },
           {
             "id": "langgraph-lesson-41",
-            "stageId": "langgraph-stage-7",
+            "stageId": "langgraph-stage-1",
             "order": 42,
             "title": "节点与边：多 Agent 协作",
             "kicker": "LangGraph 学习",
