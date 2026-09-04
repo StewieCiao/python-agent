@@ -614,7 +614,7 @@ export function LearningApp() {
             {learningTracks.map((track) => (
               <button className={`track-switch ${track.id === activeTrackId ? "active" : ""}`} disabled={isRunning} key={track.id} onClick={() => selectTrack(track)} type="button">
                 <span style={{ background: track.accent }} />
-                <div><strong>{track.shortTitle}</strong><small>{track.lessons.length} 节课程</small></div>
+                <div><strong>{track.shortTitle}</strong><small>{track.lessons.length} 节课程 · {track.lessons.filter((item) => progress.completed.includes(item.id)).length} 已完成</small></div>
               </button>
             ))}
           </div>
