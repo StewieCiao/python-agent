@@ -454,7 +454,7 @@ export const langgraphTrack: LearningTrack = {
       ],
       videos: [{ title: "LangGraph Essentials - Python", url: ACADEMY_ESSENTIALS, provider: "LangChain Academy", language: "英文", duration: "1 小时", note: "补充 interrupt、人工审核与恢复执行。" }],
       officialSources: [{ label: "LangGraph interrupts", url: INTERRUPTS }],
-      migrations: [{ title: "隐式布尔确认 → 可恢复审核状态", status: "replaced", explanation: "把待审核动作、人工决定和恢复结果写入图状态；未知决定不默认批准。", beforeCode: "if approved:\n    send_report()", afterCode: "review = interrupt({" + "\"action\": \"send_report\"})", officialSources: [{ label: "LangGraph interrupts", url: INTERRUPTS }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
+      migrations: [{ title: "隐式布尔确认 → 可恢复审核状态", status: "replaced", explanation: "把待审核动作、人工决定和恢复结果写入图状态；未知决定不默认批准。", beforeCode: "if approved:\n    send_report()", afterCode: 'review = interrupt({"action": "send_report"})', officialSources: [{ label: "LangGraph interrupts", url: INTERRUPTS }], verifiedAt: VERIFIED_AT, verifiedVersions: VERIFIED_VERSIONS }],
       project: false, projectLinks: [],
       exercise: { prompt: "实现 resume_review(review, decision)：review 包含 action；approve 返回 status=approved，reject 返回 status=cancelled；两者都保留 action 并清除 pending_review，其他决定抛出 ValueError。", starterCode: `def resume_review(review, decision):\n    pass\n`, solution: `def resume_review(review, decision):\n    if decision == "approve":\n        return {"status": "approved", "action": review["action"]}\n    if decision == "reject":\n        return {"status": "cancelled", "action": review["action"]}\n    raise ValueError("unknown decision")\n` },
     },
