@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { CourseLesson, CourseTrack } from "../content/schema";
+import { learningTracks } from "../content/publicCatalog";
 import { loadPersonalizedExercise } from "../lib/platformBridge";
 
 export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete }: {
@@ -16,7 +17,9 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
   const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
   const [personalizedStatus, setPersonalizedStatus] = useState("");
   const [personalizedLoading, setPersonalizedLoading] = useState(false);
-  const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => track.lessons.find((item) => item.id === id)?.title ?? id);
+  const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => learningTracks
+    .flatMap((candidateTrack) => candidateTrack.lessons)
+    .find((item) => item.id === id)?.title ?? id);
 
   async function requestPersonalized() {
     if (!lesson.familyId) return;
