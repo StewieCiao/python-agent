@@ -17,6 +17,20 @@ BUNDLE = load_learning_bundle(CATALOG_PATH)
 
 
 class ServiceTest(unittest.TestCase):
+    def test_service_persists_and_lists_rag_documents(self):
+        with tempfile.TemporaryDirectory() as directory:
+            storage = Storage(Path(directory) / "stewie.db")
+            documents = [{"id": "guide.md", "text": "StateGraph 节点", "source": "guide.md"}]
+            self.assertEqual(
+                dispatch_request({"method": "documents.save", "params": {"documents": documents}}, storage, BUNDLE),
+                {"saved": 1},
+            )
+            self.assertEqual(
+                dispatch_request({"method": "documents.list", "params": {}}, storage, BUNDLE),
+                documents,
+            )
+            storage.close()
+
     def test_tutor_validate_persists_a_thread_scoped_graph_state(self):
         with tempfile.TemporaryDirectory() as directory:
             storage = Storage(Path(directory) / "stewie.db")
