@@ -58,6 +58,9 @@ npm run desktop:make
 ## 检查
 
 ```bash
+npm run test:all
+
+# 也可以分步执行
 npm test
 npm run test:python
 npm run lint
@@ -65,3 +68,4 @@ npm run build
 ```
 
 `npm run test:python` 使用项目内置的 Python 3.13.15 运行时；若尚未准备运行时，先执行 `npm run prepare:python-runtime`。
+`npm run test:all` 会自动准备运行时，并串联上述全部检查。
