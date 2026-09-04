@@ -486,6 +486,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "structured-output",
+      familyId: "langchain-structured-output-v1",
       title: "结构化输出与失败边界",
       prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["structured-output", "validation"],
       summary: "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",

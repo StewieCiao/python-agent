@@ -47,6 +47,10 @@ const hybridCases = [
   ["policy.md", 0.8, 0.7, "ok"], ["deploy.md", 0.7, 0.6, "ok"], ["security.md", 0.9, 0.85, "ok"],
   ["schema.md", 0.6, 0.7, "no_results"], ["service.md", 0.75, 0.8, "no_results"], ["review.md", 0.5, 0.6, "no_results"],
 ] as const;
+const structuredCases = [
+  ["答案", 0.9, "ok"], ["摘要", 0.6, "ok"], ["结论", 1, "ok"],
+  ["警告", -0.1, "invalid"], ["证据", 1.1, "invalid"], ["说明", "high", "invalid"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -150,6 +154,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `merge_retrieval([{"source":"${source}","score":${score}}], [], ${threshold})["status"] == "${expected}"`,
       `merge_retrieval([], [], ${threshold}) == {"status": "no_results", "matches": []}`,
       "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+    ))),
+  },
+  {
+    id: "langchain-structured-output-v1", lessonIds: ["structured-output"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["missing-field", "invalid-confidence"], constraints: ["require summary and confidence", "confidence must be 0..1"],
+    variants: structuredCases.map(([summary, confidence, expected]) => variant(`${summary} / confidence=${confidence}`, `${summary} / ${confidence}`, twoBehaviorChecks(
+      `validate_answer({"summary":"${summary}","confidence":${typeof confidence === "string" ? `"${confidence}"` : confidence}}) == ${expected === "ok" ? "True" : "False"}`,
+      `validate_answer({"summary":"${summary}"}) is False`,
+      "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
     ))),
   },
 ];

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "faf1b116b6648cd07eee15c0e942411d346f826f3714adcedb31523694067046",
-  "familyHash": "84a47a091d2552b71be568d7fdfd3b2432d040f8ff7bc0caa4e17b87117f09ee",
+  "catalogHash": "f8b4ceddf08166e98c6bec3ea47da1553e676173b50219b9ba34bfe07f8e1b96",
+  "familyHash": "bc83318d61305ee2e7fd3a4b1b27ed9327dcbd824ed73bbadf233cb7b7e2cffd",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7712,6 +7712,7 @@
           },
           {
             "id": "structured-output",
+            "familyId": "langchain-structured-output-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 10,
             "title": "结构化输出与失败边界",
@@ -17947,6 +17948,132 @@
             {
               "name": "边界行为",
               "expression": "merge_retrieval([], [], 0.6) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-structured-output-v1": {
+      "id": "langchain-structured-output-v1",
+      "lessonIds": [
+        "structured-output"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "missing-field",
+        "invalid-confidence"
+      ],
+      "constraints": [
+        "require summary and confidence",
+        "confidence must be 0..1"
+      ],
+      "variants": [
+        {
+          "label": "答案 / confidence=0.9",
+          "values": "答案 / 0.9",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"答案\",\"confidence\":0.9}) == True",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"答案\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "摘要 / confidence=0.6",
+          "values": "摘要 / 0.6",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"摘要\",\"confidence\":0.6}) == True",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"摘要\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "结论 / confidence=1",
+          "values": "结论 / 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"结论\",\"confidence\":1}) == True",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"结论\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "警告 / confidence=-0.1",
+          "values": "警告 / -0.1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"警告\",\"confidence\":-0.1}) == False",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"警告\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "证据 / confidence=1.1",
+          "values": "证据 / 1.1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"证据\",\"confidence\":1.1}) == False",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"证据\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "说明 / confidence=high",
+          "values": "说明 / high",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_answer({\"summary\":\"说明\",\"confidence\":\"high\"}) == False",
+              "failure": "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_answer({\"summary\":\"说明\"}) is False",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
