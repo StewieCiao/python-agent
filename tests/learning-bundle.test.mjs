@@ -948,6 +948,16 @@ test("LangGraph 多 Agent 项目接入角色调度与未知角色边界练习 fa
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("dispatch"))));
 });
 
+test("LangGraph 长期记忆项目接入用户隔离与缺失边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph")?.lessons.find(({ id }) => id === "langgraph-lesson-23");
+  assert.equal(lesson?.familyId, "langgraph-memory-project-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("other-user"))));
+});
+
 test("Python 工程路线包含 HTTP 请求失败边界课程", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const track = authoredCatalog.tracks.find(({ id }) => id === "python");

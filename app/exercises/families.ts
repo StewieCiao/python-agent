@@ -151,6 +151,10 @@ const dispatchCases = [
   ["search", "RAG"], ["write", "摘要"], ["review", "草稿"],
   ["plan", "步骤"], ["code", "测试"], ["publish", "报告"],
 ] as const;
+const projectMemoryCases = [
+  ["u1", "theme", "dark"], ["u2", "language", "zh-CN"], ["researcher", "format", "long"],
+  ["reviewer", "tone", "brief"], ["guest", "level", "beginner"], ["team-a", "timezone", "Asia/Shanghai"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -416,6 +420,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `dispatch([{"role":"${role}","input":"${input}"}], {"${role}": lambda value: value + "!"}) == [{"role":"${role}","result":"${input}!"}]`,
       `_raises_key_error(lambda: dispatch([{"role":"missing","input":"${input}"}], {}))`,
       "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+    ))),
+  },
+  {
+    id: "langgraph-memory-project-v1", lessonIds: ["langgraph-lesson-23"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["cross-user-memory", "wrong-namespace"], constraints: ["isolate user namespace", "return None when missing"],
+    variants: projectMemoryCases.map(([user, key, value]) => variant(`${user}/${key}`, `${user} / ${key}`, twoBehaviorChecks(
+      `read_memory({("${user}",): {"${key}": "${value}"}}, "${user}", "${key}") == "${value}"`,
+      `read_memory({("${user}",): {"${key}": "${value}"}}, "other-user", "${key}") is None`,
+      "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
     ))),
   },
   {

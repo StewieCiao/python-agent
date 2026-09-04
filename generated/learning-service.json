@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "90c19ec9b15d810905fa0b8546b622c9453129b61031acc71fa47568ebd7a409",
-  "familyHash": "188ffe3ea93dca2afdc891b07ef728bd7de178420eece1dac39000f71b249daf",
+  "catalogHash": "448723236495bddaa54932cecbd3d0fa41c1f2e60749a2896da0baa03605c633",
+  "familyHash": "0135dfb301efbdf3854e3c4c42ba71e7f55a8347f107489708209230d5e955bc",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -14374,6 +14374,7 @@
           },
           {
             "id": "langgraph-lesson-23",
+            "familyId": "langgraph-memory-project-v1",
             "stageId": "langgraph-stage-4",
             "order": 24,
             "title": "带长期记忆的任务图",
@@ -20246,6 +20247,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"报告\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-memory-project-v1": {
+      "id": "langgraph-memory-project-v1",
+      "lessonIds": [
+        "langgraph-lesson-23"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "cross-user-memory",
+        "wrong-namespace"
+      ],
+      "constraints": [
+        "isolate user namespace",
+        "return None when missing"
+      ],
+      "variants": [
+        {
+          "label": "u1/theme",
+          "values": "u1 / theme",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"u1\", \"theme\") == \"dark\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"u1\",): {\"theme\": \"dark\"}}, \"other-user\", \"theme\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "u2/language",
+          "values": "u2 / language",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"u2\",): {\"language\": \"zh-CN\"}}, \"u2\", \"language\") == \"zh-CN\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"u2\",): {\"language\": \"zh-CN\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "researcher/format",
+          "values": "researcher / format",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"researcher\",): {\"format\": \"long\"}}, \"researcher\", \"format\") == \"long\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"researcher\",): {\"format\": \"long\"}}, \"other-user\", \"format\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reviewer/tone",
+          "values": "reviewer / tone",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"reviewer\",): {\"tone\": \"brief\"}}, \"reviewer\", \"tone\") == \"brief\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"reviewer\",): {\"tone\": \"brief\"}}, \"other-user\", \"tone\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "guest/level",
+          "values": "guest / level",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"guest\",): {\"level\": \"beginner\"}}, \"guest\", \"level\") == \"beginner\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"guest\",): {\"level\": \"beginner\"}}, \"other-user\", \"level\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "team-a/timezone",
+          "values": "team-a / timezone",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_memory({(\"team-a\",): {\"timezone\": \"Asia/Shanghai\"}}, \"team-a\", \"timezone\") == \"Asia/Shanghai\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_memory({(\"team-a\",): {\"timezone\": \"Asia/Shanghai\"}}, \"other-user\", \"timezone\") is None",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
