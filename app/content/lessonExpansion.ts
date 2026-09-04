@@ -771,6 +771,36 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
 };
 
 const FRAMEWORK_MIGRATIONS: Record<string, CourseLesson["migrations"][number]> = {
+  "langchain-rag:消息角色": {
+    title: "拼接字符串提示 → role-aware messages",
+    status: "replaced",
+    explanation: "新版模型接口把 system、user 和 tool 角色作为消息结构传递；不要把所有上下文拼成一段无法区分来源的字符串。",
+    beforeCode: "prompt = f\"你是助手。问题：{question}\"\nllm.invoke(prompt)",
+    afterCode: "model.invoke([\n    {\"role\": \"system\", \"content\": \"你是助手\"},\n    {\"role\": \"user\", \"content\": question},\n])",
+    officialSources: [{ label: "Messages", url: "https://docs.langchain.com/oss/python/langchain/messages", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langchain-rag:模型配置": {
+    title: "隐式 LLM 参数 → 显式 model 配置",
+    status: "replaced",
+    explanation: "模型名称、超时和温度应在创建模型时显式传入；不要依赖旧链对象或环境变量悄悄填充关键请求边界。",
+    beforeCode: "chain = LLMChain(prompt=prompt, llm=llm)",
+    afterCode: "model = init_chat_model(\"openai:gpt-4.1-mini\", timeout=30, temperature=0)",
+    officialSources: [{ label: "Models", url: "https://docs.langchain.com/oss/python/langchain/models", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langchain-rag:Embedding": {
+    title: "手写向量函数 → Embeddings 接口",
+    status: "replaced",
+    explanation: "检索流程通过统一 Embeddings 接口生成查询和文档向量；不要把某个供应商的向量维度或函数名写死在业务逻辑中。",
+    beforeCode: "vectors = [my_embedding(text) for text in texts]",
+    afterCode: "vectors = embeddings.embed_documents(texts)\nquery_vector = embeddings.embed_query(question)",
+    officialSources: [{ label: "Retrieval", url: "https://docs.langchain.com/oss/python/langchain/retrieval", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
   "langchain-rag:结构化输出": {
     title: "StructuredOutputParser → model.with_structured_output",
     status: "replaced",
@@ -808,6 +838,16 @@ const FRAMEWORK_MIGRATIONS: Record<string, CourseLesson["migrations"][number]> =
     beforeCode: "memory = ConversationBufferMemory()\nconversation = ConversationChain(llm=llm, memory=memory)",
     afterCode: "graph = builder.compile(checkpointer=InMemorySaver())\nconfig = {\"configurable\": {\"thread_id\": \"u-1\"}}",
     officialSources: [{ label: "Short-term memory", url: "https://docs.langchain.com/oss/python/langchain/short-term-memory", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langgraph:Checkpoint": {
+    title: "手写状态字典 → checkpointer",
+    status: "replaced",
+    explanation: "图的 checkpoint 由编译时传入的保存器管理，并按 thread_id 恢复；不要在节点外维护一个共享可变状态字典。",
+    beforeCode: "saved = {}\nsaved[thread_id] = state",
+    afterCode: "graph = builder.compile(checkpointer=InMemorySaver())\nconfig = {\"configurable\": {\"thread_id\": thread_id}}",
+    officialSources: [{ label: "Persistence", url: "https://docs.langchain.com/oss/python/langgraph/persistence", kind: "official-doc", verifiedAt: "2026-09-02" }],
     verifiedAt: "2026-09-02",
     verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
   },
