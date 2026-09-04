@@ -741,6 +741,16 @@ test("LangChain 模型配置课接入显式失败边界个性化练习 family", 
   assert.ok(family.variants.every(({ checks }) => checks.every(({ kind }) => kind === "behavior")));
 });
 
+test("LangChain 消息课接入角色与变量个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag")?.lessons.find(({ id }) => id === "model-messages-prompts");
+  assert.equal(lesson?.familyId, "langchain-messages-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.every(({ kind }) => kind === "behavior")));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

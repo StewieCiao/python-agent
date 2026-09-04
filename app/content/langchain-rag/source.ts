@@ -435,6 +435,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "model-messages-prompts",
+      familyId: "langchain-messages-v1",
       title: "模型、消息与 Prompt 模板",
       prerequisites: ["memory-modernization"], difficulty: "beginner", tags: ["messages", "prompts"],
       summary: "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",

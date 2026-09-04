@@ -96,6 +96,7 @@ const modelConfigCases = [
   ["demo", 30, 0, "True", "None"], ["chat", 1, 1, "True", "None"], ["local", 5, 0.5, "True", "None"],
   ["", 30, 0, "False", "model"], ["demo", 0, 0.2, "False", "timeout"], ["demo", 30, 1.5, "False", "temperature"],
 ] as const;
+const messageCases = ["RAG", "检索", "Agent", "LangGraph", "评测", "记忆"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -190,6 +191,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `validate_model_config({"model": "${model}", "timeout": ${timeout}, "temperature": ${temperature}}) == {"valid": ${valid}, "error": ${error === "None" ? "None" : `"${error}"`}}`,
       `validate_model_config({"model": "demo", "timeout": 30})["valid"] is False`,
       "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+    ))),
+  },
+  {
+    id: "langchain-messages-v1", lessonIds: ["model-messages-prompts"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["wrong-role", "missing-variable"], constraints: ["declare prompt variable", "preserve system/user message roles"],
+    variants: messageCases.map((topic) => variant(`主题 ${topic}`, topic, twoBehaviorChecks(
+      `prompt_variables == ["topic"] and messages[0]["role"] == "system" and messages[1]["role"] == "user" and messages[1]["content"] == "解释 ${topic}"`,
+      `messages[0]["content"] != messages[1]["content"]`,
+      "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
     ))),
   },
   {

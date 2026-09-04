@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "4c38b57a6f047f94cc2bf549f37f09d8feace5fecd9778f77cc2f5238d72a537",
-  "familyHash": "cab4e8c98b5c76f35b9c02aa89337b39128bf3572ad1340d8911278e7ebc0074",
+  "catalogHash": "0d810952da885b5e542513b13009252a4ec874f37c51a4a931a200714ee308a8",
+  "familyHash": "9483c33049ec156b3970c3c39526f1f54054d68f0ab5232bcd6086d74b199c14",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7464,6 +7464,7 @@
           },
           {
             "id": "model-messages-prompts",
+            "familyId": "langchain-messages-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 8,
             "title": "模型、消息与 Prompt 模板",
@@ -17834,6 +17835,132 @@
             {
               "name": "边界行为",
               "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-messages-v1": {
+      "id": "langchain-messages-v1",
+      "lessonIds": [
+        "model-messages-prompts"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-role",
+        "missing-variable"
+      ],
+      "constraints": [
+        "declare prompt variable",
+        "preserve system/user message roles"
+      ],
+      "variants": [
+        {
+          "label": "主题 RAG",
+          "values": "RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 RAG\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "主题 检索",
+          "values": "检索",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 检索\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "主题 Agent",
+          "values": "Agent",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 Agent\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "主题 LangGraph",
+          "values": "LangGraph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 LangGraph\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "主题 评测",
+          "values": "评测",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 评测\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "主题 记忆",
+          "values": "记忆",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "prompt_variables == [\"topic\"] and messages[0][\"role\"] == \"system\" and messages[1][\"role\"] == \"user\" and messages[1][\"content\"] == \"解释 记忆\"",
+              "failure": "消息列表应保留 system/user 角色，并由 topic 变量生成用户消息内容。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "messages[0][\"content\"] != messages[1][\"content\"]",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
