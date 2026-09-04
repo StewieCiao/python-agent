@@ -121,6 +121,7 @@ const memoryCases = [
   ["memory", '["agent memory design"]'], ["tools", '["python agent tools"]'],
   ["PYTHON", '["python basics", "python agent tools"]'], ["missing", "[]"],
 ] as const;
+const handoffCases = ["weather", "code", "search", "review", "translate", "summarize"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -287,6 +288,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `retrieve_memories([{"content":"python agent tools","importance":2},{"content":"agent memory design","importance":1},{"content":"python basics","importance":3}], "${query}", 2) == ${expected}`,
       `retrieve_memories([], "${query}", 2) == [] and retrieve_memories([{"content":"agent tools","importance":1}], "${query}", 0) == []`,
       "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+    ))),
+  },
+  {
+    id: "python-handoff-v1", lessonIds: ["agent-handoff"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-agent-selection", "mutated-handoff-input"], constraints: ["select first matching capability", "preserve task envelope"],
+    variants: handoffCases.map((capability) => variant(`能力 ${capability}`, capability, twoBehaviorChecks(
+      `handoff("planner", {"capability":"${capability}","description":"执行 ${capability}"}, [{"name":"general","capabilities":["${capability}"]}]) == {"from":"planner","to":"general","task":{"capability":"${capability}","description":"执行 ${capability}"}}`,
+      `_raises_lookup_error(lambda: handoff("planner", {"capability":"missing","description":"x"}, [{"name":"general","capabilities":[]}]))`,
+      "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
     ))),
   },
   {

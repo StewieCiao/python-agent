@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "95ae0927ddc9f62e010c71c4bb0415dab7b38aef751feb46087022dd35027f24",
-  "familyHash": "ddb80d2e23523a8e2828d0757ced8c007a8fe08f0baedaf78a37f71a23747531",
+  "catalogHash": "b20da65cd12ba530026756f8467f33732cee93da8e839157b38bc17e6d7205fe",
+  "familyHash": "17bcb4f873c4048b4cec7c6e5ad077aa04220bfa736b29bf1e2a954609efd3c6",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2423,6 +2423,7 @@
           },
           {
             "id": "agent-handoff",
+            "familyId": "python-handoff-v1",
             "stageId": "python-stage-3",
             "order": 22,
             "title": "设计多 Agent 交接",
@@ -18850,6 +18851,132 @@
             {
               "name": "边界行为",
               "expression": "retrieve_memories([], \"missing\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"missing\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-handoff-v1": {
+      "id": "python-handoff-v1",
+      "lessonIds": [
+        "agent-handoff"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-agent-selection",
+        "mutated-handoff-input"
+      ],
+      "constraints": [
+        "select first matching capability",
+        "preserve task envelope"
+      ],
+      "variants": [
+        {
+          "label": "能力 weather",
+          "values": "weather",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"weather\",\"description\":\"执行 weather\"}, [{\"name\":\"general\",\"capabilities\":[\"weather\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"weather\",\"description\":\"执行 weather\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "能力 code",
+          "values": "code",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"code\",\"description\":\"执行 code\"}, [{\"name\":\"general\",\"capabilities\":[\"code\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"code\",\"description\":\"执行 code\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "能力 search",
+          "values": "search",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"search\",\"description\":\"执行 search\"}, [{\"name\":\"general\",\"capabilities\":[\"search\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"search\",\"description\":\"执行 search\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "能力 review",
+          "values": "review",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"review\",\"description\":\"执行 review\"}, [{\"name\":\"general\",\"capabilities\":[\"review\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"review\",\"description\":\"执行 review\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "能力 translate",
+          "values": "translate",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"translate\",\"description\":\"执行 translate\"}, [{\"name\":\"general\",\"capabilities\":[\"translate\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"translate\",\"description\":\"执行 translate\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "能力 summarize",
+          "values": "summarize",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "handoff(\"planner\", {\"capability\":\"summarize\",\"description\":\"执行 summarize\"}, [{\"name\":\"general\",\"capabilities\":[\"summarize\"]}]) == {\"from\":\"planner\",\"to\":\"general\",\"task\":{\"capability\":\"summarize\",\"description\":\"执行 summarize\"}}",
+              "failure": "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
