@@ -681,6 +681,16 @@ test("Python Action 解析课接入可轮换的个性化练习 family", async ()
   assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
 });
 
+test("Python 类与对象课接入余额边界个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "classes");
+  assert.equal(lesson?.familyId, "python-wallet-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("deposit(0)"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

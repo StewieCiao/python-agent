@@ -72,6 +72,10 @@ const actionCases = [
   ["weather", "成都"], ["search", "RAG"], ["calendar", "周五"],
   ["Finish", "已完成"], ["lookup", "LangGraph"], ["summarize", "资料"],
 ] as const;
+const walletCases = [
+  ["5, 7", 12], ["1, 20", 21], ["12, 3", 15],
+  ["100, 25", 125], ["8, 8", 16], ["2, 4", 6],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -113,6 +117,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
     id: "python-expense-v1", lessonIds: ["project-expense"], difficulty: "intermediate", validatorVersion: "1",
     mistakeCodes: ["hard-coded-category", "extra-traversal"], constraints: ["aggregate arbitrary categories", "one loop in summarize"],
     variants: expenses.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`summarize([${values.split(", ").map((item) => { const [category, amount] = item.split("="); return `{\"category\":\"${category}\",\"amount\":${amount}}`; }).join(", ")}]) == ${expected}`, 'summarize([]) == {"total": 0, "by_category": {}}', "应从本变体记录动态汇总总额和分类。"))),
+  },
+  {
+    id: "python-wallet-v1", lessonIds: ["classes"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["shared-state", "accepted-non-positive-deposit"], constraints: ["keep balance per instance", "reject zero and negative deposits"],
+    variants: walletCases.map(([label, expected]) => variant(`存入 ${label}`, label, twoBehaviorChecks(
+      `((lambda wallet: (wallet.deposit(${label.split(", ").join("), wallet.deposit(")}), wallet.balance()))(Wallet()))[-1] == ${expected}`,
+      `_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))`,
+      "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+    ))),
   },
   {
     id: "langchain-reranking-v1", lessonIds: ["reranking"], difficulty: "intermediate", validatorVersion: "1",

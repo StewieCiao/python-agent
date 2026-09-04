@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "894440bf6390af4013f087ab94483275e7817133365324f2575de2a497e5c372",
-  "familyHash": "7c3c75f07f74885f443e0a6ff2f6465ef86bf0b774179d7b27d22da4d6ddbda4",
+  "catalogHash": "7b0775c890c9f0f8228d655e6ee95aa56b0156bfb2a918615adb3d3d46e993c4",
+  "familyHash": "b5e19399f2f7156ffd52134f28e9c5608364eede628a9344e3f5cdec61775662",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1129,6 +1129,7 @@
           },
           {
             "id": "classes",
+            "familyId": "python-wallet-v1",
             "stageId": "python-stage-2",
             "order": 10,
             "title": "让数据带上行为",
@@ -17071,6 +17072,132 @@
             {
               "name": "边界行为",
               "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-wallet-v1": {
+      "id": "python-wallet-v1",
+      "lessonIds": [
+        "classes"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "shared-state",
+        "accepted-non-positive-deposit"
+      ],
+      "constraints": [
+        "keep balance per instance",
+        "reject zero and negative deposits"
+      ],
+      "variants": [
+        {
+          "label": "存入 5, 7",
+          "values": "5, 7",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(5), wallet.deposit(7), wallet.balance()))(Wallet()))[-1] == 12",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "存入 1, 20",
+          "values": "1, 20",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(1), wallet.deposit(20), wallet.balance()))(Wallet()))[-1] == 21",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "存入 12, 3",
+          "values": "12, 3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(12), wallet.deposit(3), wallet.balance()))(Wallet()))[-1] == 15",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "存入 100, 25",
+          "values": "100, 25",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(100), wallet.deposit(25), wallet.balance()))(Wallet()))[-1] == 125",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "存入 8, 8",
+          "values": "8, 8",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(8), wallet.deposit(8), wallet.balance()))(Wallet()))[-1] == 16",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "存入 2, 4",
+          "values": "2, 4",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda wallet: (wallet.deposit(2), wallet.deposit(4), wallet.balance()))(Wallet()))[-1] == 6",
+              "failure": "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
