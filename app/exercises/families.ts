@@ -59,6 +59,11 @@ const interruptCases = [
   ["send_report", "approve"], ["publish_note", "reject"], ["delete_record", "approve"],
   ["export_data", "reject"], ["reset_access", "approve"], ["merge_branch", "reject"],
 ] as const;
+const evaluationCases = [
+  ["a.md", ["a.md"], ["a.md"], 1], ["b.md", ["b.md", "c.md"], ["b.md"], 0.5],
+  ["c.md", ["x.md"], [], 0], ["d.md", ["x.md"], ["x.md"], 0],
+  ["e.md", ["e.md", "f.md"], ["e.md", "f.md"], 1], ["g.md", [], [], 0],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -189,6 +194,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `approve_email({"draft":"${action}","decision":"${decision}"}) == "${decision === "approve" ? "approved" : "cancelled"}"`,
       `_raises_value_error(lambda: approve_email({"draft":"${action}","decision":"later"}))`,
       "人工决定必须显式处理：批准继续、拒绝取消、未知决定失败。",
+    ))),
+  },
+  {
+    id: "langchain-rag-evaluation-v1", lessonIds: ["rag-evaluation"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-recall", "missing-citation"], constraints: ["compare retrieved sources", "measure citation coverage"],
+    variants: evaluationCases.map(([source, retrieved, cited, recall]) => variant(`${source} 评估`, `${source} / recall=${recall}`, twoBehaviorChecks(
+      `evaluate_retrieval(["${source}"], ${JSON.stringify(retrieved)}, ${JSON.stringify(cited)})["recall"] == ${recall}`,
+      `evaluate_retrieval([], [], []) ["status"] == "no_results"`,
+      "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
     ))),
   },
 ];

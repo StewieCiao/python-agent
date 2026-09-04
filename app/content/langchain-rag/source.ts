@@ -537,6 +537,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "rag-evaluation",
+      familyId: "langchain-rag-evaluation-v1",
       title: "RAG 评估：召回、引用与资料不足",
       prerequisites: ["retrieval-chain"], difficulty: "intermediate", tags: ["rag", "evaluation", "citations"],
       summary: "用固定问答样本测量召回和引用覆盖，并把无资料作为真实结果记录。",

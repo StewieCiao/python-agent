@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "1ab098d25c869992816bd408a5a7cbbcaa1df3a673d693de2460c6667e8fe371",
-  "familyHash": "9a10067e58bf8aeffba33e14c8d1fdfb8ed7d943ca93719390a79e5b0c274860",
+  "catalogHash": "4bb408370f75cb36c771160d4c7e4a60afcb9e552a5443360c0d7298f109d391",
+  "familyHash": "1ef98e2385dc6fee67e4d3454f7d9b66ea9b2dad51c8b904adb04f502970c8f0",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7953,6 +7953,7 @@
           },
           {
             "id": "rag-evaluation",
+            "familyId": "langchain-rag-evaluation-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 12,
             "title": "RAG 评估：召回、引用与资料不足",
@@ -18328,6 +18329,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: approve_email({\"draft\":\"merge_branch\",\"decision\":\"later\"}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-rag-evaluation-v1": {
+      "id": "langchain-rag-evaluation-v1",
+      "lessonIds": [
+        "rag-evaluation"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-recall",
+        "missing-citation"
+      ],
+      "constraints": [
+        "compare retrieved sources",
+        "measure citation coverage"
+      ],
+      "variants": [
+        {
+          "label": "a.md 评估",
+          "values": "a.md / recall=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"a.md\"], [\"a.md\"], [\"a.md\"])[\"recall\"] == 1",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "b.md 评估",
+          "values": "b.md / recall=0.5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"b.md\"], [\"b.md\",\"c.md\"], [\"b.md\"])[\"recall\"] == 0.5",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "c.md 评估",
+          "values": "c.md / recall=0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"c.md\"], [\"x.md\"], [])[\"recall\"] == 0",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "d.md 评估",
+          "values": "d.md / recall=0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"d.md\"], [\"x.md\"], [\"x.md\"])[\"recall\"] == 0",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "e.md 评估",
+          "values": "e.md / recall=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"e.md\"], [\"e.md\",\"f.md\"], [\"e.md\",\"f.md\"])[\"recall\"] == 1",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "g.md 评估",
+          "values": "g.md / recall=0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "evaluate_retrieval([\"g.md\"], [], [])[\"recall\"] == 0",
+              "failure": "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
