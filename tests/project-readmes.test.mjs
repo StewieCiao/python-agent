@@ -31,3 +31,12 @@ test("RAG Quality Workbench 的演示包含重排与 top_k 验收", async () => 
   assert.match(readme, /top_k/);
   assert.match(readme, /retrieve → threshold → rerank → cite → evaluate/);
 });
+
+test("零部署指南明确离线、Pages 与桌面版的安全边界", async () => {
+  const guide = await readFile(new URL("../docs/zero-deploy.md", import.meta.url), "utf8");
+  assert.match(guide, /双击打开/);
+  assert.match(guide, /不加载外部脚本/);
+  assert.match(guide, /不会请求或保存 API Key/);
+  assert.match(guide, /macOS 使用钥匙串/);
+  assert.match(guide, /Windows 使用 DPAPI/);
+});
