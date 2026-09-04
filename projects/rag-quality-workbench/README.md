@@ -14,6 +14,8 @@
 
 ## 演示脚本
 
+在项目目录执行 `python demo.py` 可看到一次真实命中和一次 `no_results` 的 JSON 结果。
+
 1. 准备两份带 `source` metadata 的 Markdown 文档和三条固定问题。
 2. 执行离线 indexing，再运行同一批检索评测，记录 `recall@k`、MRR 与引用覆盖。
 3. 修改切分大小或 `top_k`，重新运行并比较真实指标。

@@ -40,6 +40,18 @@ class ProjectDemosTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "question must be non-empty"):
             rag.answer("  ", [{"text": "Python", "source": "a.md"}])
 
+    def test_rag_quality_workbench_reranks_and_preserves_no_results(self):
+        workbench = load("rag_quality_demo", "projects/rag-quality-workbench/demo.py")
+        candidates = [
+            {"source": "low.md", "rerank_score": 0.2},
+            {"source": "high.md", "rerank_score": 0.9},
+        ]
+        self.assertEqual(workbench.rerank(candidates, 1), [candidates[1]])
+        self.assertEqual(workbench.evaluate(["high.md"], candidates, 1), {"status": "ok", "recall": 1.0, "sources": ["high.md"]})
+        self.assertEqual(workbench.evaluate(["missing.md"], candidates, 0), {"status": "no_results", "recall": 0.0, "sources": []})
+        with self.assertRaisesRegex(ValueError, "top_k"):
+            workbench.rerank(candidates, -1)
+
     def test_research_graph_can_resume_same_thread_after_approval(self):
         graph = load("research_demo", "projects/recoverable-research-graph/demo.py")
         result = graph.run("LangGraph", "thread-a", True)
