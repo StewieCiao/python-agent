@@ -680,6 +680,14 @@ test("扩展课程讲解卡使用主题骨架而不是统一占位示例", async
   assert.ok(generated.guide[2].example.includes("检查："));
 });
 
+test("Python 测试设计主题覆盖类型边界", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ exercise }) => exercise.prompt.includes("is_valid_username"));
+  assert.ok(lesson);
+  assert.ok(lesson.exercise.prompt.includes("非字符串"));
+  assert.ok(lesson.browserChecks.some(({ failure }) => failure.includes("非字符串")));
+});
+
 test("框架作者路线保留可解释的先修链", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   for (const trackId of ["langchain-rag", "langgraph"]) {

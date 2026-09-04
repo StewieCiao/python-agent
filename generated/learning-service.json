@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7c31f54f65e091fa451369e9be1ed9faab90281c9cc292143aeab5352a38024c",
-  "familyHash": "0a806e8bb3daab35b05cb1a01bf1e59c65e28a150621d6ea74d72bf63f4c8aea",
+  "catalogHash": "793b8af6a74f876632861af296b8dc1e73c298585963e9cbcaf59fead68de5e3",
+  "familyHash": "c90adf6ee321dd06e28d60ee167035ac886da26282b89eb9e60e679ce84d4d3e",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -4089,16 +4089,16 @@
                   "标出核心状态",
                   "说清输出形状"
                 ],
-                "example": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。"
+                "example": "实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。"
               },
               {
                 "kind": "逐步拆解",
                 "title": "把测试设计拆成步骤",
-                "body": "先实现课程成绩单场景下题目要求的最小路径，再逐项验证：实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。",
+                "body": "先实现课程成绩单场景下题目要求的最小路径，再逐项验证：实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。",
                 "bullets": [
-                  "先检查长度的两个边界。",
+                  "先检查输入类型和长度的两个边界。",
                   "replace 后用 isalnum 检查允许字符。",
-                  "测试空串、3 个字符、12 个字符和非法符号。"
+                  "测试空串、3 个字符、12 个字符、非法符号和数字输入。"
                 ],
                 "example": "def is_valid_username(name):\n    pass\n"
               },
@@ -4111,7 +4111,7 @@
                   "保留真实输出",
                   "解释期望与实际"
                 ],
-                "example": "检查：合法边界、非法输入"
+                "example": "检查：合法边界、非法输入、类型边界"
               }
             ],
             "videos": [],
@@ -4127,14 +4127,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。\n场景：课程成绩单。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
+              "prompt": "实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。\n场景：课程成绩单。改用第 2 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def is_valid_username(name):\n    pass\n",
               "hints": [
-                "先检查长度的两个边界。",
+                "先检查输入类型和长度的两个边界。",
                 "replace 后用 isalnum 检查允许字符。",
-                "测试空串、3 个字符、12 个字符和非法符号。"
+                "测试空串、3 个字符、12 个字符、非法符号和数字输入。"
               ],
-              "solution": "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
+              "solution": "def is_valid_username(name):\n    return isinstance(name, str) and 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
             },
             "browserChecks": [
               {
@@ -4147,6 +4147,12 @@
                 "name": "非法输入",
                 "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
                 "failure": "过短或含非法符号的名字应拒绝。",
+                "kind": "behavior"
+              },
+              {
+                "name": "类型边界",
+                "expression": "not is_valid_username(123)",
+                "failure": "非字符串输入应返回 False，而不是在 len 或 replace 处崩溃。",
                 "kind": "behavior"
               }
             ]
@@ -6213,16 +6219,16 @@
                   "标出核心状态",
                   "说清输出形状"
                 ],
-                "example": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。"
+                "example": "实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。"
               },
               {
                 "kind": "逐步拆解",
                 "title": "把测试设计拆成步骤",
-                "body": "先实现日志清洗场景下题目要求的最小路径，再逐项验证：实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。",
+                "body": "先实现日志清洗场景下题目要求的最小路径，再逐项验证：实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。",
                 "bullets": [
-                  "先检查长度的两个边界。",
+                  "先检查输入类型和长度的两个边界。",
                   "replace 后用 isalnum 检查允许字符。",
-                  "测试空串、3 个字符、12 个字符和非法符号。"
+                  "测试空串、3 个字符、12 个字符、非法符号和数字输入。"
                 ],
                 "example": "def is_valid_username(name):\n    pass\n"
               },
@@ -6235,7 +6241,7 @@
                   "保留真实输出",
                   "解释期望与实际"
                 ],
-                "example": "检查：合法边界、非法输入"
+                "example": "检查：合法边界、非法输入、类型边界"
               }
             ],
             "videos": [],
@@ -6251,14 +6257,14 @@
             "project": false,
             "projectLinks": [],
             "exercise": {
-              "prompt": "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。\n场景：日志清洗。改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
+              "prompt": "实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。\n场景：日志清洗。改用第 3 组未在示例出现的输入，说明实现为何仍成立。",
               "starterCode": "def is_valid_username(name):\n    pass\n",
               "hints": [
-                "先检查长度的两个边界。",
+                "先检查输入类型和长度的两个边界。",
                 "replace 后用 isalnum 检查允许字符。",
-                "测试空串、3 个字符、12 个字符和非法符号。"
+                "测试空串、3 个字符、12 个字符、非法符号和数字输入。"
               ],
-              "solution": "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
+              "solution": "def is_valid_username(name):\n    return isinstance(name, str) and 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n"
             },
             "browserChecks": [
               {
@@ -6271,6 +6277,12 @@
                 "name": "非法输入",
                 "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
                 "failure": "过短或含非法符号的名字应拒绝。",
+                "kind": "behavior"
+              },
+              {
+                "name": "类型边界",
+                "expression": "not is_valid_username(123)",
+                "failure": "非字符串输入应返回 False，而不是在 len 或 replace 处崩溃。",
                 "kind": "behavior"
               }
             ]
@@ -18050,6 +18062,12 @@
         "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
         "failure": "过短或含非法符号的名字应拒绝。",
         "kind": "behavior"
+      },
+      {
+        "name": "类型边界",
+        "expression": "not is_valid_username(123)",
+        "failure": "非字符串输入应返回 False，而不是在 len 或 replace 处崩溃。",
+        "kind": "behavior"
       }
     ],
     "python-lesson-40": [
@@ -18397,6 +18415,12 @@
         "name": "非法输入",
         "expression": "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")",
         "failure": "过短或含非法符号的名字应拒绝。",
+        "kind": "behavior"
+      },
+      {
+        "name": "类型边界",
+        "expression": "not is_valid_username(123)",
+        "failure": "非字符串输入应返回 False，而不是在 len 或 replace 处崩溃。",
         "kind": "behavior"
       }
     ],

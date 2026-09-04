@@ -215,13 +215,14 @@ const PYTHON_TOPIC_SPECS: Record<string, TopicSpec> = {
   },
   "测试设计": {
     summary: "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
-    prompt: "实现 is_valid_username(name)：长度 3–12 且只含字母、数字或下划线时返回 True，否则 False。",
+    prompt: "实现 is_valid_username(name)：name 必须是字符串，长度 3–12 且只含字母、数字或下划线时返回 True，否则 False；非字符串输入也要安全返回 False。",
     starterCode: "def is_valid_username(name):\n    pass\n",
-    solution: "def is_valid_username(name):\n    return 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n",
-    hints: ["先检查长度的两个边界。", "replace 后用 isalnum 检查允许字符。", "测试空串、3 个字符、12 个字符和非法符号。"],
+    solution: "def is_valid_username(name):\n    return isinstance(name, str) and 3 <= len(name) <= 12 and name.replace(\"_\", \"\").isalnum()\n",
+    hints: ["先检查输入类型和长度的两个边界。", "replace 后用 isalnum 检查允许字符。", "测试空串、3 个字符、12 个字符、非法符号和数字输入。"],
     checks: [
       { name: "合法边界", expression: "is_valid_username(\"abc\") and is_valid_username(\"a\" * 12)", failure: "长度边界内的合法名字应通过。", kind: "behavior" },
       { name: "非法输入", expression: "not is_valid_username(\"ab\") and not is_valid_username(\"bad-name\")", failure: "过短或含非法符号的名字应拒绝。", kind: "behavior" },
+      { name: "类型边界", expression: "not is_valid_username(123)", failure: "非字符串输入应返回 False，而不是在 len 或 replace 处崩溃。", kind: "behavior" },
     ],
   },
   "数据清洗": {
