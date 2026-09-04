@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "e211a92e70661bddc5c15853f11e881ce2e16b00c32c4e5249277e5f4ca5dc99",
-  "familyHash": "5caba38ba88cefe6ae2f3c1c90cbc2539ed3c00c4798232e7298c5489f35a3b8",
+  "catalogHash": "09ff98323861af61d0bf5533e44e23892128f4779f41cd040471c730e10b757d",
+  "familyHash": "1129c1607f443e9dbc56d312a73e60674d5296617fa2a25df51085bd2ac29116",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -13188,6 +13188,7 @@
           },
           {
             "id": "langgraph-lesson-11",
+            "familyId": "langgraph-review-project-v1",
             "stageId": "langgraph-stage-2",
             "order": 12,
             "title": "人工审核 Agent 流程",
@@ -19992,6 +19993,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-review-project-v1": {
+      "id": "langgraph-review-project-v1",
+      "lessonIds": [
+        "langgraph-lesson-11"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "ignored-rejection",
+        "accepted-unknown-decision"
+      ],
+      "constraints": [
+        "preserve review state",
+        "reject unknown decisions"
+      ],
+      "variants": [
+        {
+          "label": "审核 send_report",
+          "values": "send_report",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"send_report\", \"approve\") == {\"status\":\"approved\",\"action\":\"send_report\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"send_report\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"send_report\"} and _raises_value_error(lambda: review_gate(\"send_report\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 publish_note",
+          "values": "publish_note",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"publish_note\", \"approve\") == {\"status\":\"approved\",\"action\":\"publish_note\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"publish_note\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"publish_note\"} and _raises_value_error(lambda: review_gate(\"publish_note\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 delete_record",
+          "values": "delete_record",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"delete_record\", \"approve\") == {\"status\":\"approved\",\"action\":\"delete_record\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"delete_record\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"delete_record\"} and _raises_value_error(lambda: review_gate(\"delete_record\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 export_data",
+          "values": "export_data",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"export_data\", \"approve\") == {\"status\":\"approved\",\"action\":\"export_data\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"export_data\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"export_data\"} and _raises_value_error(lambda: review_gate(\"export_data\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 reset_access",
+          "values": "reset_access",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"reset_access\", \"approve\") == {\"status\":\"approved\",\"action\":\"reset_access\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"reset_access\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"reset_access\"} and _raises_value_error(lambda: review_gate(\"reset_access\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 merge_branch",
+          "values": "merge_branch",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "review_gate(\"merge_branch\", \"approve\") == {\"status\":\"approved\",\"action\":\"merge_branch\"}",
+              "failure": "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "review_gate(\"merge_branch\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"merge_branch\"} and _raises_value_error(lambda: review_gate(\"merge_branch\", \"later\"))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

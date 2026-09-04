@@ -928,6 +928,16 @@ test("LangGraph Supervisor 课明确角色路由与未知角色失败", async ()
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("graph-api")));
 });
 
+test("LangGraph 审核项目接入批准、拒绝与未知决定边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph")?.lessons.find(({ id }) => id === "langgraph-lesson-11");
+  assert.equal(lesson?.familyId, "langgraph-review-project-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("later"))));
+});
+
 test("Python 工程路线包含 HTTP 请求失败边界课程", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const track = authoredCatalog.tracks.find(({ id }) => id === "python");

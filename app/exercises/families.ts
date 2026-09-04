@@ -146,6 +146,7 @@ const ragToolCases = [
 const ragRunCases = [
   [10, 20, 1], [5, 15, 0], [30, 45, 2], [8, 12, 1], [100, 120, 0], [18, 22, 2],
 ] as const;
+const projectReviewCases = ["send_report", "publish_note", "delete_record", "export_data", "reset_access", "merge_branch"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -393,6 +394,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `[item["source"] for item in rerank([{"source":"a","rerank_score":0.2},{"source":"b","rerank_score":0.9}], ${topK})] == [${expected.split(",").map((item) => `"${item}"`).join(",")}]`,
       "_raises_value_error(lambda: rerank([], -1))",
       "应按重排分数排序并严格限制 top_k。",
+    ))),
+  },
+  {
+    id: "langgraph-review-project-v1", lessonIds: ["langgraph-lesson-11"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["ignored-rejection", "accepted-unknown-decision"], constraints: ["preserve review state", "reject unknown decisions"],
+    variants: projectReviewCases.map((action) => variant(`审核 ${action}`, action, twoBehaviorChecks(
+      `review_gate("${action}", "approve") == {"status":"approved","action":"${action}"}`,
+      `review_gate("${action}", "reject") == {"status":"cancelled","action":"${action}"} and _raises_value_error(lambda: review_gate("${action}", "later"))`,
+      "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
     ))),
   },
   {
