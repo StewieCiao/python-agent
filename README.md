@@ -49,6 +49,7 @@ npm run desktop:make
 - Python 在独立 Web Worker 中真实运行；无限循环超过 4 秒会被终止，页面不会冻结。
 - 反馈直接展示标准输出、标准错误、异常类型、行号、真实 traceback，以及每项测试的实际结果、期望结果、行为规则或教学构造。
 - 进度、草稿和错题保存在本地；桌面版使用 SQLite，离线版使用浏览器本地存储。
+- 桌面版的非敏感配置由本地服务管理：macOS 位于 `~/Library/Application Support/Stewie Learning Site/`，Windows 位于 `%APPDATA%/Stewie Learning Site/`；API Key 不写入这些文件，而是保存到当前系统用户的安全存储。离线版和 Pages 版不会接收或保存 API Key。
 - “复制求助内容”会生成结构化 JSON 数据，保留本次运行的代码与反馈快照，默认要求 GPT 只给最小提示。
 
 ## 检查
