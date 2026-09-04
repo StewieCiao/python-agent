@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7b0775c890c9f0f8228d655e6ee95aa56b0156bfb2a918615adb3d3d46e993c4",
-  "familyHash": "b5e19399f2f7156ffd52134f28e9c5608364eede628a9344e3f5cdec61775662",
+  "catalogHash": "f51fa595622ff900a6e32c91c3d6dafcd6d496f3c9e3cbd59eb59718764d9d5b",
+  "familyHash": "1039cc6379eac199d246f154e816eee281238d96f19134267a98cc2433c13204",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1240,6 +1240,7 @@
           },
           {
             "id": "generators",
+            "familyId": "python-generators-v1",
             "stageId": "python-stage-2",
             "order": 11,
             "title": "按需产生数据",
@@ -17198,6 +17199,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-generators-v1": {
+      "id": "python-generators-v1",
+      "lessonIds": [
+        "generators"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "returns-list",
+        "wrong-filter"
+      ],
+      "constraints": [
+        "yield values lazily",
+        "keep only positive values"
+      ],
+      "variants": [
+        {
+          "label": "过滤 [-3, 0, 2, 5]",
+          "values": "[-3, 0, 2, 5]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-3, 0, 2, 5])) == [2, 5]",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "过滤 [1, -4, 8]",
+          "values": "[1, -4, 8]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([1, -4, 8])) == [1, 8]",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "过滤 [-9, -1]",
+          "values": "[-9, -1]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([-9, -1])) == []",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "过滤 [0, 6, 7]",
+          "values": "[0, 6, 7]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([0, 6, 7])) == [6, 7]",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "过滤 [12, -2, 3]",
+          "values": "[12, -2, 3]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([12, -2, 3])) == [12, 3]",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "过滤 []",
+          "values": "[]",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_is_generator_function(positive_numbers) and list(positive_numbers([])) == []",
+              "failure": "函数必须是真正的生成器，并按原顺序只产生正数。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "list(positive_numbers([-2, 0, -1])) == []",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

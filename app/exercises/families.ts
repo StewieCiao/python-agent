@@ -76,6 +76,10 @@ const walletCases = [
   ["5, 7", 12], ["1, 20", 21], ["12, 3", 15],
   ["100, 25", 125], ["8, 8", 16], ["2, 4", 6],
 ] as const;
+const generatorCases = [
+  ["[-3, 0, 2, 5]", "[2, 5]"], ["[1, -4, 8]", "[1, 8]"], ["[-9, -1]", "[]"],
+  ["[0, 6, 7]", "[6, 7]"], ["[12, -2, 3]", "[12, 3]"], ["[]", "[]"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -125,6 +129,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `((lambda wallet: (wallet.deposit(${label.split(", ").join("), wallet.deposit(")}), wallet.balance()))(Wallet()))[-1] == ${expected}`,
       `_raises_value_error(lambda: Wallet().deposit(-1)) and _raises_value_error(lambda: Wallet().deposit(0))`,
       "每个 Wallet 应独立累计余额，并拒绝零或负数存款。",
+    ))),
+  },
+  {
+    id: "python-generators-v1", lessonIds: ["generators"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["returns-list", "wrong-filter"], constraints: ["yield values lazily", "keep only positive values"],
+    variants: generatorCases.map(([values, expected]) => variant(`过滤 ${values}`, values, twoBehaviorChecks(
+      `_is_generator_function(positive_numbers) and list(positive_numbers(${values})) == ${expected}`,
+      `list(positive_numbers([-2, 0, -1])) == []`,
+      "函数必须是真正的生成器，并按原顺序只产生正数。",
     ))),
   },
   {
