@@ -127,6 +127,10 @@ const travelCases = [
   ["西安", "晴", "城墙", 25], ["杭州", "多云", "西湖", 21], ["青岛", "风", "栈桥", 16],
 ] as const;
 const researchCases = ["Python 基础", "RAG 检索", "Agent 工具", "LangGraph 状态", "评估指标", "部署边界"] as const;
+const capstoneCases = [
+  ["echo", "你好"], ["upper", "rag"], ["length", "python"],
+  ["reverse", "graph"], ["title", "agent"], ["count", "tools"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -320,6 +324,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `build_research_report("${topic}", ["基础", "实践"], lambda task: [{"snippet": task + " 结果", "url": task + ".md"}]) == {"topic":"${topic}","sections":[{"title":"基础","findings":["基础 结果"],"sources":["基础.md"]},{"title":"实践","findings":["实践 结果"],"sources":["实践.md"]}],"sources":["基础.md","实践.md"]}`,
       `build_research_report("${topic}", [], lambda task: 1 / 0) == {"topic":"${topic}","sections":[],"sources":[]}`,
       "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+    ))),
+  },
+  {
+    id: "python-framework-capstone-v1", lessonIds: ["agent-framework-capstone"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-tool-dispatch", "ignored-step-limit"], constraints: ["dispatch registered tools", "enforce max_steps"],
+    variants: capstoneCases.map(([tool, input]) => variant(`${tool}[${input}]`, `${tool} / ${input}`, twoBehaviorChecks(
+      `((lambda agent: (agent.register_tool("${tool}", lambda value: value.upper()), agent.run(["${tool}[${input}]", "Finish[done]"]))[1])(Agent("demo", 2))) == {"answer":"done","history":[{"action":"${tool}","input":"${input}","observation":"${input.toUpperCase()}"}]}`,
+      `((lambda agent: (agent.register_tool("${tool}", lambda value: value), agent.run(["${tool}[one]", "Finish[done]"]))[1])(Agent("demo", max_steps=1))) == {"answer":None,"history":[{"action":"${tool}","input":"one","observation":"one"}]}`,
+      "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
     ))),
   },
   {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "7ca393567d2c4f78b48c821a1b22eebf448d2e2d24863fc3d4fafb335d3d1668",
-  "familyHash": "a32a7894195c8aee7a48606063234c25b031a96994946e5cd96e7ed4ec4fda20",
+  "catalogHash": "31c452585a407179d840c5ce034f1e1e7696d92795fc54cd8dae3cf385286d04",
+  "familyHash": "1b1104b6fca655784ded8d6de297a375781619e6f92fe53c0276e8b4f4db3422",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2719,6 +2719,7 @@
           },
           {
             "id": "agent-framework-capstone",
+            "familyId": "python-framework-capstone-v1",
             "stageId": "python-stage-4",
             "order": 25,
             "title": "毕业设计：Mini Agent 框架",
@@ -19231,6 +19232,132 @@
             {
               "name": "边界行为",
               "expression": "build_research_report(\"部署边界\", [], lambda task: 1 / 0) == {\"topic\":\"部署边界\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-framework-capstone-v1": {
+      "id": "python-framework-capstone-v1",
+      "lessonIds": [
+        "agent-framework-capstone"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-tool-dispatch",
+        "ignored-step-limit"
+      ],
+      "constraints": [
+        "dispatch registered tools",
+        "enforce max_steps"
+      ],
+      "variants": [
+        {
+          "label": "echo[你好]",
+          "values": "echo / 你好",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"echo\", lambda value: value.upper()), agent.run([\"echo[你好]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"echo\",\"input\":\"你好\",\"observation\":\"你好\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"echo\", lambda value: value), agent.run([\"echo[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"echo\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "upper[rag]",
+          "values": "upper / rag",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"upper\", lambda value: value.upper()), agent.run([\"upper[rag]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"upper\",\"input\":\"rag\",\"observation\":\"RAG\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"upper\", lambda value: value), agent.run([\"upper[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"upper\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "length[python]",
+          "values": "length / python",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"length\", lambda value: value.upper()), agent.run([\"length[python]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"length\",\"input\":\"python\",\"observation\":\"PYTHON\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"length\", lambda value: value), agent.run([\"length[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"length\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reverse[graph]",
+          "values": "reverse / graph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"reverse\", lambda value: value.upper()), agent.run([\"reverse[graph]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"reverse\",\"input\":\"graph\",\"observation\":\"GRAPH\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"reverse\", lambda value: value), agent.run([\"reverse[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"reverse\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "title[agent]",
+          "values": "title / agent",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"title\", lambda value: value.upper()), agent.run([\"title[agent]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"title\",\"input\":\"agent\",\"observation\":\"AGENT\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"title\", lambda value: value), agent.run([\"title[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"title\",\"input\":\"one\",\"observation\":\"one\"}]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "count[tools]",
+          "values": "count / tools",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda agent: (agent.register_tool(\"count\", lambda value: value.upper()), agent.run([\"count[tools]\", \"Finish[done]\"]))[1])(Agent(\"demo\", 2))) == {\"answer\":\"done\",\"history\":[{\"action\":\"count\",\"input\":\"tools\",\"observation\":\"TOOLS\"}]}",
+              "failure": "应调用已注册工具并记录真实观察；达到 max_steps 后不能伪造 Finish 结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda agent: (agent.register_tool(\"count\", lambda value: value), agent.run([\"count[one]\", \"Finish[done]\"]))[1])(Agent(\"demo\", max_steps=1))) == {\"answer\":None,\"history\":[{\"action\":\"count\",\"input\":\"one\",\"observation\":\"one\"}]}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
