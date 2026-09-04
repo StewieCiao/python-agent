@@ -15,6 +15,8 @@ npm run dev
 
 ## 单文件离线版
 
+公开静态版：<https://stewieciao.github.io/python-agent/>（无需部署或安装，适合直接浏览课程内容）。
+
 直接双击项目根目录的 `Stewie-个人学习站-离线版.html` 即可使用，不需要安装 Python、Node.js，也不需要启动本地服务器。
 
 - 内含 Python 64 节、LangChain/RAG 48 节、LangGraph 42 节课程地图、提示、项目和参考答案
