@@ -84,6 +84,10 @@ const stringCases = [
   ["  PyThOn  ", "python"], [" RAG   Guide ", "rag guide"], ["\tLangChain\n", "langchain"],
   ["  Hello   World  ", "hello   world"], [" 数据   清洗 ", "数据   清洗"], [" MIXED Case ", "mixed case"],
 ] as const;
+const gradeCases = [
+  ["59, 60, 90", "C, B, A"], ["0, 89, 100", "C, B, A"], ["30, 75, 95", "C, B, A"],
+  ["58, 60, 89", "C, B, B"], ["1, 88, 90", "C, B, A"], ["-5, 60, 120", "C, B, A"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -151,6 +155,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `_silent_call(normalize_title, ${JSON.stringify(label)}) == (${JSON.stringify(expected)}, "")`,
       `((lambda text: (normalize_title(text), text))(${JSON.stringify(label)}))[1] == ${JSON.stringify(label)}`,
       "应只清理两端空白并转为小写，不能修改调用者的原字符串或打印内容。",
+    ))),
+  },
+  {
+    id: "python-branches-v1", lessonIds: ["branches"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["wrong-boundary", "missing-branch"], constraints: ["cover low/middle/high ranges", "return one grade per score"],
+    variants: gradeCases.map(([scores, expected]) => variant(`分数 ${scores}`, scores, twoBehaviorChecks(
+      `list(map(grade, [${scores}])) == [${expected.split(", ").map((item) => `"${item}"`).join(", ")}]`,
+      "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+      "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
     ))),
   },
   {

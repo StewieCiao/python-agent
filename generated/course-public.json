@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "57717623c261466ef4de2e43e3e8c3c4cbc4e83f65f4467b2560a73086e54016",
-  "familyHash": "08df08b05a7d08b1ed7f03f5220ec55ef55ede40e2d149a837edd999edc4d30d",
+  "catalogHash": "3639c5871d73565cfa3f27daa69689660c1a50a068464c404a2e2d006faf563a",
+  "familyHash": "e779d4f3ecd651ac1404e19e77271d4002775812a75c985193d744cdf53463b1",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -465,6 +465,7 @@
           },
           {
             "id": "branches",
+            "familyId": "python-branches-v1",
             "stageId": "python-stage-1",
             "order": 4,
             "title": "让程序做决定",
@@ -17453,6 +17454,132 @@
             {
               "name": "边界行为",
               "expression": "((lambda text: (normalize_title(text), text))(\" MIXED Case \"))[1] == \" MIXED Case \"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-branches-v1": {
+      "id": "python-branches-v1",
+      "lessonIds": [
+        "branches"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-boundary",
+        "missing-branch"
+      ],
+      "constraints": [
+        "cover low/middle/high ranges",
+        "return one grade per score"
+      ],
+      "variants": [
+        {
+          "label": "分数 59, 60, 90",
+          "values": "59, 60, 90",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [59, 60, 90])) == [\"C\", \"B\", \"A\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分数 0, 89, 100",
+          "values": "0, 89, 100",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [0, 89, 100])) == [\"C\", \"B\", \"A\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分数 30, 75, 95",
+          "values": "30, 75, 95",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [30, 75, 95])) == [\"C\", \"B\", \"A\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分数 58, 60, 89",
+          "values": "58, 60, 89",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [58, 60, 89])) == [\"C\", \"B\", \"B\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分数 1, 88, 90",
+          "values": "1, 88, 90",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [1, 88, 90])) == [\"C\", \"B\", \"A\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "分数 -5, 60, 120",
+          "values": "-5, 60, 120",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "list(map(grade, [-5, 60, 120])) == [\"C\", \"B\", \"A\"]",
+              "failure": "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
