@@ -1006,6 +1006,28 @@ function assignFrameworkStages(track: CourseTrack, stages: CourseStage[], lesson
   }
   for (const stage of stages) stage.lessonIds = [];
   for (const lesson of lessons) stages.find(({ id }) => id === lesson.stageId)!.lessonIds.push(lesson.id);
+  const lessonIds = new Set(lessons.map(({ id }) => id));
+  const stageIndexById = new Map(stages.map((item, index) => [item.id, index]));
+  const lessonById = new Map(lessons.map((item) => [item.id, item]));
+  const lessonOrder = new Map(lessons.map((item, index) => [item.id, index]));
+  for (const [stageIndex, stage] of stages.entries()) {
+    const stageLessons = lessons.filter(({ stageId }) => stageId === stage.id);
+    const previousStage = stages[stageIndex - 1];
+    const previousLessons = previousStage ? lessons.filter(({ stageId }) => stageId === previousStage.id) : [];
+    for (const [lessonIndex, lesson] of stageLessons.entries()) {
+      const externalPrerequisites = lesson.prerequisites.filter((id) => {
+        if (!lessonIds.has(id)) return true;
+        const prerequisite = lessonById.get(id);
+        return prerequisite
+          ? (stageIndexById.get(prerequisite.stageId) ?? -1) <= stageIndex
+            && (lessonOrder.get(prerequisite.id) ?? -1) < (lessonOrder.get(lesson.id) ?? -1)
+          : false;
+      });
+      const candidate = lessonIndex > 0 ? stageLessons[lessonIndex - 1]?.id : previousLessons.at(-1)?.id;
+      const inStagePrerequisite = candidate && (lessonOrder.get(candidate) ?? -1) < (lessonOrder.get(lesson.id) ?? -1) ? candidate : undefined;
+      lesson.prerequisites = inStagePrerequisite ? [...new Set([...externalPrerequisites, inStagePrerequisite])] : externalPrerequisites;
+    }
+  }
 }
 
 export function expandCourseTrack(track: CourseTrack, expansion: Expansion): CourseTrack {

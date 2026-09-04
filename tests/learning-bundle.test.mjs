@@ -1177,10 +1177,24 @@ test("完整课程地图达到三条路线的目标规模与项目数", async ()
     assert.equal(track.lessons.filter(({ project }) => project).length, projectCount, `${track.id} project 数量`);
     const projectIds = new Set(track.lessons.filter(({ project }) => project).map(({ id }) => id));
     for (const lesson of track.lessons) assert.ok(lesson.projectLinks.every((id) => projectIds.has(id)), `${track.id}/${lesson.id} projectLinks 必须指向项目课`);
-    const generated = track.lessons.filter(({ id }) => id.includes("-lesson-"));
-    for (const lesson of generated) {
-      const index = track.lessons.indexOf(lesson);
-      assert.deepEqual(lesson.prerequisites, index > 0 ? [track.lessons[index - 1].id] : [], `${track.id}/${lesson.id} 扩展课先修应连续`);
+  }
+});
+
+test("框架路线的先修链按阶段前进，不让早期课程依赖后续内容", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks.filter(({ id }) => id !== "python")) {
+    const stageIndex = new Map(track.stages.map((stage, index) => [stage.id, index]));
+    const lessonById = new Map(track.lessons.map((lesson) => [lesson.id, lesson]));
+    const lessonOrder = new Map(track.lessons.map((lesson, index) => [lesson.id, index]));
+    for (const lesson of track.lessons) {
+      const currentStage = stageIndex.get(lesson.stageId);
+      assert.notEqual(currentStage, undefined);
+      for (const prerequisiteId of lesson.prerequisites) {
+        const prerequisite = lessonById.get(prerequisiteId);
+        if (!prerequisite) continue;
+        assert.ok((stageIndex.get(prerequisite.stageId) ?? -1) <= currentStage, `${track.id}/${lesson.id} 依赖了后续阶段 ${prerequisiteId}`);
+        assert.ok((lessonOrder.get(prerequisiteId) ?? -1) < (lessonOrder.get(lesson.id) ?? -1), `${track.id}/${lesson.id} 依赖了后续课程 ${prerequisiteId}`);
+      }
     }
   }
 });

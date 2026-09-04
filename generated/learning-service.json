@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "57797fe58518155e9888728b02e4b60efc65742d909ce33531133806adb299ea",
+  "catalogHash": "8422648e9a9099575cab445b12e8b3583ed84ae4edd38a21462b3d8aa58f80ef",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -6573,9 +6573,7 @@
             "kicker": "langchain-rag 学习",
             "summary": "继续第 39–42 节，理解 Loader 的真正产物是带 page_content 和 metadata 的 Document。",
             "minutes": 70,
-            "prerequisites": [
-              "memory-modernization"
-            ],
+            "prerequisites": [],
             "difficulty": "beginner",
             "tags": [],
             "guide": [
@@ -7127,7 +7125,7 @@
             "summary": "对应第 55–59 节，使用 create_agent 理解工具调用、流式更新和中间件。",
             "minutes": 75,
             "prerequisites": [
-              "rag-project"
+              "memory-modernization"
             ],
             "difficulty": "beginner",
             "tags": [],
@@ -7297,7 +7295,8 @@
             "summary": "为团队建立可追溯的文档问答入口，回答始终带真实来源。",
             "minutes": 150,
             "prerequisites": [
-              "agent-v1"
+              "agent-v1",
+              "rag-project"
             ],
             "difficulty": "beginner",
             "tags": [],
@@ -7444,9 +7443,7 @@
             "kicker": "langchain-rag 学习",
             "summary": "从单次模型调用开始，区分 system、human 消息和可复用提示模板。",
             "minutes": 35,
-            "prerequisites": [
-              "memory-modernization"
-            ],
+            "prerequisites": [],
             "difficulty": "beginner",
             "tags": [
               "messages",
@@ -7698,7 +7695,8 @@
             "summary": "用 schema 约束模型结果，并区分解析失败和业务字段缺失。",
             "minutes": 40,
             "prerequisites": [
-              "model-messages-prompts"
+              "model-messages-prompts",
+              "model-configuration"
             ],
             "difficulty": "beginner",
             "tags": [
@@ -7936,7 +7934,8 @@
             "summary": "用固定问答样本测量召回和引用覆盖，并把无资料作为真实结果记录。",
             "minutes": 45,
             "prerequisites": [
-              "retrieval-chain"
+              "retrieval-chain",
+              "agent-v1"
             ],
             "difficulty": "intermediate",
             "tags": [
@@ -8064,7 +8063,7 @@
             "summary": "合并关键词与向量候选并按分数排序，低于阈值时明确返回无结果。",
             "minutes": 40,
             "prerequisites": [
-              "rag-evaluation"
+              "indexing-vector-store"
             ],
             "difficulty": "intermediate",
             "tags": [
@@ -8190,7 +8189,8 @@
             "summary": "为检索调优提供关键词、向量召回和命中率对比。",
             "minutes": 60,
             "prerequisites": [
-              "hybrid-retrieval"
+              "hybrid-retrieval",
+              "retrieval-chain"
             ],
             "difficulty": "intermediate",
             "tags": [
@@ -8437,7 +8437,8 @@
             "summary": "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。",
             "minutes": 35,
             "prerequisites": [
-              "citation-grounded-generation"
+              "citation-grounded-generation",
+              "rag-evaluation"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -8850,7 +8851,8 @@
             "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-18"
+              "langchain-rag-lesson-18",
+              "agent-rag-project"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -8949,7 +8951,7 @@
             "summary": "为业务助手连接受约束的工具，并保留每次调用结果。",
             "minutes": 60,
             "prerequisites": [
-              "langchain-rag-lesson-19"
+              "langchain-rag-lesson-18"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9066,7 +9068,7 @@
             "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-20"
+              "structured-output"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9279,7 +9281,8 @@
             "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-22"
+              "langchain-rag-lesson-22",
+              "runnable-pipeline"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9375,7 +9378,7 @@
             "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-23"
+              "langchain-rag-lesson-22"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9492,7 +9495,8 @@
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-24"
+              "langchain-rag-lesson-24",
+              "document-loaders"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9685,7 +9689,8 @@
             "summary": "为 RAG 流程记录召回、引用和无答案边界，定位质量回归。",
             "minutes": 60,
             "prerequisites": [
-              "langchain-rag-lesson-26"
+              "langchain-rag-lesson-26",
+              "langchain-rag-lesson-19"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -9802,7 +9807,7 @@
             "summary": "把向量和文档元数据一起保存，检索时不丢失可引用来源。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-27"
+              "hybrid-retrieval"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -10207,7 +10212,8 @@
             "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-31"
+              "langchain-rag-lesson-31",
+              "citation-grounded-generation"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -10403,7 +10409,8 @@
             "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-33"
+              "langchain-rag-lesson-33",
+              "langchain-rag-lesson-20"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -10914,7 +10921,8 @@
             "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-38"
+              "langchain-rag-lesson-38",
+              "langchain-rag-lesson-27"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -11012,7 +11020,7 @@
             "summary": "区分 system、user、assistant 消息，让提示上下文保持可预测。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-39"
+              "langchain-rag-lesson-24"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -11342,7 +11350,8 @@
             "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-42"
+              "langchain-rag-lesson-42",
+              "langchain-rag-lesson-23"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -11438,7 +11447,7 @@
             "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-43"
+              "langchain-rag-lesson-42"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -11555,7 +11564,8 @@
             "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-44"
+              "langchain-rag-lesson-44",
+              "langchain-rag-lesson-26"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -11747,7 +11757,8 @@
             "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langchain-rag-lesson-46"
+              "langchain-rag-lesson-46",
+              "langchain-rag-lesson-31"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -12581,7 +12592,7 @@
             "summary": "为研究任务建立可暂停、可恢复且按 thread 隔离的工作流。",
             "minutes": 65,
             "prerequisites": [
-              "streaming-interrupts"
+              "persistence-short-memory"
             ],
             "difficulty": "beginner",
             "tags": [],
@@ -12834,7 +12845,8 @@
             "summary": "为图运行配置稳定的 thread_id，并在缺少检查点时保留明确失败。",
             "minutes": 35,
             "prerequisites": [
-              "state-reducers-routing"
+              "state-reducers-routing",
+              "subgraphs-parallelism"
             ],
             "difficulty": "beginner",
             "tags": [
@@ -13346,7 +13358,7 @@
             "summary": "为高风险动作加入人工审核节点，拒绝时留下明确状态。",
             "minutes": 60,
             "prerequisites": [
-              "tool-node-boundaries"
+              "human-review-state"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -13463,7 +13475,7 @@
             "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-11"
+              "checkpoint-configuration"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -13561,7 +13573,8 @@
             "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-12"
+              "langgraph-lesson-12",
+              "langgraph-lesson-11"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -13659,7 +13672,8 @@
             "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-13"
+              "langgraph-lesson-13",
+              "tool-node-boundaries"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14050,7 +14064,7 @@
             "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-17"
+              "langgraph-lesson-13"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14148,7 +14162,8 @@
             "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-18"
+              "langgraph-lesson-18",
+              "memory-research-project"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14246,7 +14261,7 @@
             "summary": "把状态模式、节点和入口组织成可读的图结构。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-19"
+              "graph-foundations"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14535,7 +14550,8 @@
             "summary": "为用户偏好建立跨 thread 的 Store，并与短期状态分离。",
             "minutes": 60,
             "prerequisites": [
-              "langgraph-lesson-22"
+              "langgraph-lesson-22",
+              "langgraph-lesson-19"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14631,7 +14647,7 @@
             "summary": "为循环同时设置业务完成条件和步数上限，避免图无限运行。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-23"
+              "state-reducers-routing"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -14823,7 +14839,8 @@
             "summary": "把每次图运行的状态按 thread 保存，支持读取最近检查点。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-25"
+              "langgraph-lesson-25",
+              "langgraph-lesson-12"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -15040,7 +15057,8 @@
             "summary": "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-27"
+              "langgraph-lesson-27",
+              "long-term-store"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -15370,7 +15388,8 @@
             "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-30"
+              "langgraph-lesson-30",
+              "langgraph-lesson-18"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -15489,7 +15508,7 @@
             "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-31"
+              "langgraph-lesson-27"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -15587,7 +15606,8 @@
             "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-32"
+              "langgraph-lesson-32",
+              "langgraph-lesson-31"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -15685,7 +15705,8 @@
             "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-33"
+              "langgraph-lesson-33",
+              "langgraph-lesson-17"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -16077,7 +16098,7 @@
             "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-37"
+              "langgraph-lesson-33"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -16175,7 +16196,8 @@
             "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-38"
+              "langgraph-lesson-38",
+              "langgraph-lesson-23"
             ],
             "difficulty": "advanced",
             "tags": [
@@ -16273,7 +16295,7 @@
             "summary": "把状态模式、节点和入口组织成可读的图结构。 本组把同一能力迁移到多 Agent 协作场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
-              "langgraph-lesson-39"
+              "langgraph-lesson-22"
             ],
             "difficulty": "advanced",
             "tags": [
