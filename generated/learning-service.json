@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "b20da65cd12ba530026756f8467f33732cee93da8e839157b38bc17e6d7205fe",
-  "familyHash": "17bcb4f873c4048b4cec7c6e5ad077aa04220bfa736b29bf1e2a954609efd3c6",
+  "catalogHash": "0d65259097bf4e08093d2b107521deec6282e33177596a9329b80b6bb8544ee7",
+  "familyHash": "4b7d30611eadfdc9f147d0aba648f47945c9ac6ce60706e15856e2e3d9f3b29c",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2523,6 +2523,7 @@
           },
           {
             "id": "agent-travel-project",
+            "familyId": "python-travel-v1",
             "stageId": "python-stage-3",
             "order": 23,
             "title": "智能旅行助手",
@@ -18977,6 +18978,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_lookup_error(lambda: handoff(\"planner\", {\"capability\":\"missing\",\"description\":\"x\"}, [{\"name\":\"general\",\"capabilities\":[]}]))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-travel-v1": {
+      "id": "python-travel-v1",
+      "lessonIds": [
+        "agent-travel-project"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-tool-order",
+        "lost-observation"
+      ],
+      "constraints": [
+        "pass weather condition to attraction",
+        "record ordered trace"
+      ],
+      "variants": [
+        {
+          "label": "上海 / 晴",
+          "values": "上海, 晴",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"上海\", {\"weather\": lambda place: {\"condition\":\"晴\",\"temperature\":22}, \"attraction\": lambda place, weather: [\"外滩\"]}) == {\"city\":\"上海\",\"weather\":{\"condition\":\"晴\",\"temperature\":22},\"attractions\":[\"外滩\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"上海\",\"observation\":{\"condition\":\"晴\",\"temperature\":22}},{\"tool\":\"attraction\",\"input\":{\"city\":\"上海\",\"condition\":\"晴\"},\"observation\":[\"外滩\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"上海\", {\"weather\": lambda place: {\"condition\":\"晴\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "厦门 / 雨",
+          "values": "厦门, 雨",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"厦门\", {\"weather\": lambda place: {\"condition\":\"雨\",\"temperature\":18}, \"attraction\": lambda place, weather: [\"室内馆\"]}) == {\"city\":\"厦门\",\"weather\":{\"condition\":\"雨\",\"temperature\":18},\"attractions\":[\"室内馆\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"厦门\",\"observation\":{\"condition\":\"雨\",\"temperature\":18}},{\"tool\":\"attraction\",\"input\":{\"city\":\"厦门\",\"condition\":\"雨\"},\"observation\":[\"室内馆\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"厦门\", {\"weather\": lambda place: {\"condition\":\"雨\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "成都 / 阴",
+          "values": "成都, 阴",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"成都\", {\"weather\": lambda place: {\"condition\":\"阴\",\"temperature\":20}, \"attraction\": lambda place, weather: [\"熊猫基地\"]}) == {\"city\":\"成都\",\"weather\":{\"condition\":\"阴\",\"temperature\":20},\"attractions\":[\"熊猫基地\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"成都\",\"observation\":{\"condition\":\"阴\",\"temperature\":20}},{\"tool\":\"attraction\",\"input\":{\"city\":\"成都\",\"condition\":\"阴\"},\"observation\":[\"熊猫基地\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"成都\", {\"weather\": lambda place: {\"condition\":\"阴\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "西安 / 晴",
+          "values": "西安, 晴",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"西安\", {\"weather\": lambda place: {\"condition\":\"晴\",\"temperature\":25}, \"attraction\": lambda place, weather: [\"城墙\"]}) == {\"city\":\"西安\",\"weather\":{\"condition\":\"晴\",\"temperature\":25},\"attractions\":[\"城墙\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"西安\",\"observation\":{\"condition\":\"晴\",\"temperature\":25}},{\"tool\":\"attraction\",\"input\":{\"city\":\"西安\",\"condition\":\"晴\"},\"observation\":[\"城墙\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"西安\", {\"weather\": lambda place: {\"condition\":\"晴\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "杭州 / 多云",
+          "values": "杭州, 多云",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"杭州\", {\"weather\": lambda place: {\"condition\":\"多云\",\"temperature\":21}, \"attraction\": lambda place, weather: [\"西湖\"]}) == {\"city\":\"杭州\",\"weather\":{\"condition\":\"多云\",\"temperature\":21},\"attractions\":[\"西湖\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"杭州\",\"observation\":{\"condition\":\"多云\",\"temperature\":21}},{\"tool\":\"attraction\",\"input\":{\"city\":\"杭州\",\"condition\":\"多云\"},\"observation\":[\"西湖\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"杭州\", {\"weather\": lambda place: {\"condition\":\"多云\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "青岛 / 风",
+          "values": "青岛, 风",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_trip(\"青岛\", {\"weather\": lambda place: {\"condition\":\"风\",\"temperature\":16}, \"attraction\": lambda place, weather: [\"栈桥\"]}) == {\"city\":\"青岛\",\"weather\":{\"condition\":\"风\",\"temperature\":16},\"attractions\":[\"栈桥\"],\"trace\":[{\"tool\":\"weather\",\"input\":\"青岛\",\"observation\":{\"condition\":\"风\",\"temperature\":16}},{\"tool\":\"attraction\",\"input\":{\"city\":\"青岛\",\"condition\":\"风\"},\"observation\":[\"栈桥\"]}]}",
+              "failure": "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: build_trip(\"青岛\", {\"weather\": lambda place: {\"condition\":\"风\"}}))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

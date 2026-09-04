@@ -831,6 +831,16 @@ test("Python Agent 交接课接入能力路由个性化练习 family", async () 
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("lookup_error"))));
 });
 
+test("Python 旅行助手项目接入真实工具链个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "agent-travel-project");
+  assert.equal(lesson?.familyId, "python-travel-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("trace"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

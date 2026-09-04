@@ -122,6 +122,10 @@ const memoryCases = [
   ["PYTHON", '["python basics", "python agent tools"]'], ["missing", "[]"],
 ] as const;
 const handoffCases = ["weather", "code", "search", "review", "translate", "summarize"] as const;
+const travelCases = [
+  ["上海", "晴", "外滩", 22], ["厦门", "雨", "室内馆", 18], ["成都", "阴", "熊猫基地", 20],
+  ["西安", "晴", "城墙", 25], ["杭州", "多云", "西湖", 21], ["青岛", "风", "栈桥", 16],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -297,6 +301,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `handoff("planner", {"capability":"${capability}","description":"执行 ${capability}"}, [{"name":"general","capabilities":["${capability}"]}]) == {"from":"planner","to":"general","task":{"capability":"${capability}","description":"执行 ${capability}"}}`,
       `_raises_lookup_error(lambda: handoff("planner", {"capability":"missing","description":"x"}, [{"name":"general","capabilities":[]}]))`,
       "应按候选顺序选择首个具备能力的 Agent，保留原 task，并在无匹配时抛出 LookupError。",
+    ))),
+  },
+  {
+    id: "python-travel-v1", lessonIds: ["agent-travel-project"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-tool-order", "lost-observation"], constraints: ["pass weather condition to attraction", "record ordered trace"],
+    variants: travelCases.map(([city, condition, attraction, temperature]) => variant(`${city} / ${condition}`, `${city}, ${condition}`, twoBehaviorChecks(
+      `build_trip("${city}", {"weather": lambda place: {"condition":"${condition}","temperature":${temperature}}, "attraction": lambda place, weather: ["${attraction}"]}) == {"city":"${city}","weather":{"condition":"${condition}","temperature":${temperature}},"attractions":["${attraction}"],"trace":[{"tool":"weather","input":"${city}","observation":{"condition":"${condition}","temperature":${temperature}}},{"tool":"attraction","input":{"city":"${city}","condition":"${condition}"},"observation":["${attraction}"]}]}`,
+      `_raises_key_error(lambda: build_trip("${city}", {"weather": lambda place: {"condition":"${condition}"}}))`,
+      "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
     ))),
   },
   {
