@@ -466,6 +466,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "tool-node-boundaries",
+      familyId: "langgraph-tool-node-v1",
       title: "工具节点的输入校验与错误状态",
       summary: "让工具节点把参数校验、真实执行结果和失败状态写回图状态。",
       prerequisites: ["supervisor-routing"], difficulty: "advanced", tags: ["tools", "errors", "state"],

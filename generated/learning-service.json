@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "54ce22ef3c68d05b36aa2d18c4c33789846098672dca9c842f83e1638ea7b88f",
-  "familyHash": "9dcccea0584720877f9cff1f26451596a003b3546a9fd86bf666b4f5e74e254f",
+  "catalogHash": "dadc3ced033dd60b0e8feb1fa2b1e0e97abdc2d3b85f28ae0696c1316080576e",
+  "familyHash": "e175b06eb4cf75f77e86f8cba4525015a8ebcfef950e6a9022c19a331a162b44",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -13048,6 +13048,7 @@
           },
           {
             "id": "tool-node-boundaries",
+            "familyId": "langgraph-tool-node-v1",
             "stageId": "langgraph-stage-2",
             "order": 11,
             "title": "工具节点的输入校验与错误状态",
@@ -18215,6 +18216,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_key_error(lambda: handoff({\"role\":\"missing\",\"task\":\"x\"}, {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-tool-node-v1": {
+      "id": "langgraph-tool-node-v1",
+      "lessonIds": [
+        "tool-node-boundaries"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "swallowed-tool-error",
+        "missing-error-state"
+      ],
+      "constraints": [
+        "record success and failure states",
+        "preserve exception type and message"
+      ],
+      "variants": [
+        {
+          "label": "工具 天气",
+          "values": "天气",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"天气\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"天气!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "工具 检索",
+          "values": "检索",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"检索\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"检索!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "工具 汇率",
+          "values": "汇率",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"汇率\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"汇率!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "工具 日历",
+          "values": "日历",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"日历\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"日历!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "工具 状态",
+          "values": "状态",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"状态\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"状态!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "工具 摘要",
+          "values": "摘要",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "run_tool({\"tool_args\":{\"value\":\"摘要\"}}, lambda value: value + \"!\" ) == {\"tool_status\":\"ok\",\"tool_result\":\"摘要!\",\"tool_error\":None}",
+              "failure": "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "run_tool({}, lambda value: value) [\"tool_status\"] == \"error\" and run_tool({\"tool_args\":{\"value\":\"x\"}}, lambda value: (_ for _ in ()).throw(ValueError(\"bad\")))[\"tool_error\"][\"type\"] == \"ValueError\"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

@@ -102,6 +102,7 @@ const supervisorCases = [
   ["researcher", "RAG", "RAG!"], ["writer", "摘要", "摘要!"], ["reviewer", "草稿", "草稿!"],
   ["planner", "步骤", "步骤!"], ["retriever", "文档", "文档!"], ["editor", "标题", "标题!"],
 ] as const;
+const toolNodeCases = ["天气", "检索", "汇率", "日历", "状态", "摘要"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -223,6 +224,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `handoff({"role":"${role}","task":"${task}"}, {"${role}": lambda value: value + "!"}) == {"role":"${role}","task":"${task}","result":"${expected}"}`,
       `_raises_key_error(lambda: handoff({"role":"missing","task":"x"}, {}))`,
       "Supervisor 应按显式 role 调用对应 worker，并保留任务上下文与真实结果。",
+    ))),
+  },
+  {
+    id: "langgraph-tool-node-v1", lessonIds: ["tool-node-boundaries"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["swallowed-tool-error", "missing-error-state"], constraints: ["record success and failure states", "preserve exception type and message"],
+    variants: toolNodeCases.map((topic) => variant(`工具 ${topic}`, topic, twoBehaviorChecks(
+      `run_tool({"tool_args":{"value":"${topic}"}}, lambda value: value + "!" ) == {"tool_status":"ok","tool_result":"${topic}!","tool_error":None}`,
+      `run_tool({}, lambda value: value) ["tool_status"] == "error" and run_tool({"tool_args":{"value":"x"}}, lambda value: (_ for _ in ()).throw(ValueError("bad")))["tool_error"]["type"] == "ValueError"`,
+      "工具节点成功时写入结果，参数缺失或工具异常时保留明确 error 状态与异常类型。",
     ))),
   },
   {
