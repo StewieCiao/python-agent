@@ -116,6 +116,11 @@ const reflectionCases = [
   ["a", 5, "a!!"], ["x", 3, "x!!"], ["draft", 2, "draft++"],
   ["ok", 4, "ok!"], ["", 3, "!!"], ["seed", 1, "seed!"] ,
 ] as const;
+const memoryCases = [
+  ["python", '["python basics", "python agent tools"]'], ["agent", '["python agent tools", "agent memory design"]'],
+  ["memory", '["agent memory design"]'], ["tools", '["python agent tools"]'],
+  ["PYTHON", '["python basics", "python agent tools"]'], ["missing", "[]"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -273,6 +278,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `reflection_loop("${draft}", lambda text: len(text) >= ${expected.length}, lambda text: text + "!", ${rounds}) == "${expected}"`,
       `_raises_value_error(lambda: reflection_loop("x", lambda text: True, lambda text: text, -1))`,
       "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+    ))),
+  },
+  {
+    id: "python-memory-retrieval-v1", lessonIds: ["agent-memory-retrieval"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["case-sensitive-search", "wrong-ranking"], constraints: ["match query words case-insensitively", "sort by overlap then importance"],
+    variants: memoryCases.map(([query, expected]) => variant(`查询 ${query}`, query, twoBehaviorChecks(
+      `retrieve_memories([{"content":"python agent tools","importance":2},{"content":"agent memory design","importance":1},{"content":"python basics","importance":3}], "${query}", 2) == ${expected}`,
+      `retrieve_memories([], "${query}", 2) == [] and retrieve_memories([{"content":"agent tools","importance":1}], "${query}", 0) == []`,
+      "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
     ))),
   },
   {

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "8a1953f4651106b5c45e8cf0f972b8ca4f904cf26627a7a28f8c1d2f3682b4e3",
-  "familyHash": "364a8a39e872206f4b70c135df18081a67021724a5085e8ac596668a07da3be8",
+  "catalogHash": "95ae0927ddc9f62e010c71c4bb0415dab7b38aef751feb46087022dd35027f24",
+  "familyHash": "ddb80d2e23523a8e2828d0757ced8c007a8fe08f0baedaf78a37f71a23747531",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2323,6 +2323,7 @@
           },
           {
             "id": "agent-memory-retrieval",
+            "familyId": "python-memory-retrieval-v1",
             "stageId": "python-stage-3",
             "order": 21,
             "title": "实现最小记忆检索",
@@ -18723,6 +18724,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-memory-retrieval-v1": {
+      "id": "python-memory-retrieval-v1",
+      "lessonIds": [
+        "agent-memory-retrieval"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "case-sensitive-search",
+        "wrong-ranking"
+      ],
+      "constraints": [
+        "match query words case-insensitively",
+        "sort by overlap then importance"
+      ],
+      "variants": [
+        {
+          "label": "查询 python",
+          "values": "python",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"python\", 2) == [\"python basics\", \"python agent tools\"]",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"python\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"python\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "查询 agent",
+          "values": "agent",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"agent\", 2) == [\"python agent tools\", \"agent memory design\"]",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"agent\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"agent\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "查询 memory",
+          "values": "memory",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"memory\", 2) == [\"agent memory design\"]",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"memory\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"memory\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "查询 tools",
+          "values": "tools",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"tools\", 2) == [\"python agent tools\"]",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"tools\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"tools\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "查询 PYTHON",
+          "values": "PYTHON",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"PYTHON\", 2) == [\"python basics\", \"python agent tools\"]",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"PYTHON\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"PYTHON\", 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "查询 missing",
+          "values": "missing",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve_memories([{\"content\":\"python agent tools\",\"importance\":2},{\"content\":\"agent memory design\",\"importance\":1},{\"content\":\"python basics\",\"importance\":3}], \"missing\", 2) == []",
+              "failure": "应按关键词重叠和重要度稳定排序，并处理无命中与非正 limit。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve_memories([], \"missing\", 2) == [] and retrieve_memories([{\"content\":\"agent tools\",\"importance\":1}], \"missing\", 0) == []",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
