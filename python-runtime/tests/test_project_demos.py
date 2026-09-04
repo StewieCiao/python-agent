@@ -66,6 +66,14 @@ class ProjectDemosTest(unittest.TestCase):
         with self.assertRaises(KeyError):
             supervisor.dispatch({"role": "unknown", "input": "x"}, {})
 
+    def test_agentic_rag_router_keeps_no_results_and_unknown_tool_failures(self):
+        router = load("agentic_rag_demo", "projects/agentic-rag-router/demo.py")
+        tools = {"search_knowledge": lambda query: [{"text": "30 天", "source": "policy.md"}]}
+        self.assertEqual(router.answer_question("退款期限", tools)["sources"], ["policy.md"])
+        self.assertEqual(router.answer_question("未知政策", {"search_knowledge": lambda query: []})["answer"], "资料不足")
+        with self.assertRaises(KeyError):
+            router.answer_question("退款期限", {})
+
 
 if __name__ == "__main__":
     unittest.main()
