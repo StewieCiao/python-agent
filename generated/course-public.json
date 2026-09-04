@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "0d65259097bf4e08093d2b107521deec6282e33177596a9329b80b6bb8544ee7",
-  "familyHash": "4b7d30611eadfdc9f147d0aba648f47945c9ac6ce60706e15856e2e3d9f3b29c",
+  "catalogHash": "7ca393567d2c4f78b48c821a1b22eebf448d2e2d24863fc3d4fafb335d3d1668",
+  "familyHash": "a32a7894195c8aee7a48606063234c25b031a96994946e5cd96e7ed4ec4fda20",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2621,6 +2621,7 @@
           },
           {
             "id": "agent-deep-research-project",
+            "familyId": "python-research-v1",
             "stageId": "python-stage-3",
             "order": 24,
             "title": "自动化 DeepResearch",
@@ -19104,6 +19105,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_key_error(lambda: build_trip(\"青岛\", {\"weather\": lambda place: {\"condition\":\"风\"}}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-research-v1": {
+      "id": "python-research-v1",
+      "lessonIds": [
+        "agent-deep-research-project"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-task-order",
+        "duplicate-source-loss"
+      ],
+      "constraints": [
+        "build sections in task order",
+        "deduplicate top-level sources"
+      ],
+      "variants": [
+        {
+          "label": "研究 Python 基础",
+          "values": "Python 基础",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"Python 基础\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"Python 基础\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"Python 基础\", [], lambda task: 1 / 0) == {\"topic\":\"Python 基础\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "研究 RAG 检索",
+          "values": "RAG 检索",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"RAG 检索\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"RAG 检索\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"RAG 检索\", [], lambda task: 1 / 0) == {\"topic\":\"RAG 检索\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "研究 Agent 工具",
+          "values": "Agent 工具",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"Agent 工具\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"Agent 工具\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"Agent 工具\", [], lambda task: 1 / 0) == {\"topic\":\"Agent 工具\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "研究 LangGraph 状态",
+          "values": "LangGraph 状态",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"LangGraph 状态\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"LangGraph 状态\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"LangGraph 状态\", [], lambda task: 1 / 0) == {\"topic\":\"LangGraph 状态\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "研究 评估指标",
+          "values": "评估指标",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"评估指标\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"评估指标\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"评估指标\", [], lambda task: 1 / 0) == {\"topic\":\"评估指标\",\"sections\":[],\"sources\":[]}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "研究 部署边界",
+          "values": "部署边界",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "build_research_report(\"部署边界\", [\"基础\", \"实践\"], lambda task: [{\"snippet\": task + \" 结果\", \"url\": task + \".md\"}]) == {\"topic\":\"部署边界\",\"sections\":[{\"title\":\"基础\",\"findings\":[\"基础 结果\"],\"sources\":[\"基础.md\"]},{\"title\":\"实践\",\"findings\":[\"实践 结果\"],\"sources\":[\"实践.md\"]}],\"sources\":[\"基础.md\",\"实践.md\"]}",
+              "failure": "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "build_research_report(\"部署边界\", [], lambda task: 1 / 0) == {\"topic\":\"部署边界\",\"sections\":[],\"sources\":[]}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

@@ -126,6 +126,7 @@ const travelCases = [
   ["上海", "晴", "外滩", 22], ["厦门", "雨", "室内馆", 18], ["成都", "阴", "熊猫基地", 20],
   ["西安", "晴", "城墙", 25], ["杭州", "多云", "西湖", 21], ["青岛", "风", "栈桥", 16],
 ] as const;
+const researchCases = ["Python 基础", "RAG 检索", "Agent 工具", "LangGraph 状态", "评估指标", "部署边界"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -310,6 +311,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `build_trip("${city}", {"weather": lambda place: {"condition":"${condition}","temperature":${temperature}}, "attraction": lambda place, weather: ["${attraction}"]}) == {"city":"${city}","weather":{"condition":"${condition}","temperature":${temperature}},"attractions":["${attraction}"],"trace":[{"tool":"weather","input":"${city}","observation":{"condition":"${condition}","temperature":${temperature}}},{"tool":"attraction","input":{"city":"${city}","condition":"${condition}"},"observation":["${attraction}"]}]}`,
       `_raises_key_error(lambda: build_trip("${city}", {"weather": lambda place: {"condition":"${condition}"}}))`,
       "应先调用 weather，再把真实 condition 传给 attraction，并按顺序保留两条 trace。",
+    ))),
+  },
+  {
+    id: "python-research-v1", lessonIds: ["agent-deep-research-project"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-task-order", "duplicate-source-loss"], constraints: ["build sections in task order", "deduplicate top-level sources"],
+    variants: researchCases.map((topic) => variant(`研究 ${topic}`, topic, twoBehaviorChecks(
+      `build_research_report("${topic}", ["基础", "实践"], lambda task: [{"snippet": task + " 结果", "url": task + ".md"}]) == {"topic":"${topic}","sections":[{"title":"基础","findings":["基础 结果"],"sources":["基础.md"]},{"title":"实践","findings":["实践 结果"],"sources":["实践.md"]}],"sources":["基础.md","实践.md"]}`,
+      `build_research_report("${topic}", [], lambda task: 1 / 0) == {"topic":"${topic}","sections":[],"sources":[]}`,
+      "应按任务顺序生成章节并保留来源；空任务不调用 search，也不生成虚假结果。",
     ))),
   },
   {
