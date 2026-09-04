@@ -42,6 +42,17 @@ test("RAG 相似度相同时保持来源输入顺序", async () => {
   assert.deepEqual(result.matches, [{ source: "first.md", score: 1 }, { source: "second.md", score: 1 }]);
 });
 
+test("RAG 在向量信号不足时保留明确关键词命中", async () => {
+  let called = false;
+  const service = createRagService({
+    embeddings: async (_profile, inputs) => inputs.map((_input, index) => index === 0 ? [1, 0] : [0, 1]),
+    chat: async () => { called = true; return "答案"; },
+  });
+  const result = await service.answer("p1", "checkpoint", [{ id: "a", text: "checkpoint 保存状态", source: "docs/a" }]);
+  assert.equal(called, true);
+  assert.deepEqual(result.sources, ["docs/a"]);
+});
+
 test("RAG 拒绝空问题或空文档，不调用模型", async () => {
   let called = false;
   const service = createRagService({ embeddings: async () => { called = true; return []; }, chat: async () => "" });

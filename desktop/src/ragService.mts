@@ -17,14 +17,25 @@ function cosine(a: number[], b: number[]): number {
   return left && right ? dot / Math.sqrt(left * right) : 0;
 }
 
+function lexicalScore(query: string, text: string): number {
+  const queryTokens = [...new Set(query.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? [])];
+  const documentTokens = new Set(text.toLocaleLowerCase().match(/[\p{L}\p{N}_]+/gu) ?? []);
+  if (queryTokens.length === 0) return 0;
+  return queryTokens.filter((token) => documentTokens.has(token)).length / queryTokens.length;
+}
+
 export function createRagService(client: Pick<ModelClient, "embeddings" | "chat">) {
   return {
     async answer(profileId: string, query: string, documents: RagDocument[]): Promise<{ answer: string; sources: string[]; matches: RagMatch[] }> {
       validateInput(query, documents);
       const vectors = await client.embeddings(profileId, [query, ...documents.map(({ text }) => text)]);
-      const ranked = documents.map((document, index) => ({ document, score: cosine(vectors[0], vectors[index + 1]) }))
-        .filter(({ score }) => score >= MIN_SIMILARITY)
-        .sort((left, right) => right.score - left.score).slice(0, 4);
+      const ranked = documents.map((document, index) => {
+        const score = cosine(vectors[0], vectors[index + 1]);
+        const lexical = lexicalScore(query, document.text);
+        return { document, score, relevance: score * 0.75 + lexical * 0.25 };
+      })
+        .filter(({ relevance }) => relevance >= MIN_SIMILARITY)
+        .sort((left, right) => right.relevance - left.relevance).slice(0, 4);
       if (ranked.length === 0) return { answer: "资料不足：没有找到达到相似度阈值的来源。", sources: [], matches: [] };
       const context = ranked.map(({ document }) => `[${document.source}]\n${document.text}`).join("\n\n");
       const messages: ModelMessage[] = [
