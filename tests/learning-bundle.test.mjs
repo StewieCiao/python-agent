@@ -975,7 +975,7 @@ test("框架项目练习包含各自用户故事且保留真实检查", async ()
 
 test("行为导向扩展课不使用占位判题表达式", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
-  const expanded = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter((lesson) => lesson.title.includes("写出可验证的实现")));
+  const expanded = authoredCatalog.tracks.flatMap(({ lessons }) => lessons.filter((lesson) => /-lesson-\d+$/.test(lesson.id)));
   assert.ok(expanded.length >= 10);
   for (const lesson of expanded) {
     assert.ok(lesson.browserChecks.every(({ expression }) => !["behavioral result", "boundary result"].includes(expression)), lesson.id);
@@ -990,7 +990,6 @@ test("Python 进阶基础主题也有独立的可执行练习", async () => {
   for (const topic of ["变量与类型", "模块拆分", "命令行工具", "并发基础"]) {
     const lesson = python.lessons.find(({ title }) => title.startsWith(topic));
     assert.ok(lesson, `缺少 ${topic} 课程`);
-    assert.match(lesson.title, /写出可验证的实现/);
     assert.ok(lesson.browserChecks.every(({ kind }) => kind === "behavior"));
   }
 });
@@ -1000,9 +999,8 @@ test("LangChain/RAG 基础主题提供独立的可执行练习", async () => {
   const track = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag");
   assert.ok(track);
   for (const topic of ["消息角色", "Prompt 模板", "结构化输出", "Runnable 组合", "模型配置", "向量存储"]) {
-    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    const lesson = track.lessons.find(({ title, id }) => title.startsWith(topic) && /-lesson-\d+$/.test(id));
     assert.ok(lesson, `缺少 ${topic} 课程`);
-    assert.match(lesson.title, /写出可验证的实现/);
     assert.ok(lesson.exercise.prompt.length >= 30);
     assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
   }
@@ -1013,7 +1011,7 @@ test("LangGraph 基础主题提供独立的可执行练习", async () => {
   const track = authoredCatalog.tracks.find(({ id }) => id === "langgraph");
   assert.ok(track);
   for (const topic of ["StateGraph", "节点与边", "Reducer", "短期记忆", "Store", "长期记忆"]) {
-    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    const lesson = track.lessons.find(({ title, id }) => title.startsWith(topic) && /-lesson-\d+$/.test(id));
     assert.ok(lesson, `缺少 ${topic} 课程`);
     assert.ok(lesson.exercise.prompt.length >= 30);
     assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
@@ -1025,7 +1023,7 @@ test("LangChain/RAG 进阶主题提供可诊断的行为练习", async () => {
   const track = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag");
   assert.ok(track);
   for (const topic of ["混合检索", "重排", "RAG 评估", "追踪与观测", "工具调用", "Agent 循环"]) {
-    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    const lesson = track.lessons.find(({ title, id }) => title.startsWith(topic) && /-lesson-\d+$/.test(id));
     assert.ok(lesson, `缺少 ${topic} 课程`);
     assert.ok(lesson.exercise.prompt.length >= 30);
     assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
@@ -1037,7 +1035,7 @@ test("LangGraph 执行主题提供恢复与组合练习", async () => {
   const track = authoredCatalog.tracks.find(({ id }) => id === "langgraph");
   assert.ok(track);
   for (const topic of ["恢复执行", "流式事件", "子图"]) {
-    const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+    const lesson = track.lessons.find(({ title, id }) => title.startsWith(topic) && /-lesson-\d+$/.test(id));
     assert.ok(lesson, `缺少 ${topic} 课程`);
     assert.ok(lesson.exercise.prompt.length >= 30);
     assert.ok(lesson.browserChecks.length >= 2 && lesson.browserChecks.every(({ kind }) => kind === "behavior"));
@@ -1054,7 +1052,7 @@ test("扩展路线的剩余主题不使用概念占位练习", async () => {
     const track = authoredCatalog.tracks.find(({ id }) => id === trackId);
     assert.ok(track);
     for (const topic of topics) {
-      const lesson = track.lessons.find(({ title }) => title.startsWith(topic) && title.includes("写出可验证的实现"));
+      const lesson = track.lessons.find(({ title, id }) => title.startsWith(topic) && /-lesson-\d+$/.test(id));
       assert.ok(lesson, `缺少 ${topic} 课程`);
       assert.ok(lesson.browserChecks.length >= 2);
     }

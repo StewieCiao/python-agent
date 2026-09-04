@@ -784,7 +784,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const guidePrompt = topicSpec.prompt;
   const checkNames = topicSpec.checks.map(({ name }) => name).join("、");
   return {
-    id, stageId, order: index + 1, title: `${topic}：写出可验证的实现`,
+    id, stageId, order: index + 1, title: topic,
     kicker: `${track.shortTitle} 学习`, summary: guideSummary, minutes: 35,
     prerequisites: previous ? [previous] : [], difficulty: index < 3 ? "beginner" : index < 8 ? "intermediate" : "advanced",
     tags: [track.id, `stage-${stageId}`], guide: [
