@@ -19,6 +19,7 @@
     "desktop:package": "npm run package --workspace @stewie/desktop",
     "desktop:typecheck": "npm run typecheck --workspace @stewie/desktop",
     "prepare:python-runtime": "node scripts/prepare-python-runtime.mjs",
+    "test:python": "node scripts/test-python-runtime.mjs",
     "smoke:packaged-python": "node --experimental-strip-types scripts/smoke-packaged-python.mjs",
     "smoke:packaged-renderer": "node scripts/smoke-packaged-renderer.mjs",
     "prepare:pyodide": "node scripts/prepare-pyodide.mjs",
