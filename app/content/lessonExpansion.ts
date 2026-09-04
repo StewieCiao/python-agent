@@ -888,7 +888,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const checkNames = topicSpec.checks.map(({ name }) => name).join("、");
   return {
     id, ...(familyId ? { familyId } : {}), stageId, order: index + 1, title: topic,
-    kicker: `${track.shortTitle} 学习`, summary: guideSummary, minutes: 35,
+    kicker: `${track.shortTitle} 学习`, summary: variant === 1 ? guideSummary : `${guideSummary} 本组把同一能力迁移到${scenario}场景，使用未出现在示例中的输入验证边界。`, minutes: 35,
     prerequisites: previous ? [previous] : [], difficulty: index < 3 ? "beginner" : index < 8 ? "intermediate" : "advanced",
     tags: [track.id, `stage-${stageId}`], guide: [
       { kind: "概念入门", title: `${baseTopic}要解决什么问题`, body: `把${scenario}中的真实任务先翻译成输入、处理和输出，再理解这个知识点：${guideSummary}`, bullets: ["找出输入契约", "标出核心状态", "说清输出形状"], example: guidePrompt },

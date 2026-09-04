@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "2845d5fb00f0a24785be6a0e3dc27f9bf193bc57ae46a7ee2eecbe9a67e8ad2b",
+  "catalogHash": "9c2cfba4424c7b1c5cdf1fab082428814c6e42885c0f3c764481c81435f49419",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -2834,7 +2834,7 @@
             "order": 26,
             "title": "字符串处理：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
+            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "agent-framework-capstone"
@@ -2923,7 +2923,7 @@
             "order": 27,
             "title": "条件分支：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
+            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-25"
@@ -3012,7 +3012,7 @@
             "order": 28,
             "title": "循环与迭代：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
+            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-26"
@@ -3101,7 +3101,7 @@
             "order": 29,
             "title": "函数参数：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
+            "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-27"
@@ -3190,7 +3190,7 @@
             "order": 30,
             "title": "作用域：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
+            "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-28"
@@ -3279,7 +3279,7 @@
             "order": 31,
             "title": "列表与切片：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
+            "summary": "用切片和步长提取数据，不修改调用者传入的原列表。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-29"
@@ -3368,7 +3368,7 @@
             "order": 32,
             "title": "字典聚合：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
+            "summary": "通过键动态聚合记录，支持题目示例之外的新类别。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-30"
@@ -3457,7 +3457,7 @@
             "order": 33,
             "title": "集合运算：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
+            "summary": "用集合表达去重与成员关系，明确是否保留顺序。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-31"
@@ -3544,7 +3544,7 @@
             "order": 34,
             "title": "异常边界：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
+            "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-32"
@@ -3638,7 +3638,7 @@
             "order": 35,
             "title": "类与对象：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
+            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-33"
@@ -3725,7 +3725,7 @@
             "order": 36,
             "title": "生成器：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
+            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-34"
@@ -3812,7 +3812,7 @@
             "order": 37,
             "title": "装饰器：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
+            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-35"
@@ -3899,7 +3899,7 @@
             "order": 38,
             "title": "模块拆分：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。",
+            "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-36"
@@ -3986,7 +3986,7 @@
             "order": 39,
             "title": "文件读写：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
+            "summary": "用上下文管理器可靠地打开、读取和关闭文件。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-37"
@@ -4073,7 +4073,7 @@
             "order": 40,
             "title": "测试设计：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
+            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-38"
@@ -4167,7 +4167,7 @@
             "order": 41,
             "title": "数据清洗：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。",
+            "summary": "把脏输入的清洗规则写成可复用步骤，并保留有效记录。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-39"
@@ -4254,7 +4254,7 @@
             "order": 42,
             "title": "命令行工具：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把命令行参数解析与业务函数分开，让入口可测试且错误明确。",
+            "summary": "把命令行参数解析与业务函数分开，让入口可测试且错误明确。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-40"
@@ -4341,7 +4341,7 @@
             "order": 43,
             "title": "并发基础：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用可观察的任务结果理解并发，不共享未经保护的可变状态。",
+            "summary": "用可观察的任务结果理解并发，不共享未经保护的可变状态。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-41"
@@ -4428,7 +4428,7 @@
             "order": 44,
             "title": "HTTP 请求与失败边界：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把 HTTP 状态、超时和响应正文作为显式结果处理，不伪造成功。",
+            "summary": "把 HTTP 状态、超时和响应正文作为显式结果处理，不伪造成功。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-42"
@@ -4522,7 +4522,7 @@
             "order": 45,
             "title": "SQLite 持久化与事务边界：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "用事务保证本地数据要么完整提交、要么回滚，不留下半成品。",
+            "summary": "用事务保证本地数据要么完整提交、要么回滚，不留下半成品。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-43"
@@ -4609,7 +4609,7 @@
             "order": 46,
             "title": "本地配置与安全边界：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "区分普通配置和敏感凭据，设计不回显、不落明文的本地接口。",
+            "summary": "区分普通配置和敏感凭据，设计不回显、不落明文的本地接口。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-44"
@@ -4696,7 +4696,7 @@
             "order": 47,
             "title": "日志与可观测性：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "记录可定位的阶段和结果，同时过滤 API Key 等敏感值。",
+            "summary": "记录可定位的阶段和结果，同时过滤 API Key 等敏感值。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-45"
@@ -4783,7 +4783,7 @@
             "order": 48,
             "title": "Agent 工具契约：课程成绩单",
             "kicker": "Python 学习",
-            "summary": "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。",
+            "summary": "把工具输入、输出和失败状态写成稳定契约，供 Agent 安全调用。 本组把同一能力迁移到课程成绩单场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-46"
@@ -4870,7 +4870,7 @@
             "order": 49,
             "title": "变量与类型：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用明确的值和类型转换表达数据契约，避免把字符串误当数字。",
+            "summary": "用明确的值和类型转换表达数据契约，避免把字符串误当数字。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-47"
@@ -4957,7 +4957,7 @@
             "order": 50,
             "title": "字符串处理：日志清洗",
             "kicker": "Python 学习",
-            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。",
+            "summary": "组合字符串方法完成清洗，同时保留输入语义和顺序。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-48"
@@ -5044,7 +5044,7 @@
             "order": 51,
             "title": "条件分支：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。",
+            "summary": "用互斥边界表达业务分类，让每个输入只落入一个结果。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-49"
@@ -5131,7 +5131,7 @@
             "order": 52,
             "title": "循环与迭代：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。",
+            "summary": "用一次清晰遍历完成筛选和汇总，并处理空输入。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-50"
@@ -5218,7 +5218,7 @@
             "order": 53,
             "title": "函数参数：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。",
+            "summary": "用默认值和关键字参数表达可选配置，保持调用意图清楚。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-51"
@@ -5305,7 +5305,7 @@
             "order": 54,
             "title": "作用域：日志清洗",
             "kicker": "Python 学习",
-            "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。",
+            "summary": "区分局部与全局名字，写出不依赖隐式全局状态的函数。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-52"
@@ -5392,7 +5392,7 @@
             "order": 55,
             "title": "列表与切片：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用切片和步长提取数据，不修改调用者传入的原列表。",
+            "summary": "用切片和步长提取数据，不修改调用者传入的原列表。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-53"
@@ -5479,7 +5479,7 @@
             "order": 56,
             "title": "字典聚合：日志清洗",
             "kicker": "Python 学习",
-            "summary": "通过键动态聚合记录，支持题目示例之外的新类别。",
+            "summary": "通过键动态聚合记录，支持题目示例之外的新类别。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-54"
@@ -5566,7 +5566,7 @@
             "order": 57,
             "title": "集合运算：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用集合表达去重与成员关系，明确是否保留顺序。",
+            "summary": "用集合表达去重与成员关系，明确是否保留顺序。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-55"
@@ -5653,7 +5653,7 @@
             "order": 58,
             "title": "异常边界：日志清洗",
             "kicker": "Python 学习",
-            "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。",
+            "summary": "只处理契约允许的异常，把真正的编程错误继续抛出。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-56"
@@ -5747,7 +5747,7 @@
             "order": 59,
             "title": "类与对象：日志清洗",
             "kicker": "Python 学习",
-            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。",
+            "summary": "把不变量和行为封装在对象中，让每个实例拥有独立状态。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-57"
@@ -5834,7 +5834,7 @@
             "order": 60,
             "title": "生成器：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。",
+            "summary": "用 yield 延迟产生值，处理大输入时只保留当前元素。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-58"
@@ -5921,7 +5921,7 @@
             "order": 61,
             "title": "装饰器：日志清洗",
             "kicker": "Python 学习",
-            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。",
+            "summary": "在不改变被装饰函数签名的前提下记录调用次数与结果。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-59"
@@ -6008,7 +6008,7 @@
             "order": 62,
             "title": "模块拆分：日志清洗",
             "kicker": "Python 学习",
-            "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。",
+            "summary": "把可复用逻辑放进模块，并通过公开函数边界传递数据。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-60"
@@ -6095,7 +6095,7 @@
             "order": 63,
             "title": "文件读写：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用上下文管理器可靠地打开、读取和关闭文件。",
+            "summary": "用上下文管理器可靠地打开、读取和关闭文件。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-61"
@@ -6182,7 +6182,7 @@
             "order": 64,
             "title": "测试设计：日志清洗",
             "kicker": "Python 学习",
-            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。",
+            "summary": "用小而明确的测试锁定行为和边界，而不是只测试一条成功路径。 本组把同一能力迁移到日志清洗场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "python-lesson-62"
@@ -9077,7 +9077,7 @@
             "order": 22,
             "title": "Prompt 模板：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。",
+            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-20"
@@ -9175,7 +9175,7 @@
             "order": 23,
             "title": "结构化输出：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
+            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-21"
@@ -9294,7 +9294,7 @@
             "order": 24,
             "title": "Runnable 组合：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
+            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-22"
@@ -9392,7 +9392,7 @@
             "order": 25,
             "title": "模型配置：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
+            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-23"
@@ -9511,7 +9511,7 @@
             "order": 26,
             "title": "文档加载：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
+            "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-24"
@@ -9609,7 +9609,7 @@
             "order": 27,
             "title": "文本切分：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
+            "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-25"
@@ -9825,7 +9825,7 @@
             "order": 29,
             "title": "向量存储：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把向量和文档元数据一起保存，检索时不丢失可引用来源。",
+            "summary": "把向量和文档元数据一起保存，检索时不丢失可引用来源。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-27"
@@ -9921,7 +9921,7 @@
             "order": 30,
             "title": "相似度检索：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "按可解释的相似度排序返回文档，并保留分数与来源。",
+            "summary": "按可解释的相似度排序返回文档，并保留分数与来源。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-28"
@@ -10038,7 +10038,7 @@
             "order": 31,
             "title": "混合检索：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。",
+            "summary": "合并关键词与向量召回并去重，避免单一检索信号遗漏结果。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-29"
@@ -10134,7 +10134,7 @@
             "order": 32,
             "title": "重排：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。",
+            "summary": "对候选文档按最终相关性重新排序，并保留原始来源字段。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-30"
@@ -10230,7 +10230,7 @@
             "order": 33,
             "title": "引用生成：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。",
+            "summary": "让回答中的引用只来自真实召回结果，并能回溯到来源。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-31"
@@ -10326,7 +10326,7 @@
             "order": 34,
             "title": "无答案边界：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "在相似度不足时停止生成，区分无资料和资料不足。",
+            "summary": "在相似度不足时停止生成，区分无资料和资料不足。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-32"
@@ -10422,7 +10422,7 @@
             "order": 35,
             "title": "RAG 评估：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。",
+            "summary": "把检索命中和答案正确性拆开测量，避免只看最终文本。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-33"
@@ -10518,7 +10518,7 @@
             "order": 36,
             "title": "追踪与观测：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。",
+            "summary": "为链路记录输入、步骤和错误，让失败可以定位而不是只剩最终文本。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-34"
@@ -10614,7 +10614,7 @@
             "order": 37,
             "title": "工具调用：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把工具参数和返回值约束为稳定结构，避免 Agent 误调用。",
+            "summary": "把工具参数和返回值约束为稳定结构，避免 Agent 误调用。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-35"
@@ -10731,7 +10731,7 @@
             "order": 38,
             "title": "Agent 循环：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "让 Agent 循环在完成或达到上限时停止，并保留每一步轨迹。",
+            "summary": "让 Agent 循环在完成或达到上限时停止，并保留每一步轨迹。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-36"
@@ -10827,7 +10827,7 @@
             "order": 39,
             "title": "多查询检索：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "从一个问题生成互补查询，再合并结果并保留来源去重。",
+            "summary": "从一个问题生成互补查询，再合并结果并保留来源去重。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-37"
@@ -10923,7 +10923,7 @@
             "order": 40,
             "title": "RAG 项目：产品支持台",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。",
+            "summary": "把检索、来源和无答案状态组合成可演示的最小 RAG 流程。 本组把同一能力迁移到产品支持台场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-38"
@@ -11019,7 +11019,7 @@
             "order": 41,
             "title": "消息角色：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "区分 system、user、assistant 消息，让提示上下文保持可预测。",
+            "summary": "区分 system、user、assistant 消息，让提示上下文保持可预测。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-39"
@@ -11136,7 +11136,7 @@
             "order": 42,
             "title": "Prompt 模板：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。",
+            "summary": "把变量插值与模板文本分开，缺少变量时尽早暴露错误。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-40"
@@ -11232,7 +11232,7 @@
             "order": 43,
             "title": "结构化输出：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。",
+            "summary": "在模型输出进入业务逻辑前验证字段和类型，拒绝模糊结果。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-41"
@@ -11349,7 +11349,7 @@
             "order": 44,
             "title": "Runnable 组合：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。",
+            "summary": "用清晰的数据形状串联步骤，并在每步返回可观察结果。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-42"
@@ -11445,7 +11445,7 @@
             "order": 45,
             "title": "模型配置：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。",
+            "summary": "把模型参数集中成可验证配置，避免把超时和随机性散落在调用点。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-43"
@@ -11562,7 +11562,7 @@
             "order": 46,
             "title": "文档加载：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。",
+            "summary": "把不同来源统一成带正文和来源 metadata 的文档记录。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-44"
@@ -11658,7 +11658,7 @@
             "order": 47,
             "title": "文本切分：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。",
+            "summary": "按可解释的边界切分长文，同时保留每个片段的来源信息。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-45"
@@ -11754,7 +11754,7 @@
             "order": 48,
             "title": "Embedding：研究资料库",
             "kicker": "LangChain / RAG 学习",
-            "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。",
+            "summary": "把文本映射为可比较的向量，并保持文本与向量的一一对应。 本组把同一能力迁移到研究资料库场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langchain-rag-lesson-46"
@@ -14259,7 +14259,7 @@
             "order": 21,
             "title": "StateGraph：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把状态模式、节点和入口组织成可读的图结构。",
+            "summary": "把状态模式、节点和入口组织成可读的图结构。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-19"
@@ -14357,7 +14357,7 @@
             "order": 22,
             "title": "节点与边：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "用节点输出和边目标描述图的下一步，而不是隐藏控制流。",
+            "summary": "用节点输出和边目标描述图的下一步，而不是隐藏控制流。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-20"
@@ -14455,7 +14455,7 @@
             "order": 23,
             "title": "状态更新：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "让节点返回局部更新，由图运行时统一合并状态。",
+            "summary": "让节点返回局部更新，由图运行时统一合并状态。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-21"
@@ -14650,7 +14650,7 @@
             "order": 25,
             "title": "循环终止：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "为循环同时设置业务完成条件和步数上限，避免图无限运行。",
+            "summary": "为循环同时设置业务完成条件和步数上限，避免图无限运行。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-23"
@@ -14746,7 +14746,7 @@
             "order": 26,
             "title": "Reducer：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把多个节点更新合并成确定的状态，明确追加与覆盖语义。",
+            "summary": "把多个节点更新合并成确定的状态，明确追加与覆盖语义。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-24"
@@ -14842,7 +14842,7 @@
             "order": 27,
             "title": "Checkpoint：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把每次图运行的状态按 thread 保存，支持读取最近检查点。",
+            "summary": "把每次图运行的状态按 thread 保存，支持读取最近检查点。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-25"
@@ -14959,7 +14959,7 @@
             "order": 28,
             "title": "thread_id：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。",
+            "summary": "用 thread_id 隔离不同会话的短期状态，恢复时只读取同一线程。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-26"
@@ -15055,7 +15055,7 @@
             "order": 29,
             "title": "短期记忆：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。",
+            "summary": "把会话上下文放在当前 thread 状态中，并在边界处明确隔离。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-27"
@@ -15172,7 +15172,7 @@
             "order": 30,
             "title": "Store：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。",
+            "summary": "用 namespace 和 key 保存跨线程资料，把长期数据与运行状态分开。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-28"
@@ -15268,7 +15268,7 @@
             "order": 31,
             "title": "长期记忆：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。",
+            "summary": "按用户身份读取跨 thread 的偏好，避免把会话 id 当作用户 id。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-29"
@@ -15385,7 +15385,7 @@
             "order": 32,
             "title": "Interrupt：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。",
+            "summary": "在高风险节点前暂停，把明确的待确认动作交还给人。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-30"
@@ -15502,7 +15502,7 @@
             "order": 33,
             "title": "恢复执行：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。",
+            "summary": "从检查点恢复时只继续同一 thread 的状态，不重复覆盖已完成步骤。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-31"
@@ -15598,7 +15598,7 @@
             "order": 34,
             "title": "流式事件：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。",
+            "summary": "按节点顺序发出状态事件，让长流程的中间结果可观察。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-32"
@@ -15694,7 +15694,7 @@
             "order": 35,
             "title": "子图：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。",
+            "summary": "把子图当作独立状态转换组合到父图，明确输入输出边界。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-33"
@@ -15790,7 +15790,7 @@
             "order": 36,
             "title": "并行分支：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。",
+            "summary": "并行执行独立节点后合并结果，明确冲突字段的覆盖顺序。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-34"
@@ -15886,7 +15886,7 @@
             "order": 37,
             "title": "Supervisor：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。",
+            "summary": "由 supervisor 根据任务类型选择专长节点，并拒绝未知角色。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-35"
@@ -15982,7 +15982,7 @@
             "order": 38,
             "title": "多 Agent 协作：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。",
+            "summary": "让多个 Agent 通过明确消息协议交接，不共享隐式可变状态。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-36"
@@ -16078,7 +16078,7 @@
             "order": 39,
             "title": "人工审核：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。",
+            "summary": "在高风险动作前把待审核状态显式交给人，而不是自动继续。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-37"
@@ -16174,7 +16174,7 @@
             "order": 40,
             "title": "Graph 项目：审核流程",
             "kicker": "LangGraph 学习",
-            "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。",
+            "summary": "把状态、路由、检查点和人工边界组合成可演示的图项目。 本组把同一能力迁移到审核流程场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-38"
@@ -16270,7 +16270,7 @@
             "order": 41,
             "title": "StateGraph：多 Agent 协作",
             "kicker": "LangGraph 学习",
-            "summary": "把状态模式、节点和入口组织成可读的图结构。",
+            "summary": "把状态模式、节点和入口组织成可读的图结构。 本组把同一能力迁移到多 Agent 协作场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-39"
@@ -16366,7 +16366,7 @@
             "order": 42,
             "title": "节点与边：多 Agent 协作",
             "kicker": "LangGraph 学习",
-            "summary": "用节点输出和边目标描述图的下一步，而不是隐藏控制流。",
+            "summary": "用节点输出和边目标描述图的下一步，而不是隐藏控制流。 本组把同一能力迁移到多 Agent 协作场景，使用未出现在示例中的输入验证边界。",
             "minutes": 35,
             "prerequisites": [
               "langgraph-lesson-40"

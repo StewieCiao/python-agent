@@ -1284,6 +1284,19 @@ test("行为导向扩展课不使用占位判题表达式", async () => {
   }
 });
 
+test("扩展课变体在课程摘要中明确场景差异", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    const variants = track.lessons.filter(({ id }) => id.endsWith("-lesson-24") || id.endsWith("-lesson-25"));
+    assert.ok(variants.length >= 1);
+    for (const lesson of variants) {
+      assert.match(lesson.summary, /本组把同一能力迁移到.+场景/);
+    }
+    const firstGenerated = track.lessons.find(({ id }) => id.endsWith("-lesson-00"));
+    if (firstGenerated) assert.doesNotMatch(firstGenerated.summary, /本组把同一能力迁移到/);
+  }
+});
+
 test("Python 进阶基础主题也有独立的可执行练习", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const python = authoredCatalog.tracks.find(({ id }) => id === "python");
