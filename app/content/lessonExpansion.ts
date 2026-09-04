@@ -1,6 +1,6 @@
 import type { CourseLesson, CourseStage, CourseTrack, CourseVideo } from "./schema.ts";
 
-type Expansion = { targetLessons: number; stageCount: number; projectCount: number; stageTitles: string[] };
+type Expansion = { targetLessons: number; stageCount: number; projectCount: number; stageTitles: string[]; familyIds?: Record<string, string> };
 
 const SOURCES: Record<CourseTrack["id"], { label: string; url: string }> = {
   python: { label: "Python 官方教程", url: "https://docs.python.org/3/tutorial/" },
@@ -770,7 +770,7 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
   },
 };
 
-function generatedLesson(track: CourseTrack, index: number, stageId: string, project: boolean): CourseLesson {
+function generatedLesson(track: CourseTrack, index: number, stageId: string, project: boolean, familyId?: string): CourseLesson {
   const source = SOURCES[track.id];
   const id = `${track.id}-lesson-${String(index).padStart(2, "0")}`;
   const previous = track.lessons[index - 1]?.id;
@@ -784,7 +784,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
   const guidePrompt = topicSpec.prompt;
   const checkNames = topicSpec.checks.map(({ name }) => name).join("、");
   return {
-    id, stageId, order: index + 1, title: topic,
+    id, ...(familyId ? { familyId } : {}), stageId, order: index + 1, title: topic,
     kicker: `${track.shortTitle} 学习`, summary: guideSummary, minutes: 35,
     prerequisites: previous ? [previous] : [], difficulty: index < 3 ? "beginner" : index < 8 ? "intermediate" : "advanced",
     tags: [track.id, `stage-${stageId}`], guide: [
@@ -803,7 +803,8 @@ export function expandCourseTrack(track: CourseTrack, expansion: Expansion): Cou
   const stageForIndex = (index: number) => stages[Math.min(stages.length - 1, Math.floor(index * stages.length / expansion.targetLessons))];
   const lessons = [...track.lessons];
   while (lessons.length < expansion.targetLessons) {
-    const nextLesson = generatedLesson(track, lessons.length, stageForIndex(lessons.length).id, false);
+    const nextId = `${track.id}-lesson-${String(lessons.length).padStart(2, "0")}`;
+    const nextLesson = generatedLesson(track, lessons.length, stageForIndex(lessons.length).id, false, expansion.familyIds?.[nextId]);
     const previousLesson = lessons[lessons.length - 1];
     if (previousLesson) nextLesson.prerequisites = [previousLesson.id];
     lessons.push(nextLesson);

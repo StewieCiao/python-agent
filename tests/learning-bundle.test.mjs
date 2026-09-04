@@ -895,6 +895,16 @@ test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async
   assert.ok(lesson.officialSources.some(({ url }) => url.includes("retrieval")));
 });
 
+test("LangChain 工具调用项目接入真实工具封装与错误边界练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag")?.lessons.find(({ id }) => id === "langchain-rag-lesson-20");
+  assert.equal(lesson?.familyId, "langchain-tool-assistant-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("call_tool"))));
+});
+
 test("LangGraph Supervisor 课明确角色路由与未知角色失败", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langgraph");

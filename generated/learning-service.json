@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "4b9c9604ffdb128446a0e52d6b765843dd16a10c19aae356624fce471eff04d3",
-  "familyHash": "89342cda2313608f2116b870085ddcb03a0ebce6691ef055fd549d4d8a129749",
+  "catalogHash": "9b50d1bfd60dde394512b06d46cbc1658a2120b6a740f76b7e8c25c1cbf5ee31",
+  "familyHash": "8ba6438e2631a94b599c67d08655a41d3ac3bd9bbb21f5617650997960c80db0",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8972,6 +8972,7 @@
           },
           {
             "id": "langchain-rag-lesson-20",
+            "familyId": "langchain-tool-assistant-v1",
             "stageId": "langchain-rag-stage-3",
             "order": 21,
             "title": "带工具调用的知识助手",
@@ -19612,6 +19613,132 @@
             {
               "name": "边界行为",
               "expression": "run_react([\"count[one]\", \"Finish[done]\"], {\"count\": lambda value: value}, max_steps=1) == {\"answer\":None,\"history\":[{\"action\":\"count\",\"input\":\"one\",\"observation\":\"one\"}],\"steps\":1}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-tool-assistant-v1": {
+      "id": "langchain-tool-assistant-v1",
+      "lessonIds": [
+        "langchain-rag-lesson-20"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "lost-tool-output",
+        "swallowed-tool-error"
+      ],
+      "constraints": [
+        "preserve tool envelope",
+        "expose unknown tool errors"
+      ],
+      "variants": [
+        {
+          "label": "search(RAG)",
+          "values": "search / RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"search\": lambda value: value.upper()}, \"search\", \"RAG\") == {\"name\":\"search\",\"input\":\"RAG\",\"observation\":\"RAG\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"RAG\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "weather(成都)",
+          "values": "weather / 成都",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"weather\": lambda value: value.upper()}, \"weather\", \"成都\") == {\"name\":\"weather\",\"input\":\"成都\",\"observation\":\"成都\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"成都\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "calendar(周五)",
+          "values": "calendar / 周五",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"calendar\": lambda value: value.upper()}, \"calendar\", \"周五\") == {\"name\":\"calendar\",\"input\":\"周五\",\"observation\":\"周五\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"周五\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "lookup(LangGraph)",
+          "values": "lookup / LangGraph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"lookup\": lambda value: value.upper()}, \"lookup\", \"LangGraph\") == {\"name\":\"lookup\",\"input\":\"LangGraph\",\"observation\":\"LANGGRAPH\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"LangGraph\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "summarize(资料)",
+          "values": "summarize / 资料",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"summarize\": lambda value: value.upper()}, \"summarize\", \"资料\") == {\"name\":\"summarize\",\"input\":\"资料\",\"observation\":\"资料\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"资料\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "status(ready)",
+          "values": "status / ready",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "call_tool({\"status\": lambda value: value.upper()}, \"status\", \"ready\") == {\"name\":\"status\",\"input\":\"ready\",\"observation\":\"READY\"}",
+              "failure": "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"ready\"))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

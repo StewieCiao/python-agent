@@ -139,6 +139,10 @@ const textAnalysisCases = [
   ["Py PY code", 3, 2, "py"], ["RAG docs docs", 3, 2, "docs"], ["agent tool", 2, 2, "agent"],
   ["graph graph state", 3, 2, "graph"], ["learn build build", 3, 2, "build"], ["one two three", 3, 3, "one"],
 ] as const;
+const ragToolCases = [
+  ["search", "RAG"], ["weather", "成都"], ["calendar", "周五"],
+  ["lookup", "LangGraph"], ["summarize", "资料"], ["status", "ready"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -359,6 +363,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `run_react(["${tool}[${input}]", "Finish[done]"], {"${tool}": lambda value: value.upper()}, 2) == {"answer":"done","history":[{"action":"${tool}","input":"${input}","observation":"${input.toUpperCase()}"}],"steps":2}`,
       `run_react(["${tool}[one]", "Finish[done]"], {"${tool}": lambda value: value}, max_steps=1) == {"answer":None,"history":[{"action":"${tool}","input":"one","observation":"one"}],"steps":1}`,
       "应按动作顺序调用真实工具、记录 observation；达到 max_steps 后不能继续读取 Finish。",
+    ))),
+  },
+  {
+    id: "langchain-tool-assistant-v1", lessonIds: ["langchain-rag-lesson-20"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["lost-tool-output", "swallowed-tool-error"], constraints: ["preserve tool envelope", "expose unknown tool errors"],
+    variants: ragToolCases.map(([name, payload]) => variant(`${name}(${payload})`, `${name} / ${payload}`, twoBehaviorChecks(
+      `call_tool({"${name}": lambda value: value.upper()}, "${name}", "${payload}") == {"name":"${name}","input":"${payload}","observation":"${payload.toUpperCase()}"}`,
+      `_raises_key_error(lambda: call_tool({}, "missing", "${payload}"))`,
+      "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
     ))),
   },
   {
