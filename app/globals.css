@@ -683,6 +683,24 @@ textarea:focus-visible {
   font-size: 11px;
 }
 
+.catalog-personalized {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.catalog-personalized > div:first-child { display: grid; gap: 4px; }
+.catalog-personalized small { color: var(--muted); line-height: 1.5; }
+.catalog-personalized > button,
+.catalog-personalized-result > button { justify-self: start; }
+.catalog-personalized p { margin: 0; color: #a3543d; font-size: 12px; }
+.catalog-personalized-result { display: grid; gap: 8px; }
+.catalog-personalized-result > span { color: var(--accent); font-size: 12px; }
+.catalog-personalized-result > strong { line-height: 1.5; }
+.catalog-personalized-result pre { margin: 0; max-height: 180px; overflow: auto; }
+
 .hint-section {
   margin-top: 14px;
 }

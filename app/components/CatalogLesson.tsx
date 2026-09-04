@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { CourseLesson, CourseTrack } from "../content/schema";
+import { loadPersonalizedExercise } from "../lib/platformBridge";
 
 export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete }: {
   track: CourseTrack;
@@ -12,7 +13,32 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
 }) {
   const [code, setCode] = useState(lesson.exercise.starterCode);
   const [showSolution, setShowSolution] = useState(false);
+  const [personalized, setPersonalized] = useState<{ prompt: string; starterCode: string; hints: string[]; recommendation: string } | null>(null);
+  const [personalizedStatus, setPersonalizedStatus] = useState("");
+  const [personalizedLoading, setPersonalizedLoading] = useState(false);
   const prerequisiteTitles = (lesson.prerequisites ?? []).map((id) => track.lessons.find((item) => item.id === id)?.title ?? id);
+
+  async function requestPersonalized() {
+    if (!lesson.familyId) return;
+    setPersonalizedLoading(true);
+    setPersonalizedStatus("");
+    try {
+      const result = await loadPersonalizedExercise(lesson.id, Date.now());
+      setPersonalized({
+        prompt: result.exercise.prompt,
+        starterCode: result.exercise.starterCode,
+        hints: result.exercise.hints,
+        recommendation: result.recommendation.mistakeCodes.length > 0
+          ? `根据错题模式：${result.recommendation.mistakeCodes.join("、")}`
+          : "根据当前练习 family 推荐",
+      });
+    } catch (error) {
+      setPersonalized(null);
+      setPersonalizedStatus(error instanceof Error ? error.message : String(error));
+    } finally {
+      setPersonalizedLoading(false);
+    }
+  }
 
   return (
     <div className="catalog-grid">
@@ -67,6 +93,18 @@ export function CatalogLesson({ track, lesson, onOpenChat, completed, onComplete
           <div className="practice-actions"><button onClick={() => setCode(lesson.exercise.starterCode)} type="button">重置</button><button className="primary-action" onClick={() => setShowSolution((current) => !current)} type="button">{showSolution ? "隐藏参考答案" : "查看参考答案"}</button></div>
           {showSolution && <pre className="solution-block"><code>{lesson.exercise.solution}</code></pre>}
           <p className="practice-note">此编辑器用于整理练习；涉及 LangChain/LangGraph 依赖的代码请在你的项目环境运行，本站不会伪造执行结果。</p>
+          {lesson.familyId && <div className="catalog-personalized">
+            <div><strong>根据错题生成一题</strong><small>仅使用本机错误模式，不发送代码或 API Key。</small></div>
+            <button disabled={personalizedLoading} onClick={() => void requestPersonalized()} type="button">{personalizedLoading ? "生成中…" : "生成个性题"}</button>
+            {personalizedStatus && <p role="alert">个性题生成失败：{personalizedStatus}</p>}
+            {personalized && <div className="catalog-personalized-result">
+              <span>{personalized.recommendation}</span>
+              <strong>{personalized.prompt}</strong>
+              <pre><code>{personalized.starterCode}</code></pre>
+              {personalized.hints.map((hint) => <small key={hint}>提示：{hint}</small>)}
+              <button onClick={() => { setCode(personalized.starterCode); setShowSolution(false); }} type="button">载入编辑器</button>
+            </div>}
+          </div>}
         </div>
         <button className="chat-launch" onClick={onOpenChat} type="button"><span>AI</span><div><strong>问课程导师</strong><small>携带当前课程上下文</small></div>→</button>
       </aside>
