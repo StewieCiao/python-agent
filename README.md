@@ -56,6 +56,9 @@ npm run desktop:make
 
 ```bash
 npm test
+npm run test:python
 npm run lint
 npm run build
 ```
+
+`npm run test:python` 使用项目内置的 Python 3.13.15 运行时；若尚未准备运行时，先执行 `npm run prepare:python-runtime`。
