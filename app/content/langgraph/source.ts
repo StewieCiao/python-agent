@@ -186,6 +186,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "long-term-store",
+      familyId: "langgraph-store-v1",
       title: "Store 与跨线程长期记忆",
       summary: "使用 namespace/key 保存用户资料、偏好或可检索记忆。",
       minutes: 65,
@@ -239,9 +240,9 @@ export const langgraphTrack: LearningTrack = {
         verifiedVersions: VERIFIED_VERSIONS,
       }],
       exercise: {
-        prompt: "输入是 user_id、namespace、key 和 value；输出是从 Store 读取的 profile。请用字典模拟跨 thread 的 Store：namespace 必须包含 user_id，按 (namespace, key) 写入并读取 value，不要把 thread_id 当作用户身份。",
-        starterCode: `user_id = "stewie"\nnamespace = (user_id, "profile")\nkey = "current"\nvalue = {"language": "zh-CN"}\nstore = {}\nprofile = None`,
-        solution: `user_id = "stewie"\nnamespace = (user_id, "profile")\nkey = "current"\nvalue = {"language": "zh-CN"}\nstore = {}\nstore[(namespace, key)] = value\nprofile = store[(namespace, key)]`,
+        prompt: "实现 read_store(store, user_id, key)：只读取 (user_id, 'profile') 命名空间中的 key；不存在时返回 None，不能读取其他用户的数据。",
+        starterCode: `def read_store(store, user_id, key):\n    pass\n`,
+        solution: `def read_store(store, user_id, key):\n    return store.get((user_id, "profile"), {}).get(key)\n`,
       },
     },
     {

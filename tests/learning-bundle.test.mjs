@@ -364,12 +364,10 @@ test("LangGraph 持久化代表课明确 thread 恢复与隔离", async () => {
 test("LangGraph Store 代表课使用可执行的 namespace/key 存取契约", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph").lessons.find(({ id }) => id === "long-term-store");
-  assert.match(lesson.exercise.prompt, /输入是.*user_id.*namespace.*key.*value/);
-  assert.match(lesson.exercise.prompt, /输出是.*profile/);
-  assert.match(lesson.exercise.starterCode, /store = \{\}/);
-  assert.match(lesson.exercise.solution, /store\[\(namespace, key\)\] = value/);
-  assert.match(lesson.exercise.solution, /profile = store\[\(namespace, key\)\]/);
-  assert.match(lesson.browserChecks[1].expression, /store\[\(namespace, key\)\]/);
+  assert.match(lesson.exercise.prompt, /read_store.*user_id.*key/);
+  assert.match(lesson.exercise.starterCode, /def read_store\(store, user_id, key\)/);
+  assert.match(lesson.exercise.solution, /store\.get\(\(user_id, [\"']profile/);
+  assert.ok(lesson.browserChecks.some(({ expression }) => expression.includes("read_store")));
 });
 
 test("LangGraph 中断代表课保留真实事件顺序和审批状态", async () => {
@@ -623,6 +621,17 @@ test("LangChain 结构化输出课接入可轮换的个性化练习 family", asy
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   const track = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag");
   const lesson = track?.lessons.find(({ id }) => id === "structured-output");
+  assert.ok(lesson?.familyId);
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
+});
+
+test("LangGraph Store 课接入可轮换的个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "langgraph");
+  const lesson = track?.lessons.find(({ id }) => id === "long-term-store");
   assert.ok(lesson?.familyId);
   const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
   assert.ok(family);

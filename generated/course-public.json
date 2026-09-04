@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "f8b4ceddf08166e98c6bec3ea47da1553e676173b50219b9ba34bfe07f8e1b96",
-  "familyHash": "bc83318d61305ee2e7fd3a4b1b27ed9327dcbd824ed73bbadf233cb7b7e2cffd",
+  "catalogHash": "62c515de85674018bd4f97a0b6ec4d633ddb05cd9525a7c16dfee4a0e4260fd2",
+  "familyHash": "8f38bfdd91ff97f4833092f8ebeb00e7d17ac17df465196b0effa5d93eac5022",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12157,6 +12157,7 @@
           },
           {
             "id": "long-term-store",
+            "familyId": "langgraph-store-v1",
             "stageId": "langgraph-stage-1",
             "order": 4,
             "title": "Store 与跨线程长期记忆",
@@ -12256,26 +12257,26 @@
               "subgraphs-parallelism"
             ],
             "exercise": {
-              "prompt": "输入是 user_id、namespace、key 和 value；输出是从 Store 读取的 profile。请用字典模拟跨 thread 的 Store：namespace 必须包含 user_id，按 (namespace, key) 写入并读取 value，不要把 thread_id 当作用户身份。",
-              "starterCode": "user_id = \"stewie\"\nnamespace = (user_id, \"profile\")\nkey = \"current\"\nvalue = {\"language\": \"zh-CN\"}\nstore = {}\nprofile = None",
+              "prompt": "实现 read_store(store, user_id, key)：只读取 (user_id, 'profile') 命名空间中的 key；不存在时返回 None，不能读取其他用户的数据。",
+              "starterCode": "def read_store(store, user_id, key):\n    pass\n",
               "hints": [
                 "先确定 namespace、key 和 value。",
                 "把 user_id 与 thread_id 分开。",
                 "分别验证覆盖更新和缺失记录。"
               ],
-              "solution": "user_id = \"stewie\"\nnamespace = (user_id, \"profile\")\nkey = \"current\"\nvalue = {\"language\": \"zh-CN\"}\nstore = {}\nstore[(namespace, key)] = value\nprofile = store[(namespace, key)]"
+              "solution": "def read_store(store, user_id, key):\n    return store.get((user_id, \"profile\"), {}).get(key)\n"
             },
             "browserChecks": [
               {
                 "name": "用户命名空间",
-                "expression": "namespace[0] == user_id",
+                "expression": "read_store({(\"u1\", \"profile\"): {\"language\": \"zh-CN\"}}, \"u1\", \"language\") == \"zh-CN\"",
                 "failure": "长期记忆应按 user_id 隔离。",
-                "kind": "structure"
+                "kind": "behavior"
               },
               {
-                "name": "跨线程读取",
-                "expression": "store[(namespace, key)] == value",
-                "failure": "Store 应能按 namespace/key 读取值。",
+                "name": "跨用户隔离",
+                "expression": "read_store({(\"u1\", \"profile\"): {\"language\": \"zh-CN\"}}, \"u2\", \"language\") is None",
+                "failure": "Store 不应读取其他用户的值。",
                 "kind": "behavior"
               }
             ]
@@ -18074,6 +18075,132 @@
             {
               "name": "边界行为",
               "expression": "validate_answer({\"summary\":\"说明\"}) is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-store-v1": {
+      "id": "langgraph-store-v1",
+      "lessonIds": [
+        "long-term-store"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-namespace",
+        "cross-user-memory"
+      ],
+      "constraints": [
+        "scope by user_id",
+        "return None for missing keys"
+      ],
+      "variants": [
+        {
+          "label": "u-1 / dark",
+          "values": "u-1 / dark",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"u-1\", \"profile\"): {\"language\": \"dark\"}}, \"u-1\", \"language\") == \"dark\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"u-1\", \"profile\"): {\"language\": \"dark\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "u-2 / zh-CN",
+          "values": "u-2 / zh-CN",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"u-2\", \"profile\"): {\"language\": \"zh-CN\"}}, \"u-2\", \"language\") == \"zh-CN\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"u-2\", \"profile\"): {\"language\": \"zh-CN\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "researcher / python",
+          "values": "researcher / python",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"researcher\", \"profile\"): {\"language\": \"python\"}}, \"researcher\", \"language\") == \"python\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"researcher\", \"profile\"): {\"language\": \"python\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "reviewer / graph",
+          "values": "reviewer / graph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"reviewer\", \"profile\"): {\"language\": \"graph\"}}, \"reviewer\", \"language\") == \"graph\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"reviewer\", \"profile\"): {\"language\": \"graph\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "u-5 / beginner",
+          "values": "u-5 / beginner",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"u-5\", \"profile\"): {\"language\": \"beginner\"}}, \"u-5\", \"language\") == \"beginner\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"u-5\", \"profile\"): {\"language\": \"beginner\"}}, \"other-user\", \"language\") is None",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "guest / en",
+          "values": "guest / en",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "read_store({(\"guest\", \"profile\"): {\"language\": \"en\"}}, \"guest\", \"language\") == \"en\"",
+              "failure": "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "read_store({(\"guest\", \"profile\"): {\"language\": \"en\"}}, \"other-user\", \"language\") is None",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

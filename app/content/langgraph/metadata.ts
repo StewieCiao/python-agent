@@ -38,8 +38,8 @@ export const langgraphChecks: Record<string, NonNullable<LearningLesson["browser
     { name: "恢复状态", expression: "resumed_state == saved_state", failure: "同一线程恢复时应读回检查点状态。", kind: "behavior" },
   ],
   "long-term-store": [
-    { name: "用户命名空间", expression: "namespace[0] == user_id", failure: "长期记忆应按 user_id 隔离。", kind: "structure" },
-    { name: "跨线程读取", expression: "store[(namespace, key)] == value", failure: "Store 应能按 namespace/key 读取值。", kind: "behavior" },
+    { name: "用户命名空间", expression: "read_store({(\"u1\", \"profile\"): {\"language\": \"zh-CN\"}}, \"u1\", \"language\") == \"zh-CN\"", failure: "长期记忆应按 user_id 隔离。", kind: "behavior" },
+    { name: "跨用户隔离", expression: "read_store({(\"u1\", \"profile\"): {\"language\": \"zh-CN\"}}, \"u2\", \"language\") is None", failure: "Store 不应读取其他用户的值。", kind: "behavior" },
   ],
   "streaming-interrupts": [
     { name: "事件顺序", expression: "events[0][\"node\"] != events[-1][\"node\"]", failure: "流式事件应保留节点执行顺序。", kind: "behavior" },

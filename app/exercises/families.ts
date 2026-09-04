@@ -51,6 +51,10 @@ const structuredCases = [
   ["答案", 0.9, "ok"], ["摘要", 0.6, "ok"], ["结论", 1, "ok"],
   ["警告", -0.1, "invalid"], ["证据", 1.1, "invalid"], ["说明", "high", "invalid"],
 ] as const;
+const storeCases = [
+  ["u-1", "dark"], ["u-2", "zh-CN"], ["researcher", "python"],
+  ["reviewer", "graph"], ["u-5", "beginner"], ["guest", "en"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -163,6 +167,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `validate_answer({"summary":"${summary}","confidence":${typeof confidence === "string" ? `"${confidence}"` : confidence}}) == ${expected === "ok" ? "True" : "False"}`,
       `validate_answer({"summary":"${summary}"}) is False`,
       "结构化结果必须包含 summary 和 confidence，且 confidence 必须是 0 到 1 的数字。",
+    ))),
+  },
+  {
+    id: "langgraph-store-v1", lessonIds: ["long-term-store"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-namespace", "cross-user-memory"], constraints: ["scope by user_id", "return None for missing keys"],
+    variants: storeCases.map(([userId, language]) => variant(`${userId} / ${language}`, `${userId} / ${language}`, twoBehaviorChecks(
+      `read_store({("${userId}", "profile"): {"language": "${language}"}}, "${userId}", "language") == "${language}"`,
+      `read_store({("${userId}", "profile"): {"language": "${language}"}}, "other-user", "language") is None`,
+      "长期记忆必须按 user_id 隔离 namespace；缺失用户不能读取别人的资料。",
     ))),
   },
 ];
