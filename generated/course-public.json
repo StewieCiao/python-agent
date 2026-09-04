@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "09ff98323861af61d0bf5533e44e23892128f4779f41cd040471c730e10b757d",
-  "familyHash": "1129c1607f443e9dbc56d312a73e60674d5296617fa2a25df51085bd2ac29116",
+  "catalogHash": "90c19ec9b15d810905fa0b8546b622c9453129b61031acc71fa47568ebd7a409",
+  "familyHash": "188ffe3ea93dca2afdc891b07ef728bd7de178420eece1dac39000f71b249daf",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -13781,6 +13781,7 @@
           },
           {
             "id": "langgraph-lesson-17",
+            "familyId": "langgraph-dispatch-project-v1",
             "stageId": "langgraph-stage-3",
             "order": 18,
             "title": "多 Agent 协作调度器",
@@ -20119,6 +20120,132 @@
             {
               "name": "边界行为",
               "expression": "review_gate(\"merge_branch\", \"reject\") == {\"status\":\"cancelled\",\"action\":\"merge_branch\"} and _raises_value_error(lambda: review_gate(\"merge_branch\", \"later\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-dispatch-project-v1": {
+      "id": "langgraph-dispatch-project-v1",
+      "lessonIds": [
+        "langgraph-lesson-17"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-worker-route",
+        "lost-worker-result"
+      ],
+      "constraints": [
+        "route by role",
+        "preserve worker result"
+      ],
+      "variants": [
+        {
+          "label": "search(RAG)",
+          "values": "search / RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"search\",\"input\":\"RAG\"}], {\"search\": lambda value: value + \"!\"}) == [{\"role\":\"search\",\"result\":\"RAG!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"RAG\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "write(摘要)",
+          "values": "write / 摘要",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"write\",\"input\":\"摘要\"}], {\"write\": lambda value: value + \"!\"}) == [{\"role\":\"write\",\"result\":\"摘要!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"摘要\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "review(草稿)",
+          "values": "review / 草稿",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"review\",\"input\":\"草稿\"}], {\"review\": lambda value: value + \"!\"}) == [{\"role\":\"review\",\"result\":\"草稿!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"草稿\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "plan(步骤)",
+          "values": "plan / 步骤",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"plan\",\"input\":\"步骤\"}], {\"plan\": lambda value: value + \"!\"}) == [{\"role\":\"plan\",\"result\":\"步骤!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"步骤\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "code(测试)",
+          "values": "code / 测试",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"code\",\"input\":\"测试\"}], {\"code\": lambda value: value + \"!\"}) == [{\"role\":\"code\",\"result\":\"测试!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"测试\"}], {}))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "publish(报告)",
+          "values": "publish / 报告",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "dispatch([{\"role\":\"publish\",\"input\":\"报告\"}], {\"publish\": lambda value: value + \"!\"}) == [{\"role\":\"publish\",\"result\":\"报告!\"}]",
+              "failure": "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_key_error(lambda: dispatch([{\"role\":\"missing\",\"input\":\"报告\"}], {}))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

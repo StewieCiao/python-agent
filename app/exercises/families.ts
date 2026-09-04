@@ -147,6 +147,10 @@ const ragRunCases = [
   [10, 20, 1], [5, 15, 0], [30, 45, 2], [8, 12, 1], [100, 120, 0], [18, 22, 2],
 ] as const;
 const projectReviewCases = ["send_report", "publish_note", "delete_record", "export_data", "reset_access", "merge_branch"] as const;
+const dispatchCases = [
+  ["search", "RAG"], ["write", "摘要"], ["review", "草稿"],
+  ["plan", "步骤"], ["code", "测试"], ["publish", "报告"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -403,6 +407,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `review_gate("${action}", "approve") == {"status":"approved","action":"${action}"}`,
       `review_gate("${action}", "reject") == {"status":"cancelled","action":"${action}"} and _raises_value_error(lambda: review_gate("${action}", "later"))`,
       "审核必须保留原动作；批准、拒绝和未知决定都要有明确且可观察的结果。",
+    ))),
+  },
+  {
+    id: "langgraph-dispatch-project-v1", lessonIds: ["langgraph-lesson-17"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-worker-route", "lost-worker-result"], constraints: ["route by role", "preserve worker result"],
+    variants: dispatchCases.map(([role, input]) => variant(`${role}(${input})`, `${role} / ${input}`, twoBehaviorChecks(
+      `dispatch([{"role":"${role}","input":"${input}"}], {"${role}": lambda value: value + "!"}) == [{"role":"${role}","result":"${input}!"}]`,
+      `_raises_key_error(lambda: dispatch([{"role":"missing","input":"${input}"}], {}))`,
+      "调度器必须按任务 role 调用对应 worker，保留真实结果；未知角色应明确失败。",
     ))),
   },
   {
