@@ -88,6 +88,10 @@ const gradeCases = [
   ["59, 60, 90", "C, B, A"], ["0, 89, 100", "C, B, A"], ["30, 75, 95", "C, B, A"],
   ["58, 60, 89", "C, B, B"], ["1, 88, 90", "C, B, A"], ["-5, 60, 120", "C, B, A"],
 ] as const;
+const shippingCases = [
+  [20, "True", 0], [99, "False", 0], [40, "False", 10],
+  [150, "False", 0], [1, "False", 10], [98.99, "False", 10],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -164,6 +168,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `list(map(grade, [${scores}])) == [${expected.split(", ").map((item) => `"${item}"`).join(", ")}]`,
       "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
       "应按题目边界为每个分数返回正确等级，不能遗漏区间。",
+    ))),
+  },
+  {
+    id: "python-functions-v1", lessonIds: ["functions"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["printed-instead-of-returned", "wrong-or-boundary"], constraints: ["return numeric fee", "capture output during invocation"],
+    variants: shippingCases.map(([price, member, expected]) => variant(`${price} / member=${member}`, `${price}, ${member}`, twoBehaviorChecks(
+      `_silent_call(shipping_fee, ${price}, ${member}) == (${expected}, "")`,
+      `_silent_call(shipping_fee, 99, False) == (0, "") and _silent_call(shipping_fee, 37, False) == (10, "")`,
+      "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
     ))),
   },
   {

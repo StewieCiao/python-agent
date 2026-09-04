@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "3639c5871d73565cfa3f27daa69689660c1a50a068464c404a2e2d006faf563a",
-  "familyHash": "e779d4f3ecd651ac1404e19e77271d4002775812a75c985193d744cdf53463b1",
+  "catalogHash": "bb12f26c37cf7b07ac9b2cb4964c7afba7a1b3a4241b3c89a0cfa384a83d5853",
+  "familyHash": "fdf6430ed0033e016f43c0efdf8a605a46d065403714801ca6f9936649965f6f",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -683,6 +683,7 @@
           },
           {
             "id": "functions",
+            "familyId": "python-functions-v1",
             "stageId": "python-stage-1",
             "order": 6,
             "title": "封装一条规则",
@@ -17580,6 +17581,132 @@
             {
               "name": "边界行为",
               "expression": "grade(59) == \"C\" and grade(60) == \"B\" and grade(90) == \"A\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-functions-v1": {
+      "id": "python-functions-v1",
+      "lessonIds": [
+        "functions"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "printed-instead-of-returned",
+        "wrong-or-boundary"
+      ],
+      "constraints": [
+        "return numeric fee",
+        "capture output during invocation"
+      ],
+      "variants": [
+        {
+          "label": "20 / member=True",
+          "values": "20, True",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 20, True) == (0, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "99 / member=False",
+          "values": "99, False",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "40 / member=False",
+          "values": "40, False",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 40, False) == (10, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "150 / member=False",
+          "values": "150, False",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 150, False) == (0, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "1 / member=False",
+          "values": "1, False",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 1, False) == (10, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "98.99 / member=False",
+          "values": "98.99, False",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "_silent_call(shipping_fee, 98.99, False) == (10, \"\")",
+              "failure": "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

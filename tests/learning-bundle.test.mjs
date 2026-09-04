@@ -721,6 +721,16 @@ test("Python 分支课接入多组边界个性化练习 family", async () => {
   assert.ok(family.variants.every(({ checks }) => checks.every(({ kind }) => kind === "behavior")));
 });
 
+test("Python 函数课接入调用期输出捕获个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "functions");
+  assert.equal(lesson?.familyId, "python-functions-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("_silent_call"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
