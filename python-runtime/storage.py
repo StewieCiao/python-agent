@@ -1,5 +1,6 @@
 import base64
 import binascii
+import hashlib
 import json
 import re
 import sqlite3
@@ -494,6 +495,37 @@ class Storage:
             }
             for row in rows
         ]
+
+    def save_rag_documents(self, documents):
+        if not isinstance(documents, list) or not documents:
+            raise ValueError("RAG 文档必须是非空数组")
+        for document in documents:
+            if (
+                not isinstance(document, dict)
+                or set(document) != {"id", "text", "source"}
+                or not all(isinstance(document[field], str) and document[field].strip() for field in ("id", "text", "source"))
+            ):
+                raise ValueError("RAG 文档字段无效")
+        saved = 0
+        imported_at = datetime.now(timezone.utc).isoformat()
+        with self.connection:
+            for document in documents:
+                content_hash = hashlib.sha256(document["text"].encode("utf-8")).hexdigest()
+                cursor = self.connection.execute(
+                    """
+                    INSERT OR IGNORE INTO rag_documents (id, source, text, content_hash, imported_at)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (document["id"], document["source"], document["text"], content_hash, imported_at),
+                )
+                saved += cursor.rowcount
+        return {"saved": saved}
+
+    def list_rag_documents(self):
+        rows = self.connection.execute(
+            "SELECT id, source, text FROM rag_documents ORDER BY imported_at DESC, rowid DESC"
+        ).fetchall()
+        return [{"id": row["id"], "text": row["text"], "source": row["source"]} for row in rows]
 
     def next_personalized_exercise(self, learning_bundle, lesson_id, seed):
         events = [

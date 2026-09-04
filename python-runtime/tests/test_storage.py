@@ -83,7 +83,7 @@ class StorageTest(unittest.TestCase):
         with sqlite3.connect(self.database_path) as connection:
             self.assertEqual(
                 connection.execute("SELECT version FROM schema_migrations").fetchall(),
-            [(1,), (2,), (3,), (4,), (5,)],
+            [(1,), (2,), (3,), (4,), (5,), (6,)],
             )
 
     def test_origin_change_clears_old_ciphertext_and_active_profile_is_unique(self):
@@ -217,10 +217,25 @@ class StorageTest(unittest.TestCase):
         }
         self.assertEqual(self.storage.record_rag_evaluation(record), {"recorded": True})
         self.assertEqual(self.storage.list_rag_evaluations(), [{"id": 1, **record}])
-
         invalid = {**record, "documentHash": "not-a-hash"}
         with self.assertRaisesRegex(ValueError, "RAG 评测记录字段无效"):
             self.storage.record_rag_evaluation(invalid)
+
+    def test_rag_documents_save_list_and_deduplicate_by_content(self):
+        documents = [
+            {"id": "notes.md", "text": "LangGraph 状态图", "source": "notes.md"},
+            {"id": "notes.md#page=2", "text": "持久化检查点", "source": "notes.md · 第 2 页"},
+        ]
+        self.assertEqual(self.storage.save_rag_documents(documents), {"saved": 2})
+        self.assertEqual(self.storage.save_rag_documents([documents[0]]), {"saved": 0})
+        saved = self.storage.list_rag_documents()
+        self.assertEqual(len(saved), 2)
+        self.assertEqual(saved[0]["text"], documents[1]["text"])
+        self.assertEqual(saved[1]["source"], documents[0]["source"])
+
+    def test_rag_documents_reject_invalid_fields(self):
+        with self.assertRaisesRegex(ValueError, "RAG 文档字段无效"):
+            self.storage.save_rag_documents([{"id": "x", "text": "", "source": "x"}])
 
     def test_clear_chat_history_does_not_touch_other_lessons(self):
         message = [{"role": "user", "content": "保留", "createdAt": "2026-09-02T10:00:00+00:00"}]

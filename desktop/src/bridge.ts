@@ -3,7 +3,7 @@ import type { ModelProfileInput, PublicModelProfile } from "../../app/lib/modelC
 import type { ModelMessage } from "./modelClient.mjs";
 import type { RagDocument, RagMatch } from "./ragService.mjs";
 import type { RagEvaluationCase, RagEvaluationResult } from "./ragEvaluation.mjs";
-import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState, RagEvaluationRecord, TutorGraphState, TutorPlan } from "./pythonService.mjs";
+import type { LegacyConversation, MasteryEvent, MasteryResult, PersonalizedExerciseResult, PythonChatMessage, PythonLearningState, RagEvaluationRecord, SavedRagDocument, TutorGraphState, TutorPlan } from "./pythonService.mjs";
 
 export type DesktopAppInfo = {
   name: string;
@@ -42,6 +42,8 @@ export type StewieDesktopBridge = {
   evaluateRag(input: { profileId: string; cases: RagEvaluationCase[]; documents: RagDocument[] }): Promise<DesktopIpcResult<RagEvaluationResult>>;
   listRagEvaluations(): Promise<DesktopIpcResult<RagEvaluationRecord[]>>;
   selectRagDocuments(): Promise<DesktopIpcResult<RagDocument[]>>;
+  saveRagDocuments(documents: RagDocument[]): Promise<DesktopIpcResult<{ saved: number }>>;
+  listRagDocuments(): Promise<DesktopIpcResult<SavedRagDocument[]>>;
   getLearningState(): Promise<DesktopIpcResult<PythonLearningState>>;
   saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;
   recordMasteryAttempt(event: MasteryEvent): Promise<DesktopIpcResult<{ recorded: true }>>;

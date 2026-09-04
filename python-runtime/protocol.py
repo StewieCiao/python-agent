@@ -28,6 +28,8 @@ METHOD_PARAMS = {
     "tutor.validate": {"state"},
     "personalization.next": {"lessonId", "seed"},
     "documents.parse": {"paths"},
+    "documents.save": {"documents"},
+    "documents.list": set(),
     "rag.evaluation.list": set(),
     "rag.evaluation.record": {"record"},
 }
@@ -100,6 +102,8 @@ def decode_request(frame):
         raise ProtocolError("personalization.next 参数无效")
     if request["method"] == "documents.parse" and (not isinstance(params["paths"], list) or not params["paths"] or len(params["paths"]) > 10 or not all(isinstance(path, str) and path for path in params["paths"])):
         raise ProtocolError("documents.parse 的 paths 必须是 1–10 个非空路径")
+    if request["method"] == "documents.save" and (not isinstance(params["documents"], list) or not params["documents"]):
+        raise ProtocolError("documents.save 的 documents 必须是非空数组")
     if request["method"] == "rag.evaluation.record" and not isinstance(params["record"], dict):
         raise ProtocolError("rag.evaluation.record 的 record 必须是对象")
     return request

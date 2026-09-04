@@ -100,10 +100,14 @@ class ProtocolTest(unittest.TestCase):
             decode_request(json.dumps({"id": "r2", "method": "rag.evaluation.record", "params": {"record": {}}}))["params"],
             {"record": {}},
         )
+        self.assertEqual(decode_request(json.dumps({"id": "d2", "method": "documents.save", "params": {"documents": [{"id": "a", "text": "b", "source": "a"}]}}))["method"], "documents.save")
+        self.assertEqual(decode_request(json.dumps({"id": "d3", "method": "documents.list", "params": {}}))["method"], "documents.list")
         for paths in ([], [""], ["notes.md"] * 11):
             with self.subTest(paths=paths):
                 with self.assertRaises(ProtocolError):
                     decode_request(json.dumps({"id": "d1", "method": "documents.parse", "params": {"paths": paths}}))
+        with self.assertRaises(ProtocolError):
+            decode_request(json.dumps({"id": "d2", "method": "documents.save", "params": {"documents": []}}))
 
         invalid_requests = [
             {"id": "x", "method": "mastery.get", "params": {"now": ""}},

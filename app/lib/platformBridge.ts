@@ -246,6 +246,18 @@ export async function selectRagDocuments(): Promise<Array<{ id: string; text: st
   return unwrapDesktop(await desktop.selectRagDocuments());
 }
 
+export async function saveRagDocuments(documents: Array<{ id: string; text: string; source: string }>): Promise<{ saved: number }> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "本地资料保存仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.saveRagDocuments(documents));
+}
+
+export async function listRagDocuments(): Promise<Array<{ id: string; text: string; source: string }>> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "本地资料库仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.listRagDocuments());
+}
+
 export async function modelStorageInfo(): Promise<{
   nonSecretPath: string;
   secretStorage: string;

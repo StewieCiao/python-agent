@@ -124,6 +124,10 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.next_personalized_exercise(learning_bundle, params["lessonId"], params["seed"])
     if method == "documents.parse":
         return load_documents(params["paths"])
+    if method == "documents.save":
+        return storage.save_rag_documents(params["documents"])
+    if method == "documents.list":
+        return storage.list_rag_documents()
     if method == "rag.evaluation.record":
         return storage.record_rag_evaluation(params["record"])
     if method == "rag.evaluation.list":

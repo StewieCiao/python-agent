@@ -76,6 +76,7 @@ export type PersonalizedExerciseResult = {
 };
 
 export type ParsedRagDocument = { id: string; text: string; source: string };
+export type SavedRagDocument = ParsedRagDocument;
 
 export type RagEvaluationRecord = {
   id: number;
@@ -166,6 +167,10 @@ function isPersonalizedExerciseResult(value: unknown): value is PersonalizedExer
 
 function isParsedRagDocuments(value: unknown): value is ParsedRagDocument[] {
   return Array.isArray(value) && value.every((item) => isRecord(item) && hasExactKeys(item, ["id", "text", "source"]) && typeof item.id === "string" && typeof item.text === "string" && item.text.trim().length > 0 && typeof item.source === "string" && item.source.trim().length > 0);
+}
+
+function isSavedRagResult(value: unknown): value is { saved: number } {
+  return isRecord(value) && hasExactKeys(value, ["saved"]) && typeof value.saved === "number" && Number.isInteger(value.saved) && value.saved >= 0;
 }
 
 function isRagEvaluationRecord(value: unknown): value is RagEvaluationRecord {
@@ -419,6 +424,14 @@ export class PythonServiceClient {
 
   parseDocuments(paths: string[]): Promise<ParsedRagDocument[]> {
     return this.#requestChecked("documents.parse", { paths }, isParsedRagDocuments, "本地资料解析响应结构无效");
+  }
+
+  saveRagDocuments(documents: ParsedRagDocument[]): Promise<{ saved: number }> {
+    return this.#requestChecked("documents.save", { documents }, isSavedRagResult, "RAG 文档保存响应结构无效");
+  }
+
+  listRagDocuments(): Promise<SavedRagDocument[]> {
+    return this.#requestChecked("documents.list", {}, isParsedRagDocuments, "RAG 文档列表响应结构无效");
   }
 
   recordRagEvaluation(record: Omit<RagEvaluationRecord, "id">): Promise<{ recorded: true }> {

@@ -12,6 +12,8 @@ import {
   evaluateRag,
   listRagEvaluations,
   selectRagDocuments,
+  saveRagDocuments,
+  listRagDocuments,
 } from "../lib/platformBridge";
 import {
   type ChatMessage,
@@ -92,6 +94,13 @@ export function CourseChat({ track, lesson, onClose }: {
           <textarea aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragText} onChange={(event) => setRagText(event.target.value)} />
           <input aria-label="RAG 资料来源" placeholder="来源名称或文件名" value={ragSource} onChange={(event) => setRagSource(event.target.value)} />
           <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await selectRagDocuments()))}>选择本地资料（TXT / Markdown / CSV / PDF）</button>
+          <div className="rag-library-actions">
+            <button type="button" disabled={busy || ragDocuments.length === 0} onClick={() => void perform(async () => {
+              const result = await saveRagDocuments(ragDocuments);
+              setStatus(`已保存 ${result.saved} 个新资料片段到本地资料库。`);
+            })}>保存到本地资料库</button>
+            <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await listRagDocuments()))}>读取已保存资料</button>
+          </div>
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
           <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
             const result = await answerWithRag({ profileId, query: ragQuery, documents: currentRagDocuments() });

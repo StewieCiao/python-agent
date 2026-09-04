@@ -257,6 +257,8 @@ void runStartupTask(app.whenReady().then(async () => {
     if (selection.canceled || selection.filePaths.length === 0) return [];
     return activePythonService().parseDocuments(selection.filePaths);
   }));
+  ipcMain.handle("documents:save", trustedIpc((documents: Array<{ id: string; text: string; source: string }>) => activePythonService().saveRagDocuments(documents)));
+  ipcMain.handle("documents:list", trustedIpc(() => activePythonService().listRagDocuments()));
   ipcMain.handle("learning:get", trustedIpc(() => activePythonService().getLearningState()));
   ipcMain.handle("learning:save", trustedIpc((state: PythonLearningState) => activePythonService().saveLearningState(state)));
   ipcMain.handle("mastery:record", trustedIpc((event: MasteryEvent) => activePythonService().recordMasteryAttempt(event)));
