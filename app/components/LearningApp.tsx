@@ -5,6 +5,7 @@ import { CatalogLesson } from "./CatalogLesson";
 import { CourseChat } from "./CourseChat";
 import { ModelSettings } from "./ModelSettings";
 import { lessons, lessonsByModule, learningTracks } from "../content/publicCatalog";
+import { loadLearnerSeed } from "../lib/learnerIdentity";
 import type { LessonTest } from "../content/python/curriculum";
 import type { CourseTrack } from "../content/schema";
 import { loadMastery, loadPersonalizedExercise, loadTutorPlan, pythonWorkerUrl, recordMasteryAttempt } from "../lib/platformBridge";
@@ -181,7 +182,7 @@ export function LearningApp() {
     setPersonalizedLoading(true);
     setPersonalizedStatus("");
     try {
-      const result = await loadPersonalizedExercise(requestedLessonId, Date.now());
+      const result = await loadPersonalizedExercise(requestedLessonId, loadLearnerSeed(window.localStorage));
       if (currentLessonIdRef.current !== requestedLessonId) return;
       setPersonalized({
         prompt: result.exercise.prompt,

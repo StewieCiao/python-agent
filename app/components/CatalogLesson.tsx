@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { CourseLesson, CourseTrack } from "../content/schema";
 import { learningTracks } from "../content/publicCatalog";
 import { loadPersonalizedExercise } from "../lib/platformBridge";
+import { loadLearnerSeed } from "../lib/learnerIdentity";
 
 export function CatalogLesson({ track, lesson, onOpenChat, onOpenLesson, completed, onComplete }: {
   track: CourseTrack;
@@ -29,7 +30,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, onOpenLesson, complet
     setPersonalizedLoading(true);
     setPersonalizedStatus("");
     try {
-      const result = await loadPersonalizedExercise(lesson.id, Date.now());
+      const result = await loadPersonalizedExercise(lesson.id, loadLearnerSeed(window.localStorage));
       setPersonalized({
         prompt: result.exercise.prompt,
         starterCode: result.exercise.starterCode,
