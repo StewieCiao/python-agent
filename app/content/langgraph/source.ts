@@ -82,6 +82,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "state-reducers-routing",
+      familyId: "langgraph-routing-v1",
       title: "Reducer、条件边与循环",
       summary: "控制状态如何合并，并让下一步由明确路由结果决定。",
       minutes: 60,

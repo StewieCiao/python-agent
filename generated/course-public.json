@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "a7edb1386ccebb93fab947265eb7a3e5e32e0b1564e644af40642008a49e66cc",
-  "familyHash": "049886b6999cd0e5c35a8d7a89f8807740ef9700a7df951d5459986002ed766d",
+  "catalogHash": "76a6f42b5988c7db22b3aceeb03a8b98a1211c70f94cf139a64ba2cee46abb69",
+  "familyHash": "2dba0ff65c547b430aa6d9836932acf2e2eab10a845323afd237d54b658ecd4c",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -6866,6 +6866,7 @@
           },
           {
             "id": "retrieval-chain",
+            "familyId": "langchain-retrieval-v1",
             "stageId": "langchain-rag-stage-1",
             "order": 4,
             "title": "从 Retriever 到可核验的 RAG 回答",
@@ -11913,6 +11914,7 @@
           },
           {
             "id": "state-reducers-routing",
+            "familyId": "langgraph-routing-v1",
             "stageId": "langgraph-stage-1",
             "order": 2,
             "title": "Reducer、条件边与循环",
@@ -17439,6 +17441,258 @@
             {
               "name": "边界行为",
               "expression": "grounded_answer(\"审核流程\", [])[\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-retrieval-v1": {
+      "id": "langchain-retrieval-v1",
+      "lessonIds": [
+        "retrieval-chain"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-retrieval",
+        "wrong-top-k"
+      ],
+      "constraints": [
+        "return matching documents",
+        "respect top_k and empty results"
+      ],
+      "variants": [
+        {
+          "label": "检索“退款”",
+          "values": "退款 / top_k=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"退款\", [{\"text\":\"退款 说明\", \"source\":\"policy.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 1) == [{\"text\":\"退款 说明\", \"source\":\"policy.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"退款 说明\", \"source\":\"policy.md\"}], 1) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "检索“部署”",
+          "values": "部署 / top_k=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"部署\", [{\"text\":\"部署 说明\", \"source\":\"deploy.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 1) == [{\"text\":\"部署 说明\", \"source\":\"deploy.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"部署 说明\", \"source\":\"deploy.md\"}], 1) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "检索“权限”",
+          "values": "权限 / top_k=2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"权限\", [{\"text\":\"权限 说明\", \"source\":\"security.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 2) == [{\"text\":\"权限 说明\", \"source\":\"security.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"权限 说明\", \"source\":\"security.md\"}], 2) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "检索“字段”",
+          "values": "字段 / top_k=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"字段\", [{\"text\":\"字段 说明\", \"source\":\"schema.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 1) == [{\"text\":\"字段 说明\", \"source\":\"schema.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"字段 说明\", \"source\":\"schema.md\"}], 1) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "检索“超时”",
+          "values": "超时 / top_k=2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"超时\", [{\"text\":\"超时 说明\", \"source\":\"service.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 2) == [{\"text\":\"超时 说明\", \"source\":\"service.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"超时 说明\", \"source\":\"service.md\"}], 2) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "检索“审核”",
+          "values": "审核 / top_k=1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "retrieve(\"审核\", [{\"text\":\"审核 说明\", \"source\":\"review.md\"}, {\"text\":\"其他资料\", \"source\":\"other.md\"}], 1) == [{\"text\":\"审核 说明\", \"source\":\"review.md\"}]",
+              "failure": "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "retrieve(\"不存在\", [{\"text\":\"审核 说明\", \"source\":\"review.md\"}], 1) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-routing-v1": {
+      "id": "langgraph-routing-v1",
+      "lessonIds": [
+        "state-reducers-routing"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-route",
+        "missing-termination"
+      ],
+      "constraints": [
+        "route by score",
+        "stop at attempts limit"
+      ],
+      "variants": [
+        {
+          "label": "score=0.9 / attempts=0",
+          "values": "0.9, 0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.9, \"attempts\": 0}) == \"finish\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "score=0.4 / attempts=1",
+          "values": "0.4, 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.4, \"attempts\": 1}) == \"revise\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "score=0.7 / attempts=2",
+          "values": "0.7, 2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.7, \"attempts\": 2}) == \"finish\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "score=0.8 / attempts=0",
+          "values": "0.8, 0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.8, \"attempts\": 0}) == \"finish\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "score=0.2 / attempts=2",
+          "values": "0.2, 2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.2, \"attempts\": 2}) == \"finish\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "score=0.1 / attempts=1",
+          "values": "0.1, 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 1}) == \"revise\"",
+              "failure": "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

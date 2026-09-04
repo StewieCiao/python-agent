@@ -218,6 +218,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "retrieval-chain",
+      familyId: "langchain-retrieval-v1",
       title: "从 Retriever 到可核验的 RAG 回答",
       summary: "学习第 44–45 节时，把 RunnablePassthrough 看成数据流组合，而不是必须背诵的魔法写法。",
       minutes: 55,

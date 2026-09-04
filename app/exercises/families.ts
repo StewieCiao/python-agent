@@ -31,6 +31,14 @@ const citationCases = [
   ["退款政策", "policy.md", "30 天"], ["部署手册", "deploy.md", "先运行测试"], ["安全规范", "security.md", "最小权限"],
   ["数据字典", "schema.md", "字段必须有类型"], ["服务协议", "service.md", "超时返回错误"], ["审核流程", "review.md", "拒绝会停止"],
 ] as const;
+const retrievalCases = [
+  ["退款", 1, "policy.md"], ["部署", 1, "deploy.md"], ["权限", 2, "security.md"],
+  ["字段", 1, "schema.md"], ["超时", 2, "service.md"], ["审核", 1, "review.md"],
+] as const;
+const routingCases = [
+  [0.9, 0, "finish"], [0.4, 1, "revise"], [0.7, 2, "finish"],
+  [0.8, 0, "finish"], [0.2, 2, "finish"], [0.1, 1, "revise"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -98,6 +106,24 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `grounded_answer("${label}", [{"text":"${text}","source":"${source}"}])["sources"] == ["${source}"]`,
       `grounded_answer("${label}", [])["status"] == "no_results"`,
       "回答只能引用真实检索来源；没有资料时必须明确返回 no_results。",
+      ))),
+  },
+  {
+    id: "langchain-retrieval-v1", lessonIds: ["retrieval-chain"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-retrieval", "wrong-top-k"], constraints: ["return matching documents", "respect top_k and empty results"],
+    variants: retrievalCases.map(([query, topK, source]) => variant(`检索“${query}”`, `${query} / top_k=${topK}`, twoBehaviorChecks(
+      `retrieve("${query}", [{"text":"${query} 说明", "source":"${source}"}, {"text":"其他资料", "source":"other.md"}], ${topK}) == [{"text":"${query} 说明", "source":"${source}"}]`,
+      `retrieve("不存在", [{"text":"${query} 说明", "source":"${source}"}], ${topK}) == []`,
+      "应只返回真实匹配文档，并遵守 top_k；无命中时返回空列表。",
+    ))),
+  },
+  {
+    id: "langgraph-routing-v1", lessonIds: ["state-reducers-routing"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-route", "missing-termination"], constraints: ["route by score", "stop at attempts limit"],
+    variants: routingCases.map(([score, attempts, expected]) => variant(`score=${score} / attempts=${attempts}`, `${score}, ${attempts}`, twoBehaviorChecks(
+      `route({"score": ${score}, "attempts": ${attempts}}) == "${expected}"`,
+      `route({"score": 0.1, "attempts": 3}) == "finish"`,
+      "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
     ))),
   },
 ];
