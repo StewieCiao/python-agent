@@ -569,6 +569,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "reranking",
+      familyId: "langchain-reranking-v1",
       title: "重排与 top_k 边界",
       prerequisites: ["hybrid-retrieval"], difficulty: "intermediate", tags: ["reranking", "top-k", "retrieval"],
       summary: "对混合检索候选进行第二阶段排序，并明确 top_k 与低质量候选的边界。",

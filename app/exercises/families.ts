@@ -22,6 +22,10 @@ const expenses = [
   ["记录 rent=40、music=6", "rent=40, music=6", '{"total": 46, "by_category": {"rent": 40, "music": 6}}'], ["记录 taxi=11、books=13", "taxi=11, books=13", '{"total": 24, "by_category": {"taxi": 11, "books": 13}}'], ["记录 coffee=5、hardware=27", "coffee=5, hardware=27", '{"total": 32, "by_category": {"coffee": 5, "hardware": 27}}'],
 ] as const;
 const output = [["计算 9 * 6", "9 * 6", 54], ["计算 11 * 5", "11 * 5", 55], ["计算 12 * 4", "12 * 4", 48], ["计算 13 * 7", "13 * 7", 91], ["计算 15 * 8", "15 * 8", 120], ["计算 17 * 3", "17 * 3", 51]] as const;
+const reranking = [
+  ["候选 a/b，取 2", "2", "b,a"], ["候选 x/y，取 1", "1", "y"], ["候选 p/q，取 2", "2", "p,q"],
+  ["候选 m/n，取 1", "1", "m"], ["候选 r/s，取 2", "2", "s,r"], ["候选 u/v，取 1", "1", "v"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -63,6 +67,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
     id: "python-expense-v1", lessonIds: ["project-expense"], difficulty: "intermediate", validatorVersion: "1",
     mistakeCodes: ["hard-coded-category", "extra-traversal"], constraints: ["aggregate arbitrary categories", "one loop in summarize"],
     variants: expenses.map(([label, values, expected]) => variant(label, values, twoBehaviorChecks(`summarize([${values.split(", ").map((item) => { const [category, amount] = item.split("="); return `{\"category\":\"${category}\",\"amount\":${amount}}`; }).join(", ")}]) == ${expected}`, 'summarize([]) == {"total": 0, "by_category": {}}', "应从本变体记录动态汇总总额和分类。"))),
+  },
+  {
+    id: "langchain-reranking-v1", lessonIds: ["reranking"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-order", "wrong-top-k"], constraints: ["sort by rerank_score", "reject negative top_k"],
+    variants: reranking.map(([label, topK, expected]) => variant(label, topK, twoBehaviorChecks(
+      `[item["source"] for item in rerank([{"source":"a","rerank_score":0.2},{"source":"b","rerank_score":0.9}], ${topK})] == [${expected.split(",").map((item) => `"${item}"`).join(",")}]`,
+      "_raises_value_error(lambda: rerank([], -1))",
+      "应按重排分数排序并严格限制 top_k。",
+    ))),
   },
 ];
 

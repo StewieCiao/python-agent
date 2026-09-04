@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "e32bc8c949afdb62566b887c072e9f522c3ffedef65b352a30c2e2f7096b49ec",
-  "familyHash": "e42764be4e5d3c19d9fa0ac190f64485ccc65490f81cdd018d52bd02e3b4efcc",
+  "catalogHash": "d3b59c83e96fd829aebe3707878cdddf135e40d3a973440042e3ff0d656d75ac",
+  "familyHash": "daa184fa9709bacd1ddb0b63ad15de2e9c25b4e9cf3bc62cb2f5b23ce2c1a436",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8205,6 +8205,7 @@
           },
           {
             "id": "reranking",
+            "familyId": "langchain-reranking-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 14,
             "title": "混合检索评估台",
@@ -17058,6 +17059,132 @@
             {
               "name": "边界行为",
               "expression": "summarize([]) == {\"total\": 0, \"by_category\": {}}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-reranking-v1": {
+      "id": "langchain-reranking-v1",
+      "lessonIds": [
+        "reranking"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-order",
+        "wrong-top-k"
+      ],
+      "constraints": [
+        "sort by rerank_score",
+        "reject negative top_k"
+      ],
+      "variants": [
+        {
+          "label": "候选 a/b，取 2",
+          "values": "2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 2)] == [\"b\",\"a\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "候选 x/y，取 1",
+          "values": "1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 1)] == [\"y\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "候选 p/q，取 2",
+          "values": "2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 2)] == [\"p\",\"q\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "候选 m/n，取 1",
+          "values": "1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 1)] == [\"m\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "候选 r/s，取 2",
+          "values": "2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 2)] == [\"s\",\"r\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "候选 u/v，取 1",
+          "values": "1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "[item[\"source\"] for item in rerank([{\"source\":\"a\",\"rerank_score\":0.2},{\"source\":\"b\",\"rerank_score\":0.9}], 1)] == [\"v\"]",
+              "failure": "应按重排分数排序并严格限制 top_k。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: rerank([], -1))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
