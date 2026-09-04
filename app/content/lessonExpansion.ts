@@ -20,6 +20,37 @@ const SCENARIO_LABELS: Record<CourseTrack["id"], string[]> = {
   langgraph: ["研究任务", "审核流程", "多 Agent 协作", "可恢复作业"],
 };
 
+const STAGE_DESCRIPTIONS: Record<CourseTrack["id"], string[]> = {
+  python: [
+    "从表达式、变量和控制流开始，建立可观察、可调试的 Python 基础。",
+    "用容器、循环和数据清洗处理真实输入，练习边界与数据契约。",
+    "掌握函数、作用域和模块拆分，把重复逻辑变成可复用接口。",
+    "加入文件、测试、命令行和失败处理，形成小型工程的基本结构。",
+    "用工具契约、动作解析和观察记录理解 Agent 的最小组成。",
+    "组合记忆、检索、计划和反思，处理有上限且可恢复的任务流程。",
+    "把多项能力整合成可演示项目，练习验收、日志和 README。",
+    "完成端到端毕业项目，明确输入输出、失败状态和可复现运行方式。",
+  ],
+  "langchain-rag": [
+    "先理解消息、Prompt、模型配置和结构化输出，再观察每一步输入输出。",
+    "用 Runnable 组合可读的数据流，区分模板、模型、解析器和错误边界。",
+    "把 PDF、文本和表格转换为保留来源的 Document，并检查加载质量。",
+    "完成切分、Embedding、向量存储与混合检索，理解召回不是答案。",
+    "将检索上下文交给模型生成回答，处理引用、无资料和来源一致性。",
+    "用 recall、MRR、引用覆盖和追踪事件定位 RAG 质量回归。",
+    "把检索、工具和 Agent 组合成可展示的 RAG 项目并记录取舍。",
+  ],
+  langgraph: [
+    "从 StateGraph、节点和边开始，画出状态输入、更新和最终输出。",
+    "练习条件路由、Reducer 与循环终止，让图的控制流可解释且有上限。",
+    "用 Checkpoint 和 thread_id 保存、恢复线程状态，避免跨会话串线。",
+    "区分短期状态与 Store 长期记忆，按用户和命名空间隔离资料。",
+    "用 Interrupt 暂停高风险动作，并以明确决定恢复或拒绝流程。",
+    "组合子图、并行分支与 Supervisor，观察多 Agent 的交接和失败状态。",
+    "完成可恢复 Graph 项目，验证线程隔离、审批、错误和可复现运行。",
+  ],
+};
+
 type ProjectBrief = { title: string; summary: string; prompt: string; starterCode: string; solution: string; hints: string[]; checks: CourseLesson["browserChecks"] };
 
 const PROJECT_BRIEFS: Record<"langchain-rag" | "langgraph", ProjectBrief[]> = {
@@ -902,7 +933,13 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
 
 export function expandCourseTrack(track: CourseTrack, expansion: Expansion): CourseTrack {
   if (track.lessons.length >= expansion.targetLessons && track.stages.length === expansion.stageCount) return track;
-  const stages: CourseStage[] = expansion.stageTitles.map((title, index) => ({ id: `${track.id}-stage-${index + 1}`, order: index + 1, title, description: `${title} 的核心概念与实践。`, lessonIds: [] }));
+  const stages: CourseStage[] = expansion.stageTitles.map((title, index) => ({
+    id: `${track.id}-stage-${index + 1}`,
+    order: index + 1,
+    title,
+    description: STAGE_DESCRIPTIONS[track.id][index]!,
+    lessonIds: [],
+  }));
   const stageForIndex = (index: number) => stages[Math.min(stages.length - 1, Math.floor(index * stages.length / expansion.targetLessons))];
   const lessons = [...track.lessons];
   while (lessons.length < expansion.targetLessons) {

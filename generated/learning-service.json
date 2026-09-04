@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "9c2cfba4424c7b1c5cdf1fab082428814c6e42885c0f3c764481c81435f49419",
+  "catalogHash": "04b65f9e2f0844e0c27d5b6fa2834f533d1bbb271f4546ea40c5bd5710a38c2e",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -24,7 +24,7 @@
             "id": "python-stage-1",
             "order": 1,
             "title": "起步",
-            "description": "起步 的核心概念与实践。",
+            "description": "从表达式、变量和控制流开始，建立可观察、可调试的 Python 基础。",
             "lessonIds": [
               "first-output",
               "variables",
@@ -40,7 +40,7 @@
             "id": "python-stage-2",
             "order": 2,
             "title": "数据与控制",
-            "description": "数据与控制 的核心概念与实践。",
+            "description": "用容器、循环和数据清洗处理真实输入，练习边界与数据契约。",
             "lessonIds": [
               "exceptions",
               "classes",
@@ -56,7 +56,7 @@
             "id": "python-stage-3",
             "order": 3,
             "title": "函数与模块",
-            "description": "函数与模块 的核心概念与实践。",
+            "description": "掌握函数、作用域和模块拆分，把重复逻辑变成可复用接口。",
             "lessonIds": [
               "agent-action-parser",
               "agent-react-loop",
@@ -72,7 +72,7 @@
             "id": "python-stage-4",
             "order": 4,
             "title": "工程基础",
-            "description": "工程基础 的核心概念与实践。",
+            "description": "加入文件、测试、命令行和失败处理，形成小型工程的基本结构。",
             "lessonIds": [
               "agent-framework-capstone",
               "python-lesson-25",
@@ -88,7 +88,7 @@
             "id": "python-stage-5",
             "order": 5,
             "title": "Agent 基础",
-            "description": "Agent 基础 的核心概念与实践。",
+            "description": "用工具契约、动作解析和观察记录理解 Agent 的最小组成。",
             "lessonIds": [
               "python-lesson-32",
               "python-lesson-33",
@@ -104,7 +104,7 @@
             "id": "python-stage-6",
             "order": 6,
             "title": "Agent 系统",
-            "description": "Agent 系统 的核心概念与实践。",
+            "description": "组合记忆、检索、计划和反思，处理有上限且可恢复的任务流程。",
             "lessonIds": [
               "python-lesson-40",
               "python-lesson-41",
@@ -120,7 +120,7 @@
             "id": "python-stage-7",
             "order": 7,
             "title": "综合项目",
-            "description": "综合项目 的核心概念与实践。",
+            "description": "把多项能力整合成可演示项目，练习验收、日志和 README。",
             "lessonIds": [
               "python-lesson-48",
               "python-lesson-49",
@@ -136,7 +136,7 @@
             "id": "python-stage-8",
             "order": 8,
             "title": "毕业项目",
-            "description": "毕业项目 的核心概念与实践。",
+            "description": "完成端到端毕业项目，明确输入输出、失败状态和可复现运行方式。",
             "lessonIds": [
               "python-lesson-56",
               "python-lesson-57",
@@ -6284,7 +6284,7 @@
             "id": "langchain-rag-stage-1",
             "order": 1,
             "title": "模型与提示",
-            "description": "模型与提示 的核心概念与实践。",
+            "description": "先理解消息、Prompt、模型配置和结构化输出，再观察每一步输入输出。",
             "lessonIds": [
               "memory-modernization",
               "document-loaders",
@@ -6299,7 +6299,7 @@
             "id": "langchain-rag-stage-2",
             "order": 2,
             "title": "Runnable",
-            "description": "Runnable 的核心概念与实践。",
+            "description": "用 Runnable 组合可读的数据流，区分模板、模型、解析器和错误边界。",
             "lessonIds": [
               "model-messages-prompts",
               "model-configuration",
@@ -6314,7 +6314,7 @@
             "id": "langchain-rag-stage-3",
             "order": 3,
             "title": "文档处理",
-            "description": "文档处理 的核心概念与实践。",
+            "description": "把 PDF、文本和表格转换为保留来源的 Document，并检查加载质量。",
             "lessonIds": [
               "citation-grounded-generation",
               "langchain-rag-lesson-15",
@@ -6329,7 +6329,7 @@
             "id": "langchain-rag-stage-4",
             "order": 4,
             "title": "向量检索",
-            "description": "向量检索 的核心概念与实践。",
+            "description": "完成切分、Embedding、向量存储与混合检索，理解召回不是答案。",
             "lessonIds": [
               "langchain-rag-lesson-21",
               "langchain-rag-lesson-22",
@@ -6344,7 +6344,7 @@
             "id": "langchain-rag-stage-5",
             "order": 5,
             "title": "RAG 生成",
-            "description": "RAG 生成 的核心概念与实践。",
+            "description": "将检索上下文交给模型生成回答，处理引用、无资料和来源一致性。",
             "lessonIds": [
               "langchain-rag-lesson-28",
               "langchain-rag-lesson-29",
@@ -6359,7 +6359,7 @@
             "id": "langchain-rag-stage-6",
             "order": 6,
             "title": "评估与观测",
-            "description": "评估与观测 的核心概念与实践。",
+            "description": "用 recall、MRR、引用覆盖和追踪事件定位 RAG 质量回归。",
             "lessonIds": [
               "langchain-rag-lesson-35",
               "langchain-rag-lesson-36",
@@ -6374,7 +6374,7 @@
             "id": "langchain-rag-stage-7",
             "order": 7,
             "title": "RAG 项目",
-            "description": "RAG 项目 的核心概念与实践。",
+            "description": "把检索、工具和 Agent 组合成可展示的 RAG 项目并记录取舍。",
             "lessonIds": [
               "langchain-rag-lesson-42",
               "langchain-rag-lesson-43",
@@ -11879,7 +11879,7 @@
             "id": "langgraph-stage-1",
             "order": 1,
             "title": "图基础",
-            "description": "图基础 的核心概念与实践。",
+            "description": "从 StateGraph、节点和边开始，画出状态输入、更新和最终输出。",
             "lessonIds": [
               "graph-foundations",
               "state-reducers-routing",
@@ -11893,7 +11893,7 @@
             "id": "langgraph-stage-2",
             "order": 2,
             "title": "状态与路由",
-            "description": "状态与路由 的核心概念与实践。",
+            "description": "练习条件路由、Reducer 与循环终止，让图的控制流可解释且有上限。",
             "lessonIds": [
               "memory-research-project",
               "checkpoint-configuration",
@@ -11907,7 +11907,7 @@
             "id": "langgraph-stage-3",
             "order": 3,
             "title": "持久化",
-            "description": "持久化 的核心概念与实践。",
+            "description": "用 Checkpoint 和 thread_id 保存、恢复线程状态，避免跨会话串线。",
             "lessonIds": [
               "langgraph-lesson-12",
               "langgraph-lesson-13",
@@ -11921,7 +11921,7 @@
             "id": "langgraph-stage-4",
             "order": 4,
             "title": "记忆",
-            "description": "记忆 的核心概念与实践。",
+            "description": "区分短期状态与 Store 长期记忆，按用户和命名空间隔离资料。",
             "lessonIds": [
               "langgraph-lesson-18",
               "langgraph-lesson-19",
@@ -11935,7 +11935,7 @@
             "id": "langgraph-stage-5",
             "order": 5,
             "title": "中断与恢复",
-            "description": "中断与恢复 的核心概念与实践。",
+            "description": "用 Interrupt 暂停高风险动作，并以明确决定恢复或拒绝流程。",
             "lessonIds": [
               "langgraph-lesson-24",
               "langgraph-lesson-25",
@@ -11949,7 +11949,7 @@
             "id": "langgraph-stage-6",
             "order": 6,
             "title": "多 Agent",
-            "description": "多 Agent 的核心概念与实践。",
+            "description": "组合子图、并行分支与 Supervisor，观察多 Agent 的交接和失败状态。",
             "lessonIds": [
               "langgraph-lesson-30",
               "langgraph-lesson-31",
@@ -11963,7 +11963,7 @@
             "id": "langgraph-stage-7",
             "order": 7,
             "title": "Graph 项目",
-            "description": "Graph 项目 的核心概念与实践。",
+            "description": "完成可恢复 Graph 项目，验证线程隔离、审批、错误和可复现运行。",
             "lessonIds": [
               "langgraph-lesson-36",
               "langgraph-lesson-37",

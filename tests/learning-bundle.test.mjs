@@ -1254,6 +1254,14 @@ test("迁移卡核验版本与锁定运行时一致", async () => {
   }
 });
 
+test("每个阶段描述都说明具体学习边界而非占位文案", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  for (const track of authoredCatalog.tracks) {
+    assert.ok(track.stages.every(({ description }) => description.length >= 24));
+    assert.ok(track.stages.every(({ description }) => !/核心概念与实践。$/.test(description)));
+  }
+});
+
 test("项目标记不抢占路线开头的基础课", async () => {
   const { authoredCatalog } = await import("../app/content/catalog.ts");
   for (const track of authoredCatalog.tracks) {
