@@ -39,6 +39,10 @@ const routingCases = [
   [0.9, 0, "finish"], [0.4, 1, "revise"], [0.7, 2, "finish"],
   [0.8, 0, "finish"], [0.2, 2, "finish"], [0.1, 1, "revise"],
 ] as const;
+const checkpointCases = [
+  ["thread-a", 1, 2], ["thread-b", 3, 4], ["research-1", 0, 1],
+  ["review-2", 7, 8], ["chat-x", 2, 5], ["job-9", 10, 11],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -124,6 +128,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `route({"score": ${score}, "attempts": ${attempts}}) == "${expected}"`,
       `route({"score": 0.1, "attempts": 3}) == "finish"`,
       "路由应同时检查质量阈值和尝试上限，达到任一条件就结束。",
+    ))),
+  },
+  {
+    id: "langgraph-checkpoint-v1", lessonIds: ["checkpoint-configuration"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-thread", "mutated-checkpoint"], constraints: ["resume selected thread", "return copied state"],
+    variants: checkpointCases.map(([threadId, oldStep, nextStep]) => variant(`${threadId}：${oldStep} → ${nextStep}`, `${threadId} / ${oldStep}`, twoBehaviorChecks(
+      `resume({"${threadId}": {"step": ${oldStep}}}, "${threadId}", {"step": ${nextStep}}) == {"step": ${nextStep}}`,
+      `((lambda saved: (resume(saved, "${threadId}", {}), saved))( {"${threadId}": {"step": ${oldStep}}} ))[1]["${threadId}"]["step"] == ${oldStep}`,
+      "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
     ))),
   },
 ];

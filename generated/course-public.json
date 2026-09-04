@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "76a6f42b5988c7db22b3aceeb03a8b98a1211c70f94cf139a64ba2cee46abb69",
-  "familyHash": "2dba0ff65c547b430aa6d9836932acf2e2eab10a845323afd237d54b658ecd4c",
+  "catalogHash": "5580ba5d98599bc6e446b0b3a1543a6bb30a817f73f5a8a2029c48b391955903",
+  "familyHash": "277cb092b321237e4639088a65654c612ced0962f21534af1097989383a529cf",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12649,6 +12649,7 @@
           },
           {
             "id": "checkpoint-configuration",
+            "familyId": "langgraph-checkpoint-v1",
             "stageId": "langgraph-stage-2",
             "order": 8,
             "title": "Checkpoint 配置与恢复边界",
@@ -17693,6 +17694,132 @@
             {
               "name": "边界行为",
               "expression": "route({\"score\": 0.1, \"attempts\": 3}) == \"finish\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-checkpoint-v1": {
+      "id": "langgraph-checkpoint-v1",
+      "lessonIds": [
+        "checkpoint-configuration"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-thread",
+        "mutated-checkpoint"
+      ],
+      "constraints": [
+        "resume selected thread",
+        "return copied state"
+      ],
+      "variants": [
+        {
+          "label": "thread-a：1 → 2",
+          "values": "thread-a / 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"thread-a\": {\"step\": 1}}, \"thread-a\", {\"step\": 2}) == {\"step\": 2}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"thread-a\", {}), saved))( {\"thread-a\": {\"step\": 1}} ))[1][\"thread-a\"][\"step\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "thread-b：3 → 4",
+          "values": "thread-b / 3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"thread-b\": {\"step\": 3}}, \"thread-b\", {\"step\": 4}) == {\"step\": 4}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"thread-b\", {}), saved))( {\"thread-b\": {\"step\": 3}} ))[1][\"thread-b\"][\"step\"] == 3",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "research-1：0 → 1",
+          "values": "research-1 / 0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"research-1\": {\"step\": 0}}, \"research-1\", {\"step\": 1}) == {\"step\": 1}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"research-1\", {}), saved))( {\"research-1\": {\"step\": 0}} ))[1][\"research-1\"][\"step\"] == 0",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "review-2：7 → 8",
+          "values": "review-2 / 7",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"review-2\": {\"step\": 7}}, \"review-2\", {\"step\": 8}) == {\"step\": 8}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"review-2\", {}), saved))( {\"review-2\": {\"step\": 7}} ))[1][\"review-2\"][\"step\"] == 7",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "chat-x：2 → 5",
+          "values": "chat-x / 2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"chat-x\": {\"step\": 2}}, \"chat-x\", {\"step\": 5}) == {\"step\": 5}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"chat-x\", {}), saved))( {\"chat-x\": {\"step\": 2}} ))[1][\"chat-x\"][\"step\"] == 2",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "job-9：10 → 11",
+          "values": "job-9 / 10",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume({\"job-9\": {\"step\": 10}}, \"job-9\", {\"step\": 11}) == {\"step\": 11}",
+              "failure": "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "((lambda saved: (resume(saved, \"job-9\", {}), saved))( {\"job-9\": {\"step\": 10}} ))[1][\"job-9\"][\"step\"] == 10",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

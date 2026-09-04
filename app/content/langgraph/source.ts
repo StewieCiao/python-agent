@@ -410,6 +410,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "checkpoint-configuration",
+      familyId: "langgraph-checkpoint-v1",
       title: "Checkpoint 配置与恢复边界",
       summary: "为图运行配置稳定的 thread_id，并在缺少检查点时保留明确失败。",
       prerequisites: ["state-reducers-routing"], difficulty: "beginner", tags: ["checkpoint", "thread", "recovery"],
