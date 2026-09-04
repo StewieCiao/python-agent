@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "bb12f26c37cf7b07ac9b2cb4964c7afba7a1b3a4241b3c89a0cfa384a83d5853",
-  "familyHash": "fdf6430ed0033e016f43c0efdf8a605a46d065403714801ca6f9936649965f6f",
+  "catalogHash": "4c38b57a6f047f94cc2bf549f37f09d8feace5fecd9778f77cc2f5238d72a537",
+  "familyHash": "cab4e8c98b5c76f35b9c02aa89337b39128bf3572ad1340d8911278e7ebc0074",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -7592,6 +7592,7 @@
           },
           {
             "id": "model-configuration",
+            "familyId": "langchain-model-config-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 9,
             "title": "模型配置与可解释的失败边界",
@@ -17707,6 +17708,132 @@
             {
               "name": "边界行为",
               "expression": "_silent_call(shipping_fee, 99, False) == (0, \"\") and _silent_call(shipping_fee, 37, False) == (10, \"\")",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-model-config-v1": {
+      "id": "langchain-model-config-v1",
+      "lessonIds": [
+        "model-configuration"
+      ],
+      "difficulty": "beginner",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "missing-config-boundary",
+        "accepted-invalid-timeout"
+      ],
+      "constraints": [
+        "validate model/timeout/temperature",
+        "return explicit error field"
+      ],
+      "variants": [
+        {
+          "label": "demo / timeout=30 / temperature=0",
+          "values": "demo, 30, 0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 0}) == {\"valid\": True, \"error\": None}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "chat / timeout=1 / temperature=1",
+          "values": "chat, 1, 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"chat\", \"timeout\": 1, \"temperature\": 1}) == {\"valid\": True, \"error\": None}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "local / timeout=5 / temperature=0.5",
+          "values": "local, 5, 0.5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"local\", \"timeout\": 5, \"temperature\": 0.5}) == {\"valid\": True, \"error\": None}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "空模型 / timeout=30 / temperature=0",
+          "values": ", 30, 0",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"\", \"timeout\": 30, \"temperature\": 0}) == {\"valid\": False, \"error\": \"model\"}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "demo / timeout=0 / temperature=0.2",
+          "values": "demo, 0, 0.2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 0, \"temperature\": 0.2}) == {\"valid\": False, \"error\": \"timeout\"}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "demo / timeout=30 / temperature=1.5",
+          "values": "demo, 30, 1.5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30, \"temperature\": 1.5}) == {\"valid\": False, \"error\": \"temperature\"}",
+              "failure": "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "validate_model_config({\"model\": \"demo\", \"timeout\": 30})[\"valid\"] is False",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

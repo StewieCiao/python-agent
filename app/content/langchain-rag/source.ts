@@ -460,6 +460,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "model-configuration",
+      familyId: "langchain-model-config-v1",
       title: "模型配置与可解释的失败边界",
       prerequisites: ["model-messages-prompts"], difficulty: "beginner", tags: ["model", "timeout", "configuration"],
       summary: "把模型名称、超时和请求参数作为显式配置，并区分配置错误与上游失败。",

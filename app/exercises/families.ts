@@ -92,6 +92,10 @@ const shippingCases = [
   [20, "True", 0], [99, "False", 0], [40, "False", 10],
   [150, "False", 0], [1, "False", 10], [98.99, "False", 10],
 ] as const;
+const modelConfigCases = [
+  ["demo", 30, 0, "True", "None"], ["chat", 1, 1, "True", "None"], ["local", 5, 0.5, "True", "None"],
+  ["", 30, 0, "False", "model"], ["demo", 0, 0.2, "False", "timeout"], ["demo", 30, 1.5, "False", "temperature"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -177,6 +181,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `_silent_call(shipping_fee, ${price}, ${member}) == (${expected}, "")`,
       `_silent_call(shipping_fee, 99, False) == (0, "") and _silent_call(shipping_fee, 37, False) == (10, "")`,
       "函数调用必须返回正确运费，并且调用期间不能产生标准输出。",
+    ))),
+  },
+  {
+    id: "langchain-model-config-v1", lessonIds: ["model-configuration"], difficulty: "beginner", validatorVersion: "1",
+    mistakeCodes: ["missing-config-boundary", "accepted-invalid-timeout"], constraints: ["validate model/timeout/temperature", "return explicit error field"],
+    variants: modelConfigCases.map(([model, timeout, temperature, valid, error]) => variant(`${model || "空模型"} / timeout=${timeout} / temperature=${temperature}`, `${model}, ${timeout}, ${temperature}`, twoBehaviorChecks(
+      `validate_model_config({"model": "${model}", "timeout": ${timeout}, "temperature": ${temperature}}) == {"valid": ${valid}, "error": ${error === "None" ? "None" : `"${error}"`}}`,
+      `validate_model_config({"model": "demo", "timeout": 30})["valid"] is False`,
+      "配置校验必须明确区分 model、timeout、temperature 的缺失或越界原因。",
     ))),
   },
   {
