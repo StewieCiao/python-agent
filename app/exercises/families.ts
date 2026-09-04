@@ -64,6 +64,10 @@ const evaluationCases = [
   ["c.md", ["x.md"], [], 0], ["d.md", ["x.md"], ["x.md"], 0],
   ["e.md", ["e.md", "f.md"], ["e.md", "f.md"], 1], ["g.md", [], [], 0],
 ] as const;
+const toolRegistryCases = [
+  ["weather", "成都"], ["search", "RAG"], ["calendar", "周五"],
+  ["currency", "CNY"], ["status", "ready"], ["lookup", "LangGraph"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -203,6 +207,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `evaluate_retrieval(["${source}"], ${JSON.stringify(retrieved)}, ${JSON.stringify(cited)})["recall"] == ${recall}`,
       `evaluate_retrieval([], [], []) ["status"] == "no_results"`,
       "评估应根据真实来源集合计算召回和引用覆盖，并保留无资料状态。",
+    ))),
+  },
+  {
+    id: "python-tool-registry-v1", lessonIds: ["agent-tool-registry"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-dispatch", "swallowed-tool-error"], constraints: ["forward keyword arguments", "reject duplicate or unknown tools"],
+    variants: toolRegistryCases.map(([name, value]) => variant(`${name}(${value})`, `${name} / ${value}`, twoBehaviorChecks(
+      `((lambda registry: (registry.register("${name}", lambda value: value), registry.execute("${name}", {"value": "${value}"}))[1])(ToolRegistry())) == "${value}"`,
+      `_tool_registry_errors(ToolRegistry) == (True, True)`,
+      "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
     ))),
   },
 ];

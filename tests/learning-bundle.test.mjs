@@ -661,6 +661,16 @@ test("LangChain RAG 评估课接入可轮换的个性化练习 family", async ()
   assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
 });
 
+test("Python Tool Registry 课接入可轮换的个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "agent-tool-registry");
+  assert.ok(lesson?.familyId);
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

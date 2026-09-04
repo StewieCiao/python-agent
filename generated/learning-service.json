@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "4bb408370f75cb36c771160d4c7e4a60afcb9e552a5443360c0d7298f109d391",
-  "familyHash": "1ef98e2385dc6fee67e4d3454f7d9b66ea9b2dad51c8b904adb04f502970c8f0",
+  "catalogHash": "2dcad1687ccfa9076cec32f20eaf85f9cdfe42dfca1ec237e86707813fa62a0a",
+  "familyHash": "3dc7009a831584e99c2a6096cabbb470880d14968e5ab2b518f52424982d182a",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -1785,6 +1785,7 @@
           },
           {
             "id": "agent-tool-registry",
+            "familyId": "python-tool-registry-v1",
             "stageId": "python-stage-2",
             "order": 16,
             "title": "给 Agent 装上工具箱",
@@ -18455,6 +18456,132 @@
             {
               "name": "边界行为",
               "expression": "evaluate_retrieval([], [], []) [\"status\"] == \"no_results\"",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-tool-registry-v1": {
+      "id": "python-tool-registry-v1",
+      "lessonIds": [
+        "agent-tool-registry"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-dispatch",
+        "swallowed-tool-error"
+      ],
+      "constraints": [
+        "forward keyword arguments",
+        "reject duplicate or unknown tools"
+      ],
+      "variants": [
+        {
+          "label": "weather(成都)",
+          "values": "weather / 成都",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"weather\", lambda value: value), registry.execute(\"weather\", {\"value\": \"成都\"}))[1])(ToolRegistry())) == \"成都\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "search(RAG)",
+          "values": "search / RAG",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"search\", lambda value: value), registry.execute(\"search\", {\"value\": \"RAG\"}))[1])(ToolRegistry())) == \"RAG\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "calendar(周五)",
+          "values": "calendar / 周五",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"calendar\", lambda value: value), registry.execute(\"calendar\", {\"value\": \"周五\"}))[1])(ToolRegistry())) == \"周五\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "currency(CNY)",
+          "values": "currency / CNY",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"currency\", lambda value: value), registry.execute(\"currency\", {\"value\": \"CNY\"}))[1])(ToolRegistry())) == \"CNY\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "status(ready)",
+          "values": "status / ready",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"status\", lambda value: value), registry.execute(\"status\", {\"value\": \"ready\"}))[1])(ToolRegistry())) == \"ready\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "lookup(LangGraph)",
+          "values": "lookup / LangGraph",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "((lambda registry: (registry.register(\"lookup\", lambda value: value), registry.execute(\"lookup\", {\"value\": \"LangGraph\"}))[1])(ToolRegistry())) == \"LangGraph\"",
+              "failure": "注册表必须把参数传给真实工具，并保留重复注册和未知工具错误。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_tool_registry_errors(ToolRegistry) == (True, True)",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
