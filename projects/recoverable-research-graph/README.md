@@ -12,7 +12,13 @@
 
 ## 演示脚本
 
-在项目目录运行 `python demo.py` 会先暂停在人工审核节点，再用同一个 `thread_id` 恢复并完成流程。
+先在仓库根目录运行 `npm run prepare:python-runtime`，再使用项目随附的 Python 运行时执行：
+
+```bash
+desktop/.runtime/python/bin/python3.13 projects/recoverable-research-graph/demo.py
+```
+
+演示会先暂停在人工审核节点，再用同一个 `thread_id` 恢复并完成流程；不需要另外安装 LangGraph 或访问网络。
 
 1. 用 `thread_id=research-a` 启动任务，展示节点更新。
 2. 在人工确认节点中断，关闭并重新打开任务。

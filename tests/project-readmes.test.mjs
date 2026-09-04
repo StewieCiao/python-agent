@@ -32,6 +32,13 @@ test("RAG Quality Workbench 的演示包含重排与 top_k 验收", async () => 
   assert.match(readme, /retrieve → threshold → rerank → cite → evaluate/);
 });
 
+test("需要 LangGraph 的项目明确使用随仓库提供的运行时", async () => {
+  const readme = await readFile(new URL("../projects/recoverable-research-graph/README.md", import.meta.url), "utf8");
+  assert.match(readme, /npm run prepare:python-runtime/);
+  assert.match(readme, /desktop\/\.runtime\/python\/bin\/python3\.13/);
+  assert.match(readme, /不需要另外安装 LangGraph/);
+});
+
 test("零部署指南明确离线、Pages 与桌面版的安全边界", async () => {
   const guide = await readFile(new URL("../docs/zero-deploy.md", import.meta.url), "utf8");
   assert.match(guide, /双击打开/);
