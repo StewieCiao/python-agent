@@ -112,6 +112,10 @@ const planCases = [
   ['[{"name":"one","priority":1}]', '["one"]'],
 ] as const;
 const planSolveCases = ["收集资料", "整理字段", "运行测试", "生成摘要", "检查来源", "发布报告"] as const;
+const reflectionCases = [
+  ["a", 5, "a!!"], ["x", 3, "x!!"], ["draft", 2, "draft++"],
+  ["ok", 4, "ok!"], ["", 3, "!!"], ["seed", 1, "seed!"] ,
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -260,6 +264,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `execute_plan([{"id":"first","task":"${task}"},{"id":"second","task":"下一步"}], lambda current, context: current + "|" + ",".join(sorted(context))) == [{"id":"first","result":"${task}|"},{"id":"second","result":"下一步|first"}]`,
       `execute_plan([], lambda current, context: 1 / 0) == []`,
       "执行器应按顺序收到不断累积的已完成上下文，空计划不应调用执行器。",
+    ))),
+  },
+  {
+    id: "python-reflection-v1", lessonIds: ["agent-reflection"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["ignored-early-stop", "exceeded-round-limit"], constraints: ["evaluate before revise", "stop at quality or max_rounds"],
+    variants: reflectionCases.map(([draft, rounds, expected]) => variant(`${draft || "空稿"} / ${rounds} 轮`, `${draft} / ${rounds}`, twoBehaviorChecks(
+      `reflection_loop("${draft}", lambda text: len(text) >= ${expected.length}, lambda text: text + "!", ${rounds}) == "${expected}"`,
+      `_raises_value_error(lambda: reflection_loop("x", lambda text: True, lambda text: text, -1))`,
+      "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
     ))),
   },
   {

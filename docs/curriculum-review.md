@@ -15,10 +15,10 @@
 
 ## 验证证据
 
-- `npm test`：236 项通过。
+- `npm test`：237 项通过。
 - 当前三条路线的扩展主题均已绑定具体练习规格，课程标题不再使用“从概念到练习”占位模板；讲解卡直接展示主题 starter 骨架并列出真实检查边界；后续仍需逐阶段补充更丰富的原创示例、迁移卡和项目验收材料。
 - 桌面 RAG 面板现可对用户提供的小型问答集逐条执行真实检索并显示 recall@k、MRR、引用覆盖、引用一致性代理和耗时；模型未返回 token usage 时明确标为不可用，不估算成本。
-- 个性化练习 family 现在从作者源携带六组变体和独立行为检查；覆盖 Python 输出/循环/字符串/分支/函数/容器/异常/类与对象/生成器/装饰器/项目汇总/任务优先级/Plan-and-Solve/Tool Registry/Action 解析，以及 LangChain 消息/模型配置/Runnable、结构化输出、检索链、混合检索、重排、引用、RAG 评估和 LangGraph 路由、checkpoint、Store 长期记忆、Interrupt 审批、人工审核、Supervisor 角色交接、工具节点错误状态。Python 服务只校验签名快照中的检查，桌面 Worker 使用个性题检查而不是原关卡样例。
+- 个性化练习 family 现在从作者源携带六组变体和独立行为检查；覆盖 Python 输出/循环/字符串/分支/函数/容器/异常/类与对象/生成器/装饰器/项目汇总/任务优先级/Plan-and-Solve/Reflection/Tool Registry/Action 解析，以及 LangChain 消息/模型配置/Runnable、结构化输出、检索链、混合检索、重排、引用、RAG 评估和 LangGraph 路由、checkpoint、Store 长期记忆、Interrupt 审批、人工审核、Supervisor 角色交接、工具节点错误状态。Python 服务只校验签名快照中的检查，桌面 Worker 使用个性题检查而不是原关卡样例。
 - 个性题生成会从当前种子位置顺序跳过最近已使用的变体；仅当近期记录覆盖全部候选时明确失败，避免同一学习者重复点击时误报。
 - 每节课程至少包含两项带名称、表达式和失败说明的反馈检查；旧草稿中的占位表达式已移除。
 - `npm run lint -- --max-warnings=0`：通过。

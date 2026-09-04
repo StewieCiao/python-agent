@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "ad9014c5dac99501f3cc16985f643fc3caf2c1d9cfab40af2e0eece76b6e90a1",
-  "familyHash": "5c111a683e06ad1427e1d711aa95864d3f49bded69f6bbd3e8c2af4b220fb15f",
+  "catalogHash": "8a1953f4651106b5c45e8cf0f972b8ca4f904cf26627a7a28f8c1d2f3682b4e3",
+  "familyHash": "364a8a39e872206f4b70c135df18081a67021724a5085e8ac596668a07da3be8",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -2212,6 +2212,7 @@
           },
           {
             "id": "agent-reflection",
+            "familyId": "python-reflection-v1",
             "stageId": "python-stage-3",
             "order": 20,
             "title": "让 Agent 反思后再改进",
@@ -18596,6 +18597,132 @@
             {
               "name": "边界行为",
               "expression": "execute_plan([], lambda current, context: 1 / 0) == []",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "python-reflection-v1": {
+      "id": "python-reflection-v1",
+      "lessonIds": [
+        "agent-reflection"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "ignored-early-stop",
+        "exceeded-round-limit"
+      ],
+      "constraints": [
+        "evaluate before revise",
+        "stop at quality or max_rounds"
+      ],
+      "variants": [
+        {
+          "label": "a / 5 轮",
+          "values": "a / 5",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"a\", lambda text: len(text) >= 3, lambda text: text + \"!\", 5) == \"a!!\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "x / 3 轮",
+          "values": "x / 3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"x\", lambda text: len(text) >= 3, lambda text: text + \"!\", 3) == \"x!!\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "draft / 2 轮",
+          "values": "draft / 2",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"draft\", lambda text: len(text) >= 7, lambda text: text + \"!\", 2) == \"draft++\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "ok / 4 轮",
+          "values": "ok / 4",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"ok\", lambda text: len(text) >= 3, lambda text: text + \"!\", 4) == \"ok!\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "空稿 / 3 轮",
+          "values": " / 3",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"\", lambda text: len(text) >= 2, lambda text: text + \"!\", 3) == \"!!\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "seed / 1 轮",
+          "values": "seed / 1",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "reflection_loop(\"seed\", lambda text: len(text) >= 5, lambda text: text + \"!\", 1) == \"seed!\"",
+              "failure": "每轮必须先评估，达标立即停止；未达标时最多改进指定轮次并返回真实版本。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "_raises_value_error(lambda: reflection_loop(\"x\", lambda text: True, lambda text: text, -1))",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

@@ -801,6 +801,16 @@ test("Python Plan-and-Solve 课接入增量上下文个性化练习 family", asy
   assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("context"))));
 });
 
+test("Python Reflection 课接入提前停止与轮次上限个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "python")?.lessons.find(({ id }) => id === "agent-reflection");
+  assert.equal(lesson?.familyId, "python-reflection-v1");
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.some(({ expression }) => expression.includes("max_rounds") || expression.includes("-1"))));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");
