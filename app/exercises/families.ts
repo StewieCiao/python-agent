@@ -143,6 +143,9 @@ const ragToolCases = [
   ["search", "RAG"], ["weather", "成都"], ["calendar", "周五"],
   ["lookup", "LangGraph"], ["summarize", "资料"], ["status", "ready"],
 ] as const;
+const ragRunCases = [
+  [10, 20, 1], [5, 15, 0], [30, 45, 2], [8, 12, 1], [100, 120, 0], [18, 22, 2],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -372,6 +375,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `call_tool({"${name}": lambda value: value.upper()}, "${name}", "${payload}") == {"name":"${name}","input":"${payload}","observation":"${payload.toUpperCase()}"}`,
       `_raises_key_error(lambda: call_tool({}, "missing", "${payload}"))`,
       "工具调用必须保留原始 name、input 和真实 observation；未知工具应保留 KeyError。",
+    ))),
+  },
+  {
+    id: "langchain-rag-observability-v1", lessonIds: ["langchain-rag-lesson-27"], difficulty: "advanced", validatorVersion: "1",
+    mistakeCodes: ["wrong-metric", "ignored-empty-run"], constraints: ["compute observed metrics", "handle empty runs"],
+    variants: ragRunCases.map(([first, second, insufficient]) => variant(`${first}/${second}ms`, `${first}, ${second}`, twoBehaviorChecks(
+      `summarize_rag_runs([{"latency_ms":${first},"answer":"ok"},{"latency_ms":${second},"answer":"资料不足"}]) == {"count":2,"average_latency_ms":${(first + second) / 2},"insufficient":1}`,
+      `summarize_rag_runs([]) == {"count":0,"average_latency_ms":0,"insufficient":0} and summarize_rag_runs([{"latency_ms":${first},"answer":"${insufficient ? "资料不足" : "ok"}"}])["count"] == 1`,
+      "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
     ))),
   },
   {

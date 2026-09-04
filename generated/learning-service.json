@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "9b50d1bfd60dde394512b06d46cbc1658a2120b6a740f76b7e8c25c1cbf5ee31",
-  "familyHash": "8ba6438e2631a94b599c67d08655a41d3ac3bd9bbb21f5617650997960c80db0",
+  "catalogHash": "e211a92e70661bddc5c15853f11e881ce2e16b00c32c4e5249277e5f4ca5dc99",
+  "familyHash": "5caba38ba88cefe6ae2f3c1c90cbc2539ed3c00c4798232e7298c5489f35a3b8",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -9664,6 +9664,7 @@
           },
           {
             "id": "langchain-rag-lesson-27",
+            "familyId": "langchain-rag-observability-v1",
             "stageId": "langchain-rag-stage-4",
             "order": 28,
             "title": "RAG 质量观测面板",
@@ -19739,6 +19740,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_key_error(lambda: call_tool({}, \"missing\", \"ready\"))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-rag-observability-v1": {
+      "id": "langchain-rag-observability-v1",
+      "lessonIds": [
+        "langchain-rag-lesson-27"
+      ],
+      "difficulty": "advanced",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-metric",
+        "ignored-empty-run"
+      ],
+      "constraints": [
+        "compute observed metrics",
+        "handle empty runs"
+      ],
+      "variants": [
+        {
+          "label": "10/20ms",
+          "values": "10, 20",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":10,\"answer\":\"ok\"},{\"latency_ms\":20,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":15,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":10,\"answer\":\"资料不足\"}])[\"count\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "5/15ms",
+          "values": "5, 15",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":5,\"answer\":\"ok\"},{\"latency_ms\":15,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":10,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":5,\"answer\":\"ok\"}])[\"count\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "30/45ms",
+          "values": "30, 45",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":30,\"answer\":\"ok\"},{\"latency_ms\":45,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":37.5,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":30,\"answer\":\"资料不足\"}])[\"count\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "8/12ms",
+          "values": "8, 12",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":8,\"answer\":\"ok\"},{\"latency_ms\":12,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":10,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":8,\"answer\":\"资料不足\"}])[\"count\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "100/120ms",
+          "values": "100, 120",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":100,\"answer\":\"ok\"},{\"latency_ms\":120,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":110,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":100,\"answer\":\"ok\"}])[\"count\"] == 1",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "18/22ms",
+          "values": "18, 22",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "summarize_rag_runs([{\"latency_ms\":18,\"answer\":\"ok\"},{\"latency_ms\":22,\"answer\":\"资料不足\"}]) == {\"count\":2,\"average_latency_ms\":20,\"insufficient\":1}",
+              "failure": "观测面板必须依据真实运行记录计算指标，并明确处理空记录。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "summarize_rag_runs([]) == {\"count\":0,\"average_latency_ms\":0,\"insufficient\":0} and summarize_rag_runs([{\"latency_ms\":18,\"answer\":\"资料不足\"}])[\"count\"] == 1",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
