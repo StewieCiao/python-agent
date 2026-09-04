@@ -553,6 +553,17 @@ test("LangChain 重排课接入可轮换的个性化练习 family", async () => 
   assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
 });
 
+test("LangGraph 人工审核课接入可轮换的个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const lesson = authoredCatalog.tracks.find(({ id }) => id === "langgraph")?.lessons.find(({ id }) => id === "human-review-state");
+  assert.equal(lesson?.familyId, "langgraph-human-review-v1");
+  const bundle = JSON.parse(await readFile(new URL("../generated/learning-service.json", import.meta.url), "utf8"));
+  const family = bundle.families[lesson.familyId];
+  assert.equal(family.lessonIds[0], "human-review-state");
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

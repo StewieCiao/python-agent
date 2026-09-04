@@ -26,6 +26,7 @@ const reranking = [
   ["候选 a/b，取 2", "2", "b,a"], ["候选 x/y，取 1", "1", "y"], ["候选 p/q，取 2", "2", "p,q"],
   ["候选 m/n，取 1", "1", "m"], ["候选 r/s，取 2", "2", "s,r"], ["候选 u/v，取 1", "1", "v"],
 ] as const;
+const humanReview = ["send_report", "publish_note", "delete_record", "export_data", "reset_access", "merge_branch"] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -75,6 +76,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `[item["source"] for item in rerank([{"source":"a","rerank_score":0.2},{"source":"b","rerank_score":0.9}], ${topK})] == [${expected.split(",").map((item) => `"${item}"`).join(",")}]`,
       "_raises_value_error(lambda: rerank([], -1))",
       "应按重排分数排序并严格限制 top_k。",
+    ))),
+  },
+  {
+    id: "langgraph-human-review-v1", lessonIds: ["human-review-state"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-decision", "lost-review-action"], constraints: ["approve or reject explicitly", "preserve action in returned state"],
+    variants: humanReview.map((action) => variant(`审核 ${action}`, action, twoBehaviorChecks(
+      `resume_review({"action":"${action}"}, "approve") == {"status":"approved","action":"${action}"}`,
+      `resume_review({"action":"${action}"}, "reject") == {"status":"cancelled","action":"${action}"}`,
+      "审核结果必须保留原 action，并区分批准与拒绝。",
     ))),
   },
 ];

@@ -443,6 +443,7 @@ export const langgraphTrack: LearningTrack = {
     },
     {
       id: "human-review-state",
+      familyId: "langgraph-human-review-v1",
       title: "人工审核状态与恢复",
       prerequisites: ["streaming-interrupts"], difficulty: "advanced", tags: ["interrupt", "human-in-the-loop", "recovery"],
       summary: "把高风险动作暂停为 pending_review，并根据人工决定恢复或取消。",

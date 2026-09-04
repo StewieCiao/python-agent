@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "d3b59c83e96fd829aebe3707878cdddf135e40d3a973440042e3ff0d656d75ac",
-  "familyHash": "daa184fa9709bacd1ddb0b63ad15de2e9c25b4e9cf3bc62cb2f5b23ce2c1a436",
+  "catalogHash": "1fa2ed86fcccdbad840f6959a35f05a73743c954a3e6987163477a38fb59e0e6",
+  "familyHash": "0cadabeab9dbc522ba082f9672ea956f4246364ccf4d70718c6b92322e01db30",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -12900,6 +12900,7 @@
           },
           {
             "id": "human-review-state",
+            "familyId": "langgraph-human-review-v1",
             "stageId": "langgraph-stage-2",
             "order": 10,
             "title": "人工审核状态与恢复",
@@ -17185,6 +17186,132 @@
             {
               "name": "边界行为",
               "expression": "_raises_value_error(lambda: rerank([], -1))",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langgraph-human-review-v1": {
+      "id": "langgraph-human-review-v1",
+      "lessonIds": [
+        "human-review-state"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-decision",
+        "lost-review-action"
+      ],
+      "constraints": [
+        "approve or reject explicitly",
+        "preserve action in returned state"
+      ],
+      "variants": [
+        {
+          "label": "审核 send_report",
+          "values": "send_report",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"send_report\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"send_report\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"send_report\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"send_report\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 publish_note",
+          "values": "publish_note",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"publish_note\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"publish_note\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"publish_note\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"publish_note\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 delete_record",
+          "values": "delete_record",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"delete_record\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"delete_record\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"delete_record\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"delete_record\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 export_data",
+          "values": "export_data",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"export_data\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"export_data\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"export_data\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"export_data\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 reset_access",
+          "values": "reset_access",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"reset_access\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"reset_access\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"reset_access\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"reset_access\"}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "审核 merge_branch",
+          "values": "merge_branch",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "resume_review({\"action\":\"merge_branch\"}, \"approve\") == {\"status\":\"approved\",\"action\":\"merge_branch\"}",
+              "failure": "审核结果必须保留原 action，并区分批准与拒绝。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "resume_review({\"action\":\"merge_branch\"}, \"reject\") == {\"status\":\"cancelled\",\"action\":\"merge_branch\"}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }
