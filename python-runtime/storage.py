@@ -527,6 +527,11 @@ class Storage:
         ).fetchall()
         return [{"id": row["id"], "text": row["text"], "source": row["source"]} for row in rows]
 
+    def clear_rag_documents(self):
+        with self.connection:
+            cleared = self.connection.execute("DELETE FROM rag_documents").rowcount
+        return {"cleared": cleared}
+
     def next_personalized_exercise(self, learning_bundle, lesson_id, seed):
         events = [
             {"lessonId": row["lesson_id"], "familyId": row["family_id"], "outcome": row["outcome"], "mistakeCodes": json.loads(row["mistake_codes_json"]), "createdAt": row["created_at"]}

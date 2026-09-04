@@ -30,6 +30,7 @@ METHOD_PARAMS = {
     "documents.parse": {"paths"},
     "documents.save": {"documents"},
     "documents.list": set(),
+    "documents.clear": set(),
     "rag.evaluation.list": set(),
     "rag.evaluation.record": {"record"},
 }

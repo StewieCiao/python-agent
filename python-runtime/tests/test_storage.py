@@ -237,6 +237,13 @@ class StorageTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "RAG 文档字段无效"):
             self.storage.save_rag_documents([{"id": "x", "text": "", "source": "x"}])
 
+    def test_rag_documents_can_be_cleared_without_touching_other_data(self):
+        self.storage.save_rag_documents([{"id": "notes", "text": "内容", "source": "notes"}])
+        self.storage.append_chat_messages("python", "lesson-1", [{"role": "user", "content": "保留", "createdAt": "2026-09-02T10:00:00+00:00"}])
+        self.assertEqual(self.storage.clear_rag_documents(), {"cleared": 1})
+        self.assertEqual(self.storage.list_rag_documents(), [])
+        self.assertEqual(len(self.storage.list_chat_messages("python", "lesson-1")), 1)
+
     def test_clear_chat_history_does_not_touch_other_lessons(self):
         message = [{"role": "user", "content": "保留", "createdAt": "2026-09-02T10:00:00+00:00"}]
         self.storage.append_chat_messages("python", "lesson-1", message)

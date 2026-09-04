@@ -15,6 +15,7 @@ const bridge: StewieDesktopBridge = Object.freeze({
   selectRagDocuments: () => ipcRenderer.invoke("documents:select"),
   saveRagDocuments: (documents) => ipcRenderer.invoke("documents:save", documents),
   listRagDocuments: () => ipcRenderer.invoke("documents:list"),
+  clearRagDocuments: () => ipcRenderer.invoke("documents:clear"),
   getLearningState: () => ipcRenderer.invoke("learning:get"),
   saveLearningState: (state) => ipcRenderer.invoke("learning:save", state),
   recordMasteryAttempt: (event) => ipcRenderer.invoke("mastery:record", event),

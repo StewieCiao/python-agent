@@ -258,6 +258,12 @@ export async function listRagDocuments(): Promise<Array<{ id: string; text: stri
   return unwrapDesktop(await desktop.listRagDocuments());
 }
 
+export async function clearRagDocuments(): Promise<{ cleared: number }> {
+  const desktop = desktopBridge();
+  if (!desktop) throw new PlatformRequestError(null, "DESKTOP_ONLY", "本地资料库清理仅在桌面安全服务中可用。");
+  return unwrapDesktop(await desktop.clearRagDocuments());
+}
+
 export async function modelStorageInfo(): Promise<{
   nonSecretPath: string;
   secretStorage: string;

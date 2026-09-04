@@ -128,6 +128,8 @@ def dispatch_request(request, storage, learning_bundle):
         return storage.save_rag_documents(params["documents"])
     if method == "documents.list":
         return storage.list_rag_documents()
+    if method == "documents.clear":
+        return storage.clear_rag_documents()
     if method == "rag.evaluation.record":
         return storage.record_rag_evaluation(params["record"])
     if method == "rag.evaluation.list":

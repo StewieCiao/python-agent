@@ -44,6 +44,7 @@ export type StewieDesktopBridge = {
   selectRagDocuments(): Promise<DesktopIpcResult<RagDocument[]>>;
   saveRagDocuments(documents: RagDocument[]): Promise<DesktopIpcResult<{ saved: number }>>;
   listRagDocuments(): Promise<DesktopIpcResult<SavedRagDocument[]>>;
+  clearRagDocuments(): Promise<DesktopIpcResult<{ cleared: number }>>;
   getLearningState(): Promise<DesktopIpcResult<PythonLearningState>>;
   saveLearningState(state: PythonLearningState): Promise<DesktopIpcResult<PythonLearningState>>;
   recordMasteryAttempt(event: MasteryEvent): Promise<DesktopIpcResult<{ recorded: true }>>;

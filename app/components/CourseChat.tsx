@@ -14,6 +14,7 @@ import {
   selectRagDocuments,
   saveRagDocuments,
   listRagDocuments,
+  clearRagDocuments,
 } from "../lib/platformBridge";
 import {
   type ChatMessage,
@@ -100,6 +101,11 @@ export function CourseChat({ track, lesson, onClose }: {
               setStatus(`已保存 ${result.saved} 个新资料片段到本地资料库。`);
             })}>保存到本地资料库</button>
             <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await listRagDocuments()))}>读取已保存资料</button>
+            <button type="button" disabled={busy} onClick={() => void perform(async () => {
+              const result = await clearRagDocuments();
+              setRagDocuments([]);
+              setStatus(`已清空本地资料库（${result.cleared} 个片段）。`);
+            })}>清空资料库</button>
           </div>
           {ragDocuments.length > 0 && <small className="rag-library-count">当前已载入 {ragDocuments.length} 个资料片段，可直接用于检索。</small>}
           <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />

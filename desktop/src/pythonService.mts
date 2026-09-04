@@ -173,6 +173,10 @@ function isSavedRagResult(value: unknown): value is { saved: number } {
   return isRecord(value) && hasExactKeys(value, ["saved"]) && typeof value.saved === "number" && Number.isInteger(value.saved) && value.saved >= 0;
 }
 
+function isClearedRagResult(value: unknown): value is { cleared: number } {
+  return isRecord(value) && hasExactKeys(value, ["cleared"]) && typeof value.cleared === "number" && Number.isInteger(value.cleared) && value.cleared >= 0;
+}
+
 function isRagEvaluationRecord(value: unknown): value is RagEvaluationRecord {
   if (!isRecord(value) || !hasExactKeys(value, ["id", "catalogHash", "documentHash", "embeddingModel", "recordedAt", "caseCount", "recallAtK", "mrr", "citationCoverage", "faithfulnessProxy", "latencyMs"])) return false;
   return typeof value.id === "number" && Number.isInteger(value.id) && value.id > 0 && typeof value.catalogHash === "string" && /^[0-9a-f]{64}$/.test(value.catalogHash) && typeof value.documentHash === "string" && /^[0-9a-f]{64}$/.test(value.documentHash) && typeof value.embeddingModel === "string" && typeof value.recordedAt === "string" && typeof value.caseCount === "number" && Number.isInteger(value.caseCount) && value.caseCount > 0 && ["recallAtK", "mrr", "citationCoverage", "faithfulnessProxy"].every((key) => typeof value[key] === "number" && Number.isFinite(value[key]) && value[key] >= 0 && value[key] <= 1) && typeof value.latencyMs === "number" && Number.isFinite(value.latencyMs) && value.latencyMs >= 0;
@@ -432,6 +436,10 @@ export class PythonServiceClient {
 
   listRagDocuments(): Promise<SavedRagDocument[]> {
     return this.#requestChecked("documents.list", {}, isParsedRagDocuments, "RAG 文档列表响应结构无效");
+  }
+
+  clearRagDocuments(): Promise<{ cleared: number }> {
+    return this.#requestChecked("documents.clear", {}, isClearedRagResult, "RAG 文档清理响应结构无效");
   }
 
   recordRagEvaluation(record: Omit<RagEvaluationRecord, "id">): Promise<{ recorded: true }> {
