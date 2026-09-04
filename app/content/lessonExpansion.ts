@@ -770,6 +770,69 @@ const FRAMEWORK_TOPIC_SPECS: Record<string, TopicSpec> = {
   },
 };
 
+const FRAMEWORK_MIGRATIONS: Record<string, CourseLesson["migrations"][number]> = {
+  "langchain-rag:结构化输出": {
+    title: "StructuredOutputParser → model.with_structured_output",
+    status: "replaced",
+    explanation: "LangChain v1 优先让模型绑定 schema 并返回结构化对象；旧解析器链保留在迁移语境，不能当作唯一写法。",
+    beforeCode: "parser = StructuredOutputParser.from_response_schemas(schemas)\nchain = prompt | model | parser",
+    afterCode: "class Answer(BaseModel):\n    answer: str\n\nstructured_model = model.with_structured_output(Answer)",
+    officialSources: [{ label: "Structured output", url: "https://docs.langchain.com/oss/python/langchain/structured-output", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langchain-rag:工具调用": {
+    title: "initialize_agent → create_agent",
+    status: "replaced",
+    explanation: "LangChain v1 的 Agent 入口是 create_agent；旧 initialize_agent 属于迁移前 API，工具仍需声明输入和失败边界。",
+    beforeCode: "agent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS)",
+    afterCode: "agent = create_agent(model=model, tools=tools)",
+    officialSources: [{ label: "Agents", url: "https://docs.langchain.com/oss/python/langchain/agents", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langchain-rag:相似度检索": {
+    title: "RetrievalQA → 显式 retriever 数据流",
+    status: "replaced",
+    explanation: "新版检索链把 retriever、context 格式化和回答生成拆成可观察步骤，避免把来源隐藏在旧的 RetrievalQA 封装中。",
+    beforeCode: "qa = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)",
+    afterCode: "docs = retriever.invoke(question)\ncontext = format_docs(docs)\nanswer = model.invoke({\"context\": context, \"question\": question})",
+    officialSources: [{ label: "Retrieval", url: "https://docs.langchain.com/oss/python/langchain/retrieval", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langgraph:短期记忆": {
+    title: "ConversationBufferMemory → checkpointer + thread_id",
+    status: "replaced",
+    explanation: "线程内状态由 LangGraph checkpointer 保存；thread_id 决定恢复哪次会话，不再依赖旧 memory class 的隐式历史。",
+    beforeCode: "memory = ConversationBufferMemory()\nconversation = ConversationChain(llm=llm, memory=memory)",
+    afterCode: "graph = builder.compile(checkpointer=InMemorySaver())\nconfig = {\"configurable\": {\"thread_id\": \"u-1\"}}",
+    officialSources: [{ label: "Short-term memory", url: "https://docs.langchain.com/oss/python/langchain/short-term-memory", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langgraph:长期记忆": {
+    title: "Conversation memory → Store namespace",
+    status: "replaced",
+    explanation: "跨 thread 的用户资料应放在 Store 的 namespace/key 中；checkpointer 只负责当前线程状态。",
+    beforeCode: "memory = ConversationBufferMemory()",
+    afterCode: "store.put((user_id,), \"profile\", {\"theme\": \"dark\"})",
+    officialSources: [{ label: "Long-term memory", url: "https://docs.langchain.com/oss/python/langchain/long-term-memory", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+  "langgraph:Interrupt": {
+    title: "手写暂停标志 → interrupt / Command",
+    status: "replaced",
+    explanation: "图内人工介入使用 interrupt 暂停并以 Command 恢复；不要用共享全局布尔值模拟跨调用暂停。",
+    beforeCode: "if state[\"needs_review\"]:\n    return state",
+    afterCode: "value = interrupt({\"action\": state[\"action\"]})\nreturn {\"decision\": value}",
+    officialSources: [{ label: "Interrupts", url: "https://docs.langchain.com/oss/python/langgraph/interrupts", kind: "official-doc", verifiedAt: "2026-09-02" }],
+    verifiedAt: "2026-09-02",
+    verifiedVersions: { langchain: "1.2.12", langgraph: "1.1.2" },
+  },
+};
+
 function generatedLesson(track: CourseTrack, index: number, stageId: string, project: boolean, familyId?: string): CourseLesson {
   const source = SOURCES[track.id];
   const id = `${track.id}-lesson-${String(index).padStart(2, "0")}`;
@@ -791,7 +854,7 @@ function generatedLesson(track: CourseTrack, index: number, stageId: string, pro
       { kind: "概念入门", title: `${baseTopic}要解决什么问题`, body: `把${scenario}中的真实任务先翻译成输入、处理和输出，再理解这个知识点：${guideSummary}`, bullets: ["找出输入契约", "标出核心状态", "说清输出形状"], example: guidePrompt },
       { kind: "逐步拆解", title: `把${baseTopic}拆成步骤`, body: `先实现${scenario}场景下题目要求的最小路径，再逐项验证：${guidePrompt}`, bullets: topicSpec.hints, example: topicSpec.starterCode },
       { kind: "常见误区", title: `${baseTopic}的边界检查`, body: `不要只复现${scenario}的示例；逐项对照真实检查的失败说明，判断是行为不符还是缺少教学构造。`, bullets: topicSpec.checks.map(({ failure }) => failure), example: `检查：${checkNames}` },
-    ], videos: track.id === "python" ? [] : [FRAMEWORK_VIDEOS[track.id][index % FRAMEWORK_VIDEOS[track.id].length]], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: [], project,
+    ], videos: track.id === "python" ? [] : [FRAMEWORK_VIDEOS[track.id][index % FRAMEWORK_VIDEOS[track.id].length]], officialSources: [{ ...source, kind: "official-doc", verifiedAt: "2026-09-02" }], migrations: FRAMEWORK_MIGRATIONS[`${track.id}:${baseTopic}`] ? [FRAMEWORK_MIGRATIONS[`${track.id}:${baseTopic}`]] : [], project,
     projectLinks: [], exercise: { prompt: `${topicSpec.prompt}${variant > 1 ? `\n场景：${scenario}。改用第 ${variant} 组未在示例出现的输入，说明实现为何仍成立。` : ""}`, starterCode: topicSpec.starterCode, hints: topicSpec.hints, solution: topicSpec.solution },
     browserChecks: topicSpec.checks,
   };

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "88da4f0c9ed7b235cf0fa02128550d88e6b2166dadf112056ffe4952f03e1993",
+  "catalogHash": "7a38c31b3f3c7a43dc36180989a4aaf1b61893aae15445ab4f7155beb6d19120",
   "familyHash": "811f9548ec7cd3fafe9de8dd3e815851e3bfdc495462bf82103e31c6f85be97b",
   "catalog": {
     "verifiedAt": "2026-09-02",
@@ -8608,7 +8608,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "initialize_agent → create_agent",
+                "status": "replaced",
+                "explanation": "LangChain v1 的 Agent 入口是 create_agent；旧 initialize_agent 属于迁移前 API，工具仍需声明输入和失败边界。",
+                "beforeCode": "agent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS)",
+                "afterCode": "agent = create_agent(model=model, tools=tools)",
+                "officialSources": [
+                  {
+                    "label": "Agents",
+                    "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-20"
@@ -9195,7 +9216,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "StructuredOutputParser → model.with_structured_output",
+                "status": "replaced",
+                "explanation": "LangChain v1 优先让模型绑定 schema 并返回结构化对象；旧解析器链保留在迁移语境，不能当作唯一写法。",
+                "beforeCode": "parser = StructuredOutputParser.from_response_schemas(schemas)\nchain = prompt | model | parser",
+                "afterCode": "class Answer(BaseModel):\n    answer: str\n\nstructured_model = model.with_structured_output(Answer)",
+                "officialSources": [
+                  {
+                    "label": "Structured output",
+                    "url": "https://docs.langchain.com/oss/python/langchain/structured-output",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [
               "langchain-rag-lesson-27"
@@ -9878,7 +9920,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "RetrievalQA → 显式 retriever 数据流",
+                "status": "replaced",
+                "explanation": "新版检索链把 retriever、context 格式化和回答生成拆成可观察步骤，避免把来源隐藏在旧的 RetrievalQA 封装中。",
+                "beforeCode": "qa = RetrievalQA.from_chain_type(llm=llm, retriever=retriever)",
+                "afterCode": "docs = retriever.invoke(question)\ncontext = format_docs(docs)\nanswer = model.invoke({\"context\": context, \"question\": question})",
+                "officialSources": [
+                  {
+                    "label": "Retrieval",
+                    "url": "https://docs.langchain.com/oss/python/langchain/retrieval",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {
@@ -10550,7 +10613,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "initialize_agent → create_agent",
+                "status": "replaced",
+                "explanation": "LangChain v1 的 Agent 入口是 create_agent；旧 initialize_agent 属于迁移前 API，工具仍需声明输入和失败边界。",
+                "beforeCode": "agent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS)",
+                "afterCode": "agent = create_agent(model=model, tools=tools)",
+                "officialSources": [
+                  {
+                    "label": "Agents",
+                    "url": "https://docs.langchain.com/oss/python/langchain/agents",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {
@@ -11126,7 +11210,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "StructuredOutputParser → model.with_structured_output",
+                "status": "replaced",
+                "explanation": "LangChain v1 优先让模型绑定 schema 并返回结构化对象；旧解析器链保留在迁移语境，不能当作唯一写法。",
+                "beforeCode": "parser = StructuredOutputParser.from_response_schemas(schemas)\nchain = prompt | model | parser",
+                "afterCode": "class Answer(BaseModel):\n    answer: str\n\nstructured_model = model.with_structured_output(Answer)",
+                "officialSources": [
+                  {
+                    "label": "Structured output",
+                    "url": "https://docs.langchain.com/oss/python/langchain/structured-output",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {
@@ -13190,7 +13295,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "手写暂停标志 → interrupt / Command",
+                "status": "replaced",
+                "explanation": "图内人工介入使用 interrupt 暂停并以 Command 恢复；不要用共享全局布尔值模拟跨调用暂停。",
+                "beforeCode": "if state[\"needs_review\"]:\n    return state",
+                "afterCode": "value = interrupt({\"action\": state[\"action\"]})\nreturn {\"decision\": value}",
+                "officialSources": [
+                  {
+                    "label": "Interrupts",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": true,
             "projectLinks": [],
             "exercise": {
@@ -14844,7 +14970,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "ConversationBufferMemory → checkpointer + thread_id",
+                "status": "replaced",
+                "explanation": "线程内状态由 LangGraph checkpointer 保存；thread_id 决定恢复哪次会话，不再依赖旧 memory class 的隐式历史。",
+                "beforeCode": "memory = ConversationBufferMemory()\nconversation = ConversationChain(llm=llm, memory=memory)",
+                "afterCode": "graph = builder.compile(checkpointer=InMemorySaver())\nconfig = {\"configurable\": {\"thread_id\": \"u-1\"}}",
+                "officialSources": [
+                  {
+                    "label": "Short-term memory",
+                    "url": "https://docs.langchain.com/oss/python/langchain/short-term-memory",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {
@@ -15036,7 +15183,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "Conversation memory → Store namespace",
+                "status": "replaced",
+                "explanation": "跨 thread 的用户资料应放在 Store 的 namespace/key 中；checkpointer 只负责当前线程状态。",
+                "beforeCode": "memory = ConversationBufferMemory()",
+                "afterCode": "store.put((user_id,), \"profile\", {\"theme\": \"dark\"})",
+                "officialSources": [
+                  {
+                    "label": "Long-term memory",
+                    "url": "https://docs.langchain.com/oss/python/langchain/long-term-memory",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {
@@ -15132,7 +15300,28 @@
                 "verifiedAt": "2026-09-02"
               }
             ],
-            "migrations": [],
+            "migrations": [
+              {
+                "title": "手写暂停标志 → interrupt / Command",
+                "status": "replaced",
+                "explanation": "图内人工介入使用 interrupt 暂停并以 Command 恢复；不要用共享全局布尔值模拟跨调用暂停。",
+                "beforeCode": "if state[\"needs_review\"]:\n    return state",
+                "afterCode": "value = interrupt({\"action\": state[\"action\"]})\nreturn {\"decision\": value}",
+                "officialSources": [
+                  {
+                    "label": "Interrupts",
+                    "url": "https://docs.langchain.com/oss/python/langgraph/interrupts",
+                    "kind": "official-doc",
+                    "verifiedAt": "2026-09-02"
+                  }
+                ],
+                "verifiedAt": "2026-09-02",
+                "verifiedVersions": {
+                  "langchain": "1.2.12",
+                  "langgraph": "1.1.2"
+                }
+              }
+            ],
             "project": false,
             "projectLinks": [],
             "exercise": {

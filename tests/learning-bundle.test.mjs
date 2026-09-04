@@ -1445,6 +1445,32 @@ test("框架阶段项目提供真实领域契约而不是通用组合函数", as
   assert.ok(projects.some((lesson) => lesson.exercise.prompt.includes("thread")));
 });
 
+test("扩展框架课只为有明确 API 迁移边界的主题提供迁移卡", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const expectations = [
+    ["langchain-rag", "结构化输出", "StructuredOutputParser"],
+    ["langchain-rag", "工具调用", "initialize_agent"],
+    ["langchain-rag", "相似度检索", "RetrievalQA"],
+    ["langgraph", "短期记忆", "ConversationBufferMemory"],
+    ["langgraph", "长期记忆", "Store namespace"],
+    ["langgraph", "Interrupt", "interrupt / Command"],
+  ];
+  for (const [trackId, topic, titlePart] of expectations) {
+    const track = authoredCatalog.tracks.find(({ id }) => id === trackId);
+    const lesson = track?.lessons.find(({ title, id }) => id.includes("-lesson-") && title.startsWith(topic));
+    assert.ok(lesson, `${trackId}/${topic} 缺少扩展课`);
+    assert.equal(lesson.migrations.length, 1, `${lesson.id} 应有一张主题迁移卡`);
+    const migration = lesson.migrations[0];
+    assert.match(migration.title, new RegExp(titlePart));
+    assert.ok(migration.beforeCode.trim() && migration.afterCode.trim());
+    assert.equal(migration.verifiedVersions.langchain, authoredCatalog.runtimeVersions.langchain);
+    assert.equal(migration.verifiedVersions.langgraph, authoredCatalog.runtimeVersions.langgraph);
+    assert.ok(migration.officialSources.length >= 1);
+  }
+  const python = authoredCatalog.tracks.find(({ id }) => id === "python");
+  assert.ok(python?.lessons.every(({ migrations }) => migrations.length === 0), "Python 扩展课不应伪造框架迁移卡");
+});
+
 function canonicalJson(value) {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
   if (value && typeof value === "object") {
