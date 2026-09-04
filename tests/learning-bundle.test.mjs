@@ -608,6 +608,17 @@ test("LangGraph checkpoint 课接入可轮换的个性化练习 family", async (
   assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
 });
 
+test("LangChain 混合检索课接入可轮换的个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const track = authoredCatalog.tracks.find(({ id }) => id === "langchain-rag");
+  const lesson = track?.lessons.find(({ id }) => id === "hybrid-retrieval");
+  assert.ok(lesson?.familyId);
+  const family = (await import("../app/exercises/families.ts")).exerciseFamilies.find(({ id }) => id === lesson.familyId);
+  assert.ok(family);
+  assert.equal(family.variants.length, 6);
+  assert.ok(family.variants.every(({ checks }) => checks.length >= 2));
+});
+
 test("LangChain RAG 评估课明确 recall、引用覆盖和资料不足", async () => {
   const { learningTracks } = await import("../app/content/learningCatalog.ts");
   const track = learningTracks.find(({ id }) => id === "langchain-rag");

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "stewie-catalog-v1",
-  "catalogHash": "5580ba5d98599bc6e446b0b3a1543a6bb30a817f73f5a8a2029c48b391955903",
-  "familyHash": "277cb092b321237e4639088a65654c612ced0962f21534af1097989383a529cf",
+  "catalogHash": "faf1b116b6648cd07eee15c0e942411d346f826f3714adcedb31523694067046",
+  "familyHash": "84a47a091d2552b71be568d7fdfd3b2432d040f8ff7bc0caa4e17b87117f09ee",
   "catalog": {
     "verifiedAt": "2026-09-02",
     "runtimeVersions": {
@@ -8079,6 +8079,7 @@
           },
           {
             "id": "hybrid-retrieval",
+            "familyId": "langchain-hybrid-retrieval-v1",
             "stageId": "langchain-rag-stage-2",
             "order": 13,
             "title": "混合检索与相似度阈值",
@@ -17820,6 +17821,132 @@
             {
               "name": "边界行为",
               "expression": "((lambda saved: (resume(saved, \"job-9\", {}), saved))( {\"job-9\": {\"step\": 10}} ))[1][\"job-9\"][\"step\"] == 10",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        }
+      ]
+    },
+    "langchain-hybrid-retrieval-v1": {
+      "id": "langchain-hybrid-retrieval-v1",
+      "lessonIds": [
+        "hybrid-retrieval"
+      ],
+      "difficulty": "intermediate",
+      "validatorVersion": "1",
+      "mistakeCodes": [
+        "wrong-threshold",
+        "duplicate-source"
+      ],
+      "constraints": [
+        "deduplicate by source",
+        "return no_results below threshold"
+      ],
+      "variants": [
+        {
+          "label": "policy.md 阈值 0.7",
+          "values": "policy.md / score=0.8 / threshold=0.7",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"policy.md\",\"score\":0.8}], [], 0.7)[\"status\"] == \"ok\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.7) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "deploy.md 阈值 0.6",
+          "values": "deploy.md / score=0.7 / threshold=0.6",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"deploy.md\",\"score\":0.7}], [], 0.6)[\"status\"] == \"ok\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.6) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "security.md 阈值 0.85",
+          "values": "security.md / score=0.9 / threshold=0.85",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"security.md\",\"score\":0.9}], [], 0.85)[\"status\"] == \"ok\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.85) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "schema.md 阈值 0.7",
+          "values": "schema.md / score=0.6 / threshold=0.7",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"schema.md\",\"score\":0.6}], [], 0.7)[\"status\"] == \"no_results\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.7) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "service.md 阈值 0.8",
+          "values": "service.md / score=0.75 / threshold=0.8",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"service.md\",\"score\":0.75}], [], 0.8)[\"status\"] == \"no_results\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.8) == {\"status\": \"no_results\", \"matches\": []}",
+              "failure": "还应处理空输入或未出现过的边界。",
+              "kind": "behavior"
+            }
+          ]
+        },
+        {
+          "label": "review.md 阈值 0.6",
+          "values": "review.md / score=0.5 / threshold=0.6",
+          "checks": [
+            {
+              "name": "变体行为",
+              "expression": "merge_retrieval([{\"source\":\"review.md\",\"score\":0.5}], [], 0.6)[\"status\"] == \"no_results\"",
+              "failure": "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
+              "kind": "behavior"
+            },
+            {
+              "name": "边界行为",
+              "expression": "merge_retrieval([], [], 0.6) == {\"status\": \"no_results\", \"matches\": []}",
               "failure": "还应处理空输入或未出现过的边界。",
               "kind": "behavior"
             }

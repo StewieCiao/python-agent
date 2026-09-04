@@ -43,6 +43,10 @@ const checkpointCases = [
   ["thread-a", 1, 2], ["thread-b", 3, 4], ["research-1", 0, 1],
   ["review-2", 7, 8], ["chat-x", 2, 5], ["job-9", 10, 11],
 ] as const;
+const hybridCases = [
+  ["policy.md", 0.8, 0.7, "ok"], ["deploy.md", 0.7, 0.6, "ok"], ["security.md", 0.9, 0.85, "ok"],
+  ["schema.md", 0.6, 0.7, "no_results"], ["service.md", 0.75, 0.8, "no_results"], ["review.md", 0.5, 0.6, "no_results"],
+] as const;
 
 const twoBehaviorChecks = (first: string, second: string, failure: string): PersonalizedCheck[] => [
   { name: "变体行为", expression: first, failure, kind: "behavior" },
@@ -137,6 +141,15 @@ export const exerciseFamilies: ExerciseFamily[] = [
       `resume({"${threadId}": {"step": ${oldStep}}}, "${threadId}", {"step": ${nextStep}}) == {"step": ${nextStep}}`,
       `((lambda saved: (resume(saved, "${threadId}", {}), saved))( {"${threadId}": {"step": ${oldStep}}} ))[1]["${threadId}"]["step"] == ${oldStep}`,
       "恢复必须读取指定 thread、返回更新后的副本，并保留原检查点不变。",
+    ))),
+  },
+  {
+    id: "langchain-hybrid-retrieval-v1", lessonIds: ["hybrid-retrieval"], difficulty: "intermediate", validatorVersion: "1",
+    mistakeCodes: ["wrong-threshold", "duplicate-source"], constraints: ["deduplicate by source", "return no_results below threshold"],
+    variants: hybridCases.map(([source, score, threshold, expected]) => variant(`${source} 阈值 ${threshold}`, `${source} / score=${score} / threshold=${threshold}`, twoBehaviorChecks(
+      `merge_retrieval([{"source":"${source}","score":${score}}], [], ${threshold})["status"] == "${expected}"`,
+      `merge_retrieval([], [], ${threshold}) == {"status": "no_results", "matches": []}`,
+      "应按 source 去重、保留最高分，并在没有达到阈值时明确返回 no_results。",
     ))),
   },
 ];

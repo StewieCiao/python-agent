@@ -553,6 +553,7 @@ export const langchainTrack: LearningTrack = {
     },
     {
       id: "hybrid-retrieval",
+      familyId: "langchain-hybrid-retrieval-v1",
       title: "混合检索与相似度阈值",
       prerequisites: ["rag-evaluation"], difficulty: "intermediate", tags: ["hybrid-search", "threshold", "retrieval"],
       summary: "合并关键词与向量候选并按分数排序，低于阈值时明确返回无结果。",
