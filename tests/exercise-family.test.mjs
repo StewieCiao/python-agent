@@ -31,3 +31,11 @@ test("每个 family 的六个变体都携带至少两项可执行检查", () => 
     }
   }
 });
+
+test("每个阶段项目都接入个性化练习 family", async () => {
+  const { authoredCatalog } = await import("../app/content/catalog.ts");
+  const familyLessonIds = new Set(exerciseFamilies.flatMap((family) => family.lessonIds));
+  const projects = authoredCatalog.tracks.flatMap((track) => track.lessons.filter((lesson) => lesson.project));
+  assert.equal(projects.length, 14);
+  assert.ok(projects.every((lesson) => familyLessonIds.has(lesson.id)));
+});
