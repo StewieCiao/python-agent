@@ -56,8 +56,6 @@ protocol.registerSchemesAsPrivileged([
     privileges: {
       standard: true,
       secure: true,
-      corsEnabled: true,
-      stream: true,
       supportFetchAPI: true,
     },
   },

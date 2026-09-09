@@ -1,6 +1,4 @@
-importScripts("./pyodide/pyodide.js");
-
-const { loadPyodide } = self;
+import { loadPyodide } from "./pyodide/pyodide.mjs";
 
 const PYODIDE_VERSION = "314.0.3";
 const PYODIDE_INDEX_URL = new URL("pyodide/", self.location.href).href;
