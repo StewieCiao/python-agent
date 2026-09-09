@@ -304,7 +304,7 @@ export function LearningApp() {
     workerRef.current = null;
 
     try {
-      const worker = new Worker(pythonWorkerUrl(), { type: "module" });
+      const worker = new Worker(pythonWorkerUrl());
       workerRef.current = worker;
       worker.addEventListener("message", (event: MessageEvent) => {
         const message = event.data as WorkerMessage;

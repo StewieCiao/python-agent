@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const EXPECTED_VERSION = "314.0.3";
 const files = [
-  "pyodide.mjs",
+  "pyodide.js",
   "pyodide.asm.mjs",
   "pyodide.asm.wasm",
   "python_stdlib.zip",
