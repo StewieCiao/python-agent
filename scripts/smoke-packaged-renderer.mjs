@@ -6,7 +6,7 @@ import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { packagedExecutablePath } from "./desktopPackagePaths.mjs";
 
-const READY_TIMEOUT_MS = 60_000;
+const READY_TIMEOUT_MS = process.platform === "win32" ? 180_000 : 60_000;
 const RUN_TIMEOUT_MS = 12_000;
 const IO_TIMEOUT_MS = 5_000;
 
