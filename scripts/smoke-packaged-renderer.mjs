@@ -246,11 +246,17 @@ try {
   }
 
   async function waitForText(text, timeoutMs = RUN_TIMEOUT_MS) {
-    return waitFor(
-      () => evaluate(`document.body?.textContent.includes(${JSON.stringify(text)}) ?? false`),
-      `页面没有出现“${text}”`,
-      timeoutMs,
-    );
+    try {
+      return await waitFor(
+        () => evaluate(`document.body?.textContent.includes(${JSON.stringify(text)}) ?? false`),
+        `页面没有出现“${text}”`,
+        timeoutMs,
+      );
+    } catch (error) {
+      if (!String(error).includes("页面没有出现")) throw error;
+      const bodyText = await evaluate("document.body?.textContent ?? \"\"");
+      throw new Error(`${error.message}\n页面当前文本：${bodyText.slice(-2_000)}`);
+    }
   }
 
   async function setCodeAndRun(code) {
