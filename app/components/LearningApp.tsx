@@ -22,6 +22,7 @@ import {
   type RunSnapshot,
 } from "../lib/runSnapshot.mjs";
 import { loadLearningState, saveLearningState } from "../lib/desktopState.ts";
+import { PythonEditor } from "./PythonEditor";
 
 const PYODIDE_VERSION = "314.0.3";
 const EXECUTION_TIMEOUT_MS = 4_000;
@@ -854,10 +855,9 @@ export function LearningApp() {
                       <span key={index}>{index + 1}</span>
                     ))}
                   </div>
-                  <textarea
-                    aria-label="Python 代码编辑器"
-                    data-testid="code-editor"
-                    onChange={(event) => updateCode(event.target.value)}
+                  <PythonEditor
+                    ariaLabel="Python 代码编辑器"
+                    onChange={updateCode}
                     onBlur={flushProgressSave}
                     onKeyDown={(event) => {
                       if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
@@ -882,7 +882,7 @@ export function LearningApp() {
                       }
                     }}
                     readOnly={isRunning}
-                    spellCheck={false}
+                    testId="code-editor"
                     value={code}
                   />
                 </div>

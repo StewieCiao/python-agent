@@ -5,6 +5,7 @@ import type { CourseLesson, CourseTrack } from "../content/schema";
 import { learningTracks } from "../content/publicCatalog";
 import { loadPersonalizedExercise } from "../lib/platformBridge";
 import { loadLearnerSeed } from "../lib/learnerIdentity";
+import { PythonEditor } from "./PythonEditor";
 
 export function CatalogLesson({ track, lesson, onOpenChat, onOpenLesson, completed, onComplete }: {
   track: CourseTrack;
@@ -96,7 +97,7 @@ export function CatalogLesson({ track, lesson, onOpenChat, onOpenLesson, complet
           <span className="practice-label">PRACTICE</span>
           <h3>本节练习</h3>
           <p>{lesson.exercise.prompt}</p>
-          <textarea aria-label="课程代码编辑器" onChange={(event) => setCode(event.target.value)} spellCheck={false} value={code} />
+          <PythonEditor ariaLabel="课程代码编辑器" onChange={setCode} value={code} />
           <div className="practice-actions"><button onClick={() => setCode(lesson.exercise.starterCode)} type="button">重置</button><button className="primary-action" onClick={() => setShowSolution((current) => !current)} type="button">{showSolution ? "隐藏参考答案" : "查看参考答案"}</button></div>
           {showSolution && <pre className="solution-block"><code>{lesson.exercise.solution}</code></pre>}
           <p className="practice-note">此编辑器用于整理练习；涉及 LangChain/LangGraph 依赖的代码请在你的项目环境运行，本站不会伪造执行结果。</p>

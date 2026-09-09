@@ -4,6 +4,13 @@
 
 ## 使用
 
+### v1.0.0 下载
+
+- [打开在线课程（Pages）](https://stewieciao.github.io/python-agent/)
+- [下载 v1.0.0 桌面安装包、离线 HTML 与校验清单](https://github.com/StewieCiao/python-agent/releases/tag/v1.0.0)
+
+Windows 用户按系统架构选择 `windows-2025`（x64）或 `windows-11-arm`（ARM64）文件；macOS 用户选择对应 arm64/x64 文件。发行包目前是未签名内部版本，Windows SmartScreen 或 macOS Gatekeeper 可能提示来源未知；请核对 `SHA256SUMS.txt`，不要关闭系统整体安全防护。安装包内置 Python 和本地服务，不需要单独安装 Node.js、Python 或启动服务器。
+
 ```bash
 npm install
 npm run dev
@@ -30,7 +37,7 @@ npm run dev
 
 仓库已包含 GitHub Actions 发布工作流：在仓库 Settings → Pages 中将发布方式设为 GitHub Actions，推送到 `main` 后会自动生成并发布静态站点。访问链接由 GitHub Pages 设置页提供。
 
-需要完整桌面能力时，在 GitHub Actions 中手动运行 `Build desktop installers`，或推送一个 `v*` 标签。工作流会为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包并上传为可下载的 Actions artifact；安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
+需要完整桌面能力时，优先从上面的 v1.0.0 Release 下载；后续版本推送 `v*` 标签后会由 `Build desktop installers` 为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包、离线 HTML、Pages 压缩包和 SHA256 校验清单。安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
 
 在 macOS 上也可以本地生成当前架构的安装包：
 

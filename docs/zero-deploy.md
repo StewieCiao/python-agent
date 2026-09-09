@@ -10,6 +10,10 @@
 
 Pages 版本适合浏览课程和离线学习内容。它与离线 HTML 使用同一份作者目录生成，因此不会出现课程内容分叉；浏览器端不提供模型密钥输入和本地服务能力。
 
+## v1.0.0 下载
+
+桌面安装包、离线 HTML 和 SHA256 校验清单位于公开 [v1.0.0 Release](https://github.com/StewieCiao/python-agent/releases/tag/v1.0.0)。Windows 按 x64 或 ARM64 选择文件，macOS 按 Intel 或 Apple Silicon 选择文件。
+
 ## 桌面完整版（需要安装一次）
 
 需要真实执行 Python、运行本地 RAG 或调用 OpenAI-compatible 模型时，安装 GitHub Release 中对应平台的桌面包。桌面包自带 Python、LangChain/LangGraph 和本地服务，用户不需要另装 Node.js 或 Python。

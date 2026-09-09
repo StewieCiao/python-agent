@@ -6,7 +6,7 @@ on:
     tags: ["v*"]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   make:
@@ -32,9 +32,51 @@ jobs:
           node-version: 22.13.0
           cache: npm
       - run: npm ci
+        if: matrix.runner != 'windows-11-arm'
+      # workerd has no Windows ARM64 binary and is not required by Electron packaging.
+      - run: npm ci --ignore-scripts
+        if: matrix.runner == 'windows-11-arm'
+      - run: npm rebuild electron --workspace @stewie/desktop
+        if: matrix.runner == 'windows-11-arm'
       - run: npm run desktop:make
       - uses: actions/upload-artifact@v4
         with:
-          name: stewie-learnos-${{ matrix.target }}
+          name: stewie-learnos-${{ matrix.runner }}
           path: desktop/out/make/**
           if-no-files-found: error
+
+  publish:
+    name: Publish v1.0.0 release assets
+    needs: make
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: stewie-learnos-*
+          path: release-assets
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+          cache: npm
+      - run: npm ci
+      - run: npm run build:offline
+      - run: npm run build:pages
+      - name: Prepare stable release names and checksums
+        shell: bash
+        run: |
+          mkdir -p release-upload
+          for artifact in release-assets/stewie-learnos-*; do
+            target="${artifact##*/stewie-learnos-}"
+            find "$artifact" -type f -print0 | while IFS= read -r -d '' file; do
+              base="$(basename "$file" | tr ' ' '-')"
+              cp "$file" "release-upload/stewie-learnos-1.0.0-${target}-${base}"
+            done
+          done
+          cp "Stewie-个人学习站-离线版.html" release-upload/stewie-learnos-1.0.0-offline.html
+          tar -czf release-upload/stewie-learnos-1.0.0-pages.tar.gz -C dist-pages .
+          (cd release-upload && sha256sum * > SHA256SUMS.txt)
+      - name: Create public GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "${GITHUB_REF_NAME}" release-upload/* --repo "${GITHUB_REPOSITORY}" --title "Stewie LearnOS ${GITHUB_REF_NAME}" --generate-notes

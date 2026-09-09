@@ -28,6 +28,13 @@ jobs:
           node-version: 22.13.0
           cache: npm
       - run: npm ci
+        if: matrix.runner != 'windows-11-arm'
+      # workerd has no Windows ARM64 binary and is only needed by the web build,
+      # not by Electron packaging. Keep Electron's own install step explicit.
+      - run: npm ci --ignore-scripts
+        if: matrix.runner == 'windows-11-arm'
+      - run: npm rebuild electron --workspace @stewie/desktop
+        if: matrix.runner == 'windows-11-arm'
       - run: npm run desktop:package
       - run: npm run smoke:packaged-python
       - run: npm run smoke:packaged-renderer

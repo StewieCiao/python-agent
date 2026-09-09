@@ -56,6 +56,12 @@ test("离线文件没有外部加载资源或联网执行入口", () => {
   assert.doesNotMatch(offlineHtml, /pyodide|WebAssembly/i);
 });
 
+test("离线编辑器内嵌 Python 高亮，不依赖外部资源", () => {
+  assert.match(offlineHtml, /function highlightPython\(source\)/);
+  assert.match(offlineHtml, /token-keyword/);
+  assert.match(offlineHtml, /id="editorHighlight"/);
+});
+
 test("课程 JSON 使用脚本安全序列化", () => {
   assert.ok(dataMatch);
   assert.doesNotMatch(dataMatch[1], /<\/script/i);

@@ -1,7 +1,7 @@
 {
   "name": "@stewie/desktop",
   "productName": "Stewie LearnOS",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Stewie 的本地优先自适应学习平台",
   "author": "Stewie",
   "private": true,

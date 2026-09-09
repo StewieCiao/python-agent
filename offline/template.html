@@ -229,7 +229,12 @@
 
     .editor-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); min-height: 430px; max-height: 58vh; overflow: hidden; background: var(--code); }
     .line-numbers { min-width: 46px; margin: 0; padding: 18px 10px 18px 8px; overflow: hidden; color: #61796c; border-right: 1px solid #2b4036; font: 13px/1.65 "SFMono-Regular", Consolas, monospace; text-align: right; user-select: none; }
-    #editor { width: 100%; min-height: 430px; padding: 18px; resize: none; overflow: auto; border: 0; outline: 0; color: var(--code-ink); caret-color: var(--amber); background: var(--code); font: 13px/1.65 "SFMono-Regular", Consolas, monospace; tab-size: 4; }
+    .python-editor { position: relative; min-width: 0; min-height: 430px; overflow: hidden; background: var(--code); font: 13px/1.65 "SFMono-Regular", Consolas, monospace; tab-size: 4; }
+    .python-editor-highlight, .python-editor textarea { position: absolute; inset: 0; box-sizing: border-box; width: 100%; height: 100%; margin: 0; padding: 18px; border: 0; font: inherit; line-height: inherit; white-space: pre; overflow: auto; }
+    .python-editor-highlight { pointer-events: none; color: var(--code-ink); }
+    .python-editor textarea { z-index: 1; resize: none; outline: 0; color: transparent; caret-color: var(--amber); background: transparent; -webkit-text-fill-color: transparent; }
+    .python-editor textarea::selection { background: rgba(234, 164, 58, 0.32); -webkit-text-fill-color: transparent; }
+    .token-keyword { color: #d6a6ff; } .token-string { color: #b8d68b; } .token-number { color: #f0bf78; } .token-comment { color: #78978a; font-style: italic; } .token-function { color: #80d5e8; } .token-attribute { color: #9dc7ff; } .token-identifier { color: var(--code-ink); }
     #editor::selection { background: rgba(234, 164, 58, 0.32); }
 
     .editor-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px; border-top: 1px solid #2e4239; background: var(--code); }
@@ -348,7 +353,10 @@
           <div class="practice-header"><strong>practice.py</strong><span class="save-state" id="saveState">等待编辑</span></div>
           <div class="editor-wrap">
             <pre class="line-numbers" id="lineNumbers" aria-hidden="true">1</pre>
-            <textarea id="editor" aria-label="Python 代码编辑器" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            <div class="python-editor">
+              <pre class="python-editor-highlight" id="editorHighlight" aria-hidden="true"></pre>
+              <textarea id="editor" aria-label="Python 代码编辑器" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            </div>
           </div>
           <div class="editor-actions">
             <button type="button" id="resetButton">恢复初始代码</button>
@@ -375,6 +383,8 @@
   <script id="course-data" type="application/json">__COURSE_DATA__</script>
   <script>
     "use strict";
+
+    __PYTHON_HIGHLIGHT__
 
     const COURSE = JSON.parse(document.getElementById("course-data").textContent);
     const STORAGE_KEY = "stewie-learning-site-offline-v1";
@@ -406,6 +416,7 @@
       videos: document.getElementById("videoList"),
       videoSection: document.getElementById("videoSection"),
       editor: document.getElementById("editor"),
+      highlight: document.getElementById("editorHighlight"),
       lines: document.getElementById("lineNumbers"),
       save: document.getElementById("saveState"),
       answer: document.getElementById("answerCode"),
@@ -599,6 +610,7 @@
       elements.complete.textContent = state.completed.includes(lesson.id) ? "取消完成标记" : "标记已完成";
       elements.save.textContent = state.drafts[lesson.id] !== undefined ? "已载入本机草稿" : "初始代码";
       updateLineNumbers();
+      updateHighlight();
       renderProgress();
       renderTracks();
       renderNav();
@@ -611,6 +623,12 @@
       elements.lines.scrollTop = elements.editor.scrollTop;
     }
 
+    function updateHighlight() {
+      elements.highlight.innerHTML = highlightPython(elements.editor.value) || " ";
+      elements.highlight.scrollTop = elements.editor.scrollTop;
+      elements.highlight.scrollLeft = elements.editor.scrollLeft;
+    }
+
     function saveDraftNow() {
       const lesson = currentLesson();
       state.drafts[lesson.id] = elements.editor.value;
@@ -619,6 +637,7 @@
 
     elements.editor.addEventListener("input", () => {
       updateLineNumbers();
+      updateHighlight();
       elements.save.textContent = "正在编辑…";
       clearTimeout(saveTimer);
       saveTimer = setTimeout(saveDraftNow, 300);
@@ -626,6 +645,8 @@
 
     elements.editor.addEventListener("scroll", () => {
       elements.lines.scrollTop = elements.editor.scrollTop;
+      elements.highlight.scrollTop = elements.editor.scrollTop;
+      elements.highlight.scrollLeft = elements.editor.scrollLeft;
     });
 
     elements.editor.addEventListener("keydown", (event) => {
