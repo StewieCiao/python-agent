@@ -1109,6 +1109,14 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
+.diagnostic-meta {
+  display: block;
+  margin-top: 5px;
+  color: #8aa095;
+  font-size: 10px;
+  font-weight: 600;
+}
+
 .output-block,
 .traceback-block,
 .test-results,

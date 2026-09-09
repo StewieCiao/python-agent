@@ -453,7 +453,10 @@ export function LearningApp() {
       ...current,
       drafts: { ...current.drafts, [lesson.id]: nextCode },
     }));
-    if (runRecord) setRunRecord(null);
+    if (runRecord) {
+      setRunRecord(null);
+      setNotice("代码已修改，上一次运行结果已过期；请重新运行。");
+    }
   }
 
   async function handleRun() {
@@ -928,6 +931,10 @@ export function LearningApp() {
                       <span className={runPassed ? "ok" : "issue"}>{runPassed ? "✓" : "!"}</span>
                       <div>
                         <strong>{feedbackTitle(result)}</strong>
+                        <small className="diagnostic-meta">
+                          来源：{result.executionFailure ? "Python Worker" : result.exception ? "Python 运行时" : "练习测试"} · 严重程度：{result.executionFailure || result.exception ? "错误" : runPassed ? "通过" : "提示"}
+                          {result.exception?.line ? ` · 位置：第 ${result.exception.line} 行` : ""}
+                        </small>
                         <p>
                           {result.executionFailure
                             ? "本次执行已超时，测试未运行；Python Worker 正在从同一锁定版本重新加载。"
@@ -972,10 +979,11 @@ export function LearningApp() {
                       <div className="test-results">
                         <div className="block-label">练习测试</div>
                         {result.tests.map((test) => (
-                          <div className={test.passed ? "test-pass" : "test-fail"} key={test.name}>
+                            <div className={test.passed ? "test-pass" : "test-fail"} key={test.name}>
                             <span>{test.passed ? "✓" : "×"}</span>
                             <div className="test-copy">
                               <strong>{test.name}</strong>
+                              {!test.passed && <small className="diagnostic-meta">来源：练习测试 · 严重程度：提示</small>}
                               {test.detail && <p>{test.detail}</p>}
                               {test.rule && (
                                 <div className="test-rule">
