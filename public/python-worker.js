@@ -1,7 +1,8 @@
-import { loadPyodide } from "/pyodide/pyodide.mjs";
+const PYODIDE_MODULE_URL = new URL("pyodide/pyodide.mjs", self.location.href).href;
+const { loadPyodide } = await import(PYODIDE_MODULE_URL);
 
 const PYODIDE_VERSION = "314.0.3";
-const PYODIDE_INDEX_URL = new URL("/pyodide/", self.location.origin).href;
+const PYODIDE_INDEX_URL = new URL("pyodide/", self.location.href).href;
 
 const PYTHON_HARNESS = String.raw`
 import contextlib
