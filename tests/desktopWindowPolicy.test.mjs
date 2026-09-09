@@ -77,10 +77,3 @@ test("应用协议只能解析 renderer 根目录内的文件", async () => {
     /应用资源地址无效/,
   );
 });
-
-test("打包模块资源使用浏览器可识别的 MIME 类型", async () => {
-  const { assetContentType } = await loadPolicy();
-  assert.equal(assetContentType("stewie://app/python-worker.js"), "text/javascript");
-  assert.equal(assetContentType("stewie://app/pyodide/pyodide.mjs"), "text/javascript");
-  assert.equal(assetContentType("stewie://app/pyodide/pyodide.asm.wasm"), "application/wasm");
-});

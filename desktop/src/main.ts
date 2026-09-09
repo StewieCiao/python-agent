@@ -38,7 +38,6 @@ import {
 import {
   createDesktopSecurityPolicy,
   createWindowOptions,
-  assetContentType,
   resolveAppAsset,
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
@@ -175,16 +174,7 @@ void runStartupTask(app.whenReady().then(async () => {
     const rendererRoot = join(__dirname, "..", "renderer", MAIN_WINDOW_VITE_NAME);
     protocol.handle("stewie", async (request) => {
       try {
-        const response = await net.fetch(pathToFileURL(resolveAppAsset(rendererRoot, request.url)).toString());
-        const contentType = assetContentType(request.url);
-        if (!contentType) return response;
-        const headers = new Headers(response.headers);
-        headers.set("content-type", contentType);
-        return new Response(response.body, {
-          status: response.status,
-          statusText: response.statusText,
-          headers,
-        });
+        return await net.fetch(pathToFileURL(resolveAppAsset(rendererRoot, request.url)).toString());
       } catch (error) {
         return new Response(error instanceof Error ? error.message : "应用资源读取失败", {
           status: 404,
