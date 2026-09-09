@@ -84,7 +84,7 @@ async function waitFor(probe, label, timeoutMs) {
   throw new Error(`${label}（等待 ${timeoutMs / 1000} 秒后超时）`);
 }
 
-function createCdpClient(socket) {
+function createCdpClient(socket, onEvent) {
   let nextId = 1;
   const pending = new Map();
 
@@ -100,7 +100,10 @@ function createCdpClient(socket) {
       pending.clear();
       return;
     }
-    if (!message.id) return;
+    if (!message.id) {
+      onEvent(message);
+      return;
+    }
     const request = pending.get(message.id);
     if (!request) return;
     pending.delete(message.id);
@@ -169,6 +172,7 @@ const port = await reservePort();
 const modelServer = await startModelServer();
 const userDataDirectory = await mkdtemp(join(tmpdir(), "stewie-renderer-smoke-"));
 const stderr = [];
+const rendererDiagnostics = [];
 let child;
 let childFailure = null;
 let childExitState = null;
@@ -226,8 +230,18 @@ try {
       }),
       "CDP WebSocket 未连接",
     );
-    const cdpSend = createCdpClient(socket);
+    const cdpSend = createCdpClient(socket, (message) => {
+      if (
+        message.method === "Runtime.exceptionThrown" ||
+        message.method === "Log.entryAdded" ||
+        message.method === "Network.loadingFailed"
+      ) {
+        rendererDiagnostics.push(message);
+      }
+    });
     await cdpSend("Runtime.enable");
+    await cdpSend("Log.enable");
+    await cdpSend("Network.enable");
     return cdpSend;
   }
 
@@ -254,8 +268,31 @@ try {
       );
     } catch (error) {
       if (!String(error).includes("页面没有出现")) throw error;
-      const bodyText = await evaluate("document.body?.textContent ?? \"\"");
-      throw new Error(`${error.message}\n页面当前文本：${bodyText.slice(-2_000)}`);
+      let bodyText;
+      try {
+        bodyText = await evaluate("document.body?.textContent ?? \"\"");
+      } catch (bodyError) {
+        bodyText = `无法读取：${bodyError instanceof Error ? bodyError.message : String(bodyError)}`;
+      }
+      let targets;
+      try {
+        const response = await fetch(`http://127.0.0.1:${port}/json/list`, {
+          signal: AbortSignal.timeout(IO_TIMEOUT_MS),
+        });
+        targets = response.ok
+          ? (await response.json()).map(({ type, url }) => ({ type, url }))
+          : [{ type: "diagnostic-error", url: `HTTP ${response.status}` }];
+      } catch (targetError) {
+        targets = [{
+          type: "diagnostic-error",
+          url: targetError instanceof Error ? targetError.message : String(targetError),
+        }];
+      }
+      throw new Error(
+        `${error.message}\n页面当前文本：${bodyText.slice(-2_000)}` +
+        `\nCDP 诊断：${JSON.stringify(rendererDiagnostics.slice(-50))}` +
+        `\n调试目标：${JSON.stringify(targets)}`,
+      );
     }
   }
 
