@@ -1,8 +1,18 @@
 import type { BrowserWindowConstructorOptions } from "electron";
-import { isAbsolute, relative, resolve } from "node:path";
+import { extname, isAbsolute, relative, resolve } from "node:path";
 
 const APP_PROTOCOL = "stewie:";
 const APP_HOST = "app";
+
+const ASSET_CONTENT_TYPES: Record<string, string> = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
+  ".wasm": "application/wasm",
+  ".zip": "application/zip",
+};
 
 
 function parseUrl(rawUrl: string): URL | null {
@@ -92,4 +102,10 @@ export function resolveAppAsset(rendererRoot: string, rawUrl: string): string {
     throw new Error("应用资源路径无效");
   }
   return asset;
+}
+
+export function assetContentType(rawUrl: string): string {
+  const url = parseUrl(rawUrl);
+  if (!url) return "application/octet-stream";
+  return ASSET_CONTENT_TYPES[extname(url.pathname).toLowerCase()] ?? "application/octet-stream";
 }

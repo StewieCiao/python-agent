@@ -3,7 +3,6 @@ import {
   BrowserWindow,
   dialog,
   ipcMain,
-  net,
   protocol,
   safeStorage,
   session,
@@ -12,7 +11,6 @@ import {
 import started from "electron-squirrel-startup";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
-import { pathToFileURL } from "node:url";
 import { readFile, writeFile } from "node:fs/promises";
 import type { DesktopAppInfo } from "./bridge";
 import type { DesktopIpcError, DesktopIpcResult } from "./bridge";
@@ -38,6 +36,7 @@ import {
 import {
   createDesktopSecurityPolicy,
   createWindowOptions,
+  assetContentType,
   resolveAppAsset,
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
@@ -174,7 +173,10 @@ void runStartupTask(app.whenReady().then(async () => {
     const rendererRoot = join(__dirname, "..", "renderer", MAIN_WINDOW_VITE_NAME);
     protocol.handle("stewie", async (request) => {
       try {
-        return await net.fetch(pathToFileURL(resolveAppAsset(rendererRoot, request.url)).toString());
+        const body = await readFile(resolveAppAsset(rendererRoot, request.url));
+        return new Response(body, {
+          headers: { "content-type": assetContentType(request.url) },
+        });
       } catch (error) {
         return new Response(error instanceof Error ? error.message : "应用资源读取失败", {
           status: 404,
