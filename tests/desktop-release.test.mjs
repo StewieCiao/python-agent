@@ -10,6 +10,7 @@ test("Windows ARM64 smoke skips only unsupported workerd install scripts", () =>
   assert.match(smoke, /windows-11-arm/);
   assert.match(smoke, /npm rebuild electron --workspace @stewie\/desktop/);
   assert.match(smoke, /npm run desktop:package/);
+  assert.match(smoke, /npm run smoke:packaged-renderer\s+timeout-minutes: 5/);
 });
 
 test("Windows x64 和 ARM64 仍保留在正式发布矩阵", () => {

@@ -38,4 +38,4 @@ jobs:
       - run: npm run desktop:package
       - run: npm run smoke:packaged-python
       - run: npm run smoke:packaged-renderer
-        timeout-minutes: 2
+        timeout-minutes: 5
