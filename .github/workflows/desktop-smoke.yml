@@ -39,3 +39,8 @@ jobs:
       - run: npm run smoke:packaged-python
       - run: npm run smoke:packaged-renderer
         timeout-minutes: 5
+      - uses: actions/upload-artifact@v4
+        if: failure() && runner.os == 'Windows'
+        with:
+          name: windows-failure-${{ matrix.runner }}
+          path: windows-smoke-failure.png

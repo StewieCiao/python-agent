@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
 import { createServer as createHttpServer } from "node:http";
 import { createServer as createNetServer } from "node:net";
@@ -428,6 +428,24 @@ try {
     process.stdout.write("packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n");
   }
 } catch (error) {
+  if (process.platform === "win32") {
+    try {
+      execFileSync("powershell.exe", ["-NoProfile", "-Command", `
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        $bounds = [System.Windows.Forms.SystemInformation]::VirtualScreen
+        $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+        $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+        $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+        $bitmap.Save('windows-smoke-failure.png')
+        $graphics.Dispose()
+        $bitmap.Dispose()
+        Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object ProcessName, MainWindowTitle | Format-List
+      `], { timeout: 15_000, stdio: "inherit" });
+    } catch (captureError) {
+      console.error("Windows failure capture failed:", captureError.message);
+    }
+  }
   const processError = stderr.join("").trim();
   throw new Error(`${error instanceof Error ? error.message : String(error)}${processError ? `\nElectron stderr:\n${processError}` : ""}`);
 } finally {
