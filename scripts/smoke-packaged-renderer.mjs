@@ -289,7 +289,8 @@ try {
         }];
       }
       throw new Error(
-        `${error.message}\n页面当前文本：${bodyText.slice(-2_000)}` +
+        `${error.message}\n页面状态与导航：${bodyText.slice(0, 2_000)}` +
+        `\n页面当前内容：${bodyText.slice(-2_000)}` +
         `\nCDP 诊断：${JSON.stringify(rendererDiagnostics.slice(-50))}` +
         `\n调试目标：${JSON.stringify(targets)}`,
       );
