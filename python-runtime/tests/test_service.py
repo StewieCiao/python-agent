@@ -1,4 +1,5 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -17,6 +18,24 @@ BUNDLE = load_learning_bundle(CATALOG_PATH)
 
 
 class ServiceTest(unittest.TestCase):
+    def test_service_uses_utf8_pipes_even_with_windows_legacy_encoding(self):
+        request_id = "中文请求🐍"
+        frames = json.dumps({"id": request_id, "method": "health", "params": {}}, ensure_ascii=False) + "\nnot-json\n"
+        with tempfile.TemporaryDirectory() as directory:
+            completed = subprocess.run(
+                [sys.executable, str(RUNTIME_ROOT / "service.py"),
+                 "--catalog", str(CATALOG_PATH),
+                 "--database", str(Path(directory) / "stewie.db")],
+                input=frames.encode("utf-8"),
+                capture_output=True,
+                env={**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"},
+            )
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8", errors="replace"))
+        responses = [json.loads(line) for line in completed.stdout.decode("utf-8").splitlines()]
+        self.assertEqual(responses[0]["id"], request_id)
+        self.assertTrue(responses[0]["ok"])
+        self.assertEqual(responses[1]["error"]["message"], "请求不是有效 JSON")
+
     def test_service_persists_and_lists_rag_documents(self):
         with tempfile.TemporaryDirectory() as directory:
             storage = Storage(Path(directory) / "stewie.db")

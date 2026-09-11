@@ -162,6 +162,9 @@ def serve(input_stream, output_stream, storage, learning_bundle):
 
 
 def main():
+    # The desktop JSON-lines protocol is UTF-8 on every platform, including pipes on Windows.
+    for stream in (sys.stdin, sys.stdout, sys.stderr):
+        stream.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser()
     parser.add_argument("--catalog", required=True)
     parser.add_argument("--database", required=True)

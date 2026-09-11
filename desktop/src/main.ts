@@ -3,6 +3,7 @@ import {
   BrowserWindow,
   dialog,
   ipcMain,
+  net,
   protocol,
   safeStorage,
   session,
@@ -11,6 +12,7 @@ import {
 import started from "electron-squirrel-startup";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
+import { pathToFileURL } from "node:url";
 import { readFile, writeFile } from "node:fs/promises";
 import type { DesktopAppInfo } from "./bridge";
 import type { DesktopIpcError, DesktopIpcResult } from "./bridge";
@@ -36,7 +38,6 @@ import {
 import {
   createDesktopSecurityPolicy,
   createWindowOptions,
-  assetContentType,
   resolveAppAsset,
 } from "./securityPolicy.mjs";
 import { createStartupBoundary } from "./startupBoundary.mjs";
@@ -90,15 +91,6 @@ async function createWindow(): Promise<BrowserWindow> {
   const window = new BrowserWindow(
     createWindowOptions(join(__dirname, "preload.js"), app.isPackaged),
   );
-  if (app.commandLine.hasSwitch("remote-debugging-port")) {
-    window.webContents.on("console-message", (_event, _level, message) => {
-      console.error(`[renderer] ${message}`);
-    });
-    window.webContents.on("render-process-gone", (_event, details) => {
-      console.error(`[renderer gone] ${JSON.stringify(details)}`);
-    });
-    window.on("unresponsive", () => console.error("[window] unresponsive"));
-  }
   let rendererReady = false;
   window.webContents.once("did-finish-load", () => {
     rendererReady = true;
@@ -182,12 +174,7 @@ void runStartupTask(app.whenReady().then(async () => {
     const rendererRoot = join(__dirname, "..", "renderer", MAIN_WINDOW_VITE_NAME);
     protocol.handle("stewie", async (request) => {
       try {
-        if (app.commandLine.hasSwitch("remote-debugging-port")) console.error(`[asset start] ${request.url}`);
-        const body = await readFile(resolveAppAsset(rendererRoot, request.url));
-        if (app.commandLine.hasSwitch("remote-debugging-port")) console.error(`[asset read] ${request.url} ${body.length} bytes`);
-        return new Response(body, {
-          headers: { "content-type": assetContentType(request.url) },
-        });
+        return await net.fetch(pathToFileURL(resolveAppAsset(rendererRoot, request.url)).toString());
       } catch (error) {
         return new Response(error instanceof Error ? error.message : "应用资源读取失败", {
           status: 404,
