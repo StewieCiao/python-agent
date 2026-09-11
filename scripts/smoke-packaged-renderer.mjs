@@ -297,6 +297,13 @@ try {
   }
 
   async function setCodeAndRun(code) {
+    // Results can render before the mastery write finishes and releases the run lock.
+    await waitFor(
+      () => evaluate(`([...document.querySelectorAll('button')]
+        .find((button) => button.textContent.trim().includes("运行代码")))?.disabled === false`),
+      "Python 运行按钮未恢复可用",
+      READY_TIMEOUT_MS,
+    );
     if (!await evaluate(setCodeExpression(code))) throw new Error("找不到 Python 代码编辑器");
     if (!await evaluate(clickButtonExpression("运行代码"))) throw new Error("Python 运行按钮不可用");
   }
