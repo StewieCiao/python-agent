@@ -1,5 +1,3 @@
-import { loadPyodide } from "./pyodide/pyodide.mjs";
-
 const PYODIDE_VERSION = "314.0.3";
 const PYODIDE_INDEX_URL = new URL("pyodide/", self.location.href).href;
 
@@ -411,6 +409,7 @@ json.dumps(_result, ensure_ascii=False)
 let runtime = null;
 
 async function initialize() {
+  const { loadPyodide } = await import("./pyodide/pyodide.mjs");
   runtime = await loadPyodide({ indexURL: PYODIDE_INDEX_URL });
 }
 

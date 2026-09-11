@@ -46,7 +46,7 @@ test("Python 只在 Worker 中执行，并使用单一锁定来源", async () =>
 
   assert.equal(packageJson.dependencies.pyodide, "314.0.3");
   assert.match(workerSource, /const PYODIDE_VERSION = "314\.0\.3"/);
-  assert.match(workerSource, /from "\.\/pyodide\/pyodide\.mjs"/);
+  assert.match(workerSource, /"\.\/pyodide\/pyodide\.mjs"/);
   assert.match(workerSource, /new URL\("pyodide\/", self\.location\.href\)/);
   assert.doesNotMatch(workerSource, /https?:\/\/|unpkg|cdnjs|jsdelivr|fallback/i);
   assert.match(workerSource, /runtime\.runPythonAsync\(PYTHON_HARNESS\)/);
