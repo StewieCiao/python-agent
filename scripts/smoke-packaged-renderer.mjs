@@ -270,7 +270,8 @@ try {
       if (!String(error).includes("页面没有出现")) throw error;
       let bodyText;
       try {
-        bodyText = await evaluate("document.body?.textContent ?? \"\"");
+        bodyText = await evaluate(`"页面警告：" + [...document.querySelectorAll('[role="alert"]')]
+          .map((element) => element.textContent).join("\\n") + "\\n" + (document.body?.textContent ?? "")`);
       } catch (bodyError) {
         bodyText = `无法读取：${bodyError instanceof Error ? bodyError.message : String(bodyError)}`;
       }
@@ -309,8 +310,9 @@ try {
     if (!await evaluate(clickButtonExpression("运行代码"))) throw new Error("Python 运行按钮不可用");
   }
 
-  await waitForText("Python 314.0.3 就绪", READY_TIMEOUT_MS);
+  await waitForText("STEWIE LEARNING DESK", READY_TIMEOUT_MS);
   if (!await evaluate(clickButtonExpression("Python"))) throw new Error("无法切换到 Python 课程");
+  await waitForText("Python 314.0.3 就绪", READY_TIMEOUT_MS);
   if (!await evaluate(clickButtonExpression("让 Python 开口"))) throw new Error("无法打开第一节 Python 课程");
 
   await setCodeAndRun('print("我的第一段 Python")\nprint(8 * 7)');
