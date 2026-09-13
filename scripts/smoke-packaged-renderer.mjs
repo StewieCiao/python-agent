@@ -298,7 +298,7 @@ try {
     }
   }
 
-  async function setCodeAndRun(code) {
+  async function waitForRunReady() {
     // Results can render before the mastery write finishes and releases the run lock.
     await waitFor(
       () => evaluate(`([...document.querySelectorAll('button')]
@@ -306,6 +306,10 @@ try {
       "Python 运行按钮未恢复可用",
       READY_TIMEOUT_MS,
     );
+  }
+
+  async function setCodeAndRun(code) {
+    await waitForRunReady();
     if (!await evaluate(setCodeExpression(code))) throw new Error("找不到 Python 代码编辑器");
     if (!await evaluate(clickButtonExpression("运行代码"))) throw new Error("Python 运行按钮不可用");
   }
@@ -317,12 +321,11 @@ try {
 
   await setCodeAndRun('print("我的第一段 Python")\nprint(8 * 7)');
   await waitForText("全部通过 · 可以进入下一关");
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const persistedAfterRun = await evaluate(`window.stewie.getLearningState()`);
-  if (!persistedAfterRun?.ok || !persistedAfterRun.value?.completed?.includes("first-output")) {
-    throw new Error(`打包应用没有把完成进度写入 SQLite：${JSON.stringify(persistedAfterRun)}`);
-  }
+  await waitFor(async () => {
+    const persisted = await evaluate(`window.stewie.getLearningState()`);
+    if (!persisted?.ok) throw new Error(`读取学习记录失败：${JSON.stringify(persisted)}`);
+    return persisted.value.completed.includes("first-output");
+  }, "打包应用没有把完成进度写入 SQLite", RUN_TIMEOUT_MS);
   if (!await evaluate(setCodeExpression("draft-first"))) throw new Error("无法写入第一版草稿");
   if (!await evaluate(setCodeExpression("draft-latest"))) throw new Error("无法写入最新草稿");
 
@@ -386,6 +389,7 @@ try {
   await setCodeAndRun('print("我的第一段 Python")\nprint(8 * 7)');
   await waitForText("全部通过 · 可以进入下一关");
 
+  await waitForRunReady();
   if (!await evaluate(clickButtonExpression("模型设置"))) throw new Error("无法打开模型设置");
   await waitForText("OpenAI-compatible 配置");
   for (const [label, value] of [
