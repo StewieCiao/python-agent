@@ -23,6 +23,7 @@ import {
 } from "../lib/runSnapshot.mjs";
 import { loadLearningState, saveLearningState } from "../lib/desktopState.ts";
 import { PythonEditor } from "./PythonEditor";
+import { runtimeDiagnostic } from "../lib/editor/diagnostics.mjs";
 
 const PYODIDE_VERSION = "314.0.3";
 const EXECUTION_TIMEOUT_MS = 4_000;
@@ -103,20 +104,6 @@ function feedbackTitle(result: ExecutionResult) {
   return "全部通过 · 可以进入下一关";
 }
 
-function exceptionGuidance(exception: PromptException) {
-  const guidance: Record<string, string> = {
-    SyntaxError: "Python 无法解析这段代码。先查看标出的行和它上一行，检查冒号、括号与缩进。",
-    IndentationError: "代码块缩进不一致。检查标出行是否与同一层级的语句对齐。",
-    NameError: "程序使用了当前作用域中不存在的名字。对照异常消息检查变量定义与拼写。",
-    TypeError: "某个操作收到不兼容的值类型。沿 traceback 定位调用，并检查参与运算的实际类型。",
-    ValueError: "值的类型可接受，但内容不符合该操作要求。查看异常消息中的具体值。",
-    IndexError: "列表索引超出当前范围。检查长度以及索引边界。",
-    KeyError: "字典中不存在异常消息所示的键。检查键名或先明确判断键是否存在。",
-    ZeroDivisionError: "除数为 0。回到标出行检查除数从哪里产生，并处理这个输入边界。",
-  };
-  return guidance[exception.type] ?? "已保留真实 traceback，但未能定位更多原因。请从最后一个 <learner> 行号向上检查调用链。";
-}
-
 function combinedOutput(result: ExecutionResult | null) {
   if (!result) return "";
   if (result.executionFailure) {
@@ -174,6 +161,7 @@ export function LearningApp() {
     item.id === (activeTrackId === "python" ? currentLessonId : activeLearningLessonId)
   )!;
   const result = runRecord?.result ?? null;
+  const diagnostic = runtimeDiagnostic(result?.exception ?? null);
   const completedPercent = Math.round((progress.completed.length / allLessonIds.length) * 100);
   const visibleHintCount = revealedHints[lesson.id] ?? 0;
   const latestMistakes = useMemo(() => progress.mistakes.slice(0, 30), [progress.mistakes]);
@@ -939,11 +927,12 @@ export function LearningApp() {
                           {result.executionFailure
                             ? "本次执行已超时，测试未运行；Python Worker 正在从同一锁定版本重新加载。"
                             : result.exception
-                            ? exceptionGuidance(result.exception)
+                            ? diagnostic?.reason
                             : runPassed
                               ? "你的代码满足本关全部要求，进度已保存在本机。"
                               : "Python 已正常执行。请对照下面的实际结果、期望结果与判定规则逐项修正。"}
                         </p>
+                        {diagnostic && <p>下一步：{diagnostic.nextStep}</p>}
                       </div>
                     </div>
 
@@ -969,7 +958,7 @@ export function LearningApp() {
                       </div>
                     )}
                     {result.exception && (
-                      <details className="traceback-block" open>
+                      <details className="traceback-block">
                         <summary>真实 traceback</summary>
                         <pre>{result.exception.traceback}</pre>
                       </details>

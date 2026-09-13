@@ -25,11 +25,13 @@
 
 涉及 `.github/workflows/desktop-smoke.yml`、`.github/workflows/desktop-release.yml`、`scripts/smoke-packaged-renderer.mjs`、`desktop/src/main.ts`、`desktop/src/pythonService.mts`、`desktop/vite.renderer.config.ts`、`package.json`、锁文件及相关桌面测试。
 
-- [ ] 检查当前 git 状态、既有指导、最近 CI 日志和真实下载资产，记录基线 SHA；保留不属于本轮的改动。
-- [ ] Windows x64：在失败时输出页面状态、控制台/网络异常、资源 URL 与 Python 启动日志，复现“Python 就绪”超时，定位根因后做最小修复。
-- [ ] Windows ARM64：验证 `workerd` 安装阻塞是否来自桌面流程不需要的 Web 构建依赖；通过合理拆分依赖或受支持构建方式修复，更新锁文件；禁止盲目全局忽略安装脚本。
-- [ ] 为确认的启动或配置问题添加能复现旧故障的回归检查，再修复并运行相关检查。
-- [ ] 四目标 macOS arm64/x64、Windows arm64/x64 保留为正式目标；若确有不可克服支持限制，提供证据并报告，不擅自把平台删除后声称完整发行完成。
+- [x] 检查当前 git 状态、既有指导、最近 CI 日志和真实下载资产，记录基线 SHA；保留不属于本轮的改动。
+- [x] Windows x64：在失败时输出页面状态、控制台/网络异常、资源 URL 与 Python 启动日志，复现“Python 就绪”超时，定位根因后做最小修复。
+- [x] Windows ARM64：验证 `workerd` 安装阻塞是否来自桌面流程不需要的 Web 构建依赖；通过合理拆分依赖或受支持构建方式修复，更新锁文件；禁止盲目全局忽略安装脚本。
+- [x] 为确认的启动或配置问题添加能复现旧故障的回归检查，再修复并运行相关检查。
+- [x] 四目标 macOS arm64/x64、Windows arm64/x64 保留为正式目标；若确有不可克服支持限制，提供证据并报告，不擅自把平台删除后声称完整发行完成。
+
+验证证据：`a5350e5` 的 [四平台 packaged smoke](https://github.com/StewieCiao/python-agent/actions/runs/34756979880) 全部通过。ARM64 保留既定安装方式并显式重建 Electron、准备 Pyodide；未改依赖版本，锁文件无需变更。详细根因与回归记录见 `docs/releases/v1.0.0-acceptance.md`。下载发行仍未完成，不包含在上述运行验证中。
 
 ## 2. 共享语法高亮编辑器
 
