@@ -23,6 +23,7 @@ import {
 } from "../lib/runSnapshot.mjs";
 import { loadLearningState, saveLearningState } from "../lib/desktopState.ts";
 import { PythonEditor } from "./PythonEditor";
+import { StaticFeedback } from "./StaticFeedback";
 import { runtimeDiagnostic } from "../lib/editor/diagnostics.mjs";
 
 const PYODIDE_VERSION = "314.0.3";
@@ -883,6 +884,7 @@ export function LearningApp() {
                 </div>
               </div>
 
+              <StaticFeedback key={lesson.id} code={code} />
               <div className={`feedback-card ${runPassed ? "passed" : result ? "has-result" : ""}`}>
                 <div className="feedback-header">
                   <div>

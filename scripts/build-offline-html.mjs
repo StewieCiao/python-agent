@@ -1,6 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { build } from "vite";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = dirname(scriptDirectory);
@@ -9,6 +10,15 @@ const outputPath = join(projectRoot, "Stewie-个人学习站-离线版.html");
 
 const publicSnapshot = JSON.parse(await readFile(join(projectRoot, "generated", "course-public.json"), "utf8"));
 const highlightSource = (await readFile(join(projectRoot, "app/lib/editor/pythonHighlight.mjs"), "utf8")).replace(/^export /m, "");
+const [diagnosticsBundle] = await build({
+  configFile: false,
+  logLevel: "error",
+  build: {
+    write: false,
+    lib: { entry: join(projectRoot, "app/lib/editor/staticDiagnostics.mjs"), formats: ["iife"], name: "StewieDiagnostics" },
+  },
+});
+const diagnosticsSource = diagnosticsBundle.output[0].code.replaceAll("</script", "<\\/script");
 
 const course = {
   tracks: publicSnapshot.catalog.tracks,
@@ -21,7 +31,9 @@ if (template.split(placeholder).length !== 2) {
 }
 
 const serializedCourse = JSON.stringify(course).replaceAll("<", "\\u003c");
-const output = template.replace(placeholder, serializedCourse).replace("__PYTHON_HIGHLIGHT__", highlightSource);
+const output = template.replace(placeholder, () => serializedCourse)
+  .replace("__PYTHON_HIGHLIGHT__", () => highlightSource)
+  .replace("__STATIC_DIAGNOSTICS__", () => diagnosticsSource);
 await writeFile(outputPath, output, "utf8");
 
 console.log(`已生成：${outputPath}`);

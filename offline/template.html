@@ -361,8 +361,11 @@
           <div class="editor-actions">
             <button type="button" id="resetButton">恢复初始代码</button>
             <button type="button" id="copyButton">复制代码</button>
+            <button type="button" id="checkButton">静态检查（不运行）</button>
             <button class="complete" type="button" id="completeButton">标记已完成</button>
           </div>
+          <p>静态检查只分析语法结构，不运行代码，也不自动完成课程。</p>
+          <div id="staticFeedback" aria-live="polite"></div>
           <details class="answer" id="answerDetails">
             <summary>查看参考答案</summary>
             <div class="answer-body">
@@ -385,6 +388,7 @@
     "use strict";
 
     __PYTHON_HIGHLIGHT__
+    __STATIC_DIAGNOSTICS__
 
     const COURSE = JSON.parse(document.getElementById("course-data").textContent);
     const STORAGE_KEY = "stewie-learning-site-offline-v1";
@@ -575,6 +579,7 @@
     }
 
     function renderLesson() {
+      document.getElementById("staticFeedback").textContent = "";
       const track = currentTrack();
       const lesson = currentLesson();
       const index = currentIndex();
@@ -636,6 +641,7 @@
     }
 
     elements.editor.addEventListener("input", () => {
+      if (document.getElementById("staticFeedback").textContent) document.getElementById("staticFeedback").textContent = "代码已修改，静态检查结果已过期，请重新检查。";
       updateLineNumbers();
       updateHighlight();
       elements.save.textContent = "正在编辑…";
@@ -663,12 +669,21 @@
       }
     });
 
+    document.getElementById("checkButton").addEventListener("click", () => {
+      const findings = StewieDiagnostics.staticDiagnostics(elements.editor.value);
+      document.getElementById("staticFeedback").textContent = findings.length === 0
+        ? "未发现已覆盖的常见问题，未运行代码。"
+        : findings.map((item) => `来源：静态分析 · 严重程度：提示 · 第 ${item.line} 行，第 ${item.column} 列\n${item.reason}\n下一步：${item.nextStep}`).join("\n");
+    });
+
     document.getElementById("resetButton").addEventListener("click", () => {
       const lesson = currentLesson();
       elements.editor.value = lesson.exercise.starterCode;
       delete state.drafts[lesson.id];
       persistState();
       updateLineNumbers();
+      updateHighlight();
+      document.getElementById("staticFeedback").textContent = "";
       elements.save.textContent = "已恢复初始代码";
     });
 
