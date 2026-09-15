@@ -47,6 +47,7 @@ jobs:
 
   publish:
     name: Publish v1.0.0 release assets
+    if: github.ref_type == 'tag'
     needs: make
     runs-on: ubuntu-latest
     steps:
