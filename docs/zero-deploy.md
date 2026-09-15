@@ -10,9 +10,9 @@
 
 Pages 版本适合浏览课程和离线学习内容。它与离线 HTML 使用同一份作者目录生成，因此不会出现课程内容分叉；浏览器端不提供模型密钥输入和本地服务能力。
 
-## v1.0.0 下载
+## 桌面下载状态
 
-桌面安装包、离线 HTML 和 SHA256 校验清单位于公开 [v1.0.0 Release](https://github.com/StewieCiao/python-agent/releases/tag/v1.0.0)。Windows 按 x64 或 ARM64 选择文件，macOS 按 Intel 或 Apple Silicon 选择文件。
+v1.0.0 安装包及校验清单尚未正式发布；当前不要把旧标签当成可下载安装包。发布后 Windows 按 x64 或 ARM64 选择文件，macOS 按 Intel 或 Apple Silicon 选择文件。现阶段的静态课程入口与离线文件见 [README](../README.md)。
 
 ## 桌面完整版（需要安装一次）
 

@@ -4,10 +4,18 @@
 
 ## 使用
 
-### v1.0.0 下载
+### 打开与下载（当前状态）
 
 - [打开在线课程（Pages）](https://stewieciao.github.io/python-agent/)
-- [下载 v1.0.0 桌面安装包、离线 HTML 与校验清单](https://github.com/StewieCiao/python-agent/releases/tag/v1.0.0)
+- [当前离线 HTML](./Stewie-个人学习站-离线版.html)：在文件页选择下载原始文件，双击使用。
+- [已发布的旧版离线文件 v0.1.0](https://github.com/StewieCiao/python-agent/releases/download/v0.1.0-offline/Stewie-.-.html)：不含后续更新。
+- 桌面完整版：四平台打包运行检查已通过，但 **v1.0.0 安装包尚未发布**。暂不提供不存在的下载链接。
+
+| 版本 | 执行 Python | 调用模型 | 数据与网络 |
+| --- | --- | --- | --- |
+| Pages 在线课程 | 否，只做静态检查 | 否 | 草稿存在浏览器；访问页面及主动打开资料链接需联网 |
+| 单文件离线 HTML | 否，只做静态检查 | 否 | 草稿存在浏览器；文件本身不发起网络请求 |
+| 桌面完整版 | 是 | 配置后可用 | 进度在本地 SQLite，Key 在系统安全存储；外部模型可能接收问题及相关资料片段 |
 
 Windows 用户按系统架构选择 `windows-2025`（x64）或 `windows-11-arm`（ARM64）文件；macOS 用户选择对应 arm64/x64 文件。发行包目前是未签名内部版本，Windows SmartScreen 或 macOS Gatekeeper 可能提示来源未知；请核对 `SHA256SUMS.txt`，不要关闭系统整体安全防护。安装包内置 Python 和本地服务，不需要单独安装 Node.js、Python 或启动服务器。
 
@@ -37,7 +45,7 @@ npm run dev
 
 仓库已包含 GitHub Actions 发布工作流：在仓库 Settings → Pages 中将发布方式设为 GitHub Actions，推送到 `main` 后会自动生成并发布静态站点。访问链接由 GitHub Pages 设置页提供。
 
-需要完整桌面能力时，优先从上面的 v1.0.0 Release 下载；后续版本推送 `v*` 标签后会由 `Build desktop installers` 为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包、离线 HTML、Pages 压缩包和 SHA256 校验清单。安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
+桌面下载仍待正式发布。发行工作流为 macOS（arm64/x64）和 Windows（arm64/x64）生成安装包、离线 HTML、Pages 压缩包和 SHA256 校验清单；不能把工作流文件存在或打包测试通过视为安装包已经发布。安装包内置 Python、课程快照和本地服务，不要求目标电脑安装 Node.js 或 Python。
 
 在 macOS 上也可以本地生成当前架构的安装包：
 

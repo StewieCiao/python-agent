@@ -659,7 +659,7 @@ export function LearningApp() {
         <header className="topbar">
           <div>
             <span className="eyebrow">STEWIE LEARNING DESK</span>
-            <h1>{viewMode === "settings" ? "模型与本地数据设置" : activeTrack.title}</h1>
+            <h1>{viewMode === "settings" ? "模型与本地数据设置" : activeTrack.shortTitle}</h1>
           </div>
           <nav className="view-tabs" aria-label="学习视图">
             <button
