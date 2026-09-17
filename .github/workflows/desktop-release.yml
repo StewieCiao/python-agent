@@ -36,7 +36,8 @@ jobs:
       # workerd has no Windows ARM64 binary and is not required by Electron packaging.
       - run: npm ci --ignore-scripts
         if: matrix.runner == 'windows-11-arm'
-      - run: npm rebuild electron --workspace @stewie/desktop
+      # Squirrel's install script selects the host-architecture 7-Zip executable.
+      - run: npm rebuild electron electron-winstaller --workspace @stewie/desktop
         if: matrix.runner == 'windows-11-arm'
       - run: npm run desktop:make
       - uses: actions/upload-artifact@v4
