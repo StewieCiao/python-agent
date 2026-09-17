@@ -177,6 +177,7 @@ let child;
 let childFailure = null;
 let childExitState = null;
 let childStopped;
+let successMessage;
 
 function launchChild() {
   childFailure = null;
@@ -195,6 +196,8 @@ function launchChild() {
     });
     child.once("exit", (code, signal) => {
       childExitState = { code, signal };
+    });
+    child.once("close", () => {
       resolve();
     });
   });
@@ -433,13 +436,13 @@ try {
     ) {
       throw new Error(`打包应用模型请求合同不符：${JSON.stringify(modelServer.requests)}`);
     }
-    process.stdout.write("packaged renderer smoke: Python execution/recovery and secure model request passed\n");
+    successMessage = "packaged renderer smoke: Python execution/recovery and secure model request passed\n";
   } else {
     const visibleFailure = await evaluate(`document.body.textContent.includes("系统安全存储写入失败")`);
     if (!visibleFailure || modelServer.requests.length !== 0 || profileList?.value?.some((profile) => profile.id === "renderer-smoke")) {
       throw new Error(`打包应用模型配置失败路径不明确：${JSON.stringify(profileList)}`);
     }
-    process.stdout.write("packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n");
+    successMessage = "packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n";
   }
 } catch (error) {
   if (process.platform === "win32") {
@@ -465,15 +468,18 @@ try {
 } finally {
   socket?.close();
   if (child.pid && child.exitCode === null && child.signalCode === null) {
-    child.kill();
-    const stoppedGracefully = await Promise.race([
-      childStopped.then(() => true),
-      new Promise((resolve) => setTimeout(() => resolve(false), 2_000)),
-    ]);
-    if (!stoppedGracefully) {
-      child.kill("SIGKILL");
-      await withTimeout(childStopped, "无法强制终止打包应用");
+    if (process.platform === "win32") {
+      // Killing only Electron's parent leaves utility processes holding profile files.
+      execFileSync("taskkill", ["/PID", String(child.pid), "/T", "/F"], { timeout: IO_TIMEOUT_MS });
+    } else {
+      child.kill();
+      const stoppedGracefully = await Promise.race([
+        childStopped.then(() => true),
+        new Promise((resolve) => setTimeout(() => resolve(false), 2_000)),
+      ]);
+      if (!stoppedGracefully) child.kill("SIGKILL");
     }
+    await withTimeout(childStopped, "无法终止打包应用进程树");
   }
   await withTimeout(
     rm(userDataDirectory, { recursive: true, force: true }),
@@ -481,3 +487,4 @@ try {
   );
   await withTimeout(modelServer.close(), "无法停止模型 smoke 服务");
 }
+process.stdout.write(successMessage);
