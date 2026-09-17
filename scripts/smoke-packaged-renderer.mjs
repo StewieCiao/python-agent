@@ -481,6 +481,17 @@ try {
     }
     await withTimeout(childStopped, "无法终止打包应用进程树");
   }
+  if (process.platform === "win32") {
+    execFileSync("powershell.exe", ["-NoProfile", "-Command", `
+      Get-CimInstance Win32_Process |
+        Where-Object { $_.ExecutablePath -eq $env:STEWIE_SMOKE_EXECUTABLE } |
+        Select-Object ProcessId, ParentProcessId, CommandLine | ConvertTo-Json
+    `], {
+      env: { ...process.env, STEWIE_SMOKE_EXECUTABLE: executable },
+      timeout: IO_TIMEOUT_MS,
+      stdio: "inherit",
+    });
+  }
   await withTimeout(
     rm(userDataDirectory, { recursive: true, force: true }),
     "无法清理 renderer smoke 临时目录",
