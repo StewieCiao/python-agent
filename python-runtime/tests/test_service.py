@@ -36,19 +36,41 @@ class ServiceTest(unittest.TestCase):
         self.assertTrue(responses[0]["ok"])
         self.assertEqual(responses[1]["error"]["message"], "请求不是有效 JSON")
 
-    def test_service_persists_and_lists_rag_documents(self):
+    def test_rag_library_survives_restart_and_clear_is_persistent(self):
+        documents = [{"id": "guide.md", "text": "StateGraph 节点", "source": "guide.md"}]
         with tempfile.TemporaryDirectory() as directory:
-            storage = Storage(Path(directory) / "stewie.db")
-            documents = [{"id": "guide.md", "text": "StateGraph 节点", "source": "guide.md"}]
-            self.assertEqual(
-                dispatch_request({"method": "documents.save", "params": {"documents": documents}}, storage, BUNDLE),
-                {"saved": 1},
-            )
-            self.assertEqual(
-                dispatch_request({"method": "documents.list", "params": {}}, storage, BUNDLE),
-                documents,
-            )
-            storage.close()
+            def run_service(requests):
+                completed = subprocess.run(
+                    [sys.executable, str(RUNTIME_ROOT / "service.py"),
+                     "--catalog", str(CATALOG_PATH),
+                     "--database", str(Path(directory) / "stewie.db")],
+                    input="".join(json.dumps({"id": str(index), **request}) + "\n"
+                                  for index, request in enumerate(requests)),
+                    text=True, encoding="utf-8", capture_output=True, timeout=15,
+                )
+                self.assertEqual(completed.returncode, 0, completed.stderr)
+                responses = [json.loads(line) for line in completed.stdout.splitlines()]
+                self.assertEqual(len(responses), len(requests))
+                for index, response in enumerate(responses):
+                    self.assertEqual(response["id"], str(index))
+                    self.assertTrue(response["ok"], response)
+                return [response["result"] for response in responses]
+
+            first = run_service([
+                {"method": "documents.save", "params": {"documents": documents}},
+            ])
+            self.assertEqual(first, [{"saved": 1}])
+
+            restarted = run_service([
+                {"method": "documents.list", "params": {}},
+                {"method": "documents.save", "params": {"documents": documents}},
+                {"method": "documents.clear", "params": {}},
+                {"method": "documents.list", "params": {}},
+            ])
+            self.assertEqual(restarted, [documents, {"saved": 0}, {"cleared": 1}, []])
+            self.assertEqual(run_service([
+                {"method": "documents.list", "params": {}},
+            ]), [[]])
 
     def test_tutor_validate_persists_a_thread_scoped_graph_state(self):
         with tempfile.TemporaryDirectory() as directory:
