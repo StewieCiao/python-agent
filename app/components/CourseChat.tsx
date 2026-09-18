@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ragDocumentsForInput, replaceRagInput, type RagInput, type RagWorkspace } from "../lib/ragInput.mjs";
 import type { CourseLesson, CourseTrack } from "../content/schema";
 import {
   clearCourseHistory,
@@ -33,13 +34,17 @@ export function CourseChat({ track, lesson, onClose }: {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("正在读取本节聊天记录…");
   const [busy, setBusy] = useState(false);
-  const [ragText, setRagText] = useState("");
-  const [ragSource, setRagSource] = useState("本地资料");
-  const [ragDocuments, setRagDocuments] = useState<Array<{ id: string; text: string; source: string }>>([]);
+  const busyRef = useRef(false);
+  const [rag, setRag] = useState<RagWorkspace>({
+    input: { mode: "text", text: "", source: "本地资料", documents: [] },
+    result: null,
+    evaluation: null,
+  });
+  const { input: ragInput, result: ragResult, evaluation: ragEvaluationResult } = rag;
+  const ragDocuments = ragDocumentsForInput(ragInput);
+  const ragInputReady = ragDocuments.length > 0 && (ragInput.mode === "files" || ragInput.source.trim().length > 0);
   const [ragQuery, setRagQuery] = useState("");
-  const [ragResult, setRagResult] = useState<{ answer: string; sources: string[]; matches: Array<{ source: string; score: number }> } | null>(null);
   const [ragEvaluationInput, setRagEvaluationInput] = useState('[{"query":"请概括资料的核心概念","expectedSources":["本地资料"]}]');
-  const [ragEvaluationResult, setRagEvaluationResult] = useState<Awaited<ReturnType<typeof evaluateRag>> | null>(null);
   const [ragEvaluationHistory, setRagEvaluationHistory] = useState<Awaited<ReturnType<typeof listRagEvaluations>>>([]);
 
   useEffect(() => {
@@ -59,6 +64,8 @@ export function CourseChat({ track, lesson, onClose }: {
   }, [lesson.id, track.id]);
 
   async function perform(action: () => Promise<void>) {
+    if (busyRef.current) return;
+    busyRef.current = true;
     setBusy(true);
     setStatus("");
     try {
@@ -66,12 +73,13 @@ export function CourseChat({ track, lesson, onClose }: {
     } catch (error) {
       setStatus(error instanceof Error ? error.message : String(error));
     } finally {
+      busyRef.current = false;
       setBusy(false);
     }
   }
 
-  function currentRagDocuments() {
-    return ragDocuments.length > 0 ? ragDocuments : [{ id: "local-1", text: ragText, source: ragSource || "本地资料" }];
+  function updateRagInput(change: Partial<RagInput>) {
+    setRag((current) => replaceRagInput(current, { ...current.input, ...change }));
   }
 
   return (
@@ -85,42 +93,57 @@ export function CourseChat({ track, lesson, onClose }: {
         </header>
 
         <div className="chat-controls">
-          <label>模型配置<select value={profileId} onChange={(event) => setProfileId(event.target.value)}>{profiles.map((profile) => <option key={profile.id} value={profile.id}>{profile.name} · {profile.model}</option>)}</select></label>
+          <label>模型配置<select disabled={busy} value={profileId} onChange={(event) => {
+            setProfileId(event.target.value);
+            setRag((current) => replaceRagInput(current, current.input));
+          }}>{profiles.map((profile) => <option key={profile.id} value={profile.id}>{profile.name} · {profile.model}</option>)}</select></label>
           <div className="mode-switch"><button className={mode === "lesson" ? "active" : ""} onClick={() => setMode("lesson")} type="button">课程模式</button><button className={mode === "general" ? "active" : ""} onClick={() => setMode("general")} type="button">普通模式</button></div>
         </div>
 
         {mode === "lesson" && <details className="rag-panel">
           <summary>用本地资料做一次 RAG 检索</summary>
-          <p>资料只在本次桌面请求中使用，不会写入聊天历史；API Key 仍由桌面安全存储管理。</p>
-          <textarea aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragText} onChange={(event) => setRagText(event.target.value)} />
-          <input aria-label="RAG 资料来源" placeholder="来源名称或文件名" value={ragSource} onChange={(event) => setRagSource(event.target.value)} />
-          <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await selectRagDocuments()))}>选择本地资料（TXT / Markdown / CSV / PDF）</button>
+          <p>检索仅使用下面选中的资料类型。保存的资料位于本地；检索时资料文本会发送给所配置的 Embedding / 模型服务，不会写入聊天历史。</p>
+          <label>检索资料类型<select aria-label="检索资料类型" disabled={busy} value={ragInput.mode} onChange={(event) => updateRagInput({ mode: event.target.value as RagInput["mode"] })}>
+            <option value="text">粘贴文本</option><option value="files">文件资料</option>
+          </select></label>
+          {ragInput.mode === "text" && <>
+            <textarea disabled={busy} aria-label="RAG 本地资料" placeholder="粘贴一段本地 Markdown 或纯文本…" value={ragInput.text} onChange={(event) => updateRagInput({ text: event.target.value })} />
+            <label>资料来源（必填）<input disabled={busy} aria-label="RAG 资料来源" required placeholder="来源名称或文件名" value={ragInput.source} onChange={(event) => updateRagInput({ source: event.target.value })} /></label>
+            {!ragInput.source.trim() && <small role="status">请填写资料来源名称，引用不会自动补写。</small>}
+          </>}
+          <button type="button" disabled={busy} onClick={() => void perform(async () => {
+            const documents = await selectRagDocuments();
+            if (documents.length > 0) updateRagInput({ mode: "files", documents });
+          })}>选择本地资料（TXT / Markdown / CSV / PDF）</button>
           <div className="rag-library-actions">
-            <button type="button" disabled={busy || ragDocuments.length === 0} onClick={() => void perform(async () => {
+            <button type="button" disabled={busy || ragInput.mode !== "files" || ragDocuments.length === 0} onClick={() => void perform(async () => {
               const result = await saveRagDocuments(ragDocuments);
               setStatus(`已保存 ${result.saved} 个新资料片段到本地资料库。`);
             })}>保存到本地资料库</button>
-            <button type="button" disabled={busy} onClick={() => void perform(async () => setRagDocuments(await listRagDocuments()))}>读取已保存资料</button>
+            <button type="button" disabled={busy} onClick={() => void perform(async () => updateRagInput({ mode: "files", documents: await listRagDocuments() }))}>读取已保存资料</button>
             <button type="button" disabled={busy} onClick={() => void perform(async () => {
               const result = await clearRagDocuments();
-              setRagDocuments([]);
+              updateRagInput({ mode: "files", documents: [] });
               setStatus(`已清空本地资料库（${result.cleared} 个片段）。`);
             })}>清空资料库</button>
           </div>
-          {ragDocuments.length > 0 && <small className="rag-library-count">当前已载入 {ragDocuments.length} 个资料片段，可直接用于检索。</small>}
-          <input aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => setRagQuery(event.target.value)} />
-          <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0) || !ragQuery.trim()} onClick={() => void perform(async () => {
-            const result = await answerWithRag({ profileId, query: ragQuery, documents: currentRagDocuments() });
-            setRagResult(result);
+          <small className="rag-library-count">当前使用{ragInput.mode === "files" ? "文件资料" : "粘贴文本"}：{ragDocuments.length} 个资料片段。</small>
+          <input disabled={busy} aria-label="RAG 问题" placeholder="要从资料中回答的问题" value={ragQuery} onChange={(event) => { setRagQuery(event.target.value); setRag((current) => ({ ...current, result: null })); }} />
+          <button disabled={busy || !profileId || !ragInputReady || !ragQuery.trim()} onClick={() => void perform(async () => {
+            setRag((current) => ({ ...current, result: null }));
+            const result = await answerWithRag({ profileId, query: ragQuery, documents: ragDocuments });
+            setRag((current) => ({ ...current, result }));
           })} type="button">检索并回答</button>
           {ragResult && <div className="rag-result"><strong>{ragResult.answer}</strong><small>来源：{ragResult.matches.map(({ source, score }) => `${source}（相似度 ${score.toFixed(2)}）`).join("、") || "无"}</small></div>}
           <details className="rag-evaluation">
             <summary>评测这批资料</summary>
             <p>输入 JSON 数组，每项包含 query 和 expectedSources；系统会逐条真实检索，不会把模型回答当成准确率真值。</p>
-            <textarea aria-label="RAG 评测问答集" value={ragEvaluationInput} onChange={(event) => setRagEvaluationInput(event.target.value)} />
-            <button disabled={busy || !profileId || (!ragText.trim() && ragDocuments.length === 0)} onClick={() => void perform(async () => {
+            <textarea disabled={busy} aria-label="RAG 评测问答集" value={ragEvaluationInput} onChange={(event) => { setRagEvaluationInput(event.target.value); setRag((current) => ({ ...current, evaluation: null })); }} />
+            <button disabled={busy || !profileId || !ragInputReady} onClick={() => void perform(async () => {
+              setRag((current) => ({ ...current, evaluation: null }));
               const cases = JSON.parse(ragEvaluationInput) as Array<{ query: string; expectedSources: string[] }>;
-              setRagEvaluationResult(await evaluateRag({ profileId, cases, documents: currentRagDocuments() }));
+              const evaluation = await evaluateRag({ profileId, cases, documents: ragDocuments });
+              setRag((current) => ({ ...current, evaluation }));
             })} type="button">运行评测</button>
             {ragEvaluationResult && <div className="rag-evaluation-result">
               <small>recall@k：{ragEvaluationResult.recallAtK.toFixed(2)} · MRR：{ragEvaluationResult.mrr.toFixed(2)} · 引用覆盖：{ragEvaluationResult.citationCoverage.toFixed(2)} · 引用一致性代理：{ragEvaluationResult.faithfulnessProxy.toFixed(2)} · 总耗时：{Math.round(ragEvaluationResult.latencyMs)} ms</small>

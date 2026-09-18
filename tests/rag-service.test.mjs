@@ -62,9 +62,13 @@ test("RAG 关键词召回覆盖中文短语", async () => {
   assert.deepEqual(result.sources, ["docs/a"]);
 });
 
-test("RAG 拒绝空问题或空文档，不调用模型", async () => {
+test("RAG 拒绝空问题、空文档或空来源，不调用模型", async () => {
   let called = false;
   const service = createRagService({ embeddings: async () => { called = true; return []; }, chat: async () => "" });
-  await assert.rejects(() => service.answer("p1", "", []), /不能为空/);
+  for (const [query, documents, error] of [
+    ["", [], /不能为空/],
+    ["问题", [], /1–100/],
+    ["问题", [{ id: "a", text: "正文", source: "  " }], /字段无效/],
+  ]) await assert.rejects(() => service.answer("p1", query, documents), error);
   assert.equal(called, false);
 });
