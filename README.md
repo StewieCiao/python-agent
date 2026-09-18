@@ -15,9 +15,13 @@
 | --- | --- | --- | --- |
 | Pages 在线课程 | 否，只做静态检查 | 否 | 草稿存在浏览器；访问页面及主动打开资料链接需联网 |
 | 单文件离线 HTML | 否，只做静态检查 | 否 | 草稿存在浏览器；文件本身不发起网络请求 |
-| 桌面完整版 | 是 | 配置后可用 | 进度在本地 SQLite，Key 在系统安全存储；外部模型可能接收问题及相关资料片段 |
+| 桌面完整版 | 是 | 配置后可用 | 进度和加密后的 Key 在本地 SQLite；Key 由系统安全存储加密；外部模型可能接收问题及相关资料片段 |
 
 Windows 用户按系统架构选择 `windows-2025`（x64）或 `windows-11-arm`（ARM64）文件；macOS 用户选择对应 arm64/x64 文件。发行包目前是未签名内部版本，Windows SmartScreen 或 macOS Gatekeeper 可能提示来源未知；请核对 `SHA256SUMS.txt`，不要关闭系统整体安全防护。安装包内置 Python 和本地服务，不需要单独安装 Node.js、Python 或启动服务器。
+
+安装、首次使用、模型配置与备份步骤见 [零部署使用指南](docs/zero-deploy.md)。校验清单须随可信安装包取得；尚未正式发布的清单不能作为已存在下载文件。
+
+### 开发者启动（成品用户无需执行）
 
 ```bash
 npm install
@@ -36,7 +40,7 @@ npm run dev
 
 - 内含 Python 64 节、LangChain/RAG 48 节、LangGraph 42 节课程地图、提示、项目和参考答案
 - 不加载外部资源，不发送网络请求，也不执行学习者代码
-- 草稿和完成进度只保存在当前浏览器；可通过“导出记录 / 导入记录”迁移到其他电脑
+- 草稿和完成进度只保存在当前浏览器，当前没有记录导出/导入按钮；复制 HTML 不会带走学习记录，重要代码需另存为自己的文本文件
 - 参考答案默认折叠，建议完成练习后再展开对照
 
 课程或答案更新后，运行 `npm run build:offline` 可重新生成单文件版本。
@@ -64,12 +68,12 @@ npm run desktop:make
 - 包含智能旅行助手、自动化 DeepResearch 与 Mini Agent 框架三个综合案例。
 - Python 基础顺序参考 [Python 官方教程](https://docs.python.org/3/tutorial/)；Agent 路线与案例参考并注明 [Datawhale Hello-Agents](https://github.com/datawhalechina/hello-agents) 原始章节。
 - LangChain/RAG 的路线复核了 [pixegami/langchain-rag-tutorial](https://github.com/pixegami/langchain-rag-tutorial) 的端到端文档问答拆解；LangGraph 复核了官方 [langgraph-ai/langgraph](https://github.com/langchain-ai/langgraph) 示例与 [LangChain Academy](https://academy.langchain.com/courses/langgraph-essentials-python)。这些仓库只作为学习顺序和项目边界参考，站内代码仍以锁定版本的官方 API 与本地真实测试为准。
-- 桌面版可在模型设置中保存 OpenAI-compatible 配置；API Key 只进入操作系统安全存储，不回显给页面。
+- 桌面版可在模型设置中保存 OpenAI-compatible 配置；API Key 经 Electron safeStorage 加密后保存，不回显给页面，安全存储不可用时明确失败。
 - 桌面导师支持把本地多文档交给真实 Embedding 检索并返回来源；模型不可用时保留真实错误。
 - Python 在独立 Web Worker 中真实运行；无限循环超过 4 秒会被终止，页面不会冻结。
 - 反馈直接展示标准输出、标准错误、异常类型、行号、真实 traceback，以及每项测试的实际结果、期望结果、行为规则或教学构造。
 - 进度、草稿和错题保存在本地；桌面版使用 SQLite，离线版使用浏览器本地存储。
-- 桌面版的非敏感配置由本地服务管理：macOS 位于 `~/Library/Application Support/Stewie Learning Site/`，Windows 位于 `%APPDATA%/Stewie Learning Site/`；API Key 不写入这些文件，而是保存到当前系统用户的安全存储。离线版和 Pages 版不会接收或保存 API Key。
+- 桌面版数据由本地服务管理：macOS 通常位于 `~/Library/Application Support/Stewie LearnOS/stewie.db`，Windows 通常位于 `%APPDATA%\Stewie LearnOS\stewie.db`，以模型设置显示的实际路径为准。数据库含加密 Key 密文而非明文；学习 JSON 导出不含 Key 或密文。离线版和 Pages 版不会接收或保存 API Key。
 - “复制求助内容”会生成结构化 JSON 数据，保留本次运行的代码与反馈快照，默认要求 GPT 只给最小提示。
 
 ## 检查
