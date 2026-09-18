@@ -18,6 +18,5 @@ test("Windows x64 和 ARM64 仍保留在正式发布矩阵", () => {
   assert.match(release, /target: Windows x64[\s\S]*runner: windows-2025/);
   assert.match(release, /path: desktop\/out\/make\/\*\*/);
   assert.match(release, /actions\/download-artifact@v4/);
-  assert.match(release, /stewie-learnos-1\.0\.0-offline\.html/);
   assert.match(release, /gh release create/);
 });

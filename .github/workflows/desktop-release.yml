@@ -19,12 +19,16 @@ jobs:
         include:
           - target: macOS arm64
             runner: macos-15
+            asset: macos-arm64
           - target: macOS x64
             runner: macos-15-intel
+            asset: macos-x64
           - target: Windows arm64
             runner: windows-11-arm
+            asset: windows-arm64
           - target: Windows x64
             runner: windows-2025
+            asset: windows-x64
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,14 +44,17 @@ jobs:
       - run: npm rebuild electron electron-winstaller --workspace @stewie/desktop
         if: matrix.runner == 'windows-11-arm'
       - run: npm run desktop:make
+      - run: npm run smoke:packaged-python
+      - run: npm run smoke:packaged-renderer
+        timeout-minutes: 5
       - uses: actions/upload-artifact@v4
         with:
-          name: stewie-learnos-${{ matrix.runner }}
+          name: stewie-learnos-${{ matrix.asset }}
           path: desktop/out/make/**
           if-no-files-found: error
 
   publish:
-    name: Publish v1.0.0 release assets
+    name: Publish release assets
     if: github.ref_type == 'tag'
     needs: make
     runs-on: ubuntu-latest
@@ -67,17 +74,12 @@ jobs:
       - name: Prepare stable release names and checksums
         shell: bash
         run: |
-          mkdir -p release-upload
-          for artifact in release-assets/stewie-learnos-*; do
-            target="${artifact##*/stewie-learnos-}"
-            find "$artifact" -type f -print0 | while IFS= read -r -d '' file; do
-              base="$(basename "$file" | tr ' ' '-')"
-              cp "$file" "release-upload/stewie-learnos-1.0.0-${target}-${base}"
-            done
-          done
-          cp "Stewie-个人学习站-离线版.html" release-upload/stewie-learnos-1.0.0-offline.html
-          tar -czf release-upload/stewie-learnos-1.0.0-pages.tar.gz -C dist-pages .
-          (cd release-upload && sha256sum * > SHA256SUMS.txt)
+          version="$(node -p 'require("./package.json").version')"
+          desktop_version="$(node -p 'require("./desktop/package.json").version')"
+          test "$version" = "$desktop_version"
+          test "$GITHUB_REF_NAME" = "v$version"
+          tar -czf pages.tar.gz -C dist-pages .
+          node scripts/prepare-release-assets.mjs release-assets release-upload "$version" "Stewie-个人学习站-离线版.html" pages.tar.gz
       - name: Create public GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

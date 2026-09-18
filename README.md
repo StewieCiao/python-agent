@@ -17,7 +17,7 @@
 | 单文件离线 HTML | 否，只做静态检查 | 否 | 草稿存在浏览器；文件本身不发起网络请求 |
 | 桌面完整版 | 是 | 配置后可用 | 进度和加密后的 Key 在本地 SQLite；Key 由系统安全存储加密；外部模型可能接收问题及相关资料片段 |
 
-Windows 用户按系统架构选择 `windows-2025`（x64）或 `windows-11-arm`（ARM64）文件；macOS 用户选择对应 arm64/x64 文件。发行包目前是未签名内部版本，Windows SmartScreen 或 macOS Gatekeeper 可能提示来源未知；请核对 `SHA256SUMS.txt`，不要关闭系统整体安全防护。安装包内置 Python 和本地服务，不需要单独安装 Node.js、Python 或启动服务器。
+Windows 用户按系统架构选择文件名中的 `windows-x64` 或 `windows-arm64`；macOS 用户选择 `macos-arm64`（Apple Silicon）或 `macos-x64`（Intel）。发行包目前是未签名内部版本，Windows SmartScreen 或 macOS Gatekeeper 可能提示来源未知；请核对 `SHA256SUMS.txt`，不要关闭系统整体安全防护。安装包内置 Python 和本地服务，不需要单独安装 Node.js、Python 或启动服务器。
 
 安装、首次使用、模型配置与备份步骤见 [零部署使用指南](docs/zero-deploy.md)。校验清单须随可信安装包取得；尚未正式发布的清单不能作为已存在下载文件。
 
