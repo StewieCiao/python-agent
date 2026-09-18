@@ -332,7 +332,9 @@ try {
   if (!await evaluate(setCodeExpression("draft-first"))) throw new Error("无法写入第一版草稿");
   if (!await evaluate(setCodeExpression("draft-latest"))) throw new Error("无法写入最新草稿");
 
-  void send("Browser.close").catch(() => undefined);
+  // Chromium may close CDP before acknowledging Browser.close; process exit is
+  // the shutdown contract, not the protocol response.
+  void send("Browser.close").catch((error) => console.error("Restart close response:", error.message));
   await withTimeout(childStopped, "打包应用关闭握手未完成", READY_TIMEOUT_MS);
   socket?.close();
   socket = null;
@@ -444,6 +446,13 @@ try {
     }
     successMessage = "packaged renderer smoke: Python passed; secure storage failure is visible and leaves no partial profile\n";
   }
+  // Use the same graceful shutdown as the persistence/restart check. Forced
+  // termination can leave Chromium profile handles open on Windows.
+  void send("Browser.close").catch((error) => console.error("Final close response:", error.message));
+  await withTimeout(childStopped, "打包应用最终关闭握手未完成", READY_TIMEOUT_MS);
+  if (childExitState?.code !== 0) {
+    throw new Error(`打包应用未正常退出：${JSON.stringify(childExitState)}`);
+  }
 } catch (error) {
   if (process.platform === "win32") {
     try {
@@ -480,17 +489,6 @@ try {
       if (!stoppedGracefully) child.kill("SIGKILL");
     }
     await withTimeout(childStopped, "无法终止打包应用进程树");
-  }
-  if (process.platform === "win32") {
-    execFileSync("powershell.exe", ["-NoProfile", "-Command", `
-      Get-CimInstance Win32_Process |
-        Where-Object { $_.ExecutablePath -eq $env:STEWIE_SMOKE_EXECUTABLE } |
-        Select-Object ProcessId, ParentProcessId, CommandLine | ConvertTo-Json
-    `], {
-      env: { ...process.env, STEWIE_SMOKE_EXECUTABLE: executable },
-      timeout: IO_TIMEOUT_MS,
-      stdio: "inherit",
-    });
   }
   await withTimeout(
     rm(userDataDirectory, { recursive: true, force: true }),
